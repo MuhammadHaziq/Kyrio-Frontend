@@ -4,6 +4,7 @@ const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
+const DiscountList = React.lazy(() => import("./views/Items/DiscountList"));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },
   { path: "/categories", name: "Category-list", component: CategoryList },
+  { path: "/discounts", name: "Discount-list", component: DiscountList },
 ];
 
 export default routes;

@@ -9,21 +9,23 @@ import {
   CDataTable,
 } from "@coreui/react";
 import usersData from "../users/UsersData.js";
-import { get_category_list } from "../../actions/categoryActions";
+import { get_discount_list } from "../../actions/discountActions";
 import { useSelector, useDispatch } from "react-redux";
 
-const CategoryList = () => {
-  const category = useSelector((state) => state.items.categoryReducer);
+const DiscountList = () => {
+  const discount = useSelector((state) => state.items.discountReducer);
   const dispatch = useDispatch();
-  console.log("item_list", category);
+  console.log("discount_list", discount);
   // const [items, setItems] = useState(usersData)
 
   useEffect(() => {
-    dispatch(get_category_list());
+    dispatch(get_discount_list());
   }, []);
 
   const fields = [
-    { key: "catTitle", _style: { width: "40%" } },
+    { key: "title", _style: { width: "40%" } },
+    { key: "value", _style: { width: "40%" } },
+    { key: "restricted", _style: { width: "40%" } },
     // { key: "categoryName", _style: { width: "20%" } },
     // { key: "cost", _style: { width: "20%" } },
     // {
@@ -34,11 +36,11 @@ const CategoryList = () => {
 
   return (
     <CCard>
-      <CCardHeader>Categories Detail</CCardHeader>
+      <CCardHeader>Discount Detail </CCardHeader>
 
       <CCardBody>
         <CDataTable
-          items={category.category_list}
+          items={discount.discount_list}
           fields={fields}
           columnFilter
           tableFilter
@@ -63,4 +65,4 @@ const CategoryList = () => {
   );
 };
 
-export default CategoryList;
+export default DiscountList;

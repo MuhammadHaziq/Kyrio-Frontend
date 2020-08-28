@@ -169,15 +169,17 @@ const ItemsList = () => {
   const fields = [
     { key: "name", _style: { width: "40%" } },
     { key: "name", _style: { width: "20%" } },
-    { key: "cost", _style: { width: "20%" } },
+    { key: "cost", _style: { width: "20%" }, filter: false },
     {
       key: "price",
       _style: { width: "20%" },
+       filter: false
     },
     {
       key: "stockQty",
       _style: { width: "20%" },
       label: "Stock",
+       filter: false
     },
   ];
 

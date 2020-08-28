@@ -18,6 +18,7 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CInput,
+  CLink,
 } from "@coreui/react";
 import usersData from "../users/UsersData.js";
 import { CIcon } from "@coreui/icons-react";
@@ -45,6 +46,7 @@ const ItemsList = () => {
   const [pagination, setPagination] = useState(1);
   const [limit, setLimit] = useState(10);
   const [tableFilter, setTableFilter] = useState(false);
+  const [collapse, setCollapse] = useState(false)
 
   useEffect(() => {
     setStoreId(auth.user.stores[0]._id);
@@ -130,9 +132,9 @@ const ItemsList = () => {
       };
     }
 
-    console.log(data);
     dispatch(search_item_list(data));
   };
+
   const searchFilterOnSubmit = (e) => {
     e.preventDefault();
     let data;
@@ -162,7 +164,6 @@ const ItemsList = () => {
       };
     }
 
-    console.log(data);
     dispatch(search_item_list(data));
   };
   const fields = [
@@ -185,8 +186,16 @@ const ItemsList = () => {
       <CRow>
         <CCol xs="12" sm="12">
           <CCard>
-            <CCardHeader> Items </CCardHeader>
-            <CCardBody>
+            <CCardHeader> Items Filter
+              <div className="card-header-actions">
+
+                  <CLink className="card-header-action" onClick={() => setCollapse(!collapse)}>
+                    <CIcon name={collapse ? 'cil-chevron-bottom':'cil-chevron-top'} />
+                  </CLink>
+
+                </div></CCardHeader>
+  <CCollapse show={collapse}>
+          <CCardBody>
               <CRow>
                 {showSearch == false ? (
                   <React.Fragment>
@@ -264,6 +273,7 @@ const ItemsList = () => {
                 )}
               </CRow>
             </CCardBody>
+            </CCollapse>
           </CCard>
         </CCol>
       </CRow>
@@ -280,8 +290,7 @@ const ItemsList = () => {
                 tableFilter
                 footer
                 itemsPerPageSelect
-                itemsPerPage={limit}
-                activePage={pagination}
+                itemsPerPage={5}
                 hover
                 sorter
                 pagination

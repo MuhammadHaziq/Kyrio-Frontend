@@ -153,6 +153,9 @@ const AddPaymentMethod = (props) => {
               <CFormGroup>
                 <CLabel htmlFor="cvv">CVV/CVC</CLabel>
                 <CInputGroup>
+                  <CInputGroupPrepend>
+                    <CInputGroupText><CIcon name="cil-lock-locked"/></CInputGroupText>
+                  </CInputGroupPrepend>
                   <CInput type="text" id="cvv" placeholder="123" required="required" name='cvc' onChange={handleOnChange}/>
 
                 </CInputGroup>

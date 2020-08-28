@@ -50,7 +50,7 @@ const Subscriptions = () => {
       />{" "}
       <h5>
         {" "}
-        <FaAddressCard /> & nbsp; Employee management{" "}
+        <FaAddressCard /> &nbsp;Employee management{" "}
         <CButton
           color="success"
           className="float-right"
@@ -75,7 +75,7 @@ const Subscriptions = () => {
         }}
       >
         {" "}
-        <FaLuggageCart /> & nbsp; Advance Inventory{" "}
+        <FaLuggageCart /> &nbsp;Advance Inventory{" "}
         <CButton
           color="success"
           className="float-right"

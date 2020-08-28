@@ -3,7 +3,7 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../constants/ActionTypes";
-import { LocalUrl, LiveUrl } from "../constants/baseUrls";
+import { BaseUrl } from "../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
@@ -12,7 +12,7 @@ export const get_category_list = (data) => {
     try {
       axios({
         method: "get",
-        url: `${LocalUrl}items/categories`,
+        url: `${BaseUrl}items/categories`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },

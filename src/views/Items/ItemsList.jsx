@@ -23,10 +23,12 @@ import {
 import usersData from "../users/UsersData.js";
 import { CIcon } from "@coreui/icons-react";
 import { cifAU } from "@coreui/icons";
+import ItemsListDatatable from '../../datatables/items/ItemsListDatatable.jsx'
 import {
   get_items_list,
   get_items_stock,
   search_item_list,
+  get_items_store
 } from "../../actions/itemActions";
 import { get_category_list } from "../../actions/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -46,8 +48,8 @@ const ItemsList = () => {
   const [pagination, setPagination] = useState(1);
   const [limit, setLimit] = useState(10);
   const [tableFilter, setTableFilter] = useState(false);
-  const [collapse, setCollapse] = useState(false)
-
+  const [collapse, setCollapse] = useState(true)
+const [showStore, setSelectStore]= useState('')
   useEffect(() => {
     setStoreId(auth.user.stores[0]._id);
   }, [auth]);
@@ -55,6 +57,7 @@ const ItemsList = () => {
     dispatch(get_items_list());
     dispatch(get_category_list());
     dispatch(get_items_stock());
+    dispatch(get_items_store())
   }, []);
 
   useEffect(() => {
@@ -96,6 +99,9 @@ const ItemsList = () => {
     setSelectStock(e.target.value);
     setSendCall(!sendCall);
   };
+  const storeHandleChange= (e) => {
+    setSelectStore(e.target.value);
+  }
   const changeInPagination = (val) => {
     setPagination(val);
     setTableFilter(!tableFilter);
@@ -201,6 +207,25 @@ const ItemsList = () => {
               <CRow>
                 {showSearch == false ? (
                   <React.Fragment>
+                    {item.store_list.length > 1 ? <React.Fragment><CCol xs="6" sm="2">
+                      <CFormGroup>
+                        <CSelect
+                          custom
+                          size="md"
+                          name="selectCategory"
+                          id="selectCategory"
+                          value={showStore}
+                          onChange={storeHandleChange}
+                        >
+                          <option value="0">Select Store</option>
+                          {item.store_list.map((item) => {
+                            return (
+                              <option value={item._id}>{item.title}</option>
+                            );
+                          })}
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol></React.Fragment>:''}
                     <CCol xs="6" sm="2">
                       <CFormGroup>
                         <CSelect
@@ -279,43 +304,7 @@ const ItemsList = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CRow>
-        <CCol xs="12" sm="12">
-          <CCard>
-            <CCardHeader>Items Detail</CCardHeader>
-
-            <CCardBody>
-              <CDataTable
-                items={item.item_list}
-                fields={fields}
-                columnFilter
-                tableFilter
-                footer
-                itemsPerPageSelect
-                itemsPerPage={5}
-                hover
-                sorter
-                pagination
-                // loading
-                // onRowClick={(item,index,col,e) => console.log(item,index,col,e)}
-                onPageChange={(val) =>
-                  // changeInPagination(val)
-                  console.log("new page:", val)
-                }
-                onPagesChange={(val) => console.log("new pages:", val)}
-                onPaginationChange={(val) =>
-                  // changeInLimit(val)
-                  console.log("new pagination:", val)
-                }
-                // onFilteredItemsChange={(val) => console.log('new filtered items:', val)}
-                // onSorterValueChange={(val) => console.log('new sorter value:', val)}
-                // onTableFilterChange={(val) => console.log('new table filter:', val)}
-                // onColumnFilterChange={(val) => console.log('new column filter:', val)}
-              />
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+    <ItemsListDatatable itemList={item.item_list} />
     </React.Fragment>
   );
 };

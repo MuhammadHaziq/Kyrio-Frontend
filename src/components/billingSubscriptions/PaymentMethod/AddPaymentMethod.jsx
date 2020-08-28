@@ -15,7 +15,8 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CFormText,
-  CLink
+  CLink,
+  CSelect
 } from "@coreui/react";
 import {FaRegCreditCard, FaCalendarAlt, FaLock} from "react-icons/fa";
 import {TextMask, InputAdapter} from 'react-text-mask-hoc'
@@ -33,6 +34,7 @@ const AddPaymentMethod = (props) => {
   const [errors, setErrors] = useState({email: false, business: false, timezone: false, language: false})
   const [value, setValue] = useState({})
   const [state, setState] = useState({credit_card: '', exp_date: '', cvc: ''})
+  const [country, setSelectCountry] = useState('')
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (
       tab === index
@@ -55,18 +57,9 @@ const AddPaymentMethod = (props) => {
   const savePaymentMethod = () => {
     console.log(state)
   }
-  const states = [
-    {
-      value: 'PK',
-      label: 'Pakistan'
-    }, {
-      value: 'Oman',
-      label: 'Oman'
-    }, {
-      value: 'Norway',
-      label: 'Norway'
-    }
-  ]
+  const countryHandleChange = (e) => {
+    setSelectCountry(e.target.value);
+  };
   return (<React.Fragment>
   <div className="animated fadeIn">
       <CFade timeout={timeout} in={true}>
@@ -164,7 +157,12 @@ const AddPaymentMethod = (props) => {
             <CCol xs="12">
               <CFormGroup>
                 <CLabel htmlFor="cvv">Country of business registration</CLabel>
-                <Select name="form-field-name2" value={value} options={states} onChange={setValue}/>
+                  <CSelect custom name="country" id="country"   value={country} onChange={countryHandleChange}>
+                          <option value="0">Please select</option>
+                          <option value="pakistan">Pakistan</option>
+                          <option value="oman">Oman</option>
+                          <option value="duabi">Dubai</option>
+                        </CSelect>
 
               </CFormGroup>
             </CCol>

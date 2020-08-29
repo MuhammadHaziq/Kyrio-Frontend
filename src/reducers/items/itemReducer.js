@@ -1,4 +1,4 @@
-import { GET_ITEM_LIST, GET_ITEM_STOCK, GET_ITEM_STORES } from "../constants/ActionTypes";
+import { GET_ITEM_LIST, GET_ITEM_STOCK, GET_ITEM_STORES } from "../../constants/ActionTypes";
 
 const initialState = {
   item_list: [],

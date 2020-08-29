@@ -29,8 +29,8 @@ import {
   get_items_stock,
   search_item_list,
   get_items_store
-} from "../../actions/itemActions";
-import { get_category_list } from "../../actions/categoryActions";
+} from "../../actions/items/itemActions";
+import { get_category_list } from "../../actions/items/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
 
 const ItemsList = () => {

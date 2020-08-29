@@ -15,7 +15,7 @@ import General from "./General/General";
 import BillingSubscription from './BillingSubscriptions/BillingSubscription.jsx'
 import { useSelector } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
-
+import Store from './Stores/Store.jsx'
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const features = useSelector((state) => state.auth.user.roleData.features);
@@ -179,6 +179,9 @@ const Settings = () => {
                         deserunt dolor eiusmod eu pariatur culpa mollit in
                         irure.
                       </p>
+                    </CTabPane>
+                    <CTabPane active={activeTab === 9}>
+                      <Store />
                     </CTabPane>
                   </CTabContent>
                 </CCol>

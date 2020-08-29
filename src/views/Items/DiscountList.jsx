@@ -9,7 +9,7 @@ import {
   CDataTable,
 } from "@coreui/react";
 import usersData from "../users/UsersData.js";
-import { get_discount_list } from "../../actions/discountActions";
+import { get_discount_list } from "../../actions/items/discountActions";
 import { useSelector, useDispatch } from "react-redux";
 
 const DiscountList = () => {

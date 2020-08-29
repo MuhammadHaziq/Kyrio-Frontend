@@ -12,10 +12,10 @@ import {
 } from "@coreui/react";
 import {FaAddressCard, FaLuggageCart, FaRegCreditCard} from "react-icons/fa";
 import {CIcon} from "@coreui/icons-react";
-import Subscriptions from '../../../components/billingSubscriptions/Subscriptions.jsx'
-import PaymentMethod from '../../../components/billingSubscriptions/PaymentMethod.jsx'
-import AddPaymentMethod from '../../../components/billingSubscriptions/PaymentMethod/AddPaymentMethod.jsx'
-import BusniessDetail from '../../../components/billingSubscriptions/PaymentMethod/BusniessDetail.jsx'
+import Subscriptions from '../../../components/settings/billingSubscriptions/Subscriptions.jsx'
+import PaymentMethod from '../../../components/settings/billingSubscriptions/PaymentMethod.jsx'
+import AddPaymentMethod from '../../../components/settings/billingSubscriptions/PaymentMethod/AddPaymentMethod.jsx'
+import BusniessDetail from '../../../components/settings/billingSubscriptions/PaymentMethod/BusniessDetail.jsx'
 
 const BillingSubscriptions = () => {
   const [collapse, setCollapse] = useState([true, true]);

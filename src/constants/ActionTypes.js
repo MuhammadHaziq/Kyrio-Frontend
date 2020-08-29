@@ -18,3 +18,8 @@ export const GET_ITEM_STORES = 'GET_ITEM_STORES'
 export const GET_CATEGORY_LIST = "GET_CATEGORY_LIST";
 // Discount List
 export const GET_DISCOUNT_LIST = "GET_DISCOUNT_LIST";
+
+// stores
+
+export const GET_STORES = 'GET_STORES'
+export const ADD_NEW_STORE = 'ADD_NEW_STORE'

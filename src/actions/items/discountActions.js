@@ -2,8 +2,8 @@ import {
   GET_DISCOUNT_LIST,
   MESSAGE,
   ERROR_MESSAGE,
-} from "../constants/ActionTypes";
-import { BaseUrl } from "../constants/baseUrls";
+} from "../../constants/ActionTypes";
+import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 

@@ -14,7 +14,7 @@ import {
   CCollapse,
   CLink
 } from "@coreui/react";
-import StoreDatatable from '../../../datatables/stores/StoreDatatable'
+import StoreDatatable from '../../../datatables/settings/stores/StoreDatatable'
 import {CIcon} from "@coreui/icons-react";
 import {useSelector, useDispatch} from "react-redux";
 import {get_stores} from "../../../actions/settings/storeActions";
@@ -32,7 +32,7 @@ const Stores = () => {
     dispatch(get_stores())
   }, [])
 
-  const editBillingDetails = () => {
+  const addNewStore = () => {
     setFadeStore(false)
     setFadeAddStore(true)
   }
@@ -78,7 +78,7 @@ const Stores = () => {
                       <CCardBody>
                         <CRow>
                           <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                            <CButton block="block" variant="outline" color="primary" onClick={editBillingDetails}>ADD STORE</CButton>
+                            <CButton block="block" variant="outline" color="primary" onClick={addNewStore}>ADD STORE</CButton>
                           </CCol>
                         </CRow>
                       </CCardBody>

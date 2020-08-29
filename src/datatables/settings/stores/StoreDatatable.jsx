@@ -21,9 +21,9 @@ const StoreDatatable = (props) => {
       </CCardHeader>
       <CCardBody>
         <BootstrapTable data={props.stores} version="4" striped="striped" hover="hover" pagination="pagination" search="search">
-          <TableHeaderColumn dataField="_id" dataSort="dataSort" hidden="hidden">Id</TableHeaderColumn>
+          <TableHeaderColumn dataField="_id" isKey="isKey" dataSort="dataSort" hidden="hidden">Id</TableHeaderColumn>
           <TableHeaderColumn dataField="title" dataSort="dataSort">Name</TableHeaderColumn>
-          <TableHeaderColumn isKey="isKey" dataField="address">Address</TableHeaderColumn>
+          <TableHeaderColumn  dataField="address">Address</TableHeaderColumn>
           <TableHeaderColumn dataField="pos" dataSort="dataSort" >Number Of Pos</TableHeaderColumn>
 
         </BootstrapTable>

@@ -18,13 +18,13 @@ import {
   CLink,
   CInputGroupAppend,
   CForm,
-  CTextarea
+  CInputCheckbox
 } from "@coreui/react";
 import {CIcon} from "@coreui/icons-react";
 import {TextMask, InputAdapter} from 'react-text-mask-hoc'
-import {add_new_store} from '../../../actions/settings/storeActions.js'
+import {add_new_pos_device} from '../../../actions/settings/posDeviceActions.js'
 import {useDispatch, useSelector} from "react-redux";
-const AddStore = (props) => {
+const AddPosDevice = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer)
   const [collapse, setCollapse] = useState([true, true]);
   const [expRight, setExpRight] = useState(false);
@@ -33,8 +33,9 @@ const AddStore = (props) => {
   const [message, setMessage] = useState('');
   const [buttonText, setButtonText] = useState('');
   const [timeout, setTimeout] = useState(300);
-  const [fields, setFields] = useState({store_name: "", store_address: "", store_description: "", store_phone: ''})
-  const [errors, setErrors] = useState({store_name: false, store_address: false, store_description: false, store_phone: false})
+  const [fields, setFields] = useState({pos_device_name: ''})
+  const [errors, setErrors] = useState({pos_device_name: ''})
+  const [stores_checked, setChecked] = useState([])
   const [fade, setFade] = useState(true)
   const dispatch = useDispatch()
   const toggle = (tab) => {
@@ -50,13 +51,13 @@ const AddStore = (props) => {
   const submitStoreForm = (e) => {
     e.preventDefault()
     const data = {
-      title: fields.store_name,
-      address: fields.store_address,
-      phone: fields.store_phone,
-      description: fields.store_description
+      title: fields.pos_device_name,
+      store: JSON.stringify(stores_checked)
     }
-    dispatch(add_new_store(data))
-    console.log('sote_name', data)
+    dispatch(add_new_pos_device(data))
+    console.log('sote_name', fields)
+    console.log('stores_checked', stores_checked)
+
   }
   const handleOnChange = (e) => {
     const {name, value} = e.target
@@ -65,13 +66,33 @@ const AddStore = (props) => {
       [name]: value
     })
   }
-  // useEffect(()=> {
-  //   props.goBack();
-  // },[store.save_store])
+  const handleOnChangeCheck = (e) => {
+    const {name, value} = e.target
+    const store = props.stores.filter(item => item._id == value)
+    const storeData = {
+      storeId: store[0]._id,
+      storeName: store[0].title
+    }
+    if (stores_checked.length === 0) {
+      setChecked([storeData])
+    } else {
+      const exist = stores_checked.filter(item => item.storeId == value)
+      if (exist.length > 0) {
+        const alreadyExist = stores_checked.filter(item => item.storeId !== value)
+        setChecked(alreadyExist)
+      } else {
+        setChecked([
+          ...stores_checked,
+          storeData
+        ])
+      }
+    }
+
+  }
   return (<CCard>
     <CCardHeader>
       <h4>
-        <strong>Add New Store</strong>
+        <strong>Add New Pos Device</strong>
         <div className="card-header-actions">
 
           <CLink className="card-header-action" onClick={() => toggle(0)}>
@@ -89,62 +110,29 @@ const AddStore = (props) => {
         <CForm onSubmit={submitStoreForm}>
           <CFormGroup row="row">
             <CCol md="12">
-              <CLabel htmlFor="store_name">Store Name</CLabel>
+              <CLabel htmlFor="store_name">Pos Device Name</CLabel>
               <CInputGroup>
                 <CInputGroupPrepend>
-                  <CInputGroupText><CIcon name="cil-everplaces"/></CInputGroupText>
+                  <CInputGroupText><CIcon name="cil-device"/></CInputGroupText>
                 </CInputGroupPrepend>
-                <CInput id="store_name" name="store_name" placeholder="Store Name" onChange={handleOnChange}/>
+                <CInput id="pos_device_name" name="pos_device_name" placeholder="Pos Device Name" onChange={handleOnChange}/>
 
               </CInputGroup>
             </CCol>
           </CFormGroup>
           <CFormGroup row="row">
-            <CCol md="12">
-              <CLabel htmlFor="store_address">Store Addresss</CLabel>
-              <CInputGroup>
-                <CInputGroupPrepend>
-                  <CInputGroupText><CIcon name="cil-map"/></CInputGroupText>
-                </CInputGroupPrepend>
-                <CInput id="store_address" name="store_address" placeholder="Store Address" onChange={handleOnChange}/>
-
-              </CInputGroup>
+            <CCol md="3">
+              <CLabel>Stores</CLabel>
             </CCol>
-          </CFormGroup>
-          <CFormGroup>
-            <CLabel>Store Phone</CLabel>
-            <CInputGroup>
-              <CInputGroupPrepend>
-                <CInputGroupText><CIcon name="cil-phone"/></CInputGroupText>
-              </CInputGroupPrepend>
-              <TextMask mask={[
-                  '(',
-                  /[1-9]/,
-                  /\d/,
-                  /\d/,
-                  ')',
-                  ' ',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  '-',
-                  /\d/,
-                  /\d/,
-                  /\d/,
-                  /\d/
-                ]} Component={InputAdapter} className="form-control" name='store_phone' onChange={handleOnChange}/>
-            </CInputGroup>
-
-            <CFormText color="muted">
-              ex. (999) 999-9999
-            </CFormText>
-          </CFormGroup>
-          <CFormGroup row="row">
-            <CCol md="12">
-              <CLabel htmlFor="store_description">Store Description</CLabel>
-              <CInputGroup>
-                <CTextarea name="store_description" id="store_description" rows="9" placeholder="Store Description" onChange={handleOnChange}/>
-              </CInputGroup>
+            <CCol md="9">
+              {
+                props.stores.map(item => (<React.Fragment>
+                  <CFormGroup variant="checkbox" className="checkbox">
+                    <CInputCheckbox id="stores_checked" name="stores_checked" value={item._id} onChange={handleOnChangeCheck}/>
+                    <CLabel variant="checkbox" className="form-check-label" htmlFor='stores_checked'>{item.title}</CLabel>
+                  </CFormGroup>
+                </React.Fragment>))
+              }
             </CCol>
           </CFormGroup>
           <CRow>
@@ -165,4 +153,4 @@ const AddStore = (props) => {
   </CCard>);
 }
 
-export default AddStore;
+export default AddPosDevice;

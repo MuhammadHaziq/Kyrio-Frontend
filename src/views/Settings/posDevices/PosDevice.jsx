@@ -90,7 +90,7 @@ const PosDevice = () => {
                           <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                             <CButton block="block" variant="outline" color="primary" onClick={addNewPosDevice}>ADD POS DEVICE</CButton>
                           </CCol>
-                        {/*  <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                         <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                             <CFormGroup>
                               <CSelect
                                 custom
@@ -106,7 +106,7 @@ const PosDevice = () => {
                                 })}
                               </CSelect>
                             </CFormGroup>
-                          </CCol>*/}
+                          </CCol>
                         </CRow>
                       </CCardBody>
                     </CCollapse>

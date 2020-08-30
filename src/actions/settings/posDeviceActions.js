@@ -1,6 +1,11 @@
-import{ GET_POS_DEVICES,ADD_NEW_POS_DEVICE, MESSAGE, ERROR_MESSAGE} from "../../constants/ActionTypes";
-import {BaseUrl} from '../../constants/baseUrls'
-import axios from 'axios'
+import {
+  GET_POS_DEVICES,
+  ADD_NEW_POS_DEVICE,
+  MESSAGE,
+  ERROR_MESSAGE,
+} from "../../constants/ActionTypes";
+import { BaseUrl } from "../../constants/baseUrls";
+import axios from "axios";
 
 export const get_pos_devices = () => {
   return (dispatch) => {
@@ -25,7 +30,7 @@ export const get_pos_devices = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error.response.data || {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -54,14 +59,14 @@ export const add_new_pos_device = (data) => {
       axios({
         method: "post",
         url: `${BaseUrl}devices`,
-        data:data,
+        data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          console.log(response)
-          dispatch({type:ADD_NEW_POS_DEVICE, response:response.data})
+          console.log(response);
+          dispatch({ type: ADD_NEW_POS_DEVICE, response: response.data });
           let msg = {
             open: true,
             message: `Store Save Successfully`,
@@ -80,7 +85,7 @@ export const add_new_pos_device = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error.response.data || {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -103,25 +108,22 @@ export const add_new_pos_device = (data) => {
   };
 };
 
-export const get_store_pos_device =(data) => {
+export const get_store_pos_device = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "post",
         url: `${BaseUrl}devices/getStoreDevice`,
-        data:{storeId:data},
+        data: { storeId: data },
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          console.log(response)
-          dispatch({type:GET_POS_DEVICES, response:response.data})
+          dispatch({ type: GET_POS_DEVICES, response: [response.data] });
         })
         .catch((error) => {
           console.log("err", error.response);
-          console.log("err", error);
-
           let msg = {
             open: true,
             message:
@@ -130,7 +132,7 @@ export const get_store_pos_device =(data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error.response.data || {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -151,4 +153,4 @@ export const get_store_pos_device =(data) => {
       dispatch({ type: MESSAGE, data: msg });
     }
   };
-}
+};

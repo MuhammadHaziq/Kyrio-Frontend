@@ -15,10 +15,10 @@ import {
 
 const getStoreName = (cell, row) => {
   const storeNames = []
-  const storeName = row.store.map(item => {
-    return storeNames.push(item.storeName)
-  })
-  return storeNames
+  // const storeName = row.store.map(item => {
+  //   return storeNames.push(item.storeName)
+  // })
+  return row.store.storeName
 }
 const PosDeviceDatatable = (props) => {
   return (<React.Fragment>

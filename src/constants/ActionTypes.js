@@ -40,9 +40,21 @@ export const ADD_NEW_STORE = 'ADD_NEW_STORE'
 
 //  Pos Device Action
 export const GET_POS_DEVICES= 'GET_POS_DEVICES'
-export const ADD_NEW_POS_DEVICE = 'ADD_NEW_POS_DEVICE'  
+export const ADD_NEW_POS_DEVICE = 'ADD_NEW_POS_DEVICE'
 /**
 *
 *  Pos & Stores End
+*
+****/
+/**
+*
+*  Dining Option
+*
+****/
+export const  GET_DINING_OPTION = 'GET_DINING_OPTION'
+export const ADD_NEW_DINING_OPTION = 'ADD_NEW_DINING_OPTION'
+/**
+*
+*  Dining Option End
 *
 ****/

@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
 import Store from './stores/Store.jsx'
 import PosDevice from './posDevices/PosDevice.jsx'
+import DiningOptions from './diningOption/DiningOptions.jsx'
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const features = useSelector((state) => state.auth.user.roleData.features);
@@ -180,6 +181,9 @@ const Settings = () => {
                         deserunt dolor eiusmod eu pariatur culpa mollit in
                         irure.
                       </p>
+                    </CTabPane>
+                    <CTabPane active={activeTab === 8}>
+                      <DiningOptions />
                     </CTabPane>
                     <CTabPane active={activeTab === 9}>
                       <Store />

@@ -12,12 +12,13 @@ import {
   CLabel,
   CFade,
   CCollapse,
-  CLink
+  CLink,
+  CSelect
 } from "@coreui/react";
 import PosDeviceDatatable from '../../../datatables/settings/posDevice/PosDeviceDatatable'
 import {CIcon} from "@coreui/icons-react";
 import {useSelector, useDispatch} from "react-redux";
-import {get_pos_devices} from "../../../actions/settings/posDeviceActions";
+import {get_pos_devices, get_store_pos_device} from "../../../actions/settings/posDeviceActions";
 import {get_stores} from "../../../actions/settings/storeActions";
 import AddPosDevice from '../../../components/settings/posDevice/AddPosDevice'
 
@@ -26,6 +27,7 @@ const PosDevice = () => {
   const [fadePosDevice, setFadePosDevice] = useState(true);
   const [fadeAddPosDevice, setFadeAddPosDevice] = useState(false);
   const [timeout, setTimeout] = useState(300);
+  const [selectedStoreId, setSelectedStoreId] = useState('')
   const dispatch = useDispatch()
   const posDevice = useSelector((state) => state.settingReducers.posDeviceReducer)
   const store = useSelector((state) => state.settingReducers.storeReducer)
@@ -42,6 +44,11 @@ const PosDevice = () => {
   const goBack = () => {
     setFadePosDevice(true)
     setFadeAddPosDevice(false)
+  }
+
+  const storeHandleChange = (e) => {
+    setSelectedStoreId(e.target.value)
+    dispatch(get_store_pos_device(e.target.value))
   }
   const toggleCollapse = (tab) => {
     const state = collapse.map((x, index) => (
@@ -83,6 +90,23 @@ const PosDevice = () => {
                           <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                             <CButton block="block" variant="outline" color="primary" onClick={addNewPosDevice}>ADD POS DEVICE</CButton>
                           </CCol>
+                        {/*  <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                            <CFormGroup>
+                              <CSelect
+                                custom
+                                size="md"
+                                name="selectStore"
+                                id="selectStore"
+                                value={selectedStoreId}
+                                onChange={storeHandleChange}
+                              >
+                                <option value="0">Select Store</option>
+                                {store.stores_list.map((item) => {
+                                  return <option value={item._id}>{item.title}</option>;
+                                })}
+                              </CSelect>
+                            </CFormGroup>
+                          </CCol>*/}
                         </CRow>
                       </CCardBody>
                     </CCollapse>

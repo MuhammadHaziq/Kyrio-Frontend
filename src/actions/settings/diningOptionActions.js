@@ -7,7 +7,7 @@ export const get_dining_options = () => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}devices`,
+        url: `${BaseUrl}dining`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -53,7 +53,7 @@ export const add_new_dining_option = (data) => {
     try {
       axios({
         method: "post",
-        url: `${BaseUrl}devices`,
+        url: `${BaseUrl}dining`,
         data:data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
@@ -64,7 +64,7 @@ export const add_new_dining_option = (data) => {
           dispatch({type:ADD_NEW_DINING_OPTION, response:response.data})
           let msg = {
             open: true,
-            message: `Store Save Successfully`,
+            message: `Dining Save Successfully`,
             object: {},
             error: false,
           };

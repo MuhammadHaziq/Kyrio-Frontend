@@ -19,16 +19,18 @@ import {
   CListGroupItem,
 } from "@coreui/react";
 // fake data generator
-import {connect} from 'react-redux'
-const getItems = (count) =>
-  Array.from({ length: count }, (v, k) => k).map((k) => ({
-    id: `item-${k}`,
-    content: `item ${k}`,
-  }));
+import { get_dining_options } from "../../../actions/settings/diningOptionActions";
+import { connect } from "react-redux";
+import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
+// const getItems = (data) =>
+//   data.map((item, index) => ({
+//     id: item._id,
+//     content: item.title,
+//   }));
 
 // a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
+const reorder = (data, startIndex, endIndex) => {
+  const result = data;
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
 
@@ -63,11 +65,26 @@ class DiningOptions extends Component {
       checked: [false, false],
       fadeDiningOption: true,
       fadeAddDiningOption: false,
-      items: getItems(10),
+      items: [],
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  componentDidMount() {
+    this.props.get_dining_options();
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.dining_option_list !== this.props.dining_option_list) {
+      const data = this.props.dining_option_list.map((item, index) => ({
+        id: item._id,
+        content: item.title,
+      }));
+      this.setState({
+        ...this.state,
+        items: data,
+      });
+    }
+  }
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
@@ -86,23 +103,32 @@ class DiningOptions extends Component {
   }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
-  addDiningOpt = () =>{
+  addDiningOpt = () => {
     this.setState({
-        fadeDiningOption: false,
-        fadeAddDiningOption: true
+      fadeDiningOption: false,
+      fadeAddDiningOption: true,
     });
-  }
-  goBack = () =>{
+  };
+  goBack = () => {
     this.setState({
       fadeDiningOption: true,
-      fadeAddDiningOption: false
+      fadeAddDiningOption: false,
     });
-  }
+  };
 
   render() {
-      const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
+    console.log("items", this.state.items);
+    console.log("items", this.props.dining_option_list)
+    const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
     return (
       <React.Fragment>
+        {fadeAddDiningOption ? (
+          <CFade timeout={timeout} in={fadeAddDiningOption}>
+            <AddDiningOption goBack={this.goBack} store={this.props.store} />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeDiningOption ? (
           <CFade timeout={timeout} in={fadeDiningOption}>
             <CRow>
@@ -170,7 +196,9 @@ class DiningOptions extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-
-  }
-}
-export default connect(mapStateToProps, null)(DiningOptions);
+    dining_option_list:
+      state.settingReducers.diningOptionReducer.dining_option_list,
+    store: state.settingReducers.storeReducer.stores_list,
+  };
+};
+export default connect(mapStateToProps, { get_dining_options })(DiningOptions);

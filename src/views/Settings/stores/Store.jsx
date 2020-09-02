@@ -17,7 +17,6 @@ import {
 import StoreDatatable from '../../../datatables/settings/stores/StoreDatatable'
 import {CIcon} from "@coreui/icons-react";
 import {useSelector, useDispatch} from "react-redux";
-import {get_stores} from "../../../actions/settings/storeActions";
 import AddStore from '../../../components/settings/stores/AddStore'
 const Stores = () => {
   const [collapse, setCollapse] = useState([true, true]);
@@ -28,9 +27,6 @@ const Stores = () => {
   const dispatch = useDispatch()
   const store = useSelector((state) => state.settingReducers.storeReducer)
 
-  useEffect(() => {
-    dispatch(get_stores())
-  }, [])
 
   const addNewStore = () => {
     setFadeStore(false)

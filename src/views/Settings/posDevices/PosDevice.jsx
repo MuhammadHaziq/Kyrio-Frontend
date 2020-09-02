@@ -19,7 +19,6 @@ import PosDeviceDatatable from '../../../datatables/settings/posDevice/PosDevice
 import {CIcon} from "@coreui/icons-react";
 import {useSelector, useDispatch} from "react-redux";
 import {get_pos_devices, get_store_pos_device} from "../../../actions/settings/posDeviceActions";
-import {get_stores} from "../../../actions/settings/storeActions";
 import AddPosDevice from '../../../components/settings/posDevice/AddPosDevice'
 
 const PosDevice = () => {
@@ -34,7 +33,6 @@ const PosDevice = () => {
 
   useEffect(() => {
     dispatch(get_pos_devices())
-      dispatch(get_stores())
   }, [])
 
   const addNewPosDevice = () => {

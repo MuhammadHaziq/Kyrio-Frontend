@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CCard,
   CCardBody,
@@ -13,14 +13,21 @@ import { Redirect } from "react-router-dom";
 import { MdSettings, MdStore } from "react-icons/md";
 import General from "./General/General";
 import BillingSubscription from './BillingSubscriptions/BillingSubscription.jsx'
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
 import Store from './stores/Store.jsx'
 import PosDevice from './posDevices/PosDevice.jsx'
 import DiningOptions from './diningOption/DiningOptions.jsx'
+import {get_stores} from "../../actions/settings/storeActions";
+
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const features = useSelector((state) => state.auth.user.roleData.features);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(get_stores())
+  }, [])
+
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
   ) : (

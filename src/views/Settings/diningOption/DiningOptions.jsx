@@ -17,9 +17,14 @@ import {
   CLink,
   CListGroup,
   CListGroupItem,
+  CSelect
 } from "@coreui/react";
 // fake data generator
-import { get_dining_options } from "../../../actions/settings/diningOptionActions";
+import {
+  get_dining_options,
+  update_dining_option,
+  get_store_dining,
+} from "../../../actions/settings/diningOptionActions";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
 // const getItems = (data) =>
@@ -66,7 +71,7 @@ class DiningOptions extends Component {
       fadeDiningOption: true,
       fadeAddDiningOption: false,
       items: [],
-    };
+      selectedStoreId: ""   };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
@@ -84,6 +89,14 @@ class DiningOptions extends Component {
         items: data,
       });
     }
+    if(prevState.selectedStoreId !== this.state.selectedStoreId) {
+      const data ={
+        storeId:this.state.selectedStoreId
+      }
+      console.log(data)
+      this.props.get_store_dining(data)
+    }
+
   }
   onDragEnd(result) {
     // dropped outside the list
@@ -96,7 +109,10 @@ class DiningOptions extends Component {
       result.source.index,
       result.destination.index
     );
-
+    const data = {
+      data:JSON.stringify(items)
+    }
+    this.props.update_dining_option(data)
     this.setState({
       items,
     });
@@ -115,10 +131,14 @@ class DiningOptions extends Component {
       fadeAddDiningOption: false,
     });
   };
-
+   storeHandleChange = (e) => {
+    this.setState({
+      ...this.state,
+      selectedStoreId: e.target.value,
+    });
+  };
   render() {
-    console.log("items", this.state.items);
-    console.log("items", this.props.dining_option_list)
+    console.log("items", this.props.dining_option_list);
     const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
     return (
       <React.Fragment>
@@ -137,9 +157,31 @@ class DiningOptions extends Component {
                   <CCardHeader>
                     <CRow>
                       <CCol xs="12" lg="6">
-                        <CButton color="success" onClick={this.addDiningOpt}>
-                          <i className="fa fa-plus"></i> ADD DINING OPTION
-                        </CButton>
+                        <CButton block="block" variant="outline" color="primary" onClick={this.addDiningOpt}>DINING OPTION</CButton>
+                      </CCol>
+                      <CCol xs='12' lg='6'>
+                        <CFormGroup row>
+                          <CCol md="3">
+                            <CLabel>Select Store</CLabel>
+                          </CCol>
+                          <CCol md="9">
+                              <CFormGroup>
+                                <CSelect
+                                  custom
+                                  size="md"
+                                  name="selectedStoreId"
+                                  id="selectStore"
+                                  value={this.state.selectedStoreId}
+                                  onChange={this.storeHandleChange}
+                                >
+                                  <option value="0">Select Store</option>
+                                  {this.props.store.map((item) => {
+                                    return <option value={item._id}>{item.title}</option>;
+                                  })}
+                                </CSelect>
+                              </CFormGroup>
+                          </CCol>
+                        </CFormGroup>
                       </CCol>
                     </CRow>
                   </CCardHeader>
@@ -201,4 +243,4 @@ const mapStateToProps = (state) => {
     store: state.settingReducers.storeReducer.stores_list,
   };
 };
-export default connect(mapStateToProps, { get_dining_options })(DiningOptions);
+export default connect(mapStateToProps, { get_dining_options, update_dining_option, get_store_dining })(DiningOptions);

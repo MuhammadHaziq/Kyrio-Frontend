@@ -27,15 +27,8 @@ import {useDispatch, useSelector} from "react-redux";
 const AddStore = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer)
   const [collapse, setCollapse] = useState([true, true]);
-  const [expRight, setExpRight] = useState(false);
-  const [subscribe, setSubscribe] = useState(false);
-  const [title, setTitle] = useState('');
-  const [message, setMessage] = useState('');
-  const [buttonText, setButtonText] = useState('');
-  const [timeout, setTimeout] = useState(300);
   const [fields, setFields] = useState({store_name: "", store_address: "", store_description: "", store_phone: ''})
   const [errors, setErrors] = useState({store_name: false, store_address: false, store_description: false, store_phone: false})
-  const [fade, setFade] = useState(true)
   const dispatch = useDispatch()
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (

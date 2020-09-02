@@ -12,21 +12,21 @@ import {
 import { Redirect } from "react-router-dom";
 import { MdSettings, MdStore } from "react-icons/md";
 import General from "./General/General";
-import BillingSubscription from './BillingSubscriptions/BillingSubscription.jsx'
+import BillingSubscription from "./BillingSubscriptions/BillingSubscription.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
-import Store from './stores/Store.jsx'
-import PosDevice from './posDevices/PosDevice.jsx'
-import DiningOptions from './diningOption/DiningOptions.jsx'
-import {get_stores} from "../../actions/settings/storeActions";
-
+import Store from "./stores/Store.jsx";
+import PosDevice from "./posDevices/PosDevice.jsx";
+import DiningOptions from "./diningOption/DiningOptions.jsx";
+import { get_stores } from "../../actions/settings/storeActions";
+import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const features = useSelector((state) => state.auth.user.roleData.features);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(get_stores())
-  }, [])
+    dispatch(get_stores());
+  }, []);
 
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
@@ -159,7 +159,7 @@ const Settings = () => {
                       <General />
                     </CTabPane>
                     <CTabPane active={activeTab === 1}>
-                    <BillingSubscription />
+                      <BillingSubscription />
                     </CTabPane>
                     <CTabPane active={activeTab === 2}>
                       <p>
@@ -189,6 +189,9 @@ const Settings = () => {
                         irure.
                       </p>
                     </CTabPane>
+                    <CTabPane active={activeTab === 4}>
+                      <Taxes />
+                    </CTabPane>
                     <CTabPane active={activeTab === 8}>
                       <DiningOptions />
                     </CTabPane>
@@ -196,7 +199,7 @@ const Settings = () => {
                       <Store />
                     </CTabPane>
                     <CTabPane active={activeTab === 10}>
-                      <PosDevice/>
+                      <PosDevice />
                     </CTabPane>
                   </CTabContent>
                 </CCol>

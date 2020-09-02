@@ -17,7 +17,7 @@ import {
   CLink,
   CListGroup,
   CListGroupItem,
-  CSelect
+  CSelect,
 } from "@coreui/react";
 // fake data generator
 import {
@@ -71,7 +71,8 @@ class DiningOptions extends Component {
       fadeDiningOption: true,
       fadeAddDiningOption: false,
       items: [],
-      selectedStoreId: ""   };
+      selectedStoreId: "",
+    };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
@@ -89,14 +90,13 @@ class DiningOptions extends Component {
         items: data,
       });
     }
-    if(prevState.selectedStoreId !== this.state.selectedStoreId) {
-      const data ={
-        storeId:this.state.selectedStoreId
-      }
-      console.log(data)
-      this.props.get_store_dining(data)
+    if (prevState.selectedStoreId !== this.state.selectedStoreId) {
+      const data = {
+        storeId: this.state.selectedStoreId,
+      };
+      console.log(data);
+      this.props.get_store_dining(data);
     }
-
   }
   onDragEnd(result) {
     // dropped outside the list
@@ -110,9 +110,9 @@ class DiningOptions extends Component {
       result.destination.index
     );
     const data = {
-      data:JSON.stringify(items)
-    }
-    this.props.update_dining_option(data)
+      data: JSON.stringify(items),
+    };
+    this.props.update_dining_option(data);
     this.setState({
       items,
     });
@@ -131,7 +131,7 @@ class DiningOptions extends Component {
       fadeAddDiningOption: false,
     });
   };
-   storeHandleChange = (e) => {
+  storeHandleChange = (e) => {
     this.setState({
       ...this.state,
       selectedStoreId: e.target.value,
@@ -157,29 +157,37 @@ class DiningOptions extends Component {
                   <CCardHeader>
                     <CRow>
                       <CCol xs="12" lg="6">
-                        <CButton block="block" variant="outline" color="primary" onClick={this.addDiningOpt}>DINING OPTION</CButton>
+                        <CButton
+                          block="block"
+                          variant="outline"
+                          color="primary"
+                          onClick={this.addDiningOpt}
+                        >
+                          DINING OPTION
+                        </CButton>
                       </CCol>
-                      <CCol xs='12' lg='6'>
+                      <CCol xs="12" lg="6">
                         <CFormGroup row>
-                          <CCol md="3">
-                            <CLabel>Select Store</CLabel>
-                          </CCol>
                           <CCol md="9">
-                              <CFormGroup>
-                                <CSelect
-                                  custom
-                                  size="md"
-                                  name="selectedStoreId"
-                                  id="selectStore"
-                                  value={this.state.selectedStoreId}
-                                  onChange={this.storeHandleChange}
-                                >
-                                  <option value="0">Select Store</option>
-                                  {this.props.store.map((item) => {
-                                    return <option value={item._id}>{item.title}</option>;
-                                  })}
-                                </CSelect>
-                              </CFormGroup>
+                            <CFormGroup>
+                              <CSelect
+                                custom
+                                size="md"
+                                name="selectedStoreId"
+                                id="selectStore"
+                                value={this.state.selectedStoreId}
+                                onChange={this.storeHandleChange}
+                              >
+                                <option value="0">Select Store</option>
+                                {this.props.store.map((item) => {
+                                  return (
+                                    <option value={item._id}>
+                                      {item.title}
+                                    </option>
+                                  );
+                                })}
+                              </CSelect>
+                            </CFormGroup>
                           </CCol>
                         </CFormGroup>
                       </CCol>
@@ -243,4 +251,8 @@ const mapStateToProps = (state) => {
     store: state.settingReducers.storeReducer.stores_list,
   };
 };
-export default connect(mapStateToProps, { get_dining_options, update_dining_option, get_store_dining })(DiningOptions);
+export default connect(mapStateToProps, {
+  get_dining_options,
+  update_dining_option,
+  get_store_dining,
+})(DiningOptions);

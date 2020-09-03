@@ -14,6 +14,7 @@ import ModalSelectItemsTax from "./ModalSelectItemsTax";
 import {
   toggle_dinings,
   toggle_category,
+  toggle_category_item,
 } from "../../../actions/settings/taxesActions.js";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +31,8 @@ const TaxDiningOption = (props) => {
   const toggleItems = () => {
     setModalItems(!modalItems);
     const data = [];
-    dispatch(toggle_category(data));
+    // dispatch(toggle_category(data));
+    dispatch(toggle_category_item(data, data));
   };
   const dining = useSelector(
     (state) => state.settingReducers.diningOptionReducer

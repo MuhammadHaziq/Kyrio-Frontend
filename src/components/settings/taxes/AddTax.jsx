@@ -25,8 +25,6 @@ import {
   CSwitch,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { TextMask, InputAdapter } from "react-text-mask-hoc";
-// import {add_new_store} from '../../../actions/settings/storeActions.js'
 import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
 const AddTax = (props) => {
@@ -97,9 +95,6 @@ const AddTax = (props) => {
         setStoreId(data);
       }
     }
-
-    // setStoreId(storeData);
-    // setType(e.target.value);
   };
 
   return (

@@ -7,6 +7,7 @@ import discountReducer from "./items/discountReducer";
 import storeReducer from './settings/storeReducer';
 import posDeviceReducer from './settings/posDeviceReducer'
 import diningOptionReducer from './settings/diningOptionReducer'
+import taxesReducer from './settings/taxesReducer'
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -24,7 +25,8 @@ const items = combineReducers({
 const settingReducers = combineReducers({
   storeReducer,
   posDeviceReducer,
-  diningOptionReducer
+  diningOptionReducer,
+  taxesReducer
 })
 const rootReducer = combineReducers({
   settings: settingsReducer,

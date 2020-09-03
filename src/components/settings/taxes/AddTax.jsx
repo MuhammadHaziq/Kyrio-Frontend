@@ -27,6 +27,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 // import {add_new_store} from '../../../actions/settings/storeActions.js'
+import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
 const AddTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -240,6 +241,16 @@ const AddTax = (props) => {
           </CCollapse>
         </CCardFooter>
       </CCard>
+      {sChecked == true ? (
+        <CRow>
+          <CCol sm="12" xl="12">
+            <CCard>
+              <TaxDiningOption />
+            </CCard>
+          </CCol>
+        </CRow>
+      ) : null}
+
       <CRow>
         <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <CButton

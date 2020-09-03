@@ -58,3 +58,15 @@ export const ADD_NEW_DINING_OPTION = 'ADD_NEW_DINING_OPTION'
 *  Dining Option End
 *
 ****/
+/**
+*
+*  Taxes
+*
+****/
+export const  TOGGLE_DININGS = 'TOGGLE_DININGS'
+export const TOGGLE_CATEGORY = 'TOGGLE_CATEGORY'
+/**
+*
+*  Taxes  End
+*
+****/

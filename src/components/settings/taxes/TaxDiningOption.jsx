@@ -34,17 +34,25 @@ const TaxDiningOption = (props) => {
     dispatch(toggle_category_item(data, data));
   };
 
+  const doneDining = () => {
+    setModalDining(!modalDining);
+  };
+  const doneItems = () => {
+    setModalItems(!modalItems);
+  };
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   return (
     <React.Fragment>
       <ModalSelectDiningOption
         show={modalDining}
         toggle={toggleDining}
+        done={doneDining}
         dining={taxes.tax_dining_list}
       />
       <ModalSelectItemsTax
         show={modalItems}
         toggle={toggleItems}
+        done={doneItems}
         category={taxes.tax_category_list}
       />
       <CCardBody>
@@ -79,7 +87,7 @@ const TaxDiningOption = (props) => {
               Do not apply tax to these items:
               <CButton
                 className="float-right"
-              variant="ghost"
+                variant="ghost"
                 color="primary"
                 size="sm"
                 onClick={() => setModalItems(!modalItems)}

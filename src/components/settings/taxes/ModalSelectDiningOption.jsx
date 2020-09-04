@@ -64,7 +64,9 @@ const ModalSelectDiningOption = (props) => {
           <CButton color="secondary" onClick={props.toggle}>
             Cancel
           </CButton>
-          <CButton color="primary">Done</CButton>{" "}
+          <CButton color="primary" onClick={props.done}>
+            Done
+          </CButton>{" "}
         </CModalFooter>
       </CModal>
     </React.Fragment>

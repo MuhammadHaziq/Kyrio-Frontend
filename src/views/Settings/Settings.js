@@ -20,7 +20,11 @@ import PosDevice from "./posDevices/PosDevice.jsx";
 import DiningOptions from "./diningOption/DiningOptions.jsx";
 import { get_stores } from "../../actions/settings/storeActions";
 // import { get_category_list } from "../../actions/items/categoryActions";
-import {get_tax_category_list} from '../../actions/settings/taxesActions'
+import {
+  get_tax_category_list,
+  get_taxes_type,
+  get_taxes_option,
+} from "../../actions/settings/taxesActions";
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -29,7 +33,9 @@ const Settings = () => {
   useEffect(() => {
     dispatch(get_stores());
     // dispatch(get_category_list())
-    dispatch(get_tax_category_list())
+    dispatch(get_tax_category_list());
+    dispatch(get_taxes_type());
+    dispatch(get_taxes_option());
   }, []);
 
   return !LoginCheck() ? (

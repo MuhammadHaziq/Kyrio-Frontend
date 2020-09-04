@@ -1,26 +1,32 @@
 import {
-  GET_DINING_OPTION,
-  ADD_NEW_DINING_OPTION,
   MESSAGE,
   ERROR_MESSAGE,
+  TOGGLE_DININGS,
+  DINING_SELECT_STATUS,
+  TOGGLE_CATEGORY,
+  CATEGORY_SELECT_STATUS,
+  GET_CATEGORY_ITEMS,
+  TOGGLE_CATEGORY_ITEMS,
+  GET_CATEGORY_TAX,
   GET_DINING_TAX,
+  CATEGORY_ITEMS_SELECT_STATUS,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 
-export const get_dining_options = () => {
+export const get_taxes_type = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}dining`,
+        url: `${BaseUrl}tax/taxesType`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          dispatch({ type: GET_DINING_OPTION, response: response.data });
-          dispatch({ type: GET_DINING_TAX, response: response.data });
+          console.log(response);
+          dispatch({ type: GET_CATEGORY_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -32,10 +38,7 @@ export const get_dining_options = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
+            object: error.response.data,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -58,28 +61,19 @@ export const get_dining_options = () => {
   };
 };
 
-export const add_new_dining_option = (data) => {
+export const get_taxes_option = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "post",
-        url: `${BaseUrl}dining`,
-        data: data,
+        method: "get",
+        url: `${BaseUrl}items/categories`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: ADD_NEW_DINING_OPTION, response: response.data });
-
-          let msg = {
-            open: true,
-            message: `Dining Save Successfully`,
-            object: {},
-            error: false,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({ type: GET_CATEGORY_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -91,10 +85,7 @@ export const add_new_dining_option = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
+            object: error.response.data,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -117,27 +108,19 @@ export const add_new_dining_option = (data) => {
   };
 };
 
-export const update_dining_option = (data) => {
+export const get_tax_category_list = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "patch",
-        url: `${BaseUrl}dining`,
-        data: data,
+        method: "get",
+        url: `${BaseUrl}items/categories`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          // dispatch({type:GET_DINING_OPTION, response:response.data})
-          let msg = {
-            open: true,
-            message: `Dining Option Updated Successfully`,
-            object: {},
-            error: false,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({ type: GET_CATEGORY_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -149,10 +132,7 @@ export const update_dining_option = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
+            object: error.response.data,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -175,30 +155,19 @@ export const update_dining_option = (data) => {
   };
 };
 
-export const get_store_dining = (data) => {
+export const get_catgeory_item = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "post",
-        url: `${BaseUrl}dining/getStoreDining`,
-        data: data,
+        method: "get",
+        url: `${BaseUrl}items/categories/categoryItem`,
+        params: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          console.log(response);
-          dispatch({ type: GET_DINING_OPTION, response: response.data });
-          let msg = {
-            open: true,
-            message:
-              response.data.length === 0
-                ? `No Dining Found `
-                : `Selected Store Dining`,
-            object: {},
-            error: false,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({ type: GET_CATEGORY_ITEMS, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -210,10 +179,7 @@ export const get_store_dining = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
+            object: error.response.data || {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -233,5 +199,47 @@ export const get_store_dining = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const toggle_dinings = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: DINING_SELECT_STATUS,
+      response: data,
+    });
+    // dispatch({
+    //   type: TOGGLE_DININGS,
+    //   response: data,
+    // });
+  };
+};
+
+export const toggle_category = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: CATEGORY_SELECT_STATUS,
+      response: data,
+    });
+    // dispatch({
+    //   type: TOGGLE_CATEGORY,
+    //   response: data,
+    // });
+  };
+};
+
+export const toggle_category_item = (categoryItems, category) => {
+  return (dispatch) => {
+    console.log(categoryItems);
+    dispatch({
+      type: CATEGORY_ITEMS_SELECT_STATUS,
+      category: category,
+      categoryItems: categoryItems,
+    });
+    // dispatch({
+    //   type: TOGGLE_CATEGORY_ITEMS,
+    //   category: category,
+    //   categoryItems: categoryItems,
+    // });
   };
 };

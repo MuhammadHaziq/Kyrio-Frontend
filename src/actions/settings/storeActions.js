@@ -1,6 +1,11 @@
-import{ GET_STORES,ADD_NEW_STORE, MESSAGE, ERROR_MESSAGE} from "../../constants/ActionTypes";
-import {BaseUrl} from '../../constants/baseUrls'
-import axios from 'axios'
+import {
+  GET_STORES,
+  ADD_NEW_STORE,
+  MESSAGE,
+  ERROR_MESSAGE,
+} from "../../constants/ActionTypes";
+import { BaseUrl } from "../../constants/baseUrls";
+import axios from "axios";
 export const get_stores = () => {
   return (dispatch) => {
     try {
@@ -24,7 +29,10 @@ export const get_stores = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -53,14 +61,14 @@ export const add_new_store = (data) => {
       axios({
         method: "post",
         url: `${BaseUrl}stores`,
-        data:data,
+        data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          console.log(response)
-          dispatch({type:ADD_NEW_STORE, response:response.data})
+          console.log(response);
+          dispatch({ type: ADD_NEW_STORE, response: response.data });
           let msg = {
             open: true,
             message: `Store Save Successfully`,
@@ -79,7 +87,10 @@ export const add_new_store = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

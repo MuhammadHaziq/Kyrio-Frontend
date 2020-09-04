@@ -141,7 +141,9 @@ const ModalSelectItemsTax = (props) => {
               <CButton color="secondary" variant="ghost" onClick={props.toggle}>
                 Cancel
               </CButton>
-              <CButton color="primary" variant="ghost">Done</CButton>{" "}
+              <CButton color="primary" variant="ghost" onClick={props.done}>
+                Done
+              </CButton>{" "}
             </React.Fragment>
           ) : (
             <CButton color="primary" variant="ghost" onClick={goBack}>

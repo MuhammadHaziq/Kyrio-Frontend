@@ -23,12 +23,15 @@ import {
   CInputCheckbox,
   CCardFooter,
   CSwitch,
+  CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
+import { save_item_taxes } from "../../../actions/settings/taxesActions.js";
 const AddTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   const [collapse, setCollapse] = useState([true, false]);
   const [taxTypeId, setTaxType] = useState("");
   const [taxOptionId, setTaxOption] = useState("");
@@ -47,6 +50,15 @@ const AddTax = (props) => {
     tax_option: false,
   });
   const dispatch = useDispatch();
+  useEffect(() => {
+    setStoreId(store.stores_list);
+  }, [store.stores_list]);
+
+  useEffect(() => {
+    setTaxOption(0);
+    setTaxType(taxes.tax_types[0]._id);
+  }, [taxes.tax_types]);
+
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -56,15 +68,81 @@ const AddTax = (props) => {
   };
   const submitTaxForm = (e) => {
     e.preventDefault();
+    if (fields.tax_name == "") {
+      setErrors({
+        ...errors,
+        tax_name: true,
+      });
+      return false;
+    }
+    const selectedStore = [];
+    storeId
+      .filter((item) => item.isSelected == true)
+      .map((item) => {
+        selectedStore.push({
+          storeId: item._id,
+          storeTitle: item.title,
+        });
+      });
+    const selectedDining = [];
+    taxes.tax_dining_list
+      .filter((item) => item.isSelected == true)
+      .map((item) => {
+        selectedDining.push({
+          diningId: item._id,
+          diningTitle: item.title,
+        });
+      });
+    const selectedCategory = [];
+    taxes.tax_category_list
+      .filter((item) => item.isSelected == true)
+      .map((item) => {
+        selectedCategory.push({
+          categoryId: item._id,
+          categoryTitle: item.catTitle,
+        });
+      });
+    const selectedCategoryItems = [];
+    taxes.category_items
+      .filter((item) => item.isSelected == true)
+      .map((item) => {
+        selectedCategoryItems.push({
+          itemId: item._id,
+          itemName: item.name,
+          categoryId: item.category.categoryId,
+        });
+      });
+    const types = taxes.tax_types.filter((item) => item._id == taxTypeId);
+    const options = taxes.tax_options.filter((item) => item._id == taxOptionId);
     const data = {
       title: fields.tax_name,
-      address: fields.tax_rate,
-      phone: fields.store_phone,
-      description: fields.store_description,
+      tax_rate: fields.tax_rate,
+      tax_type: JSON.stringify({
+        id: types[0]._id,
+        title: types[0].title,
+      }),
+      tax_option:
+        options.length == 0
+          ? JSON.stringify({ id: "0", title: "-" })
+          : JSON.stringify({
+              id: options[0]._id,
+              title: options[0].title,
+            }),
+      stores: JSON.stringify(selectedStore),
+      dinings: JSON.stringify(selectedDining),
+      categories: JSON.stringify(selectedCategory),
+      items: JSON.stringify(selectedCategoryItems),
     };
     console.log("sote_name", data);
+    dispatch(save_item_taxes(data));
   };
   const handleOnChange = (e) => {
+    if (e.target.name == "tax_name") {
+      setErrors({
+        ...errors,
+        tax_name: false,
+      });
+    }
     const { name, value } = e.target;
     setFields({
       ...fields,
@@ -78,23 +156,27 @@ const AddTax = (props) => {
     setTaxOption(e.target.value);
   };
   const storeHandleChange = (e) => {
-    const store = props.store.filter((item) => item._id == e.target.value);
-    let storeData;
-    storeData = {
-      storeId: store[0]._id,
-      storeName: store[0].title,
-    };
-    if (storeId.length == 0) {
-      setStoreId([storeData]);
+    let selectedStore = [];
+    if (e.target.value == 0) {
+      selectedStore = storeId.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: !item.isSelected,
+        };
+      });
     } else {
-      const checkExist = storeId.filter((item) => item.storeId == store[0]._id);
-      if (checkExist.length == 0) {
-        setStoreId([...storeId, storeData]);
-      } else {
-        const data = storeId.filter((item) => item.storeId !== store[0]._id);
-        setStoreId(data);
-      }
+      selectedStore = storeId.slice().map((item) => {
+        if (item._id == e.target.value) {
+          return {
+            ...item,
+            isSelected: !item.isSelected,
+          };
+        }
+        return item;
+      });
     }
+
+    setStoreId(selectedStore);
   };
 
   return (
@@ -114,93 +196,105 @@ const AddTax = (props) => {
         </CCardHeader>
         <CCollapse show={collapse[0]}>
           <CCardBody>
-            <CForm onSubmit={submitTaxForm}>
-              <CFormGroup row="row">
-                <CCol md="8">
-                  <CLabel htmlFor="tax_name">Tax Name</CLabel>
-                  <CInputGroup>
-                    <CInputGroupPrepend>
-                      <CInputGroupText>
-                        <CIcon name="cil-everplaces" />
-                      </CInputGroupText>
-                    </CInputGroupPrepend>
-                    <CInput
-                      id="tax_name"
-                      name="tax_name"
-                      placeholder="Tax Name"
-                      onChange={handleOnChange}
+            <CFormGroup row>
+              <CCol md="8">
+                <CLabel htmlFor="tax_name">Tax Name</CLabel>
+                <CInputGroup>
+                  <CInputGroupPrepend>
+                    <CInputGroupText>
+                      <CIcon name="cil-everplaces" />
+                    </CInputGroupText>
+                  </CInputGroupPrepend>
+                  <CInput
+                    id="tax_name"
+                    name="tax_name"
+                    placeholder="Tax Name"
+                    onChange={handleOnChange}
+                  />
+                  <CInvalidFeedback style={{ display: "block" }}>
+                    {errors.tax_name == true ? "Please Enter Tax Name" : ""}
+                  </CInvalidFeedback>
+                </CInputGroup>
+              </CCol>
+              <CCol md="4">
+                <CLabel htmlFor="tax_rate">Tax Rate</CLabel>
+                <CInputGroup>
+                  <CInput
+                    id="tax_rate"
+                    name="tax_rate"
+                    placeholder="Tax Rate %"
+                    onChange={handleOnChange}
+                  />
+                  <CInputGroupAppend>
+                    <CInputGroupText>%</CInputGroupText>
+                  </CInputGroupAppend>
+                </CInputGroup>
+              </CCol>
+            </CFormGroup>
+            <CCol col="12" sm="12" md="12" xl="xl" className="mb-3 mb-xl-0">
+              <CFormGroup>
+                <CLabel htmlFor="taxTypeId">Type</CLabel>
+                <CSelect
+                  custom
+                  size="md"
+                  name="taxTypeId"
+                  id="taxTypeId"
+                  value={taxTypeId}
+                  onChange={typeHandleChange}
+                >
+                  {taxes.tax_types.map((item, index) => {
+                    return (
+                      <option value={item._id} key={index}>
+                        {item.title}
+                      </option>
+                    );
+                  })}
+                </CSelect>
+              </CFormGroup>
+            </CCol>
+            <CCol col="12" sm="12" md="12" xl="xl" className="mb-3 mb-xl-0">
+              <CFormGroup>
+                <CLabel htmlFor="taxOptionId">Option</CLabel>
+                <CSelect
+                  custom
+                  size="md"
+                  name="taxOptionId"
+                  id="taxOptionId;
+"
+                  value={taxOptionId}
+                  onChange={optionHandleChange}
+                >
+                  <option value={0}>-</option>
+                  {taxes.tax_options.map((item, index) => {
+                    return (
+                      <option value={item._id} key={index}>
+                        {item.title}
+                      </option>
+                    );
+                  })}
+                </CSelect>
+              </CFormGroup>
+              <CFormGroup>
+                <CCol md="12">
+                  <p>
+                    Tax application depends on dining option
+                    <CSwitch
+                      className={"mx-1 float-right"}
+                      variant={"3d"}
+                      color={"success"}
+                      size="sm"
+                      onChange={() => setChecked(!sChecked)}
                     />
-                  </CInputGroup>
-                </CCol>
-                <CCol md="4">
-                  <CLabel htmlFor="tax_rate">Tax Rate</CLabel>
-                  <CInputGroup>
-                    <CInput
-                      id="tax_rate"
-                      name="tax_rate"
-                      placeholder="Tax Rate %"
-                      onChange={handleOnChange}
-                    />
-                    <CInputGroupAppend>
-                      <CInputGroupText>%</CInputGroupText>
-                    </CInputGroupAppend>
-                  </CInputGroup>
+                  </p>
                 </CCol>
               </CFormGroup>
-              <CCol col="12" sm="12" md="12" xl="xl" className="mb-3 mb-xl-0">
-                <CFormGroup>
-                  <CSelect
-                    custom
-                    size="md"
-                    name="taxTypeId"
-                    id="taxTypeId"
-                    value={taxTypeId}
-                    onChange={typeHandleChange}
-                  >
-                    {store.stores_list.map((item) => {
-                      return <option value={item._id}>{item.title}</option>;
-                    })}
-                  </CSelect>
-                </CFormGroup>
-              </CCol>
-              <CCol col="12" sm="12" md="12" xl="xl" className="mb-3 mb-xl-0">
-                <CFormGroup>
-                  <CSelect
-                    custom
-                    size="md"
-                    name="taxOptionId"
-                    id="taxOptionId"
-                    value={taxOptionId}
-                    onChange={optionHandleChange}
-                  >
-                    {store.stores_list.map((item) => {
-                      return <option value={item._id}>{item.title}</option>;
-                    })}
-                  </CSelect>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="12">
-                    <p>
-                      Tax application depends on dining option
-                      <CSwitch
-                        className={"mx-1 float-right"}
-                        variant={"3d"}
-                        color={"success"}
-                        size="sm"
-                        checked={sChecked || ""}
-                        onChange={() => setChecked(!sChecked)}
-                      />
-                    </p>
-                  </CCol>
-                </CFormGroup>
-              </CCol>
-            </CForm>
+            </CCol>
           </CCardBody>
         </CCollapse>
 
         <CCardFooter>
           <h4>
-            Select Stores
+            Select Stores{" "}
             <div className="card-header-actions">
               <CLink className="card-header-action" onClick={() => toggle(1)}>
                 <CIcon
@@ -209,17 +303,47 @@ const AddTax = (props) => {
               </CLink>
             </div>
           </h4>
+          <span>
+            <small>
+              {storeId.filter((item) => item.isSelected).length == 0
+                ? "Not Available in Stores"
+                : `Available In ${
+                    storeId.filter((item) => item.isSelected).length
+                  } Stores`}{" "}
+              Stores
+            </small>
+          </span>
           <CCollapse show={collapse[1]}>
             <CCardBody>
-              <CFormGroup row>
+              <CFormGroup>
+                <CCol md="3">
+                  <CLabel>Select Store</CLabel>
+                </CCol>
                 <CCol md="9">
-                  {store.stores_list.map((item) => (
-                    <CFormGroup variant="custom-checkbox" inline>
+                  <CFormGroup variant="custom-checkbox" inline>
+                    <CInputCheckbox
+                      custom
+                      name="storeId"
+                      id={"storeId"}
+                      value={0}
+                      onChange={storeHandleChange}
+                    />
+                    <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
+                      {storeId.filter((item) => !item.isSelected).length == 0
+                        ? "UnSelect All"
+                        : "Select All"}
+                    </CLabel>
+                  </CFormGroup>
+                </CCol>
+                <CCol md="9">
+                  {(storeId || []).map((item, index) => (
+                    <CFormGroup variant="custom-checkbox" inline key={index}>
                       <CInputCheckbox
                         custom
                         name="storeId"
                         id={"storeId" + item._id}
                         value={item._id}
+                        checked={item.isSelected}
                         onChange={storeHandleChange}
                       />
                       <CLabel
@@ -249,7 +373,7 @@ const AddTax = (props) => {
       <CRow>
         <CCol sm="2" md="2" className="mb-3 mb-xl-0">
           <CButton
-          variant="ghost"
+            variant="ghost"
             className="pull-left"
             color="default"
             onClick={goBack}
@@ -259,7 +383,7 @@ const AddTax = (props) => {
         </CCol>
         <CCol sm="2" md="2" className="mb-3 mb-xl-0">
           <CButton
-          variant="ghost"
+            variant="ghost"
             className="pull-left"
             color="danger"
             onClick={goBack}
@@ -269,10 +393,11 @@ const AddTax = (props) => {
         </CCol>
         <CCol sm="2" md="8" className="mb-3 mb-xl-0 form-actions">
           <CButton
-            type="submit"
+            type="click"
             variant="ghost"
             className="float-right"
             color="primary"
+            onClick={submitTaxForm}
           >
             SAVE
           </CButton>

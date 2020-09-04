@@ -156,39 +156,33 @@ class DiningOptions extends Component {
                 <CCard>
                   <CCardHeader>
                     <CRow>
-                      <CCol xs="12" lg="6">
+                      <CCol xs="6" lg="6">
                         <CButton
-                          block="block"
                           variant="outline"
                           color="primary"
+                          className="float-left"
                           onClick={this.addDiningOpt}
                         >
                           DINING OPTION
                         </CButton>
                       </CCol>
-                      <CCol xs="12" lg="6">
-                        <CFormGroup row>
-                          <CCol md="9">
-                            <CFormGroup>
-                              <CSelect
-                                custom
-                                size="md"
-                                name="selectedStoreId"
-                                id="selectStore"
-                                value={this.state.selectedStoreId}
-                                onChange={this.storeHandleChange}
-                              >
-                                <option value="0">Select Store</option>
-                                {this.props.store.map((item) => {
-                                  return (
-                                    <option value={item._id}>
-                                      {item.title}
-                                    </option>
-                                  );
-                                })}
-                              </CSelect>
-                            </CFormGroup>
-                          </CCol>
+                      <CCol xs="6" lg="6">
+                        <CFormGroup className="float-right">
+                          <CSelect
+                            custom
+                            size="md"
+                            name="selectedStoreId"
+                            id="selectStore"
+                            value={this.state.selectedStoreId}
+                            onChange={this.storeHandleChange}
+                          >
+                            <option value="0">Select Store</option>
+                            {this.props.store.map((item) => {
+                              return (
+                                <option value={item._id}>{item.title}</option>
+                              );
+                            })}
+                          </CSelect>
                         </CFormGroup>
                       </CCol>
                     </CRow>

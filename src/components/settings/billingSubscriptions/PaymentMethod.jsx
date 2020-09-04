@@ -17,7 +17,7 @@ const PaymentMethod = (props) => {
     <p>
       <FaRegCreditCard/>
       &nbsp;&nbsp;No credit card currently on file.{" "}
-      <CButton color="success" className="float-right" shape='pill' varient="outline" onClick={props.addPaymentMethod}>
+      <CButton color="success" className="float-right" variant="ghost" onClick={props.addPaymentMethod}>
         ADD PAYMENT METHOD
       </CButton>
     </p>
@@ -27,7 +27,7 @@ const PaymentMethod = (props) => {
       Edit your business name, add a billing
       <br/>
       contact or other information you want to include on your invoices.{" "}
-      <CButton color="success" className="float-right" shape='pill' varient="outline" onClick={props.editBillingDetails}>
+      <CButton color="success" className="float-right" variant="ghost" onClick={props.editBillingDetails}>
         EDIT BILLING DETAILS
       </CButton>
     </p>

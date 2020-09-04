@@ -46,6 +46,9 @@ const AddDiningOption = (props) => {
   //   dispatch(get_stores())
   //
   // },[])
+  useEffect(() => {
+    setStoreId(props.store);
+  }, [props.store]);
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -55,12 +58,23 @@ const AddDiningOption = (props) => {
   };
   const submitDiningForm = (e) => {
     e.preventDefault();
-    if (storeId.length == 0) {
+    // if (storeId.length == 0) {
+    if (storeId.filter((item) => item.isSelected == true).length == 0) {
       alert("Select Store");
     } else {
+      const store = storeId.filter((item) => item.isSelected == true);
+      let storeData = [];
+      store.map((item) => {
+        storeData.push({
+          storeId: item._id,
+          storeName: item.title,
+        });
+      });
+
       const data = {
         title: fields.dining_name,
-        store: JSON.stringify(storeId),
+        store: JSON.stringify(storeData),
+        // store: JSON.stringify(storeId),
       };
       dispatch(add_new_dining_option(data));
     }
@@ -73,27 +87,49 @@ const AddDiningOption = (props) => {
     });
   };
   const storeHandleChange = (e) => {
-    const store = props.store.filter((item) => item._id == e.target.value);
-    let storeData;
-    storeData = {
-      storeId: store[0]._id,
-      storeName: store[0].title,
-    };
-    if (storeId.length == 0) {
-      setStoreId([storeData]);
+    let selectedStore = [];
+    if (e.target.value == 0) {
+      selectedStore = storeId.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: !item.isSelected,
+        };
+      });
     } else {
-      const checkExist = storeId.filter((item) => item.storeId == store[0]._id);
-      if (checkExist.length == 0) {
-        setStoreId([...storeId, storeData]);
-      } else {
-        const data = storeId.filter((item) => item.storeId !== store[0]._id);
-        setStoreId(data);
-      }
+      selectedStore = storeId.slice().map((item) => {
+        if (item._id == e.target.value) {
+          return {
+            ...item,
+            isSelected: !item.isSelected,
+          };
+        }
+        return item;
+      });
     }
+
+    setStoreId(selectedStore);
+    // const store = props.store.filter((item) => item._id == e.target.value);
+    // let storeData;
+    // storeData = {
+    //   storeId: store[0]._id,
+    //   storeName: store[0].title,
+    // };
+    // if (storeId.length == 0) {
+    //   setStoreId([storeData]);
+    // } else {
+    //   const checkExist = storeId.filter((item) => item.storeId == store[0]._id);
+    //   if (checkExist.length == 0) {
+    //     setStoreId([...storeId, storeData]);
+    //   } else {
+    //     const data = storeId.filter((item) => item.storeId !== store[0]._id);
+    //     setStoreId(data);
+    //   }
+    // }
 
     // setStoreId(storeData);
     // setSelectedStoreId(e.target.value);
   };
+  console.log(storeId);
   return (
     <CCard>
       <CCardHeader>
@@ -111,7 +147,7 @@ const AddDiningOption = (props) => {
       <CCollapse show={collapse[0]}>
         <CCardBody>
           <CForm onSubmit={submitDiningForm}>
-            <CFormGroup row="row">
+            <CFormGroup>
               <CCol md="12">
                 <CLabel htmlFor="store_name">Dining Name</CLabel>
                 <CInputGroup>
@@ -129,18 +165,36 @@ const AddDiningOption = (props) => {
                 </CInputGroup>
               </CCol>
             </CFormGroup>
-            <CFormGroup row>
+            <CFormGroup>
               <CCol md="3">
                 <CLabel>Select Store</CLabel>
               </CCol>
               <CCol md="9">
-                {props.store.map((item) => (
-                  <CFormGroup variant="custom-checkbox" inline>
+                <CFormGroup variant="custom-checkbox" inline>
+                  <CInputCheckbox
+                    custom
+                    name="storeId"
+                    id={"storeId"}
+                    value={0}
+                    onChange={storeHandleChange}
+                  />
+                  <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
+                    {storeId.filter((item) => item.isSelected == false)
+                      .length == 0
+                      ? "UnSelect All"
+                      : "Select All"}
+                  </CLabel>
+                </CFormGroup>
+              </CCol>
+              <CCol md="8">
+                {storeId.map((item, index) => (
+                  <CFormGroup variant="custom-checkbox" inline key={index}>
                     <CInputCheckbox
                       custom
                       name="storeId"
                       id={"storeId" + item._id}
                       value={item._id}
+                      checked={item.isSelected}
                       onChange={storeHandleChange}
                     />
                     <CLabel
@@ -154,40 +208,31 @@ const AddDiningOption = (props) => {
               </CCol>
             </CFormGroup>
             <CRow>
-              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+              <CCol sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="floatl-left"
                   color="default"
                   onClick={goBack}
                 >
                   BACK
                 </CButton>
               </CCol>
-              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+              <CCol sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="floatl-left"
                   color="danger"
                   onClick={goBack}
                 >
                   CANCEL
                 </CButton>
               </CCol>
-              <CCol
-                col="6"
-                sm="4"
-                md="4"
-                xl="xl"
-                className="mb-3 mb-xl-0 form-actions"
-              >
+              <CCol sm="4" md="8" xl="xl" className="mb-3 mb-xl-0 form-actions">
                 <CButton
                   type="submit"
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="float-right"
                   color="primary"
                 >
                   SAVE

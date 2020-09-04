@@ -37,7 +37,7 @@ const Subscriptions = () => {
     setShow(!show);
     setSubscribe(false);
   };
-  console.log('show', show)
+  console.log("show", show);
 
   return (
     <React.Fragment>
@@ -54,8 +54,7 @@ const Subscriptions = () => {
         <CButton
           color="success"
           className="float-right"
-          shape="pill"
-          variant="outline"
+          variant="ghost"
           onClick={() => handleSubscribe(1)}
         >
           SUBSCRIBE{" "}
@@ -79,8 +78,7 @@ const Subscriptions = () => {
         <CButton
           color="success"
           className="float-right"
-          shape="pill"
-          variant="outline"
+          variant="ghost"
           onClick={() => handleSubscribe(2)}
         >
           SUBSCRIBE{" "}

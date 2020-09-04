@@ -169,17 +169,17 @@ const AddPaymentMethod = (props) => {
           </CRow>
           <CRow>
             <CCol xs="4" className="text-center mt-3">
-              <CButton size='lg' color="secondary" className="pull-right btn-pill btn-block" variant="outline" onClick={props.goBack}>
+              <CButton size='md' color="secondary" className="float-left btn-block" variant="ghost" onClick={props.goBack}>
                 BACK
               </CButton>
             </CCol>
             <CCol xs="4" className="text-center mt-3">
-              <CButton size='lg' color="danger" className="pull-right btn-pill btn-block" variant="outline" onClick={props.goBack}>
+              <CButton size='md' color="danger" className="float-left btn-block" variant="ghost" onClick={props.goBack}>
                 CANCEL
               </CButton>
             </CCol>
             <CCol xs="4" className="text-center mt-3">
-              <CButton size='lg' color="success" className="pull-right btn-pill btn-block" variant="outline" onClick={savePaymentMethod}>
+              <CButton size='md' color="success" className="float-right btn-block" variant="ghost" onClick={savePaymentMethod}>
                 SAVE
               </CButton>
             </CCol>

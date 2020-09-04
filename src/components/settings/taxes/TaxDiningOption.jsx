@@ -54,20 +54,24 @@ const TaxDiningOption = (props) => {
               When dining option is:
               <CButton
                 className="float-right"
-                variant="outline"
+                variant="ghost"
                 color="primary"
                 size="sm"
                 onClick={() => setModalDining(!modalDining)}
               >
-                SELECT
+                {taxes.tax_dining_list.filter((item) => item.isSelected == true)
+                  .length == 0
+                  ? "SELECT"
+                  : "EDIT"}
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-15px" }}>
               {taxes.tax_dining_list.filter((item) => item.isSelected == true)
                 .length == 0
                 ? "No dining options selected"
-                : taxes.tax_dining_list.filter((item) => item.isSelected == true)
-                  .length + " dinings are selected"}
+                : taxes.tax_dining_list.filter(
+                    (item) => item.isSelected == true
+                  ).length + " dinings are selected"}
             </div>
           </CListGroupItem>
           <CListGroupItem>
@@ -75,20 +79,25 @@ const TaxDiningOption = (props) => {
               Do not apply tax to these items:
               <CButton
                 className="float-right"
-                variant="outline"
+              variant="ghost"
                 color="primary"
                 size="sm"
                 onClick={() => setModalItems(!modalItems)}
               >
-                SELECT
+                {taxes.tax_category_list.filter(
+                  (item) => item.isSelected == true
+                ).length == 0
+                  ? "SELECT"
+                  : "EDIT"}
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-8px" }}>
               {taxes.tax_category_list.filter((item) => item.isSelected == true)
                 .length == 0
                 ? " No items selected"
-                : taxes.tax_category_list.filter((item) => item.isSelected == true)
-                    .length + " items are selected"}
+                : taxes.tax_category_list.filter(
+                    (item) => item.isSelected == true
+                  ).length + " items are selected"}
             </div>
           </CListGroupItem>
         </CListGroup>

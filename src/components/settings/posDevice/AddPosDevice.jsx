@@ -63,9 +63,6 @@ const AddPosDevice = (props) => {
       };
       dispatch(add_new_pos_device(data));
     }
-
-    console.log("sote_name", fields);
-    console.log("stores_checked", storeId);
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -144,22 +141,20 @@ const AddPosDevice = (props) => {
               </CSelect>
             </CFormGroup>
             <CRow>
-              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="float-left"
                   color="default"
                   onClick={goBack}
                 >
                   BACK
                 </CButton>
               </CCol>
-              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="float-left"
                   color="danger"
                   onClick={goBack}
                 >
@@ -169,15 +164,14 @@ const AddPosDevice = (props) => {
               <CCol
                 col="6"
                 sm="4"
-                md="4"
+                md="8"
                 xl="xl"
                 className="mb-3 mb-xl-0 form-actions"
               >
                 <CButton
                   type="submit"
-                  block="block"
-                  variant="outline"
-                  className="btn-pill pull-right"
+                  variant="ghost"
+                  className="float-right"
                   color="primary"
                 >
                   SAVE

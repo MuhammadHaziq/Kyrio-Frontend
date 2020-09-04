@@ -82,7 +82,7 @@ const Taxes = () => {
                         <CCol
                           col="6"
                           sm="4"
-                          md="6"
+                          md="3"
                           xl="xl"
                           className="mb-3 mb-xl-0"
                         >
@@ -90,6 +90,7 @@ const Taxes = () => {
                             block="block"
                             variant="outline"
                             color="primary"
+                            className='float-left'
                             onClick={addNewTax}
                           >
                             ADD TAXES
@@ -97,12 +98,12 @@ const Taxes = () => {
                         </CCol>
                         <CCol
                           col="6"
-                          sm="4"
-                          md="6"
+                          sm="8"
+                          md="9"
                           xl="xl"
                           className="mb-3 mb-xl-0"
                         >
-                          <CFormGroup>
+                          <CFormGroup className='float-right'>
                             <CSelect
                               custom
                               size="md"

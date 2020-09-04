@@ -138,13 +138,13 @@ const ModalSelectItemsTax = (props) => {
         <CModalFooter>
           {!fadeCategory ? (
             <React.Fragment>
-              <CButton color="secondary" onClick={props.toggle}>
+              <CButton color="secondary" variant="ghost" onClick={props.toggle}>
                 Cancel
               </CButton>
-              <CButton color="primary">Done</CButton>{" "}
+              <CButton color="primary" variant="ghost">Done</CButton>{" "}
             </React.Fragment>
           ) : (
-            <CButton color="primary" onClick={goBack}>
+            <CButton color="primary" variant="ghost" onClick={goBack}>
               Back
             </CButton>
           )}

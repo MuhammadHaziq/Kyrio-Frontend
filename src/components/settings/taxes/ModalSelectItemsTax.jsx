@@ -27,7 +27,8 @@ const ModalSelectItemsTax = (props) => {
   const [fadeCategory, setFadeCategory] = useState(false);
   const [fadeItems, setFadeItems] = useState(true);
   const [storeId, setStoreId] = useState();
-  const [categoryId, setCategoryId] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState();
+  const [categoryId, setCategoryId] = useState();
   const categoryHandleChange = (e) => {
     const category = props.category.filter(
       (item) => item._id == e.target.value
@@ -37,9 +38,9 @@ const ModalSelectItemsTax = (props) => {
       categoryId: category[0]._id,
       categoryName: category[0].catTitle,
     };
-
     dispatch(toggle_category(categoryData));
   };
+
   const goBack = () => {
     setFadeCategory(false);
     setFadeItems(true);
@@ -52,16 +53,17 @@ const ModalSelectItemsTax = (props) => {
       storeId: storeId,
       categoryFilter: id,
     };
+    setCategoryId(id);
     setFadeCategory(true);
     setFadeItems(false);
-    console.log(data);
-    dispatch(get_catgeory_item(data));
+    if (id != categoryId) {
+      dispatch(get_catgeory_item(data));
+    }
   };
   useEffect(() => {
     setFadeCategory(false);
     setFadeItems(true);
   }, [props.show]);
-  console.log(props.category);
   return (
     <React.Fragment>
       <CModal
@@ -87,6 +89,7 @@ const ModalSelectItemsTax = (props) => {
                             name="categoryId"
                             id={"categoryId" + item._id}
                             value={item._id}
+                            checked={item.isSelected}
                             onChange={categoryHandleChange}
                           />
                           <CLabel
@@ -109,10 +112,13 @@ const ModalSelectItemsTax = (props) => {
                             marginLeft: "25px",
                           }}
                         >
-                          {taxes.toggle_category.length == 0
+                          {taxes.tax_category_list.filter(
+                            (item) => item.isSelected == true
+                          ).length == 0
                             ? " No items selected"
-                            : taxes.toggle_category.length +
-                              " items are selected"}
+                            : taxes.tax_category_list.filter(
+                                (item) => item.isSelected == true
+                              ).length + " items are selected"}
                         </div>
                       </CListGroupItem>
                     ))}

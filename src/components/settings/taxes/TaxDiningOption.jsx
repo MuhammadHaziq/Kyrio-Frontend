@@ -31,25 +31,21 @@ const TaxDiningOption = (props) => {
   const toggleItems = () => {
     setModalItems(!modalItems);
     const data = [];
-    // dispatch(toggle_category(data));
     dispatch(toggle_category_item(data, data));
   };
-  const dining = useSelector(
-    (state) => state.settingReducers.diningOptionReducer
-  );
-  const category = useSelector((state) => state.items.categoryReducer);
+
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   return (
     <React.Fragment>
       <ModalSelectDiningOption
         show={modalDining}
         toggle={toggleDining}
-        dining={dining.dining_option_list}
+        dining={taxes.tax_dining_list}
       />
       <ModalSelectItemsTax
         show={modalItems}
         toggle={toggleItems}
-        category={category.category_list}
+        category={taxes.tax_category_list}
       />
       <CCardBody>
         <CListGroup>
@@ -67,9 +63,11 @@ const TaxDiningOption = (props) => {
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-15px" }}>
-              {taxes.toggle_dinings.length == 0
+              {taxes.tax_dining_list.filter((item) => item.isSelected == true)
+                .length == 0
                 ? "No dining options selected"
-                : taxes.toggle_dinings.length + " dinings are selected"}
+                : taxes.tax_dining_list.filter((item) => item.isSelected == true)
+                  .length + " dinings are selected"}
             </div>
           </CListGroupItem>
           <CListGroupItem>
@@ -86,9 +84,11 @@ const TaxDiningOption = (props) => {
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-8px" }}>
-              {taxes.toggle_category.length == 0
+              {taxes.tax_category_list.filter((item) => item.isSelected == true)
+                .length == 0
                 ? " No items selected"
-                : taxes.toggle_category.length + " items are selected"}
+                : taxes.tax_category_list.filter((item) => item.isSelected == true)
+                    .length + " items are selected"}
             </div>
           </CListGroupItem>
         </CListGroup>

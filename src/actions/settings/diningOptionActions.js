@@ -3,6 +3,7 @@ import {
   ADD_NEW_DINING_OPTION,
   MESSAGE,
   ERROR_MESSAGE,
+  GET_DINING_TAX,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -19,6 +20,7 @@ export const get_dining_options = () => {
       })
         .then((response) => {
           dispatch({ type: GET_DINING_OPTION, response: response.data });
+          dispatch({ type: GET_DINING_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -67,6 +69,7 @@ export const add_new_dining_option = (data) => {
         .then((response) => {
           console.log(response);
           dispatch({ type: ADD_NEW_DINING_OPTION, response: response.data });
+
           let msg = {
             open: true,
             message: `Dining Save Successfully`,

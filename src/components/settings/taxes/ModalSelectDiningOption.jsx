@@ -25,24 +25,7 @@ const ModalSelectDiningOption = (props) => {
       diningName: dining[0].title,
     };
     dispatch(toggle_dinings(diningData));
-    // if (diningId.length == 0) {
-    //   setDiningId([diningData]);
-    // } else {
-    //   const checkExist = diningId.filter(
-    //     (item) => item.diningId == dining[0]._id
-    //   );
-    //   if (checkExist.length == 0) {
-    //     setDiningId([...diningId, diningData]);
-    //   } else {
-    //     const data = diningId.filter((item) => item.diningId !== dining[0]._id);
-    //     setDiningId(data);
-    //   }
-    // }
-
-    // setDiningId(diningData);
-    // setType(e.target.value);
   };
-  console.log(props.dining);
   return (
     <React.Fragment>
       <CModal show={props.show} onClose={props.toggle} closeOnBackdrop={false}>
@@ -61,6 +44,7 @@ const ModalSelectDiningOption = (props) => {
                         name="diningId"
                         id={"diningId" + item._id}
                         value={item._id}
+                        checked={item.isSelected}
                         onChange={diningHandleChange}
                       />
                       <CLabel

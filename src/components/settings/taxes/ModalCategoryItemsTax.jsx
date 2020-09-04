@@ -18,8 +18,11 @@ import { toggle_category_item } from "../../../actions/settings/taxesActions.js"
 const ModalCategoryItemsTax = (props) => {
   const dispatch = useDispatch();
   const [itemId, setItemId] = useState([]);
+
   const categoryHandleChange = (e) => {
-    const category = props.category_items.filter((item) => item._id == e.target.value);
+    const category = props.category_items.filter(
+      (item) => item._id == e.target.value
+    );
     let category_item;
     category_item = {
       itemId: category[0]._id,
@@ -27,42 +30,40 @@ const ModalCategoryItemsTax = (props) => {
       categoryId: category[0].category.categoryId,
     };
     const categoryData = {
-        categoryId: category[0].category.categoryId,
-        categoryName: category[0].category.categoryName,
-      };
-console.log(category_item)
+      categoryId: category[0].category.categoryId,
+      categoryName: category[0].category.categoryName,
+    };
     dispatch(toggle_category_item(category_item, categoryData));
   };
 
   return (
     <React.Fragment>
-
-            <CFormGroup row>
-              <CCol md="12">
-                <CListGroup>
-                  {props.category_items.map((item) => (
-                    <CListGroupItem>
-                      <CFormGroup variant="custom-checkbox" inline>
-                        <CInputCheckbox
-                          custom
-                          name="itemId"
-                          id={"itemId" + item._id}
-                          value={item._id}
-                          onChange={categoryHandleChange}
-                        />
-                        <CLabel
-                          variant="custom-checkbox"
-                          htmlFor={"itemId" + item._id}
-                        >
-                          {item.name}
-                        </CLabel>
-                      </CFormGroup>
-                    </CListGroupItem>
-                  ))}
-                </CListGroup>
-              </CCol>
-            </CFormGroup>
-
+      <CFormGroup row>
+        <CCol md="12">
+          <CListGroup>
+            {props.category_items.map((item) => (
+              <CListGroupItem>
+                <CFormGroup variant="custom-checkbox" inline>
+                  <CInputCheckbox
+                    custom
+                    name="itemId"
+                    id={"itemId" + item._id}
+                    value={item._id}
+                    checked={item.isSelected}
+                    onChange={categoryHandleChange}
+                  />
+                  <CLabel
+                    variant="custom-checkbox"
+                    htmlFor={"itemId" + item._id}
+                  >
+                    {item.name}
+                  </CLabel>
+                </CFormGroup>
+              </CListGroupItem>
+            ))}
+          </CListGroup>
+        </CCol>
+      </CFormGroup>
     </React.Fragment>
   );
 };

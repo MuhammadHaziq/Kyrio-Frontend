@@ -7,6 +7,7 @@ import {
   CATEGORY_ITEMS_SELECT_STATUS,
   GET_TAXES_TYPE,
   GET_TAXES_OPTION,
+  GET_ITEM_TAXES,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -15,10 +16,18 @@ const initialState = {
   category_items: [],
   tax_types: [],
   tax_options: [],
+  item_taxes: [],
 };
 const taxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case GET_ITEM_TAXES: {
+      return {
+        ...state,
+        item_taxes: action.response,
+      };
+    }
+
     case GET_TAXES_TYPE: {
       return {
         ...state,

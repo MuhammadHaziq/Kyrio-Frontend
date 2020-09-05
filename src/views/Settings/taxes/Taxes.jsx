@@ -28,7 +28,7 @@ const Taxes = () => {
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
-
+  const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   const addNewTax = () => {
     setFadeTaxes(false);
     setFadeAddTaxes(true);
@@ -90,7 +90,7 @@ const Taxes = () => {
                             block="block"
                             variant="outline"
                             color="primary"
-                            className='float-left'
+                            className="float-left"
                             onClick={addNewTax}
                           >
                             ADD TAXES
@@ -103,7 +103,7 @@ const Taxes = () => {
                           xl="xl"
                           className="mb-3 mb-xl-0"
                         >
-                          <CFormGroup className='float-right'>
+                          <CFormGroup className="float-right">
                             <CSelect
                               custom
                               size="md"
@@ -129,7 +129,7 @@ const Taxes = () => {
             </CRow>
             <CRow>
               <CCol sm="12">
-                <TaxesDatatable taxes={[]} />
+                <TaxesDatatable taxes={taxes.item_taxes} />
               </CCol>
             </CRow>
           </CFade>

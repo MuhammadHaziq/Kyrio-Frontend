@@ -24,6 +24,7 @@ import {
   get_tax_category_list,
   get_taxes_type,
   get_taxes_option,
+  get_item_taxes,
 } from "../../actions/settings/taxesActions";
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
@@ -36,6 +37,7 @@ const Settings = () => {
     dispatch(get_tax_category_list());
     dispatch(get_taxes_type());
     dispatch(get_taxes_option());
+    dispatch(get_item_taxes());
   }, []);
 
   return !LoginCheck() ? (

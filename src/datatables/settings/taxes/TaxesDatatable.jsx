@@ -13,6 +13,22 @@ import {
   CInput,
 } from "@coreui/react";
 
+const taxOption = (cell, row) => {
+  console.log(cell);
+  const taxOption = cell !== undefined ? cell.title : cell;
+  if (
+    taxOption == "Apply the tax to the new items" ||
+    taxOption == "Apply the tax to all new and existing items"
+  ) {
+    return "Yes";
+  } else {
+    return "No";
+  }
+};
+
+const taxRate = (cell, row) => {
+  return cell.toLocaleString("en-US") + " %";
+};
 const TaxesDatatable = (props) => {
   return (
     <React.Fragment>
@@ -38,10 +54,14 @@ const TaxesDatatable = (props) => {
             <TableHeaderColumn dataField="title" dataSort="dataSort">
               Name
             </TableHeaderColumn>
-            <TableHeaderColumn dataField="option">
+            <TableHeaderColumn dataField="tax_option" dataFormat={taxOption}>
               Apply to new items
             </TableHeaderColumn>
-            <TableHeaderColumn dataField="tax_rate" dataSort="dataSort">
+            <TableHeaderColumn
+              dataField="tax_rate"
+              dataSort="dataSort"
+              dataFormat={taxRate}
+            >
               Tax rate
             </TableHeaderColumn>
           </BootstrapTable>

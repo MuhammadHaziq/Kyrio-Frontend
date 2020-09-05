@@ -8,6 +8,10 @@ import {
   GET_TAXES_TYPE,
   GET_TAXES_OPTION,
   GET_ITEM_TAXES,
+  TOGGLE_SELECT_SINGLE,
+  TOGGLE_SELECT_ALL,
+  INSERT_NEW_TAX,
+  DELETE_ITEM_TAXES,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -28,12 +32,30 @@ const taxesReducer = (state = initialState, action) => {
       };
     }
 
+    case INSERT_NEW_TAX: {
+      return {
+        ...state,
+        item_taxes: [action.response, ...state.item_taxes],
+      };
+    }
+
+    case DELETE_ITEM_TAXES: {
+      let item_taxes = state.item_taxes;
+      for (const id of JSON.parse(action.response)) {
+        item_taxes = item_taxes.filter((item) => item._id !== id);
+      }
+      return {
+        ...state,
+        item_taxes,
+      };
+    }
     case GET_TAXES_TYPE: {
       return {
         ...state,
         tax_types: action.response,
       };
     }
+
     case GET_TAXES_OPTION: {
       return {
         ...state,
@@ -47,6 +69,35 @@ const taxesReducer = (state = initialState, action) => {
 
     case GET_CATEGORY_TAX: {
       return { ...state, tax_category_list: action.response };
+    }
+
+    case TOGGLE_SELECT_SINGLE: {
+      const item_taxes = state.item_taxes.slice().map((item) => {
+        if (item._id == action.response._id) {
+          return {
+            ...item,
+            isSelected: !item.isSelected,
+          };
+        }
+        return item;
+      });
+      return {
+        ...state,
+        item_taxes,
+      };
+    }
+
+    case TOGGLE_SELECT_ALL: {
+      const item_taxes = state.item_taxes.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: action.response,
+        };
+      });
+      return {
+        ...state,
+        item_taxes,
+      };
     }
 
     case GET_CATEGORY_ITEMS: {

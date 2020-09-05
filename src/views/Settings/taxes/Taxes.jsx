@@ -19,6 +19,10 @@ import TaxesDatatable from "../../../datatables/settings/taxes/TaxesDatatable";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddTax from "../../../components/settings/taxes/AddTax";
+import {
+  delete_item_taxes,
+  get_store_item_taxes,
+} from "../../../actions/settings/taxesActions";
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [checked, setChecked] = useState([true, true]);
@@ -43,6 +47,18 @@ const Taxes = () => {
   };
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
+    const data = {
+      storeId: e.target.value,
+    };
+    dispatch(get_store_item_taxes(data));
+  };
+  const deleteTaxes = () => {
+    const deleteIds = taxes.item_taxes
+      .filter((item) => item.isSelected == true)
+      .map((item) => {
+        return item._id;
+      });
+    dispatch(delete_item_taxes(JSON.stringify(deleteIds)));
   };
   return (
     <React.Fragment>
@@ -79,13 +95,7 @@ const Taxes = () => {
                   <CCollapse show={collapse[0]}>
                     <CCardBody>
                       <CRow>
-                        <CCol
-                          col="6"
-                          sm="4"
-                          md="3"
-                          xl="xl"
-                          className="mb-3 mb-xl-0"
-                        >
+                        <CCol sm="4" md="3" xl="xl" className="mb-3 mb-xl-0">
                           <CButton
                             block="block"
                             variant="outline"
@@ -96,10 +106,39 @@ const Taxes = () => {
                             ADD TAXES
                           </CButton>
                         </CCol>
+                        {taxes.item_taxes.filter(
+                          (item) => item.isSelected == true
+                        ).length > 0 ? (
+                          <CCol sm="4" md="3" xl="xl" className="mb-3 mb-xl-0">
+                            <CButton
+                              block="block"
+                              variant="outline"
+                              color="primary"
+                              className="float-left"
+                              onClick={deleteTaxes}
+                            >
+                              DELETE
+                            </CButton>
+                          </CCol>
+                        ) : (
+                          ""
+                        )}
+
                         <CCol
-                          col="6"
-                          sm="8"
-                          md="9"
+                          sm={
+                            taxes.item_taxes.filter(
+                              (item) => item.isSelected == true
+                            ).length > 0
+                              ? "4"
+                              : "8"
+                          }
+                          md={
+                            taxes.item_taxes.filter(
+                              (item) => item.isSelected == true
+                            ).length > 0
+                              ? "6"
+                              : "9"
+                          }
                           xl="xl"
                           className="mb-3 mb-xl-0"
                         >
@@ -113,9 +152,11 @@ const Taxes = () => {
                               onChange={storeHandleChange}
                             >
                               <option value="0">Select Store</option>
-                              {store.stores_list.map((item) => {
+                              {store.stores_list.map((item, index) => {
                                 return (
-                                  <option value={item._id}>{item.title}</option>
+                                  <option value={item._id} key={index}>
+                                    {item.title}
+                                  </option>
                                 );
                               })}
                             </CSelect>

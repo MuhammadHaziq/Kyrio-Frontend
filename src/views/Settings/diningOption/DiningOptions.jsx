@@ -177,9 +177,11 @@ class DiningOptions extends Component {
                             onChange={this.storeHandleChange}
                           >
                             <option value="0">Select Store</option>
-                            {this.props.store.map((item) => {
+                            {this.props.store.map((item, index) => {
                               return (
-                                <option value={item._id}>{item.title}</option>
+                                <option value={item._id} key={index}>
+                                  {item.title}
+                                </option>
                               );
                             })}
                           </CSelect>

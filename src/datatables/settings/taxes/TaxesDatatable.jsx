@@ -12,24 +12,75 @@ import {
   CFormGroup,
   CInput,
 } from "@coreui/react";
+import { useDispatch } from "react-redux";
+import {
+  toggle_select_single,
+  toggle_select_all,
+} from "../../../actions/settings/taxesActions";
 
-const taxOption = (cell, row) => {
-  console.log(cell);
-  const taxOption = cell !== undefined ? cell.title : cell;
-  if (
-    taxOption == "Apply the tax to the new items" ||
-    taxOption == "Apply the tax to all new and existing items"
-  ) {
-    return "Yes";
-  } else {
-    return "No";
-  }
-};
-
-const taxRate = (cell, row) => {
-  return cell.toLocaleString("en-US") + " %";
-};
 const TaxesDatatable = (props) => {
+  const dispatch = useDispatch();
+  /**
+   *
+   *  Datatable functions start
+   *
+   ***/
+  const taxOption = (cell, row) => {
+    const taxOption = cell !== undefined ? cell.title : cell;
+    if (
+      taxOption == "Apply the tax to the new items" ||
+      taxOption == "Apply the tax to all new and existing items"
+    ) {
+      return "Yes";
+    } else {
+      return "No";
+    }
+  };
+
+  const taxRate = (cell, row) => {
+    return cell.toLocaleString("en-US") + " %";
+  };
+
+  const onRowSelect = (row, isSelected, e) => {
+    dispatch(toggle_select_single(row));
+  };
+
+  const onSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      dispatch(toggle_select_all(true));
+    } else {
+      dispatch(toggle_select_all(false));
+    }
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    clickToSelect: true,
+    onSelect: onRowSelect,
+    onSelectAll: onSelectAll,
+  };
+  /**
+   *
+   *  Datatable functions End
+   *
+   ***/
+  const options = {
+    sizePerPageList: [
+      {
+        text: "5",
+        value: 5,
+      },
+      {
+        text: "10",
+        value: 10,
+      },
+      {
+        text: "All",
+        value: props.taxes.length,
+      },
+    ],
+    sizePerPage: 5,
+  };
   return (
     <React.Fragment>
       <CCard>
@@ -38,20 +89,22 @@ const TaxesDatatable = (props) => {
           <BootstrapTable
             data={props.taxes}
             version="4"
-            striped="striped"
-            hover="hover"
-            pagination="pagination"
-            search="search"
+            striped
+            hover
+            pagination
+            search
+            selectRow={selectRowProp}
+            option={options}
           >
             <TableHeaderColumn
               dataField="_id"
-              isKey="isKey"
-              dataSort="dataSort"
-              hidden="hidden"
+              isKey={true}
+              dataSort={true}
+              hidden={true}
             >
               Id
             </TableHeaderColumn>
-            <TableHeaderColumn dataField="title" dataSort="dataSort">
+            <TableHeaderColumn dataField="title" dataSort={true}>
               Name
             </TableHeaderColumn>
             <TableHeaderColumn dataField="tax_option" dataFormat={taxOption}>
@@ -59,7 +112,7 @@ const TaxesDatatable = (props) => {
             </TableHeaderColumn>
             <TableHeaderColumn
               dataField="tax_rate"
-              dataSort="dataSort"
+              dataSort={true}
               dataFormat={taxRate}
             >
               Tax rate

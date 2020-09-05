@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import 'react-bootstrap-table/dist//react-bootstrap-table-all.min.css';
+import React, { useState, useEffect } from "react";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   CRow,
   CCol,
@@ -10,26 +10,61 @@ import {
   CCardBody,
   CButton,
   CFormGroup,
-  CInput
+  CInput,
 } from "@coreui/react";
 
 const StoreDatatable = (props) => {
-  return (<React.Fragment>
-    <CCard>
-      <CCardHeader>
-            Stores Detail
-      </CCardHeader>
-      <CCardBody>
-        <BootstrapTable data={props.stores} version="4" striped="striped" hover="hover" pagination="pagination" search="search">
-          <TableHeaderColumn dataField="_id" isKey="isKey" dataSort="dataSort" hidden="hidden">Id</TableHeaderColumn>
-          <TableHeaderColumn dataField="title" dataSort="dataSort">Name</TableHeaderColumn>
-          <TableHeaderColumn  dataField="address">Address</TableHeaderColumn>
-          <TableHeaderColumn dataField="pos" dataSort="dataSort" >Number Of Pos</TableHeaderColumn>
+  const options = {
+    sizePerPageList: [
+      {
+        text: "5",
+        value: 5,
+      },
+      {
+        text: "10",
+        value: 10,
+      },
+      {
+        text: "All",
+        value: props.stores.length,
+      },
+    ],
+    sizePerPage: 5,
+  };
+  return (
+    <React.Fragment>
+      <CCard>
+        <CCardHeader>Stores Detail</CCardHeader>
+        <CCardBody>
+          <BootstrapTable
+            data={props.stores}
+            version="4"
+            striped
+            hover
+            pagination
+            search
+            option={options}
+          >
+            <TableHeaderColumn
+              dataField="_id"
+              isKey={true}
+              dataSort={true}
+              hidden={true}
+            >
+              Id
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="title" dataSort={true}>
+              Name
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
+            <TableHeaderColumn dataField="pos" dataSort={true}>
+              Number Of Pos
+            </TableHeaderColumn>
+          </BootstrapTable>
+        </CCardBody>
+      </CCard>
+    </React.Fragment>
+  );
+};
 
-        </BootstrapTable>
-      </CCardBody>
-    </CCard>
-  </React.Fragment>);
-}
-
-export default StoreDatatable
+export default StoreDatatable;

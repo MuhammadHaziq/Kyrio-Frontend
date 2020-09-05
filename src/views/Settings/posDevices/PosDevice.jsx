@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   get_pos_devices,
   get_store_pos_device,
+  delete_pos_devices,
 } from "../../../actions/settings/posDeviceActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 
@@ -56,6 +57,14 @@ const PosDevice = () => {
   const toggleCollapse = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
+  };
+  const deletePosDevices = () => {
+    const data = posDevice.pos_device_list
+      .filter((item) => item.isDeleted == true)
+      .map((item) => {
+        return item._id;
+      });
+    dispatch(delete_pos_devices(JSON.stringify(data)));
   };
   return (
     <React.Fragment>
@@ -108,10 +117,44 @@ const PosDevice = () => {
                             ADD POS DEVICE
                           </CButton>
                         </CCol>
+                        {posDevice.pos_device_list.filter(
+                          (item) => item.isDeleted == true
+                        ).length > 0 ? (
+                          <CCol
+                            col="6"
+                            sm="4"
+                            md="4"
+                            xl="xl"
+                            className="mb-3 mb-xl-0"
+                          >
+                            <CButton
+                              variant="outline"
+                              className="float-left"
+                              color="danger"
+                              onClick={deletePosDevices}
+                            >
+                              DELETE
+                            </CButton>
+                          </CCol>
+                        ) : (
+                          ""
+                        )}
+
                         <CCol
-                          col="6"
-                          sm="4"
-                          md="8"
+                          sm={
+                            posDevice.pos_device_list.filter(
+                              (item) => item.isDeleted == true
+                            ).length > 0
+                              ? "4"
+                              : "8"
+                          }
+                          md={
+                            posDevice.pos_device_list.filter(
+                              (item) => item.isDeleted == true
+                            ).length > 0
+                              ? "4"
+                              : "8"
+                          }
                           xl="xl"
                           className="mb-3 mb-xl-0"
                         >

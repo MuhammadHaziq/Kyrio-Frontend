@@ -54,7 +54,7 @@ const Taxes = () => {
   };
   const deleteTaxes = () => {
     const deleteIds = taxes.item_taxes
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isDeleted == true)
       .map((item) => {
         return item._id;
       });
@@ -107,7 +107,7 @@ const Taxes = () => {
                           </CButton>
                         </CCol>
                         {taxes.item_taxes.filter(
-                          (item) => item.isSelected == true
+                          (item) => item.isDeleted == true
                         ).length > 0 ? (
                           <CCol sm="4" md="3" xl="xl" className="mb-3 mb-xl-0">
                             <CButton
@@ -127,14 +127,14 @@ const Taxes = () => {
                         <CCol
                           sm={
                             taxes.item_taxes.filter(
-                              (item) => item.isSelected == true
+                              (item) => item.isDeleted == true
                             ).length > 0
                               ? "4"
                               : "8"
                           }
                           md={
                             taxes.item_taxes.filter(
-                              (item) => item.isSelected == true
+                              (item) => item.isDeleted == true
                             ).length > 0
                               ? "6"
                               : "9"

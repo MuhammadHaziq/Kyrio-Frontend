@@ -1,8 +1,14 @@
-import { GET_POS_DEVICES, ADD_NEW_POS_DEVICE } from "../../constants/ActionTypes";
+import {
+  GET_POS_DEVICES,
+  ADD_NEW_POS_DEVICE,
+  DELETE_POS_DEVICES,
+  TOGGLE_POS_SINGLE_SELECT,
+  TOGGLE_POS_ALL_SELECT,
+} from "../../constants/ActionTypes";
 
 const initialState = {
-  pos_device_list:[],
-  save_pos_device:false
+  pos_device_list: [],
+  save_pos_device: false,
 };
 const posDeviceReducecr = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -14,9 +20,49 @@ const posDeviceReducecr = (state = initialState, action) => {
     case ADD_NEW_POS_DEVICE: {
       return {
         ...state,
-        save_pos_device:!state.save_store,
-        pos_device_list:[action.response, ...state.pos_device_list]
+        save_pos_device: !state.save_store,
+        pos_device_list: [action.response, ...state.pos_device_list],
+      };
+    }
+
+    case TOGGLE_POS_SINGLE_SELECT: {
+      const pos_device_list = state.pos_device_list.slice().map((item) => {
+        if (item._id == action.response._id) {
+          return {
+            ...item,
+            isDeleted: !item.isDeleted,
+          };
+        }
+        return item;
+      });
+      return {
+        ...state,
+        pos_device_list,
+      };
+    }
+
+    case TOGGLE_POS_ALL_SELECT: {
+      const pos_device_list = state.pos_device_list.slice().map((item) => {
+        return {
+          ...item,
+          isDeleted: action.response,
+        };
+      });
+      return {
+        ...state,
+        pos_device_list,
+      };
+    }
+
+    case DELETE_POS_DEVICES: {
+      let pos_device_list = state.pos_device_list;
+      for (const id of JSON.parse(action.response)) {
+        pos_device_list = pos_device_list.filter((item) => item._id !== id);
       }
+      return {
+        ...state,
+        pos_device_list,
+      };
     }
     default:
       return { ...state };

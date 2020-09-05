@@ -8,8 +8,8 @@ import {
   GET_TAXES_TYPE,
   GET_TAXES_OPTION,
   GET_ITEM_TAXES,
-  TOGGLE_SELECT_SINGLE,
-  TOGGLE_SELECT_ALL,
+  TOGGLE_TAXES_SELECT_SINGLE,
+  TOGGLE_TAXES_SELECT_ALL,
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
 } from "../../constants/ActionTypes";
@@ -71,12 +71,12 @@ const taxesReducer = (state = initialState, action) => {
       return { ...state, tax_category_list: action.response };
     }
 
-    case TOGGLE_SELECT_SINGLE: {
+    case TOGGLE_TAXES_SELECT_SINGLE: {
       const item_taxes = state.item_taxes.slice().map((item) => {
         if (item._id == action.response._id) {
           return {
             ...item,
-            isSelected: !item.isSelected,
+            isDeleted: !item.isDeleted,
           };
         }
         return item;
@@ -87,11 +87,11 @@ const taxesReducer = (state = initialState, action) => {
       };
     }
 
-    case TOGGLE_SELECT_ALL: {
+    case TOGGLE_TAXES_SELECT_ALL: {
       const item_taxes = state.item_taxes.slice().map((item) => {
         return {
           ...item,
-          isSelected: action.response,
+          isDeleted: action.response,
         };
       });
       return {

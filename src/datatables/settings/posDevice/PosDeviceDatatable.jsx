@@ -12,15 +12,49 @@ import {
   CFormGroup,
   CInput,
 } from "@coreui/react";
+import {
+  toggle_pos_single_select,
+  toggle_pso_all_select,
+} from "../../../actions/settings/posDeviceActions";
+import { useSelector, useDispatch } from "react-redux";
 
-const getStoreName = (cell, row) => {
-  const storeNames = [];
-  // const storeName = row.store.map(item => {
-  //   return storeNames.push(item.storeName)
-  // })
-  return row.store.storeName;
-};
 const PosDeviceDatatable = (props) => {
+  const dispatch = useDispatch();
+  /**
+   *
+   *  Datatable functions start
+   *
+   ***/
+  const getStoreName = (cell, row) => {
+    const storeNames = [];
+    // const storeName = row.store.map(item => {
+    //   return storeNames.push(item.storeName)
+    // })
+    return row.store.storeName;
+  };
+  const onRowSelect = (row, isSelected, e) => {
+    dispatch(toggle_pos_single_select(row));
+  };
+
+  const onSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      dispatch(toggle_pso_all_select(true));
+    } else {
+      dispatch(toggle_pso_all_select(false));
+    }
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    clickToSelect: true,
+    onSelect: onRowSelect,
+    onSelectAll: onSelectAll,
+  };
+  /**
+   *
+   *  Datatable functions End
+   *
+   ***/
   const options = {
     sizePerPageList: [
       {
@@ -50,6 +84,7 @@ const PosDeviceDatatable = (props) => {
             hover
             pagination
             search
+            selectRow={selectRowProp}
             option={options}
           >
             <TableHeaderColumn

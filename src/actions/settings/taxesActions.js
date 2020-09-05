@@ -10,8 +10,8 @@ import {
   GET_TAXES_TYPE,
   GET_TAXES_OPTION,
   GET_ITEM_TAXES,
-  TOGGLE_SELECT_SINGLE,
-  TOGGLE_SELECT_ALL,
+  TOGGLE_TAXES_SELECT_SINGLE,
+  TOGGLE_TAXES_SELECT_ALL,
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
 } from "../../constants/ActionTypes";
@@ -468,7 +468,7 @@ export const toggle_category_item = (categoryItems, category) => {
 export const toggle_select_single = (row) => {
   return (dispatch) => {
     dispatch({
-      type: TOGGLE_SELECT_SINGLE,
+      type: TOGGLE_TAXES_SELECT_SINGLE,
       response: row,
     });
   };
@@ -476,7 +476,7 @@ export const toggle_select_single = (row) => {
 export const toggle_select_all = (status) => {
   return (dispatch) => {
     dispatch({
-      type: TOGGLE_SELECT_ALL,
+      type: TOGGLE_TAXES_SELECT_ALL,
       response: status,
     });
   };

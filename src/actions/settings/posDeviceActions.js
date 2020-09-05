@@ -1,6 +1,9 @@
 import {
   GET_POS_DEVICES,
   ADD_NEW_POS_DEVICE,
+  TOGGLE_POS_SINGLE_SELECT,
+  TOGGLE_POS_ALL_SELECT,
+  DELETE_POS_DEVICES,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -161,5 +164,72 @@ export const get_store_pos_device = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const delete_pos_devices = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "delete",
+        url: `${BaseUrl}devices/${data}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: DELETE_POS_DEVICES, response: data });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status == 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const toggle_pos_single_select = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_POS_SINGLE_SELECT,
+      response: data,
+    });
+  };
+};
+
+export const toggle_pso_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_POS_ALL_SELECT,
+      response: status,
+    });
   };
 };

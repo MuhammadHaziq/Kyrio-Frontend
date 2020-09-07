@@ -134,7 +134,7 @@ const AddDiningOption = (props) => {
     <CCard>
       <CCardHeader>
         <h4>
-          <strong>Add New Dining</strong>
+          <strong>Create Dining Option</strong>
           <div className="card-header-actions">
             <CLink className="card-header-action" onClick={() => toggle(0)}>
               <CIcon
@@ -153,7 +153,7 @@ const AddDiningOption = (props) => {
                 <CInputGroup>
                   <CInputGroupPrepend>
                     <CInputGroupText>
-                      <CIcon name="cil-device" />
+                      <CIcon name="cil-print" />
                     </CInputGroupText>
                   </CInputGroupPrepend>
                   <CInput
@@ -208,32 +208,35 @@ const AddDiningOption = (props) => {
               </CCol>
             </CFormGroup>
             <CRow>
-              <CCol sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="floatl-left"
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
                   color="default"
                   onClick={goBack}
                 >
                   BACK
                 </CButton>
               </CCol>
-              <CCol sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="floatl-left"
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
                   color="danger"
                   onClick={goBack}
                 >
                   CANCEL
                 </CButton>
               </CCol>
-              <CCol sm="4" md="8" xl="xl" className="mb-3 mb-xl-0 form-actions">
+              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
                 <CButton
+                  block
                   type="submit"
-                  variant="ghost"
-                  className="float-right"
-                  color="primary"
+                  variant="outline"
+                  className="btn-pill pull-right"
+                  color="success"
                 >
                   SAVE
                 </CButton>

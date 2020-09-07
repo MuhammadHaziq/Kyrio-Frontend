@@ -94,7 +94,7 @@ const AddPosDevice = (props) => {
     <CCard>
       <CCardHeader>
         <h4>
-          <strong>Add New Pos Device</strong>
+          <strong>Create Pos Device</strong>
           <div className="card-header-actions">
             <CLink className="card-header-action" onClick={() => toggle(0)}>
               <CIcon
@@ -141,20 +141,22 @@ const AddPosDevice = (props) => {
               </CSelect>
             </CFormGroup>
             <CRow>
-              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="float-left"
+                  block
+                  className="btn-pill pull-right"
+                  variant="outline"
                   color="default"
                   onClick={goBack}
                 >
                   BACK
                 </CButton>
               </CCol>
-              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="float-left"
+                  block
+                  className="btn-pill pull-right"
+                  variant="outline"
                   color="danger"
                   onClick={goBack}
                 >
@@ -164,15 +166,16 @@ const AddPosDevice = (props) => {
               <CCol
                 col="6"
                 sm="4"
-                md="8"
+                md="4"
                 xl="xl"
                 className="mb-3 mb-xl-0 form-actions"
               >
                 <CButton
                   type="submit"
-                  variant="ghost"
-                  className="float-right"
-                  color="primary"
+                  color="success"
+                  block
+                  className="btn-pill pull-right"
+                  variant="outline"
                 >
                   SAVE
                 </CButton>

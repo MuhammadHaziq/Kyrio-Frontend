@@ -55,8 +55,23 @@ const Stores = () => {
               <CCol xs="12" lg="12">
                 <CCard>
                   <CCardHeader>
-                    Add New Store
-                    <div className="card-header-actions">
+                    <CRow>
+                      <CCol
+                        col="6"
+                        sm="4"
+                        md="4"
+                        xl="xl"
+                        className="mb-3 mb-xl-0"
+                      >
+                        <CButton
+                          color="success"
+                          onClick={addNewStore}
+                        >
+                          ADD STORE
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                    {/*  <div className="card-header-actions">
                       <CLink
                         className="card-header-action"
                         onClick={() => toggleCollapse(0)}
@@ -68,36 +83,15 @@ const Stores = () => {
                               : "cil-chevron-top"
                           }
                         />
-                      </CLink>
-                    </div>
+                      </CLink>}
+                    </div>*/}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>
                     <CCardBody>
-                      <CRow>
-                        <CCol
-                          col="6"
-                          sm="4"
-                          md="4"
-                          xl="xl"
-                          className="mb-3 mb-xl-0"
-                        >
-                          <CButton
-                            variant="outline"
-                            color="primary"
-                            onClick={addNewStore}
-                          >
-                            ADD STORE
-                          </CButton>
-                        </CCol>
-                      </CRow>
+                      <StoreDatatable stores={store.stores_list} />
                     </CCardBody>
                   </CCollapse>
                 </CCard>
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol sm="12">
-                <StoreDatatable stores={store.stores_list} />
               </CCol>
             </CRow>
           </CFade>

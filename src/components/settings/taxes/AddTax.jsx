@@ -56,7 +56,7 @@ const AddTax = (props) => {
 
   useEffect(() => {
     setTaxOption(0);
-    setTaxType(taxes.tax_types[0]._id);
+    setTaxType(typeof taxes.tax_types === "undefined" ? taxes.tax_types[0]._id : "");
   }, [taxes.tax_types]);
 
   const toggle = (tab) => {

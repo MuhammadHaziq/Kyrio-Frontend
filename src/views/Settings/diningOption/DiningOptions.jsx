@@ -158,16 +158,15 @@ class DiningOptions extends Component {
                     <CRow>
                       <CCol xs="6" lg="6">
                         <CButton
-                          variant="outline"
-                          color="primary"
-                          className="float-left"
+                          color="success"
+                          className="btn-square pull right"
                           onClick={this.addDiningOpt}
                         >
                           DINING OPTION
                         </CButton>
                       </CCol>
                       <CCol xs="6" lg="6">
-                        <CFormGroup className="float-right">
+                        <CFormGroup>
                           <CSelect
                             custom
                             size="md"

@@ -33,36 +33,29 @@ const StoreDatatable = (props) => {
   };
   return (
     <React.Fragment>
-      <CCard>
-        <CCardHeader>Stores Detail</CCardHeader>
-        <CCardBody>
-          <BootstrapTable
-            data={props.stores}
-            version="4"
-            striped
-            hover
-            pagination
-            search
-            option={options}
-          >
-            <TableHeaderColumn
-              dataField="_id"
-              isKey={true}
-              dataSort={true}
-              hidden={true}
-            >
-              Id
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="title" dataSort={true}>
-              Name
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
-            <TableHeaderColumn dataField="pos" dataSort={true}>
-              Number Of Pos
-            </TableHeaderColumn>
-          </BootstrapTable>
-        </CCardBody>
-      </CCard>
+      <BootstrapTable
+        data={props.stores}
+        version="4"
+        striped
+        hover
+        option={options}
+      >
+        <TableHeaderColumn
+          dataField="_id"
+          isKey={true}
+          dataSort={true}
+          hidden={true}
+        >
+          Id
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="title" dataSort={true}>
+          Name
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
+        <TableHeaderColumn dataField="pos" dataSort={true}>
+          Number Of Pos
+        </TableHeaderColumn>
+      </BootstrapTable>
     </React.Fragment>
   );
 };

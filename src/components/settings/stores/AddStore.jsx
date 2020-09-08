@@ -170,20 +170,22 @@ const AddStore = (props) => {
               </CCol>
             </CFormGroup>
             <CRow>
-              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="float-left"
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
                   color="default"
                   onClick={goBack}
                 >
                   BACK
                 </CButton>
               </CCol>
-              <CCol col="6" sm="4" md="2" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  variant="ghost"
-                  className="float-left"
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
                   color="danger"
                   onClick={goBack}
                 >
@@ -193,14 +195,15 @@ const AddStore = (props) => {
               <CCol
                 col="6"
                 sm="4"
-                md="8"
+                md="4"
                 xl="xl"
                 className="mb-3 mb-xl-0 form-actions"
               >
                 <CButton
+                  block
                   type="submit"
-                  variant="ghost"
-                  className="float-right"
+                  variant="outline"
+                  className="btn-pill pull-right"
                   color="primary"
                 >
                   SAVE

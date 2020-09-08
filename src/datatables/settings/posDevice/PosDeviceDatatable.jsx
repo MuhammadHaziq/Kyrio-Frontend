@@ -74,43 +74,36 @@ const PosDeviceDatatable = (props) => {
   };
   return (
     <React.Fragment>
-      <CCard>
-        <CCardHeader>Pos Devices Detail</CCardHeader>
-        <CCardBody>
-          <BootstrapTable
-            data={props.pos_devices}
-            version="4"
-            striped
-            hover
-            pagination
-            search
-            selectRow={selectRowProp}
-            option={options}
-          >
-            <TableHeaderColumn
-              dataField="_id"
-              isKey={true}
-              dataSort={true}
-              hidden={true}
-            >
-              Id
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="title" dataSort={true}>
-              Name
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="storeName"
-              dataSort={true}
-              dataFormat={getStoreName}
-            >
-              Store
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="isActive" dataSort={true}>
-              Status
-            </TableHeaderColumn>
-          </BootstrapTable>
-        </CCardBody>
-      </CCard>
+      <BootstrapTable
+        data={props.pos_devices}
+        version="4"
+        striped
+        hover
+        selectRow={selectRowProp}
+        option={options}
+      >
+        <TableHeaderColumn
+          dataField="_id"
+          isKey={true}
+          dataSort={true}
+          hidden={true}
+        >
+          Id
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="title" dataSort={true}>
+          Name
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="storeName"
+          dataSort={true}
+          dataFormat={getStoreName}
+        >
+          Store
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="isActive" dataSort={true}>
+          Status
+        </TableHeaderColumn>
+      </BootstrapTable>
     </React.Fragment>
   );
 };

@@ -82,8 +82,61 @@ const PosDevice = () => {
               <CCol xs="12" lg="12">
                 <CCard>
                   <CCardHeader>
-                    Add Pos Device
-                    <div className="card-header-actions">
+                    <CRow>
+                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                        <CButton
+                          className="btn-square pull right"
+                          color="success"
+                          onClick={addNewPosDevice}
+                        >
+                          ADD POS DEVICE
+                        </CButton>
+                        {posDevice.pos_device_list.filter(
+                          (item) => item.isDeleted == true
+                        ).length > 0 ? (
+                          <CButton
+                            variant="outline"
+                            className="ml-2"
+                            color="danger"
+                            onClick={deletePosDevices}
+                          >
+                            DELETE
+                          </CButton>
+                        ) : (
+                          ""
+                        )}
+                      </CCol>
+
+                      <CCol
+                        sm="6"
+                        md="6"
+                        xl="xl"
+                        xl="xl"
+                        className="mb-3 mb-xl-0"
+                      >
+                        <CFormGroup>
+                          <CSelect
+                            custom
+                            size="md"
+                            name="selectStore"
+                            id="selectStore"
+                            value={selectedStoreId}
+                            onChange={storeHandleChange}
+                          >
+                            <option value="0">Select Store</option>
+                            {store.stores_list.map((item, index) => {
+                              return (
+                                <option value={item._id} key={index}>
+                                  {item.title}
+                                </option>
+                              );
+                            })}
+                          </CSelect>
+                        </CFormGroup>
+                      </CCol>
+                    </CRow>
+
+                    {/*<div className="card-header-actions">
                       <CLink
                         className="card-header-action"
                         onClick={() => toggleCollapse(0)}
@@ -96,97 +149,16 @@ const PosDevice = () => {
                           }
                         />
                       </CLink>
-                    </div>
+                    </div>*/}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>
                     <CCardBody>
-                      <CRow>
-                        <CCol
-                          col="6"
-                          sm="4"
-                          md="4"
-                          xl="xl"
-                          className="mb-3 mb-xl-0"
-                        >
-                          <CButton
-                            variant="outline"
-                            className="float-left"
-                            color="primary"
-                            onClick={addNewPosDevice}
-                          >
-                            ADD POS DEVICE
-                          </CButton>
-                        </CCol>
-                        {posDevice.pos_device_list.filter(
-                          (item) => item.isDeleted == true
-                        ).length > 0 ? (
-                          <CCol
-                            col="6"
-                            sm="4"
-                            md="4"
-                            xl="xl"
-                            className="mb-3 mb-xl-0"
-                          >
-                            <CButton
-                              variant="outline"
-                              className="float-left"
-                              color="danger"
-                              onClick={deletePosDevices}
-                            >
-                              DELETE
-                            </CButton>
-                          </CCol>
-                        ) : (
-                          ""
-                        )}
-
-                        <CCol
-                          sm={
-                            posDevice.pos_device_list.filter(
-                              (item) => item.isDeleted == true
-                            ).length > 0
-                              ? "4"
-                              : "8"
-                          }
-                          md={
-                            posDevice.pos_device_list.filter(
-                              (item) => item.isDeleted == true
-                            ).length > 0
-                              ? "4"
-                              : "8"
-                          }
-                          xl="xl"
-                          className="mb-3 mb-xl-0"
-                        >
-                          <CFormGroup className="float-right">
-                            <CSelect
-                              custom
-                              size="md"
-                              name="selectStore"
-                              id="selectStore"
-                              value={selectedStoreId}
-                              onChange={storeHandleChange}
-                            >
-                              <option value="0">Select Store</option>
-                              {store.stores_list.map((item, index) => {
-                                return (
-                                  <option value={item._id} key={index}>
-                                    {item.title}
-                                  </option>
-                                );
-                              })}
-                            </CSelect>
-                          </CFormGroup>
-                        </CCol>
-                      </CRow>
+                      <PosDeviceDatatable
+                        pos_devices={posDevice.pos_device_list}
+                      />
                     </CCardBody>
                   </CCollapse>
                 </CCard>
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol sm="12">
-                <PosDeviceDatatable pos_devices={posDevice.pos_device_list} />
               </CCol>
             </CRow>
           </CFade>
@@ -198,3 +170,17 @@ const PosDevice = () => {
   );
 };
 export default PosDevice;
+// sm={
+//   posDevice.pos_device_list.filter(
+//     (item) => item.isDeleted == true
+//   ).length > 0
+//     ? "4"
+//     : "8"
+// }
+// md={
+//   posDevice.pos_device_list.filter(
+//     (item) => item.isDeleted == true
+//   ).length > 0
+//     ? "4"
+//     : "8"
+// }

@@ -21,11 +21,14 @@ import {
   CInputCheckbox,
   CInputRadio,
   CSelect,
+  CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
 import { useDispatch, useSelector } from "react-redux";
+import validator from "validator";
+
 const AddPosDevice = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const [collapse, setCollapse] = useState([true, true]);
@@ -36,7 +39,10 @@ const AddPosDevice = (props) => {
   const [buttonText, setButtonText] = useState("");
   const [timeout, setTimeout] = useState(300);
   const [fields, setFields] = useState({ pos_device_name: "" });
-  const [errors, setErrors] = useState({ pos_device_name: "" });
+  const [errors, setErrors] = useState({
+    pos_device_name: false,
+    storeId: false,
+  });
   const [storeId, setStoreId] = useState({
     storeId: 0,
     storeName: "Select Store",
@@ -71,6 +77,14 @@ const AddPosDevice = (props) => {
       [name]: value,
     });
   };
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
+    });
+  };
+
   const storeHandleChange = (e) => {
     console.log(e.target.value);
     const store = props.stores.filter((item) => item._id == e.target.value);
@@ -121,7 +135,15 @@ const AddPosDevice = (props) => {
                     name="pos_device_name"
                     placeholder="Pos Device Name"
                     onChange={handleOnChange}
+                    invalid={errors.pos_device_name}
+                    onBlur={handleOnBlur}
+                    value={fields.pos_device_name}
                   />
+                  <CInvalidFeedback>
+                    {validator.isEmpty(fields.pos_device_name)
+                      ? "Please Enter The Pos Device Name"
+                      : ""}
+                  </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
             </CFormGroup>
@@ -173,6 +195,9 @@ const AddPosDevice = (props) => {
                 <CButton
                   type="submit"
                   color="success"
+                  disabled={
+                    storeId["storeId"] == 0 || fields.pos_device_name == ""
+                  }
                   block
                   className="btn-pill pull-right"
                   variant="outline"

@@ -19,7 +19,9 @@ import {
   CInputGroupAppend,
   CForm,
   CTextarea,
+  CInvalidFeedback,
 } from "@coreui/react";
+import validator from "validator";
 import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_store } from "../../../actions/settings/storeActions.js";
@@ -65,6 +67,13 @@ const AddStore = (props) => {
       [name]: value,
     });
   };
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
+    });
+  };
   // useEffect(()=> {
   //   props.goBack();
   // },[store.save_store])
@@ -99,7 +108,15 @@ const AddStore = (props) => {
                     name="store_name"
                     placeholder="Store Name"
                     onChange={handleOnChange}
+                    invalid={errors.store_name}
+                    onBlur={handleOnBlur}
+                    value={fields.store_name}
                   />
+                  <CInvalidFeedback>
+                    {validator.isEmpty(fields.store_name)
+                      ? "Please Enter The Store Name"
+                      : ""}
+                  </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
             </CFormGroup>
@@ -117,6 +134,9 @@ const AddStore = (props) => {
                     name="store_address"
                     placeholder="Store Address"
                     onChange={handleOnChange}
+                    invalid={errors.store_address}
+                    onBlur={handleOnBlur}
+                    value={fields.store_address}
                   />
                 </CInputGroup>
               </CCol>
@@ -150,6 +170,9 @@ const AddStore = (props) => {
                   className="form-control"
                   name="store_phone"
                   onChange={handleOnChange}
+                  invalid={errors.store_phone}
+                  onBlur={handleOnBlur}
+                  value={fields.store_phone}
                 />
               </CInputGroup>
 
@@ -165,6 +188,9 @@ const AddStore = (props) => {
                     rows="9"
                     placeholder="Store Description"
                     onChange={handleOnChange}
+                    invalid={errors.store_description}
+                    onBlur={handleOnBlur}
+                    value={fields.store_description}
                   />
                 </CInputGroup>
               </CCol>
@@ -204,7 +230,8 @@ const AddStore = (props) => {
                   type="submit"
                   variant="outline"
                   className="btn-pill pull-right"
-                  color="primary"
+                  color="success"
+                  disabled={fields.store_name == ""}
                 >
                   SAVE
                 </CButton>

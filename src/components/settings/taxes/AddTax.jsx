@@ -29,6 +29,7 @@ import { CIcon } from "@coreui/icons-react";
 import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { save_item_taxes } from "../../../actions/settings/taxesActions.js";
+import validator from "validator";
 const AddTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
@@ -118,15 +119,15 @@ const AddTax = (props) => {
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
       tax_type: JSON.stringify({
-        id: types[0]._id,
-        title: types[0].title,
+        id: types[0]._id || "",
+        title: types[0].title || "",
       }),
       tax_option:
         options.length == 0
           ? JSON.stringify({ id: "0", title: "-" })
           : JSON.stringify({
-              id: options[0]._id,
-              title: options[0].title,
+              id: options[0]._id || "0",
+              title: options[0].title || "-",
             }),
       stores: JSON.stringify(selectedStore),
       dinings: JSON.stringify(selectedDining),
@@ -147,6 +148,14 @@ const AddTax = (props) => {
     setFields({
       ...fields,
       [name]: value,
+    });
+  };
+
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
     });
   };
   const typeHandleChange = (e) => {
@@ -210,6 +219,9 @@ const AddTax = (props) => {
                     name="tax_name"
                     placeholder="Tax Name"
                     onChange={handleOnChange}
+                    invalid={errors.tax_name}
+                    onBlur={handleOnBlur}
+                    value={fields.tax_name}
                   />
                   <CInvalidFeedback style={{ display: "block" }}>
                     {errors.tax_name == true ? "Please Enter Tax Name" : ""}
@@ -224,6 +236,9 @@ const AddTax = (props) => {
                     name="tax_rate"
                     placeholder="Tax Rate %"
                     onChange={handleOnChange}
+                    invalid={errors.tax_rate}
+                    onBlur={handleOnBlur}
+                    value={fields.tax_rate}
                   />
                   <CInputGroupAppend>
                     <CInputGroupText>%</CInputGroupText>
@@ -241,6 +256,9 @@ const AddTax = (props) => {
                   id="taxTypeId"
                   value={taxTypeId}
                   onChange={typeHandleChange}
+                  invalid={errors.taxTypeId}
+                  onBlur={handleOnBlur}
+                  value={fields.taxTypeId}
                 >
                   {taxes.tax_types.map((item, index) => {
                     return (
@@ -259,8 +277,7 @@ const AddTax = (props) => {
                   custom
                   size="md"
                   name="taxOptionId"
-                  id="taxOptionId;
-"
+                  id="taxOptionId"
                   value={taxOptionId}
                   onChange={optionHandleChange}
                 >
@@ -373,8 +390,9 @@ const AddTax = (props) => {
       <CRow>
         <CCol sm="2" md="2" className="mb-3 mb-xl-0">
           <CButton
-            variant="ghost"
-            className="pull-left"
+            block
+            variant="outline"
+            className="pull-right"
             color="default"
             onClick={goBack}
           >
@@ -383,8 +401,9 @@ const AddTax = (props) => {
         </CCol>
         <CCol sm="2" md="2" className="mb-3 mb-xl-0">
           <CButton
-            variant="ghost"
-            className="pull-left"
+            block
+            variant="outline"
+            className="pull-right"
             color="danger"
             onClick={goBack}
           >
@@ -393,10 +412,12 @@ const AddTax = (props) => {
         </CCol>
         <CCol sm="2" md="8" className="mb-3 mb-xl-0 form-actions">
           <CButton
+            block
             type="click"
-            variant="ghost"
-            className="float-right"
-            color="primary"
+            variant="outline"
+            className="pull-right"
+            color="success"
+            disabled={fields.tax_name == ""}
             onClick={submitTaxForm}
           >
             SAVE

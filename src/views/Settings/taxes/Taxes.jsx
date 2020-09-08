@@ -76,8 +76,56 @@ const Taxes = () => {
               <CCol xs="12" lg="12">
                 <CCard>
                   <CCardHeader>
-                    Add New Tax
-                    <div className="card-header-actions">
+                    <CRow>
+                      <CCol sm="4" md="6" xl="xl" className="mb-3 mb-xl-0">
+                        <CButton
+                          variant="outline"
+                          color="success"
+                          className="btn-square pull-right"
+                          onClick={addNewTax}
+                        >
+                          ADD TAXES
+                        </CButton>
+                        {taxes.item_taxes.filter(
+                          (item) => item.isDeleted == true
+                        ).length > 0 ? (
+                          <CButton
+                            variant="outline"
+                            color="danger"
+                            className="btn-square pull-right ml-2"
+                            onClick={deleteTaxes}
+                          >
+                            DELETE
+                          </CButton>
+                        ) : (
+                          ""
+                        )}
+                      </CCol>
+
+                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                        <CFormGroup className="btn-square pull-right">
+                          <CSelect
+                            custom
+                            size="md"
+                            name="selectedStoreId"
+                            id="selectStore"
+                            value={selectedStoreId}
+                            onChange={storeHandleChange}
+                          >
+                            <option value="0">Select Store</option>
+                            {store.stores_list.map((item, index) => {
+                              return (
+                                <option value={item._id} key={index}>
+                                  {item.title}
+                                </option>
+                              );
+                            })}
+                          </CSelect>
+                        </CFormGroup>
+                      </CCol>
+                    </CRow>
+
+                    {/*  <div className="card-header-actions">
                       <CLink
                         className="card-header-action"
                         onClick={() => toggleCollapse(0)}
@@ -90,87 +138,13 @@ const Taxes = () => {
                           }
                         />
                       </CLink>
-                    </div>
+                    </div> */}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>
-                    <CCardBody>
-                      <CRow>
-                        <CCol sm="4" md="3" xl="xl" className="mb-3 mb-xl-0">
-                          <CButton
-                            block="block"
-                            variant="outline"
-                            color="primary"
-                            className="float-left"
-                            onClick={addNewTax}
-                          >
-                            ADD TAXES
-                          </CButton>
-                        </CCol>
-                        {taxes.item_taxes.filter(
-                          (item) => item.isDeleted == true
-                        ).length > 0 ? (
-                          <CCol sm="4" md="3" xl="xl" className="mb-3 mb-xl-0">
-                            <CButton
-                              block="block"
-                              variant="outline"
-                              color="primary"
-                              className="float-left"
-                              onClick={deleteTaxes}
-                            >
-                              DELETE
-                            </CButton>
-                          </CCol>
-                        ) : (
-                          ""
-                        )}
-
-                        <CCol
-                          sm={
-                            taxes.item_taxes.filter(
-                              (item) => item.isDeleted == true
-                            ).length > 0
-                              ? "4"
-                              : "8"
-                          }
-                          md={
-                            taxes.item_taxes.filter(
-                              (item) => item.isDeleted == true
-                            ).length > 0
-                              ? "6"
-                              : "9"
-                          }
-                          xl="xl"
-                          className="mb-3 mb-xl-0"
-                        >
-                          <CFormGroup className="float-right">
-                            <CSelect
-                              custom
-                              size="md"
-                              name="selectedStoreId"
-                              id="selectStore"
-                              value={selectedStoreId}
-                              onChange={storeHandleChange}
-                            >
-                              <option value="0">Select Store</option>
-                              {store.stores_list.map((item, index) => {
-                                return (
-                                  <option value={item._id} key={index}>
-                                    {item.title}
-                                  </option>
-                                );
-                              })}
-                            </CSelect>
-                          </CFormGroup>
-                        </CCol>
-                      </CRow>
-                    </CCardBody>
+                    <CCardBody></CCardBody>
+                    <TaxesDatatable taxes={taxes.item_taxes} />
                   </CCollapse>
                 </CCard>
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol sm="12">
-                <TaxesDatatable taxes={taxes.item_taxes} />
               </CCol>
             </CRow>
           </CFade>

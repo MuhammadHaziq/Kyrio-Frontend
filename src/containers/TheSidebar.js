@@ -43,8 +43,7 @@ const TheSidebar = () => {
         for(const mod of module){
           if(mod.enable){
             if(mod.isMenu && !mod.isChild){
-              console.log("test2")
-              let nav = _nav.filter(itm=> itm.moduleName === mod.moduleName);
+              let nav = _nav.filter(itm => itm.moduleName === mod.moduleName);
               if(nav.length > 0){
                 routes.push(nav[0]);
                 if(nav.length > 1){

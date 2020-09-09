@@ -2,25 +2,48 @@ import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  CRow,
-  CCol,
-  CCard,
-  CSelect,
-  CCardHeader,
-  CCardBody,
-  CButton,
-  CFormGroup,
-  CInput,
-} from "@coreui/react";
-
+  toggle_kitchen_printer_single_select,
+  toggle_kitchen_printer_select_all,
+} from "../../../actions/settings/kitchenPrinterActions";
+import { useDispatch } from "react-redux";
 const KitchenPrinterDatatable = (props) => {
+  const dispatch = useDispatch();
+
+  /**
+   *
+   *  Datatable functions start
+   *
+   ***/
   const getCategory = (cell, row) => {
     const categoryName = [];
     row.categories.map((item) => {
-      categoryName.push(item.categoryName);
+      return categoryName.push(item.categoryName);
     });
     return categoryName.join();
   };
+  const onRowSelect = (row, isSelected, e) => {
+    dispatch(toggle_kitchen_printer_single_select(row));
+  };
+
+  const onSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      dispatch(toggle_kitchen_printer_select_all(true));
+    } else {
+      dispatch(toggle_kitchen_printer_select_all(false));
+    }
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    clickToSelect: true,
+    onSelect: onRowSelect,
+    onSelectAll: onSelectAll,
+  };
+  /**
+   *
+   *  Datatable functions End
+   *
+   ***/
   const options = {
     sizePerPageList: [
       {
@@ -45,6 +68,7 @@ const KitchenPrinterDatatable = (props) => {
         version="4"
         striped
         hover
+        selectRow={selectRowProp}
         option={options}
       >
         <TableHeaderColumn

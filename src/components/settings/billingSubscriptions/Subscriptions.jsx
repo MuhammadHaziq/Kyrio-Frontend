@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  CRow,
-  CCol,
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCollapse,
-  CFade,
-  CLink,
-} from "@coreui/react";
+import { CButton } from "@coreui/react";
 import { FaAddressCard, FaLuggageCart, FaRegCreditCard } from "react-icons/fa";
 import SubscriptionModel from "./SubscriptionModel";
 const Subscriptions = () => {
@@ -37,8 +27,6 @@ const Subscriptions = () => {
     setShow(!show);
     setSubscribe(false);
   };
-  console.log("show", show);
-
   return (
     <React.Fragment>
       <SubscriptionModel

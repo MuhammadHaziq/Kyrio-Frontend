@@ -26,18 +26,14 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { add_new_dining_option } from "../../../actions/settings/diningOptionActions.js";
-import { get_stores } from "../../../actions/settings/storeActions.js";
+import { add_new_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
 const AddKitchenPrinter = (props) => {
   // const store = useSelector((state) => state.settingReducers.storeReducer);
   const [collapse, setCollapse] = useState([true, true]);
-  const [expRight, setExpRight] = useState(false);
-  const [subscribe, setSubscribe] = useState(false);
-  const [title, setTitle] = useState("");
-  const [timeout, setTimeout] = useState(300);
+  const [storeId, setStoreId] = useState();
   const [fields, setFields] = useState({ kitchen_name: "", checkAll: true });
   const [errors, setErrors] = useState({
     kitchen_name_error: false,
@@ -45,12 +41,8 @@ const AddKitchenPrinter = (props) => {
   });
   const [categoryId, setCategoryId] = useState([]);
 
-  const [fade, setFade] = useState(true);
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  // useEffect(()=> {
-  //   dispatch(get_stores())
-  //
-  // },[])
   useEffect(() => {
     if (props.category !== undefined) {
       const categories = props.category.slice().map((item) => {
@@ -62,36 +54,34 @@ const AddKitchenPrinter = (props) => {
       setCategoryId(categories);
     }
   }, [props.category]);
-  const toggle = (tab) => {
-    const state = collapse.map((x, index) => (tab === index ? !x : x));
-    setCollapse(state);
-  };
+  useEffect(() => {
+    setStoreId(auth.user.stores[0]._id);
+  }, [auth]);
   const goBack = () => {
     props.goBack();
   };
   const saveKitchenPrinter = () => {
     // e.preventDefault();
     // if (categoryId.length == 0) {
-    if (categoryId.filter((item) => item.isSelected == true).length == 0) {
+    if (categoryId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Category");
     } else {
-      const category = categoryId.filter((item) => item.isSelected == true);
+      const category = categoryId.filter((item) => item.isSelected === true);
       let categoryData = [];
       category.map((item) => {
-        categoryData.push({
+        return categoryData.push({
           categoryId: item._id,
           categoryName: item.catTitle,
         });
       });
 
       const data = {
-        title: fields.kitchen_name,
-        categoryId: JSON.stringify(categoryData),
-        isSelected: true,
-        // store: JSON.stringify(categoryId),
+        name: fields.kitchen_name,
+        categories: JSON.stringify(categoryData),
+        storeId: storeId,
       };
       console.log(data);
-      // dispatch(add_new_dining_option(data));
+      dispatch(add_new_kitchen_printer(data));
     }
   };
   const handleOnChange = (e) => {
@@ -111,7 +101,7 @@ const AddKitchenPrinter = (props) => {
   const categoryHandleChange = (e) => {
     let selectedCategory = [];
 
-    if (e.target.value == 0) {
+    if (e.target.value === "0") {
       setFields({
         ...fields,
         checkAll: !fields.checkAll,
@@ -124,7 +114,7 @@ const AddKitchenPrinter = (props) => {
       });
     } else {
       selectedCategory = categoryId.slice().map((item) => {
-        if (item._id == e.target.value) {
+        if (item._id === e.target.value) {
           return {
             ...item,
             isSelected: !item.isSelected,
@@ -166,38 +156,34 @@ const AddKitchenPrinter = (props) => {
                     onBlur={handleOnBlur}
                   />
                   <CInvalidFeedback style={{ display: "block" }}>
-                    {errors.kitchen_name == true
+                    {errors.kitchen_name === true
                       ? "Please Enter Kitchen Printer"
                       : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
             </CFormGroup>
-            <CFormGroup>
-              <CCol md="3" className="mb-3">
-                <h2 className="mb-0">Categories</h2>
-                <span>
-                  <small>Categories printed on this printer group</small>
-                </span>
-              </CCol>
-              <CCol md="9">
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="categoryId"
-                    id={"categoryId"}
-                    value={0}
-                    checked={fields.checkAll}
-                    onChange={categoryHandleChange}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
-                    {categoryId.filter((item) => item.isSelected == false)
-                      .length == 0
-                      ? "UnSelect All"
-                      : "Select All"}
-                  </CLabel>
-                </CFormGroup>
-              </CCol>
+            <CCol md="12" className="mb-3">
+              <h2 className="mb-0">Categories</h2>
+              <span>
+                <small>Categories printed on this printer group</small>
+              </span>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  name="categoryId"
+                  id={"categoryId"}
+                  value={0}
+                  checked={fields.checkAll}
+                  onChange={categoryHandleChange}
+                />
+                <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
+                  {categoryId.filter((item) => item.isSelected === false)
+                    .length === 0
+                    ? "UnSelect All"
+                    : "Select All"}
+                </CLabel>
+              </CFormGroup>
               <CCol md="8">
                 {categoryId.map((item, index) => (
                   <CFormGroup variant="custom-checkbox" inline key={index}>
@@ -218,7 +204,7 @@ const AddKitchenPrinter = (props) => {
                   </CFormGroup>
                 ))}
               </CCol>
-            </CFormGroup>
+            </CCol>
           </CCardBody>
           <CCardFooter>
             <CRow>
@@ -253,9 +239,9 @@ const AddKitchenPrinter = (props) => {
                   color="success"
                   onClick={saveKitchenPrinter}
                   disabled={
-                    fields.kitchen_name == "" ||
-                    categoryId.filter((item) => item.isSelected == true)
-                      .length == 0
+                    fields.kitchen_name === "" ||
+                    categoryId.filter((item) => item.isSelected === true)
+                      .length === 0
                   }
                 >
                   SAVE

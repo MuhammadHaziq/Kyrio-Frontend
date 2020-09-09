@@ -27,10 +27,14 @@ import {
   get_taxes_option,
   get_item_taxes,
 } from "../../actions/settings/taxesActions";
+import { get_kitchen_printers } from "../../actions/settings/kitchenPrinterActions";
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const features = useSelector((state) => state.auth.user.roleData.features);
+  const kitchenPrinter = useSelector(
+    (state) => state.settingReducers.kitchenPrinterReducer
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(get_stores());
@@ -39,6 +43,12 @@ const Settings = () => {
     dispatch(get_taxes_type());
     dispatch(get_taxes_option());
     dispatch(get_item_taxes());
+    if (
+      kitchenPrinter.kitchen_printers == undefined ||
+      kitchenPrinter.kitchen_printers.length === 0
+    ) {
+      dispatch(get_kitchen_printers());
+    }
   }, []);
 
   return !LoginCheck() ? (

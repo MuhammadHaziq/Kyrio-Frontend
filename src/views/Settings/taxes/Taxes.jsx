@@ -54,7 +54,7 @@ const Taxes = () => {
   };
   const deleteTaxes = () => {
     const deleteIds = taxes.item_taxes
-      .filter((item) => item.isDeleted == true)
+      .filter((item) => item.isDeleted === true)
       .map((item) => {
         return item._id;
       });
@@ -87,7 +87,7 @@ const Taxes = () => {
                           ADD TAXES
                         </CButton>
                         {taxes.item_taxes.filter(
-                          (item) => item.isDeleted == true
+                          (item) => item.isDeleted === true
                         ).length > 0 ? (
                           <CButton
                             variant="outline"

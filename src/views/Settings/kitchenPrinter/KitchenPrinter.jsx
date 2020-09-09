@@ -6,29 +6,23 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
-  CFormGroup,
-  CInput,
-  CLabel,
   CFade,
-  CCollapse,
-  CLink,
 } from "@coreui/react";
 import KitchenPrinterDatatable from "../../../datatables/settings/kitchenPrinter/KitchenPrinterDatatable";
-import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddKitchenPrinter from "../../../components/settings/kitchenPrinter/AddKitchenPrinter";
+import { delete_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions";
 const KitchenPrinter = () => {
-  const [collapse, setCollapse] = useState([true, true]);
-  const [checked, setChecked] = useState([true, true]);
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
   const [timeout, setTimeout] = useState(300);
   const dispatch = useDispatch();
-  // const store = useSelector((state) => state.settingReducers.storeReducer);
+  const kitchenPrinter = useSelector(
+    (state) => state.settingReducers.kitchenPrinterReducer
+  );
   const category = useSelector((state) => state.items.categoryReducer);
 
-  const addNewStore = () => {
+  const addNewKitchenPrinter = () => {
     setFadeKitchenPrinter(false);
     setFadeAddKitchenPrinter(true);
   };
@@ -36,9 +30,13 @@ const KitchenPrinter = () => {
     setFadeKitchenPrinter(true);
     setFadeAddKitchenPrinter(false);
   };
-  const toggleCollapse = (tab) => {
-    const state = collapse.map((x, index) => (tab === index ? !x : x));
-    setCollapse(state);
+  const deleteTaxes = () => {
+    const deleteIds = kitchenPrinter.kitchen_printers
+      .filter((item) => item.isDeleted === true)
+      .map((item) => {
+        return item._id;
+      });
+    dispatch(delete_kitchen_printer(JSON.stringify(deleteIds)));
   };
   return (
     <React.Fragment>
@@ -60,24 +58,32 @@ const KitchenPrinter = () => {
                 <CCard>
                   <CCardHeader>
                     <CRow>
-                      <CCol
-                        col="6"
-                        sm="4"
-                        md="4"
-                        xl="xl"
-                        className="mb-3 mb-xl-0"
-                      >
-                        <CButton color="success" onClick={addNewStore}>
-                          ADD STORE
+                      <CCol sm="8" md="8" xl="xl" className="mb-3 mb-xl-0">
+                        <CButton color="success" onClick={addNewKitchenPrinter}>
+                          ADD PRINTER GROUP
                         </CButton>
+                        {kitchenPrinter.kitchen_printers.filter(
+                          (item) => item.isDeleted === true
+                        ).length > 0 ? (
+                          <CButton
+                            variant="outline"
+                            color="danger"
+                            className="btn-square pull-right ml-2"
+                            onClick={deleteTaxes}
+                          >
+                            DELETE
+                          </CButton>
+                        ) : (
+                          ""
+                        )}
                       </CCol>
                     </CRow>
                   </CCardHeader>
-                  <CCollapse show={collapse[0]}>
-                    <CCardBody>
-                      <KitchenPrinterDatatable kitchen_printer_list={[]} />
-                    </CCardBody>
-                  </CCollapse>
+                  <CCardBody>
+                    <KitchenPrinterDatatable
+                      kitchen_printer_list={kitchenPrinter.kitchen_printers}
+                    />
+                  </CCardBody>
                 </CCard>
               </CCol>
             </CRow>

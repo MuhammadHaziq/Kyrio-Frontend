@@ -4,10 +4,11 @@ import messageReducer from "./messageReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
-import storeReducer from './settings/storeReducer';
-import posDeviceReducer from './settings/posDeviceReducer'
-import diningOptionReducer from './settings/diningOptionReducer'
-import taxesReducer from './settings/taxesReducer'
+import storeReducer from "./settings/storeReducer";
+import posDeviceReducer from "./settings/posDeviceReducer";
+import diningOptionReducer from "./settings/diningOptionReducer";
+import taxesReducer from "./settings/taxesReducer";
+import kitchenPrinterReducer from "./settings/kitchenPrinterReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -26,14 +27,15 @@ const settingReducers = combineReducers({
   storeReducer,
   posDeviceReducer,
   diningOptionReducer,
-  taxesReducer
-})
+  taxesReducer,
+  kitchenPrinterReducer,
+});
 const rootReducer = combineReducers({
   settings: settingsReducer,
   auth: authReducer,
   msg: messageReducer,
   items,
-  settingReducers
+  settingReducers,
 });
 
 export default persistReducer(persistConfig, rootReducer);

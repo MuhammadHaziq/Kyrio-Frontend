@@ -2,21 +2,10 @@ import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  CRow,
-  CCol,
-  CCard,
-  CSelect,
-  CCardHeader,
-  CCardBody,
-  CButton,
-  CFormGroup,
-  CInput,
-} from "@coreui/react";
-import {
   toggle_pos_single_select,
   toggle_pso_all_select,
 } from "../../../actions/settings/posDeviceActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const PosDeviceDatatable = (props) => {
   const dispatch = useDispatch();
@@ -26,10 +15,6 @@ const PosDeviceDatatable = (props) => {
    *
    ***/
   const getStoreName = (cell, row) => {
-    const storeNames = [];
-    // const storeName = row.store.map(item => {
-    //   return storeNames.push(item.storeName)
-    // })
     return row.store.storeName;
   };
   const onRowSelect = (row, isSelected, e) => {

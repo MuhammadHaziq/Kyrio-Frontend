@@ -43,6 +43,7 @@ const AddTax = (props) => {
     tax_rate: "",
     tax_type: "",
     tax_option: "",
+    checkedAll: true,
   });
   const [errors, setErrors] = useState({
     tax_name: false,
@@ -52,12 +53,20 @@ const AddTax = (props) => {
   });
   const dispatch = useDispatch();
   useEffect(() => {
-    setStoreId(store.stores_list);
+    if (store.stores_list !== undefined) {
+      const stores = store.stores_list.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: true,
+        };
+      });
+      setStoreId(stores);
+    }
   }, [store.stores_list]);
 
   useEffect(() => {
     setTaxOption(0);
-    setTaxType(taxes.tax_types[0]._id);
+    setTaxType(taxes.tax_types[0]._id || "");
   }, [taxes.tax_types]);
 
   const toggle = (tab) => {
@@ -138,12 +147,6 @@ const AddTax = (props) => {
     dispatch(save_item_taxes(data));
   };
   const handleOnChange = (e) => {
-    if (e.target.name == "tax_name") {
-      setErrors({
-        ...errors,
-        tax_name: false,
-      });
-    }
     const { name, value } = e.target;
     setFields({
       ...fields,
@@ -167,6 +170,10 @@ const AddTax = (props) => {
   const storeHandleChange = (e) => {
     let selectedStore = [];
     if (e.target.value == 0) {
+      setFields({
+        ...fields,
+        checkedAll: !fields.checkedAll,
+      });
       selectedStore = storeId.slice().map((item) => {
         return {
           ...item,
@@ -296,10 +303,11 @@ const AddTax = (props) => {
                   <p>
                     Tax application depends on dining option
                     <CSwitch
+                      shape="pill"
                       className={"mx-1 float-right"}
-                      variant={"3d"}
                       color={"success"}
-                      size="sm"
+                      size="md"
+                      value={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
                   </p>
@@ -343,6 +351,7 @@ const AddTax = (props) => {
                       name="storeId"
                       id={"storeId"}
                       value={0}
+                      checked={fields.checkedAll}
                       onChange={storeHandleChange}
                     />
                     <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
@@ -388,34 +397,34 @@ const AddTax = (props) => {
       ) : null}
 
       <CRow>
-        <CCol sm="2" md="2" className="mb-3 mb-xl-0">
+        <CCol sm="2" md="4" className="mb-3 mb-xl-0">
           <CButton
             block
             variant="outline"
-            className="pull-right"
+            className="btn-pill pull-right"
             color="default"
             onClick={goBack}
           >
             BACK
           </CButton>
         </CCol>
-        <CCol sm="2" md="2" className="mb-3 mb-xl-0">
+        <CCol sm="2" md="4" className="mb-3 mb-xl-0">
           <CButton
             block
             variant="outline"
-            className="pull-right"
+            className="btn-pill pull-right"
             color="danger"
             onClick={goBack}
           >
             CANCEL
           </CButton>
         </CCol>
-        <CCol sm="2" md="8" className="mb-3 mb-xl-0 form-actions">
+        <CCol sm="2" md="4" className="mb-3 mb-xl-0 form-actions">
           <CButton
             block
             type="click"
             variant="outline"
-            className="pull-right"
+            className="btn-pill pull-right"
             color="success"
             disabled={fields.tax_name == ""}
             onClick={submitTaxForm}

@@ -14,6 +14,7 @@ import {
   TOGGLE_TAXES_SELECT_ALL,
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
+  GET_CATEGORY_LIST,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -181,6 +182,7 @@ export const get_tax_category_list = (data) => {
         .then((response) => {
           console.log(response);
           dispatch({ type: GET_CATEGORY_TAX, response: response.data });
+          dispatch({ type: GET_CATEGORY_LIST, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

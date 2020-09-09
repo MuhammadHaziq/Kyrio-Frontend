@@ -18,7 +18,6 @@ export const get_category_list = (data) => {
         },
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: GET_CATEGORY_LIST, response: response.data });
         })
         .catch((error) => {

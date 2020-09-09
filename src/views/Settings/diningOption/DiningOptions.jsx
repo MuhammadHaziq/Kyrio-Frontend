@@ -18,6 +18,7 @@ import {
   CListGroup,
   CListGroupItem,
   CSelect,
+  CInputCheckbox,
 } from "@coreui/react";
 // fake data generator
 import {
@@ -84,7 +85,9 @@ class DiningOptions extends Component {
       const data = this.props.dining_option_list.map((item, index) => ({
         id: item._id,
         content: item.title,
+        isActive: item.isActive,
       }));
+      // isActive: item.isActive,
       this.setState({
         ...this.state,
         items: data,
@@ -94,10 +97,10 @@ class DiningOptions extends Component {
       const data = {
         storeId: this.state.selectedStoreId,
       };
-      console.log(data);
       this.props.get_store_dining(data);
     }
   }
+
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
@@ -137,8 +140,28 @@ class DiningOptions extends Component {
       selectedStoreId: e.target.value,
     });
   };
+  diningHandleCheck = (id) => {
+    const items = this.state.items.map((item) => {
+      if (item.id == id) {
+        return {
+          ...item,
+          isActive: !item.isActive,
+        };
+      }
+      return item;
+    });
+    this.setState({
+      ...this.state,
+      items,
+    });
+    const data = {
+      data: JSON.stringify(items),
+    };
+    this.props.update_dining_option(data);
+  };
   render() {
-    console.log("items", this.props.dining_option_list);
+    console.log("props", this.props.dining_option_list);
+    console.log("items", this.state.items);
     const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
     return (
       <React.Fragment>
@@ -191,6 +214,31 @@ class DiningOptions extends Component {
                   <CCardBody>
                     <CRow>
                       <CCol xs="12" lg="12">
+                        <CRow style={{ marginBottom: "1%" }}>
+                          <CCol
+                            xs="6"
+                            className=" mt-3"
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: "500",
+                              color: "rgba(0,0,0,0.54)",
+                            }}
+                          >
+                            Name
+                          </CCol>
+                          <CCol
+                            xs="4"
+                            className=" mt-3"
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: "500",
+                              color: "rgba(0,0,0,0.54)",
+                              marginLeft: "-1.75rem !important",
+                            }}
+                          >
+                            Available
+                          </CCol>
+                        </CRow>
                         <DragDropContext onDragEnd={this.onDragEnd}>
                           <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -215,7 +263,30 @@ class DiningOptions extends Component {
                                           provided.draggableProps.style
                                         )}
                                       >
-                                        <CCol sm="12">{item.content}</CCol>
+                                        <CRow>
+                                          <CCol sm="6" className="pull-left">
+                                            {item.content}
+                                          </CCol>
+                                          <CCol sm="4">
+                                            <CFormGroup
+                                              inline
+                                              key={index}
+                                              className="pull-right"
+                                            >
+                                              <CInputCheckbox
+                                                name="diningId"
+                                                id={"diningId" + item.id}
+                                                value={item.id}
+                                                checked={item.isActive}
+                                                onChange={() =>
+                                                  this.diningHandleCheck(
+                                                    item.id
+                                                  )
+                                                }
+                                              />
+                                            </CFormGroup>
+                                          </CCol>
+                                        </CRow>
                                       </div>
                                     )}
                                   </Draggable>

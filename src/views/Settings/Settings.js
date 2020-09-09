@@ -18,6 +18,7 @@ import LoginCheck from "../Authorization/LoginCheck";
 import Store from "./stores/Store.jsx";
 import PosDevice from "./posDevices/PosDevice.jsx";
 import DiningOptions from "./diningOption/DiningOptions.jsx";
+import KitchenPrinter from "./kitchenPrinter/KitchenPrinter.jsx";
 import { get_stores } from "../../actions/settings/storeActions";
 // import { get_category_list } from "../../actions/items/categoryActions";
 import {
@@ -203,6 +204,9 @@ const Settings = () => {
                     </CTabPane>
                     <CTabPane active={activeTab === 4}>
                       <Taxes />
+                    </CTabPane>
+                    <CTabPane active={activeTab === 7}>
+                      <KitchenPrinter />
                     </CTabPane>
                     <CTabPane active={activeTab === 8}>
                       <DiningOptions />

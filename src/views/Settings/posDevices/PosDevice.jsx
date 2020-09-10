@@ -6,13 +6,9 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
   CFormGroup,
-  CInput,
-  CLabel,
   CFade,
   CCollapse,
-  CLink,
   CSelect,
 } from "@coreui/react";
 import PosDeviceDatatable from "../../../datatables/settings/posDevice/PosDeviceDatatable";
@@ -39,7 +35,7 @@ const PosDevice = () => {
 
   useEffect(() => {
     dispatch(get_pos_devices());
-  }, []);
+  }, [dispatch]);
 
   const addNewPosDevice = () => {
     setFadePosDevice(false);
@@ -92,7 +88,7 @@ const PosDevice = () => {
                           ADD POS DEVICE
                         </CButton>
                         {posDevice.pos_device_list.filter(
-                          (item) => item.isDeleted == true
+                          (item) => item.isDeleted === true
                         ).length > 0 ? (
                           <CButton
                             variant="outline"
@@ -110,7 +106,6 @@ const PosDevice = () => {
                       <CCol
                         sm="6"
                         md="6"
-                        xl="xl"
                         xl="xl"
                         className="mb-3 mb-xl-0"
                       >

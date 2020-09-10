@@ -6,13 +6,9 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
   CFormGroup,
-  CInput,
-  CLabel,
   CFade,
   CCollapse,
-  CLink,
   CSelect,
 } from "@coreui/react";
 import TaxesDatatable from "../../../datatables/settings/taxes/TaxesDatatable";

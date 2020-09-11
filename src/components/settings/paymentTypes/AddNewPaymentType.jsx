@@ -87,8 +87,8 @@ const AddNewPaymentType = (props) => {
       };
     } else {
       paymentData = {
-        paymentId: payment[0]._id,
-        paymentName: payment[0].title,
+        paymentId: payment[0]._id || 0,
+        paymentName: payment[0].title || "Select Payment Type",
       };
     }
 

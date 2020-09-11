@@ -29,6 +29,35 @@ const taxesReducer = (state = initialState, action) => {
       return { ...state, tax_category_list: action.response };
     }
 
+    case TOGGLE_TAXES_SELECT_SINGLE: {
+      const item_taxes = state.item_taxes.slice().map((item) => {
+        if (item._id == action.response._id) {
+          return {
+            ...item,
+            isDeleted: !item.isDeleted,
+          };
+        }
+        return item;
+      });
+      return {
+        ...state,
+        item_taxes,
+      };
+    }
+
+    case TOGGLE_TAXES_SELECT_ALL: {
+      const item_taxes = state.item_taxes.slice().map((item) => {
+        return {
+          ...item,
+          isDeleted: action.response,
+        };
+      });
+      return {
+        ...state,
+        item_taxes,
+      };
+    }
+
     case GET_CATEGORY_ITEMS: {
       return {
         ...state,
@@ -37,7 +66,7 @@ const taxesReducer = (state = initialState, action) => {
     }
 
     case DINING_SELECT_STATUS: {
-      let tax_dining_list = []
+      let tax_dining_list = [];
       tax_dining_list = state.tax_dining_list.slice().map((item) => {
         if (item._id == action.response.diningId) {
           console.log("diningItem", item);
@@ -48,13 +77,13 @@ const taxesReducer = (state = initialState, action) => {
         }
         return item;
       });
-      if(action.response.length == 0) {
+      if (action.response.length == 0) {
         tax_dining_list = state.tax_dining_list.slice().map((item) => {
-            return {
-              ...item,
-              isSelected: false,
-            };
-          })
+          return {
+            ...item,
+            isSelected: false,
+          };
+        });
       }
       return {
         ...state,
@@ -63,8 +92,8 @@ const taxesReducer = (state = initialState, action) => {
     }
 
     case CATEGORY_SELECT_STATUS: {
-        let tax_category_list = []
-       tax_category_list = state.tax_category_list.slice().map((item) => {
+      let tax_category_list = [];
+      tax_category_list = state.tax_category_list.slice().map((item) => {
         if (item._id == action.response.categoryId) {
           return {
             ...item,
@@ -73,13 +102,13 @@ const taxesReducer = (state = initialState, action) => {
         }
         return item;
       });
-      if(action.response.length == 0) {
+      if (action.response.length == 0) {
         tax_category_list = state.tax_category_list.slice().map((item) => {
-            return {
-              ...item,
-              isSelected: false,
-            };
-          })
+          return {
+            ...item,
+            isSelected: false,
+          };
+        });
       }
       return {
         ...state,
@@ -88,9 +117,9 @@ const taxesReducer = (state = initialState, action) => {
     }
 
     case CATEGORY_ITEMS_SELECT_STATUS: {
-      let category_items = []
-            let tax_category_list = []
-       category_items = state.category_items.slice().map((item) => {
+      let category_items = [];
+      let tax_category_list = [];
+      category_items = state.category_items.slice().map((item) => {
         if (item._id == action.categoryItems.itemId) {
           return {
             ...item,
@@ -104,7 +133,7 @@ const taxesReducer = (state = initialState, action) => {
           item.category.categoryId == action.category.categoryId &&
           item.isSelected == true
       );
-       tax_category_list = state.tax_category_list.slice().map((item) => {
+      tax_category_list = state.tax_category_list.slice().map((item) => {
         if (item._id == action.category.categoryId) {
           return {
             ...item,
@@ -115,20 +144,18 @@ const taxesReducer = (state = initialState, action) => {
       });
       if (action.categoryItems.length == 0 && action.category.length == 0) {
         console.log("action", action);
-         category_items = state.category_items.slice().map((item) => {
+        category_items = state.category_items.slice().map((item) => {
           return {
             ...item,
             isSelected: false,
           };
         });
-         tax_category_list = state.tax_category_list
-          .slice()
-          .map((item) => {
-            return {
-              ...item,
-              isSelected: false,
-            };
-          });
+        tax_category_list = state.tax_category_list.slice().map((item) => {
+          return {
+            ...item,
+            isSelected: false,
+          };
+        });
       }
       return {
         ...state,

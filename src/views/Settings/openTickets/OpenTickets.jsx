@@ -15,14 +15,9 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
 } from "@coreui/react";
-import PosDeviceDatatable from "../../../datatables/settings/posDevice/PosDeviceDatatable";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  get_pos_devices,
-  get_store_pos_device,
-  delete_pos_devices,
-} from "../../../actions/settings/posDeviceActions";
+import { add_new_open_ticket } from "../../../actions/settings/openTicketActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
@@ -33,6 +28,7 @@ const OpenTickets = () => {
   const [timeout] = useState(300);
   const [sChecked, setChecked] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState("");
+  const [selectedStoreObject, setSelectedStoreObject] = useState({});
   const [items, setItems] = useState([]);
   const [values, setValues] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -42,9 +38,9 @@ const OpenTickets = () => {
   );
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
-  useEffect(() => {
-    dispatch(get_pos_devices());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(get_pos_devices());
+  // }, [dispatch]);
 
   const goBack = () => {
     setFadeOpenTicket(true);
@@ -52,7 +48,20 @@ const OpenTickets = () => {
   };
 
   const storeHandleChange = (e) => {
+    const storeObject = store.stores_list.filter((item) => {
+      return item._id === e.target.value;
+    });
+    let storeId = {};
+    if (e.target.value !== "0") {
+      storeId = {
+        store_id: storeObject[0]._id,
+        name: storeObject[0].title,
+      };
+    }
+
+    setSelectedStoreObject(storeId);
     setSelectedStoreId(e.target.value);
+
     // dispatch(get_store_pos_device(e.target.value));
   };
 
@@ -62,7 +71,6 @@ const OpenTickets = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(data);
     // dispatch(delete_pos_devices(JSON.stringify(data)));
   };
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -116,17 +124,6 @@ const OpenTickets = () => {
     setValues(values);
     setErrors(list);
     setItems(newTicket);
-
-    // this.setState(
-    //   {
-    //     items: newTicket,
-    //   },
-    //   () => {
-    //     if (this.state.items.length !== 0) {
-    //       document.getElementById("ticket" + this.state.items.length).focus();
-    //     }
-    //   }
-    // );
   };
 
   const deleteTicket = (selectedItem, index) => {
@@ -137,26 +134,6 @@ const OpenTickets = () => {
       }
     }
     setItems(items);
-    // this.setState(
-    //   {
-    //     items: items,
-    //   },
-    //   () => {
-    //     let list = this.state.items.map((itm) => {
-    //       return false;
-    //     });
-    //     let values = this.state.items.map((itm) => {
-    //       return itm.value;
-    //     });
-    //     this.setState({
-    //       errors: list,
-    //       values: values,
-    //     });
-    //     if (this.state.items.length !== 0) {
-    //       document.getElementById("ticket" + this.state.items.length).focus();
-    //     }
-    //   }
-    // );
   };
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -179,7 +156,7 @@ const OpenTickets = () => {
         document.getElementById("ticket" + id).focus();
         let errorIndex = id - 1;
         let list = items.map((itm, index) => {
-          return index == errorIndex ? true : false;
+          return index === errorIndex ? true : false;
         });
         const dataError = reorder(
           list,
@@ -193,211 +170,207 @@ const OpenTickets = () => {
   };
   const handleChange = (e, index) => {
     let values = items.map((itm, i) => {
-      return i == index ? e.target.value : itm.value;
+      return i === index ? e.target.value : itm.value;
     });
     let itemList = items.map((itm, i) => {
-      return i == index
+      return i === index
         ? { id: itm.id, value: e.target.value }
         : { id: itm.id, value: itm.value };
     });
     setItems(itemList);
     setValues(values);
   };
+  const saveOpenTicket = () => {
+    const sendData = {
+      ticket_name: values,
+      store: selectedStoreObject,
+    };
+    console.log("saveOpenTicket", sendData);
+    dispatch(add_new_open_ticket(sendData));
+  };
   return (
     <React.Fragment>
       <div className="animated fadeIn">
-        {fadeAddOpenTicket ? (
-          <CFade timeout={timeout} in={fadeAddOpenTicket}>
-            <AddPosDevice goBack={goBack} stores={store.stores_list} />
-          </CFade>
-        ) : (
-          ""
-        )}
-        {fadeOpenTicket ? (
-          <CFade timeout={timeout} in={fadeOpenTicket}>
-            <CRow>
-              <CCol xs="12" lg="12">
-                <CCard>
-                  <CCardHeader>
-                    <CRow>
-                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                        <h2>Open tickets</h2>
-                        {posDevice.pos_device_list.filter(
-                          (item) => item.isDeleted === true
-                        ).length > 0 ? (
-                          <CButton
-                            variant="outline"
-                            className="ml-2"
-                            color="danger"
-                            onClick={deleteOpenTicket}
-                          >
-                            DELETE
-                          </CButton>
-                        ) : (
-                          ""
-                        )}
-                      </CCol>
-
-                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                        <CFormGroup>
-                          <CSelect
-                            custom
-                            size="md"
-                            name="selectStore"
-                            id="selectStore"
-                            value={selectedStoreId}
-                            onChange={storeHandleChange}
-                          >
-                            <option value="0">Select Store</option>
-                            {store.stores_list.map((item, index) => {
-                              return (
-                                <option value={item._id} PosDevicekey={index}>
-                                  {item.title}
-                                </option>
-                              );
-                            })}
-                          </CSelect>
-                        </CFormGroup>
-                      </CCol>
-                    </CRow>
-                  </CCardHeader>
-                  <CCardBody>
-                    <CRow>
-                      <CCol sm="12">
-                        <h7 style={{ display: "block" }}>
-                          Use predefined tickets
-                        </h7>
-                        <span>
-                          <small>
-                            This feature allows you to quickly assign names to
-                            open tickets. For example, Table 1, Table 2, etc.
-                          </small>
-                        </span>
-                        <CSwitch
-                          shape="pill"
-                          className={"mx-1 float-right"}
-                          color={"success"}
-                          size="md"
-                          value={sChecked}
-                          onChange={() => setChecked(!sChecked)}
-                        />
-                      </CCol>
-                      {sChecked ? (
-                        <CCol xs="12" lg="12">
-                          {/* Dragable Component */}
-                          <DragDropContext onDragEnd={onDragEnd}>
-                            <Droppable droppableId="droppable">
-                              {(provided, snapshot) => (
-                                <div
-                                  {...provided.droppableProps}
-                                  ref={provided.innerRef}
-                                  style={getListStyle(snapshot.isDraggingOver)}
-                                >
-                                  {items.map((item, index) => (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id}
-                                      index={index}
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                          style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                          )}
-                                        >
-                                          <CRow>
-                                            <CCol sm="12" className="mt-2">
-                                              <CFormGroup
-                                                key={index}
-                                                className="pull-right"
-                                              >
-                                                <CInputGroup>
-                                                  <CInputGroupPrepend>
-                                                    <CInputGroupText>
-                                                      <CIcon name="cilWaves" />
-                                                    </CInputGroupText>
-                                                  </CInputGroupPrepend>
-                                                  <CInput
-                                                    type="text"
-                                                    invalid={errors[index]}
-                                                    id={"ticket" + (index + 1)}
-                                                    name={
-                                                      "ticket" + (index + 1)
-                                                    }
-                                                    value={values[index]}
-                                                    onChange={(e) =>
-                                                      handleChange(e, index)
-                                                    }
-                                                  />
-                                                </CInputGroup>
-                                              </CFormGroup>
-                                            </CCol>
-                                          </CRow>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  ))}
-                                  {provided.placeholder}
-                                </div>
-                              )}
-                            </Droppable>
-                          </DragDropContext>
-                          {/* END Dragable Component */}
-                        </CCol>
-                      ) : (
-                        ""
-                      )}
-                    </CRow>
-                    <CRow>
-                      {sChecked ? (
-                        <CCol sm xs="12" className="text-center mt-3">
-                          <CButton
-                            color="info"
-                            block
-                            className="btn-pill pull-right"
-                            outline
-                            onClick={() => addTicket(items.length)}
-                          >
-                            ADD PREDEFINED TICKET
-                          </CButton>
-                        </CCol>
-                      ) : (
-                        ""
-                      )}
-                      <CCol sm xs="12" className="text-center mt-3">
+        <CFade timeout={timeout} in={fadeOpenTicket}>
+          <CRow>
+            <CCol xs="12" lg="12">
+              <CCard>
+                <CCardHeader>
+                  <CRow>
+                    <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                      <h2>Open tickets</h2>
+                      {posDevice.pos_device_list.filter(
+                        (item) => item.isDeleted === true
+                      ).length > 0 ? (
                         <CButton
+                          variant="outline"
+                          className="ml-2"
                           color="danger"
-                          block
-                          className="btn-pill pull-right"
-                          outline
-                          onClick={goBack}
+                          onClick={deleteOpenTicket}
                         >
-                          CANCEL
+                          DELETE
                         </CButton>
+                      ) : (
+                        ""
+                      )}
+                    </CCol>
+
+                    <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                      <CFormGroup>
+                        <CSelect
+                          custom
+                          size="md"
+                          name="selectStore"
+                          id="selectStore"
+                          value={selectedStoreId}
+                          onChange={storeHandleChange}
+                        >
+                          <option value="0">Select Store</option>
+                          {store.stores_list.map((item, index) => {
+                            return (
+                              <option value={item._id} PosDevicekey={index}>
+                                {item.title}
+                              </option>
+                            );
+                          })}
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+                <CCardBody>
+                  <CRow>
+                    <CCol sm="12">
+                      <h7 style={{ display: "block" }}>
+                        Use predefined tickets
+                      </h7>
+                      <span>
+                        <small>
+                          This feature allows you to quickly assign names to
+                          open tickets. For example, Table 1, Table 2, etc.
+                        </small>
+                      </span>
+                      <CSwitch
+                        shape="pill"
+                        className={"mx-1 float-right"}
+                        color={"success"}
+                        size="md"
+                        value={sChecked}
+                        onChange={() => setChecked(!sChecked)}
+                      />
+                    </CCol>
+                    {sChecked ? (
+                      <CCol xs="12" lg="12">
+                        {/* Dragable Component */}
+                        <DragDropContext onDragEnd={onDragEnd}>
+                          <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                              <div
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                style={getListStyle(snapshot.isDraggingOver)}
+                              >
+                                {items.map((item, index) => (
+                                  <Draggable
+                                    key={item.id}
+                                    draggableId={item.id}
+                                    index={index}
+                                  >
+                                    {(provided, snapshot) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={getItemStyle(
+                                          snapshot.isDragging,
+                                          provided.draggableProps.style
+                                        )}
+                                      >
+                                        <CRow>
+                                          <CCol sm="12" className="mt-2">
+                                            <CFormGroup
+                                              key={index}
+                                              className="pull-right"
+                                            >
+                                              <CInputGroup>
+                                                <CInputGroupPrepend>
+                                                  <CInputGroupText>
+                                                    <CIcon name={"cil-waves"} />
+                                                  </CInputGroupText>
+                                                </CInputGroupPrepend>
+                                                <CInput
+                                                  type="text"
+                                                  invalid={errors[index]}
+                                                  id={"ticket" + (index + 1)}
+                                                  name={"ticket" + (index + 1)}
+                                                  value={values[index]}
+                                                  onChange={(e) =>
+                                                    handleChange(e, index)
+                                                  }
+                                                />
+                                              </CInputGroup>
+                                            </CFormGroup>
+                                          </CCol>
+                                        </CRow>
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                ))}
+                                {provided.placeholder}
+                              </div>
+                            )}
+                          </Droppable>
+                        </DragDropContext>
+                        {/* END Dragable Component */}
                       </CCol>
+                    ) : (
+                      ""
+                    )}
+                  </CRow>
+                  <CRow>
+                    {sChecked ? (
                       <CCol sm xs="12" className="text-center mt-3">
                         <CButton
-                          color="success"
+                          color="info"
                           block
                           className="btn-pill pull-right"
-                          outline
+                          variant="outline"
+                          onClick={() => addTicket(items.length)}
                         >
-                          SAVE
+                          ADD PREDEFINED TICKET
                         </CButton>
                       </CCol>
-                    </CRow>
-                  </CCardBody>
-                </CCard>
-              </CCol>
-            </CRow>
-          </CFade>
-        ) : (
-          ""
-        )}
+                    ) : (
+                      ""
+                    )}
+                    <CCol sm xs="12" className="text-center mt-3">
+                      <CButton
+                        color="danger"
+                        block
+                        className="btn-pill pull-right"
+                        variant="outline"
+                        onClick={goBack}
+                      >
+                        CANCEL
+                      </CButton>
+                    </CCol>
+                    <CCol sm xs="12" className="text-center mt-3">
+                      <CButton
+                        color="success"
+                        block
+                        className="btn-pill pull-right"
+                        variant="outline"
+                        onClick={saveOpenTicket}
+                      >
+                        SAVE
+                      </CButton>
+                    </CCol>
+                  </CRow>
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+        </CFade>
       </div>
     </React.Fragment>
   );

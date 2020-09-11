@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardHeader,
   CCollapse,
-  CFade,
   CCol,
   CFormGroup,
   CInput,
@@ -14,45 +13,27 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CFormText,
   CLink,
-  CInputGroupAppend,
-  CForm,
   CInputCheckbox,
-  CInputRadio,
-  CSelect,
   CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_dining_option } from "../../../actions/settings/diningOptionActions.js";
-import { get_stores } from "../../../actions/settings/storeActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
 const AddDiningOption = (props) => {
   // const store = useSelector((state) => state.settingReducers.storeReducer);
   const [collapse, setCollapse] = useState([true, true]);
-  const [expRight, setExpRight] = useState(false);
-  const [subscribe, setSubscribe] = useState(false);
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [timeout, setTimeout] = useState(300);
   const [fields, setFields] = useState({ dining_name: "", checkAll: true });
   const [errors, setErrors] = useState({
     dining_name_error: false,
     checkAll_error: false,
   });
   const [storeId, setStoreId] = useState([]);
-
-  const [fade, setFade] = useState(true);
   const dispatch = useDispatch();
-  // useEffect(()=> {
-  //   dispatch(get_stores())
-  //
-  // },[])
+
   useEffect(() => {
     if (props.store !== undefined) {
       const stores = props.store.slice().map((item) => {
@@ -75,13 +56,13 @@ const AddDiningOption = (props) => {
   const submitDiningForm = () => {
     // e.preventDefault();
     // if (storeId.length == 0) {
-    if (storeId.filter((item) => item.isSelected == true).length == 0) {
+    if (storeId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Store");
     } else {
-      const store = storeId.filter((item) => item.isSelected == true);
+      const store = storeId.filter((item) => item.isSelected === true);
       let storeData = [];
       store.map((item) => {
-        storeData.push({
+        return storeData.push({
           storeId: item._id,
           storeName: item.title,
         });

@@ -19,6 +19,7 @@ import Store from "./stores/Store.jsx";
 import PosDevice from "./posDevices/PosDevice.jsx";
 import DiningOptions from "./diningOption/DiningOptions.jsx";
 import KitchenPrinter from "./kitchenPrinter/KitchenPrinter.jsx";
+import PaymentTypes from "./paymentTypes/PaymentTypes.jsx";
 import OpenTickets from "./openTickets/OpenTickets.jsx";
 import { get_stores } from "../../actions/settings/storeActions";
 // import { get_category_list } from "../../actions/items/categoryActions";
@@ -29,6 +30,8 @@ import {
   get_item_taxes,
 } from "../../actions/settings/taxesActions";
 import { get_kitchen_printers } from "../../actions/settings/kitchenPrinterActions";
+import { get_payment_types } from "../../actions/settings/paymentTypesActions";
+
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -44,6 +47,7 @@ const Settings = () => {
     dispatch(get_taxes_type());
     dispatch(get_taxes_option());
     dispatch(get_item_taxes());
+    dispatch(get_payment_types());
     if (
       kitchenPrinter.kitchen_printers == undefined ||
       kitchenPrinter.kitchen_printers.length === 0
@@ -186,18 +190,7 @@ const Settings = () => {
                       <BillingSubscription />
                     </CTabPane>
                     <CTabPane active={activeTab === 2}>
-                      <p>
-                        Ut ut do pariatur aliquip aliqua aliquip exercitation do
-                        nostrud commodo reprehenderit aute ipsum voluptate.
-                        Irure Lorem et laboris nostrud amet cupidatat cupidatat
-                        anim do ut velit mollit consequat enim tempor.
-                        Consectetur est minim nostrud nostrud consectetur irure
-                        labore voluptate irure. Ipsum id Lorem sit sint
-                        voluptate est pariatur eu ad cupidatat et deserunt culpa
-                        sit eiusmod deserunt. Consectetur et fugiat anim do
-                        eiusmod aliquip nulla laborum elit adipisicing pariatur
-                        cillum.
-                      </p>
+                      <PaymentTypes />
                     </CTabPane>
                     <CTabPane active={activeTab === 3}>
                       <p>

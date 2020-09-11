@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  CRow,
-  CCol,
-  CCard,
-  CSelect,
-  CCardHeader,
-  CCardBody,
-  CButton,
-  CFormGroup,
-  CInput,
-} from "@coreui/react";
 
 const StoreDatatable = (props) => {
   const options = {

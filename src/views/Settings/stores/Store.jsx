@@ -6,25 +6,18 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
-  CFormGroup,
-  CInput,
-  CLabel,
   CFade,
   CCollapse,
-  CLink,
 } from "@coreui/react";
 import StoreDatatable from "../../../datatables/settings/stores/StoreDatatable";
 import { CIcon } from "@coreui/icons-react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import AddStore from "../../../components/settings/stores/AddStore";
 const Stores = () => {
   const [collapse, setCollapse] = useState([true, true]);
-  const [checked, setChecked] = useState([true, true]);
   const [fadeStore, setFadeStore] = useState(true);
   const [fadeAddStore, setFadeAddStore] = useState(false);
-  const [timeout, setTimeout] = useState(300);
-  const dispatch = useDispatch();
+  const [timeout] = useState(300);
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
   const addNewStore = () => {
@@ -63,10 +56,7 @@ const Stores = () => {
                         xl="xl"
                         className="mb-3 mb-xl-0"
                       >
-                        <CButton
-                          color="success"
-                          onClick={addNewStore}
-                        >
+                        <CButton color="success" onClick={addNewStore}>
                           ADD STORE
                         </CButton>
                       </CCol>

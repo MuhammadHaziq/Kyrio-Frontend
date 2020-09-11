@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   CButton,
@@ -8,15 +7,8 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CTable,
   CFormGroup,
-  CInput,
-  CLabel,
   CFade,
-  CCollapse,
-  CLink,
-  CListGroup,
-  CListGroupItem,
   CSelect,
   CInputCheckbox,
 } from "@coreui/react";

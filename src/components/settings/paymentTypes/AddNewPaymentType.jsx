@@ -23,19 +23,18 @@ import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.j
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
-const AddPosDevice = (props) => {
-  const store = useSelector((state) => state.settingReducers.storeReducer);
+const AddNewPaymentType = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
-  const [fields, setFields] = useState({ pos_device_name: "" });
+  const [fields, setFields] = useState({ name: "" });
   const [errors, setErrors] = useState({
     pos_device_name: false,
-    storeId: false,
+    paymentId: false,
   });
-  const [storeId, setStoreId] = useState({
-    storeId: 0,
-    storeName: "Select Store",
+  const [PaymentType, setPaymentType] = useState({
+    paymentId: 0,
+    paymentName: "Select Payment Type",
   });
-  const [selectedStoreId, setSelectedStoreId] = useState();
+  const [selectedPaymentType, setSelectedPaymentId] = useState();
   const dispatch = useDispatch();
 
   const toggle = (tab) => {
@@ -45,16 +44,17 @@ const AddPosDevice = (props) => {
   const goBack = () => {
     props.goBack();
   };
-  const submitStoreForm = (e) => {
+  const submitPaymentForm = (e) => {
     e.preventDefault();
-    if (storeId["storeId"] === "0") {
-      alert("Select Store");
+    if (PaymentType["paymentId"] === 0) {
+      alert("Select Payment Type");
     } else {
       const data = {
-        title: fields.pos_device_name,
-        store: JSON.stringify(storeId),
+        name: fields.name,
+        PaymentType: JSON.stringify(PaymentType),
       };
-      dispatch(add_new_pos_device(data));
+      console.log(data);
+      // dispatch(add_new_pos_device(data));
     }
   };
   const handleOnChange = (e) => {
@@ -72,29 +72,34 @@ const AddPosDevice = (props) => {
     });
   };
 
-  const storeHandleChange = (e) => {
-    const store = props.stores.filter((item) => item._id === e.target.value);
-    let storeData;
+  const paymentHandleChange = (e) => {
+    console.log(e.target.value);
+
+    const payment = props.payment_types.filter(
+      (item) => item._id === e.target.value
+    );
+
+    let paymentData;
     if (e.target.value === 0) {
-      storeData = {
-        storeId: 0,
-        storeName: "Select Store",
+      paymentData = {
+        paymentId: 0,
+        paymentName: "Select Payment Type",
       };
     } else {
-      storeData = {
-        storeId: store[0]._id,
-        storeName: store[0].title,
+      paymentData = {
+        paymentId: payment[0]._id,
+        paymentName: payment[0].title,
       };
     }
 
-    setStoreId(storeData);
-    setSelectedStoreId(e.target.value);
+    setPaymentType(paymentData);
+    setSelectedPaymentId(e.target.value);
   };
   return (
     <CCard>
       <CCardHeader>
         <h4>
-          <strong>Create Pos Device</strong>
+          <strong>Create Payment Type</strong>
           <div className="card-header-actions">
             <CLink className="card-header-action" onClick={() => toggle(0)}>
               <CIcon
@@ -106,10 +111,25 @@ const AddPosDevice = (props) => {
       </CCardHeader>
       <CCollapse show={collapse[0]}>
         <CCardBody>
-          <CForm onSubmit={submitStoreForm}>
+          <CForm onSubmit={submitPaymentForm}>
+            <CFormGroup>
+              <CSelect
+                custom
+                size="md"
+                name="selectedPaymentType"
+                id="selectedPaymentType"
+                value={selectedPaymentType}
+                onChange={paymentHandleChange}
+              >
+                <option value="0">Payment type</option>
+                {props.payment_types.map((item) => {
+                  return <option value={item._id}>{item.title}</option>;
+                })}
+              </CSelect>
+            </CFormGroup>
             <CFormGroup row="row">
               <CCol md="12">
-                <CLabel htmlFor="store_name">Pos Device Name</CLabel>
+                <CLabel htmlFor="name">Name</CLabel>
                 <CInputGroup>
                   <CInputGroupPrepend>
                     <CInputGroupText>
@@ -117,36 +137,19 @@ const AddPosDevice = (props) => {
                     </CInputGroupText>
                   </CInputGroupPrepend>
                   <CInput
-                    id="pos_device_name"
-                    name="pos_device_name"
-                    placeholder="Pos Device Name"
+                    id="name"
+                    name="name"
+                    placeholder="Name"
                     onChange={handleOnChange}
-                    invalid={errors.pos_device_name}
+                    invalid={errors.name}
                     onBlur={handleOnBlur}
-                    value={fields.pos_device_name}
+                    value={fields.name}
                   />
                   <CInvalidFeedback>
-                    {validator.isEmpty(fields.pos_device_name)
-                      ? "Please Enter The Pos Device Name"
-                      : ""}
+                    {validator.isEmpty(fields.name) ? "Please Enter Name" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
-            </CFormGroup>
-            <CFormGroup>
-              <CSelect
-                custom
-                size="md"
-                name="selectStore"
-                id="selectStore"
-                value={selectedStoreId}
-                onChange={storeHandleChange}
-              >
-                <option value="0">Select Store</option>
-                {props.stores.map((item) => {
-                  return <option value={item._id}>{item.title}</option>;
-                })}
-              </CSelect>
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
@@ -181,9 +184,7 @@ const AddPosDevice = (props) => {
                 <CButton
                   type="submit"
                   color="success"
-                  disabled={
-                    storeId["storeId"] === 0 || fields.pos_device_name === ""
-                  }
+                  disabled={PaymentType["paymentId"] == 0 || fields.name == ""}
                   block
                   className="btn-pill pull-right"
                   variant="outline"
@@ -199,4 +200,4 @@ const AddPosDevice = (props) => {
   );
 };
 
-export default AddPosDevice;
+export default AddNewPaymentType;

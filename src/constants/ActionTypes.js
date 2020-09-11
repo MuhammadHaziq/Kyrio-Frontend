@@ -10,29 +10,21 @@ export const LOGIN = "LOGIN";
 export const MESSAGE = "MESSAGE";
 export const ERROR_MESSAGE = "Internal server error! Please try again later";
 /**
- *
  *  Items
- *
- *
  **/
 // Items List
 export const GET_ITEM_LIST = "GET_ITEM_LIST";
 export const GET_ITEM_STOCK = "GET_ITEM_STOCK";
 export const GET_ITEM_STORES = "GET_ITEM_STORES";
-//  Category list
+// X Category list
 export const GET_CATEGORY_LIST = "GET_CATEGORY_LIST";
 // Discount List
 export const GET_DISCOUNT_LIST = "GET_DISCOUNT_LIST";
 /**
- *
  *  Items End
- *
- *
  **/
 /**
- *
  *  Pos & Stores
- *
  ****/
 // stores
 export const GET_STORES = "GET_STORES";
@@ -45,26 +37,18 @@ export const TOGGLE_POS_SINGLE_SELECT = "TOGGLE_POS_SINGLE_SELECT";
 export const TOGGLE_POS_ALL_SELECT = "TOGGLE_POS_ALL_SELECT";
 export const DELETE_POS_DEVICES = "DELETE_POS_DEVICES";
 /**
- *
  *  Pos & Stores End
- *
  ****/
 /**
- *
  *  Dining Option
- *
  ****/
 export const GET_DINING_OPTION = "GET_DINING_OPTION";
 export const ADD_NEW_DINING_OPTION = "ADD_NEW_DINING_OPTION";
 /**
- *
  *  Dining Option End
- *
  ****/
 /**
- *
  *  Taxes
- *
  ****/
 export const TOGGLE_DININGS = "TOGGLE_DININGS";
 export const TOGGLE_CATEGORY = "TOGGLE_CATEGORY";
@@ -83,7 +67,6 @@ export const TOGGLE_TAXES_SELECT_ALL = "TOGGLE_TAXES_SELECT_ALL";
 export const INSERT_NEW_TAX = "INSERT_NEW_TAX";
 export const DELETE_ITEM_TAXES = "DELETE_ITEM_TAXES";
 /**
- *
  *  Taxes  End
  *    Start Kitchen Printer
  ****/
@@ -95,7 +78,18 @@ export const TOGGLE_KITCHEN_PRINTER_SINGLE_SELECT =
 export const TOGGLE_KITCHEN_PRINTER_SELECT_ALL =
   "TOGGLE_KITCHEN_PRINTER_SELECT_ALL";
 /**
- *
  *  End Kitchen Printer
- *
+ ****/
+/**
+ *  End Open Ticket
+ ****/
+export const ADD_NEW_OPEN_TICKET = "ADD_NEW_OPEN_TICKET";
+/**
+ *  End Open Ticket
+ *  Start Payment Types
+ ****/
+export const GET_PAYMENT_TYPES = "GET_PAYMENT_TYPES";
+export const ADD_NEW_PAYMENT_TYPE = "ADD_NEW_PAYMENT_TYPE";
+/**
+ *  End Payment Types
  ****/

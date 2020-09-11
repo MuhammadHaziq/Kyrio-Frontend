@@ -14,44 +14,52 @@ const posDeviceReducecr = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
     case GET_POS_DEVICES: {
-      return { ...state, pos_device_list: action.response };
+      return Object.assign({}, state, {
+        pos_device_list: action.response,
+      });
     }
 
     case ADD_NEW_POS_DEVICE: {
-      return {
-        ...state,
+      return Object.assign({}, state, {
         save_pos_device: !state.save_store,
         pos_device_list: [action.response, ...state.pos_device_list],
-      };
+      });
     }
 
     case TOGGLE_POS_SINGLE_SELECT: {
-      const pos_device_list = state.pos_device_list.slice().map((item) => {
-        if (item._id == action.response._id) {
-          return {
-            ...item,
-            isDeleted: !item.isDeleted,
-          };
-        }
-        return item;
+      return Object.assign({}, state, {
+        pos_device_list: state.pos_device_list.map((item) => {
+          if (item._id === action.response._id) {
+            return Object.assign({}, item, {
+              isDeleted: !item.isDeleted,
+            });
+          }
+          return item;
+        }),
       });
-      return {
-        ...state,
-        pos_device_list,
-      };
+      // const pos_device_list = state.pos_device_list.slice().map((item) => {
+      //   if (item._id == action.response._id) {
+      //     return {
+      //       ...item,
+      //       isDeleted: !item.isDeleted,
+      //     };
+      //   }
+      //   return item;
+      // });
+      // return {
+      //   ...state,
+      //   pos_device_list,
+      // };
     }
 
     case TOGGLE_POS_ALL_SELECT: {
-      const pos_device_list = state.pos_device_list.slice().map((item) => {
-        return {
-          ...item,
-          isDeleted: action.response,
-        };
+      return Object.assign({}, state, {
+        pos_device_list: state.pos_device_list.map((item) => {
+          return Object.assign({}, item, {
+            isDeleted: action.response,
+          });
+        }),
       });
-      return {
-        ...state,
-        pos_device_list,
-      };
     }
 
     case DELETE_POS_DEVICES: {

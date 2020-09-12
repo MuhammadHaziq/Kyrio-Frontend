@@ -6,9 +6,19 @@ import {
   TOGGLE_KITCHEN_PRINTER_SELECT_ALL,
   MESSAGE,
   ERROR_MESSAGE,
+  REDIRECT_BACK_KITCHEN,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_kitchen = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_KITCHEN,
+      response: status,
+    });
+  };
+};
 
 export const get_kitchen_printers = () => {
   return (dispatch) => {
@@ -80,6 +90,7 @@ export const add_new_kitchen_printer = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_kitchen(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

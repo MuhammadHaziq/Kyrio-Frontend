@@ -46,6 +46,13 @@ const AddStore = (props) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
+
+  useEffect(() => {
+    if (store.redirect_store !== undefined && store.redirect_store === true) {
+      props.goBack();
+    }
+  }, [store.redirect_store]);
+
   const goBack = () => {
     props.goBack();
   };

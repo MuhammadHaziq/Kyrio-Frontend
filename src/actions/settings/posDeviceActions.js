@@ -6,9 +6,19 @@ import {
   DELETE_POS_DEVICES,
   MESSAGE,
   ERROR_MESSAGE,
+  REDIRECT_BACK_POS_DEVICES,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_pos_devices = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_POS_DEVICES,
+      response: status,
+    });
+  };
+};
 
 export const get_pos_devices = () => {
   return (dispatch) => {
@@ -79,6 +89,7 @@ export const add_new_pos_device = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_pos_devices(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

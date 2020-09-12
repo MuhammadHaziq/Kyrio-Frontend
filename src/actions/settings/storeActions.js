@@ -3,9 +3,20 @@ import {
   ADD_NEW_STORE,
   MESSAGE,
   ERROR_MESSAGE,
+  REDIRECT_BACK_STORE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_store = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_STORE,
+      response: status,
+    });
+  };
+};
+
 export const get_stores = () => {
   return (dispatch) => {
     try {
@@ -75,6 +86,7 @@ export const add_new_store = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_store(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

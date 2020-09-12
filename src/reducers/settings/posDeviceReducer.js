@@ -4,15 +4,22 @@ import {
   DELETE_POS_DEVICES,
   TOGGLE_POS_SINGLE_SELECT,
   TOGGLE_POS_ALL_SELECT,
+  REDIRECT_BACK_POS_DEVICES,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   pos_device_list: [],
-  save_pos_device: false,
+  redirect_pos_devices: true,
 };
 const posDeviceReducecr = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_POS_DEVICES: {
+      return Object.assign({}, state, {
+        redirect_pos_devices: action.response,
+      });
+    }
+
     case GET_POS_DEVICES: {
       return Object.assign({}, state, {
         pos_device_list: action.response,
@@ -21,7 +28,6 @@ const posDeviceReducecr = (state = initialState, action) => {
 
     case ADD_NEW_POS_DEVICE: {
       return Object.assign({}, state, {
-        save_pos_device: !state.save_store,
         pos_device_list: [action.response, ...state.pos_device_list],
       });
     }

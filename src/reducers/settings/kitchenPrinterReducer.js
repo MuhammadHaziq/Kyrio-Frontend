@@ -4,15 +4,22 @@ import {
   DELETE_KITCHEN_PRINTER,
   TOGGLE_KITCHEN_PRINTER_SINGLE_SELECT,
   TOGGLE_KITCHEN_PRINTER_SELECT_ALL,
+  REDIRECT_BACK_KITCHEN,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   kitchen_printers: [],
-  save_kitchen_printer: false,
+  redirect_kitchen: true,
 };
 const kitchenPrinterReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_KITCHEN: {
+      return Object.assign({}, state, {
+        redirect_kitchen: action.response,
+      });
+    }
+
     case GET_KICTCH_PRINTER: {
       return Object.assign({}, state, {
         kitchen_printers: action.response,
@@ -21,7 +28,6 @@ const kitchenPrinterReducer = (state = initialState, action) => {
 
     case ADD_NEW_KITCHEN_PRINTER: {
       return Object.assign({}, state, {
-        save_kitchen_printer: !state.save_store,
         kitchen_printers: [action.response, ...state.kitchen_printers],
       });
     }

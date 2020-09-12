@@ -4,9 +4,19 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
   GET_DINING_TAX,
+  REDIRECT_BACK_DINING,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_dining = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_DINING,
+      response: status,
+    });
+  };
+};
 
 export const get_dining_options = () => {
   return (dispatch) => {
@@ -79,6 +89,7 @@ export const add_new_dining_option = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_dining(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardHeader,
   CCollapse,
-  CFade,
   CCol,
   CFormGroup,
   CInput,
@@ -14,24 +13,20 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CFormText,
-  CLink,
-  CInputGroupAppend,
-  CForm,
   CInputCheckbox,
-  CInputRadio,
-  CSelect,
   CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
 const AddKitchenPrinter = (props) => {
   // const store = useSelector((state) => state.settingReducers.storeReducer);
+  const kitchenPrinter = useSelector(
+    (state) => state.settingReducers.kitchenPrinterReducer
+  );
   const [collapse, setCollapse] = useState([true, true]);
   const [storeId, setStoreId] = useState();
   const [fields, setFields] = useState({ kitchen_name: "", checkAll: true });
@@ -54,6 +49,15 @@ const AddKitchenPrinter = (props) => {
       setCategoryId(categories);
     }
   }, [props.category]);
+
+  useEffect(() => {
+    if (
+      kitchenPrinter.redirect_kitchen !== undefined &&
+      kitchenPrinter.redirect_kitchen === true
+    ) {
+      props.goBack();
+    }
+  }, [kitchenPrinter.redirect_kitchen]);
   useEffect(() => {
     setStoreId(auth.user.stores[0]._id);
   }, [auth]);

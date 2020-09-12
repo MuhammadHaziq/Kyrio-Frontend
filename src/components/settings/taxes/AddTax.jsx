@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardHeader,
   CCollapse,
-  CFade,
   CCol,
   CFormGroup,
   CInput,
@@ -14,11 +13,8 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CFormText,
   CLink,
   CInputGroupAppend,
-  CForm,
-  CTextarea,
   CSelect,
   CInputCheckbox,
   CCardFooter,
@@ -65,8 +61,16 @@ const AddTax = (props) => {
   }, [store.stores_list]);
 
   useEffect(() => {
-    setTaxOption(0);
-    setTaxType(taxes.tax_types[0]._id || "");
+    if (taxes.redirect === true) {
+      props.goBack();
+    }
+  }, [taxes.redirect_taxes]);
+
+  useEffect(() => {
+    if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
+      setTaxOption(0);
+      setTaxType(taxes.tax_types[0]._id || "");
+    }
   }, [taxes.tax_types]);
 
   const toggle = (tab) => {
@@ -78,7 +82,7 @@ const AddTax = (props) => {
   };
   const submitTaxForm = (e) => {
     e.preventDefault();
-    if (fields.tax_name == "") {
+    if (fields.tax_name === "") {
       setErrors({
         ...errors,
         tax_name: true,
@@ -87,52 +91,56 @@ const AddTax = (props) => {
     }
     const selectedStore = [];
     storeId
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => {
-        selectedStore.push({
+        return selectedStore.push({
           storeId: item._id,
           storeTitle: item.title,
         });
       });
     const selectedDining = [];
     taxes.tax_dining_list
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => {
-        selectedDining.push({
+        return selectedDining.push({
           diningId: item._id,
           diningTitle: item.title,
         });
       });
     const selectedCategory = [];
     taxes.tax_category_list
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => {
-        selectedCategory.push({
+        return selectedCategory.push({
           categoryId: item._id,
           categoryTitle: item.catTitle,
         });
       });
     const selectedCategoryItems = [];
     taxes.category_items
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => {
-        selectedCategoryItems.push({
+        return selectedCategoryItems.push({
           itemId: item._id,
           itemName: item.name,
           categoryId: item.category.categoryId,
         });
       });
-    const types = taxes.tax_types.filter((item) => item._id == taxTypeId);
-    const options = taxes.tax_options.filter((item) => item._id == taxOptionId);
+    const types = (taxes.tax_types || []).filter(
+      (item) => item._id === taxTypeId
+    );
+    const options = (taxes.tax_options || []).filter(
+      (item) => item._id === taxOptionId
+    );
     const data = {
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
       tax_type: JSON.stringify({
-        id: types[0]._id || "",
-        title: types[0].title || "",
+        id: types[0] ? types[0]._id : "",
+        title: types[0] ? types[0].title : "",
       }),
       tax_option:
-        options.length == 0
+        options.length === 0
           ? JSON.stringify({ id: "0", title: "-" })
           : JSON.stringify({
               id: options[0]._id || "0",
@@ -169,7 +177,7 @@ const AddTax = (props) => {
   };
   const storeHandleChange = (e) => {
     let selectedStore = [];
-    if (e.target.value == 0) {
+    if (e.target.value === 0) {
       setFields({
         ...fields,
         checkedAll: !fields.checkedAll,
@@ -182,7 +190,7 @@ const AddTax = (props) => {
       });
     } else {
       selectedStore = storeId.slice().map((item) => {
-        if (item._id == e.target.value) {
+        if (item._id === e.target.value) {
           return {
             ...item,
             isSelected: !item.isSelected,
@@ -231,7 +239,7 @@ const AddTax = (props) => {
                     value={fields.tax_name}
                   />
                   <CInvalidFeedback style={{ display: "block" }}>
-                    {errors.tax_name == true ? "Please Enter Tax Name" : ""}
+                    {errors.tax_name === true ? "Please Enter Tax Name" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
@@ -261,7 +269,6 @@ const AddTax = (props) => {
                   size="md"
                   name="taxTypeId"
                   id="taxTypeId"
-                  value={taxTypeId}
                   onChange={typeHandleChange}
                   invalid={errors.taxTypeId}
                   onBlur={handleOnBlur}
@@ -330,7 +337,7 @@ const AddTax = (props) => {
           </h4>
           <span>
             <small>
-              {storeId.filter((item) => item.isSelected).length == 0
+              {storeId.filter((item) => item.isSelected).length === 0
                 ? "Not Available in Stores"
                 : `Available In ${
                     storeId.filter((item) => item.isSelected).length
@@ -355,7 +362,7 @@ const AddTax = (props) => {
                       onChange={storeHandleChange}
                     />
                     <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
-                      {storeId.filter((item) => !item.isSelected).length == 0
+                      {storeId.filter((item) => !item.isSelected).length === 0
                         ? "UnSelect All"
                         : "Select All"}
                     </CLabel>
@@ -426,7 +433,7 @@ const AddTax = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            disabled={fields.tax_name == ""}
+            disabled={fields.tax_name === ""}
             onClick={submitTaxForm}
           >
             SAVE

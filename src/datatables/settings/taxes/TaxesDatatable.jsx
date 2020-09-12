@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  CRow,
-  CCol,
-  CCard,
-  CSelect,
-  CCardHeader,
-  CCardBody,
-  CButton,
-  CFormGroup,
-  CInput,
-} from "@coreui/react";
 import { useDispatch } from "react-redux";
 import {
   toggle_select_single,
@@ -28,8 +17,8 @@ const TaxesDatatable = (props) => {
   const taxOption = (cell, row) => {
     const taxOption = cell !== undefined ? cell.title : cell;
     if (
-      taxOption == "Apply the tax to the new items" ||
-      taxOption == "Apply the tax to all new and existing items"
+      taxOption === "Apply the tax to the new items" ||
+      taxOption === "Apply the tax to all new and existing items"
     ) {
       return "Yes";
     } else {
@@ -83,43 +72,38 @@ const TaxesDatatable = (props) => {
   };
   return (
     <React.Fragment>
-      <CCard>
-        <CCardHeader>Taxes Detail</CCardHeader>
-        <CCardBody>
-          <BootstrapTable
-            data={props.taxes}
-            version="4"
-            striped
-            hover
-            pagination
-            search
-            selectRow={selectRowProp}
-            option={options}
-          >
-            <TableHeaderColumn
-              dataField="_id"
-              isKey={true}
-              dataSort={true}
-              hidden={true}
-            >
-              Id
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="title" dataSort={true}>
-              Name
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="tax_option" dataFormat={taxOption}>
-              Apply to new items
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="tax_rate"
-              dataSort={true}
-              dataFormat={taxRate}
-            >
-              Tax rate
-            </TableHeaderColumn>
-          </BootstrapTable>
-        </CCardBody>
-      </CCard>
+      <BootstrapTable
+        data={props.taxes}
+        version="4"
+        striped
+        hover
+        pagination
+        search
+        selectRow={selectRowProp}
+        option={options}
+      >
+        <TableHeaderColumn
+          dataField="_id"
+          isKey={true}
+          dataSort={true}
+          hidden={true}
+        >
+          Id
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="title" dataSort={true}>
+          Name
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="tax_option" dataFormat={taxOption}>
+          Apply to new items
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="tax_rate"
+          dataSort={true}
+          dataFormat={taxRate}
+        >
+          Tax rate
+        </TableHeaderColumn>
+      </BootstrapTable>
     </React.Fragment>
   );
 };

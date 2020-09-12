@@ -1,15 +1,23 @@
 import {
   GET_DINING_OPTION,
   ADD_NEW_DINING_OPTION,
+  REDIRECT_BACK_DINING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   dining_option_list: [],
   save_dining_option: false,
+  redirect_dining: true,
 };
 const diningOptionReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_DINING: {
+      return Object.assign({}, state, {
+        redirect_dining: action.response,
+      });
+    }
+
     case GET_DINING_OPTION: {
       return Object.assign({}, state, {
         dining_option_list: action.response,

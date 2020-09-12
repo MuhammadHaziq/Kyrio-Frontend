@@ -15,9 +15,19 @@ import {
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
   GET_CATEGORY_LIST,
+  REDIRECT_BACK_TAXES,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_taxes = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_TAXES,
+      response: status,
+    });
+  };
+};
 
 export const get_item_taxes = () => {
   return (dispatch) => {
@@ -290,6 +300,7 @@ export const save_item_taxes = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_taxes(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

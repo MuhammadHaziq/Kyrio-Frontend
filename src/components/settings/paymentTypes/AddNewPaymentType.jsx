@@ -35,12 +35,23 @@ const AddNewPaymentType = (props) => {
     paymentName: "Select Payment Type",
   });
   const [selectedPaymentType, setSelectedPaymentId] = useState();
+  const redirect_payment = useSelector(
+    (state) => state.settingReducers.paymentTypesReducer.redirect_payment
+  );
+
   const dispatch = useDispatch();
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
+
+  useEffect(() => {
+    if (redirect_payment !== undefined && redirect_payment === true) {
+      props.goBack();
+    }
+  }, [redirect_payment]);
+
   const goBack = () => {
     props.goBack();
   };

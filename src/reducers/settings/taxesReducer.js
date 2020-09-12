@@ -12,6 +12,7 @@ import {
   TOGGLE_TAXES_SELECT_ALL,
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
+  REDIRECT_BACK_TAXES,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -21,10 +22,17 @@ const initialState = {
   tax_types: [],
   tax_options: [],
   item_taxes: [],
+  redirect_taxes: true,
 };
 const taxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_TAXES: {
+      return Object.assign({}, state, {
+        redirect_taxes: action.response,
+      });
+    }
+
     case GET_ITEM_TAXES: {
       return Object.assign({}, state, {
         item_taxes: action.response,

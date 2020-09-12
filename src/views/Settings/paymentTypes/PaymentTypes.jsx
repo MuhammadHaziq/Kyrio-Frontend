@@ -9,22 +9,26 @@ import {
   CFade,
 } from "@coreui/react";
 import PaymentTypesDatatable from "../../../datatables/settings/paymentTypes/PaymentTypesDatatable";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AddNewPaymentType from "../../../components/settings/paymentTypes/AddNewPaymentType";
+import { redirect_back_payment } from "../../../actions/settings/paymentTypesActions";
 const PaymentTypes = () => {
   const [fadePaymentTypes, setPaymentTypes] = useState(true);
   const [fadeAddPaymentTypes, setFadeAddPaymentTypes] = useState(false);
   const [timeout] = useState(300);
 
+  const dispatch = useDispatch();
   const payment_types = useSelector(
     (state) => state.settingReducers.paymentTypesReducer.payment_types
   );
 
   const addNewPaymentType = () => {
+    dispatch(redirect_back_payment(false));
     setPaymentTypes(false);
     setFadeAddPaymentTypes(true);
   };
   const goBack = () => {
+    dispatch(redirect_back_payment(true));
     setPaymentTypes(true);
     setFadeAddPaymentTypes(false);
   };

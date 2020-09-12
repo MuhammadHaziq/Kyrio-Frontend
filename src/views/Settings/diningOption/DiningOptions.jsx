@@ -17,6 +17,7 @@ import {
   get_dining_options,
   update_dining_option,
   get_store_dining,
+  redirect_back_dining,
 } from "../../../actions/settings/diningOptionActions";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
@@ -119,12 +120,14 @@ class DiningOptions extends Component {
       fadeDiningOption: false,
       fadeAddDiningOption: true,
     });
+    this.props.redirect_back_dining(false);
   };
   goBack = () => {
     this.setState({
       fadeDiningOption: true,
       fadeAddDiningOption: false,
     });
+    this.props.redirect_back_dining(true);
   };
   storeHandleChange = (e) => {
     this.setState({
@@ -134,7 +137,7 @@ class DiningOptions extends Component {
   };
   diningHandleCheck = (id) => {
     const items = this.state.items.map((item) => {
-      if (item.id == id) {
+      if (item.id === id) {
         return {
           ...item,
           isActive: !item.isActive,
@@ -152,8 +155,6 @@ class DiningOptions extends Component {
     this.props.update_dining_option(data);
   };
   render() {
-    console.log("props", this.props.dining_option_list);
-    console.log("items", this.state.items);
     const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
     return (
       <React.Fragment>
@@ -313,4 +314,5 @@ export default connect(mapStateToProps, {
   get_dining_options,
   update_dining_option,
   get_store_dining,
+  redirect_back_dining,
 })(DiningOptions);

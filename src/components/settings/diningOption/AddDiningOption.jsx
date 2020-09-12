@@ -25,6 +25,9 @@ import validator from "validator";
 
 const AddDiningOption = (props) => {
   // const store = useSelector((state) => state.settingReducers.storeReducer);
+  const dinings = useSelector(
+    (state) => state.settingReducers.diningOptionReducer
+  );
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ dining_name: "", checkAll: true });
   const [errors, setErrors] = useState({
@@ -45,6 +48,14 @@ const AddDiningOption = (props) => {
       setStoreId(stores);
     }
   }, [props.store]);
+
+  useEffect(() => {
+    if (
+      dinings.redirect_dining !== undefined &&
+      dinings.redirect_dining === true
+    )
+      props.goBack();
+  }, [dinings.redirect_dining]);
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -94,7 +105,7 @@ const AddDiningOption = (props) => {
   const storeHandleChange = (e) => {
     let selectedStore = [];
 
-    if (e.target.value == 0) {
+    if (e.target.value === 0) {
       setFields({
         ...fields,
         checkAll: !fields.checkAll,
@@ -107,7 +118,7 @@ const AddDiningOption = (props) => {
       });
     } else {
       selectedStore = storeId.slice().map((item) => {
-        if (item._id == e.target.value) {
+        if (item._id === e.target.value) {
           return {
             ...item,
             isSelected: !item.isSelected,
@@ -119,7 +130,6 @@ const AddDiningOption = (props) => {
 
     setStoreId(selectedStore);
   };
-  console.log(storeId);
   return (
     <React.Fragment>
       <CCard>
@@ -171,7 +181,8 @@ const AddDiningOption = (props) => {
             </h4>
             <span>
               <small>
-                {storeId.filter((item) => item.isSelected == false).length == 0
+                {storeId.filter((item) => item.isSelected === false).length ===
+                0
                   ? "Available in all stores"
                   : "Not available in stores"}
               </small>
@@ -213,7 +224,7 @@ const AddDiningOption = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
-                    {storeId.filter((item) => item.isSelected == false)
+                    {storeId.filter((item) => item.isSelected === false)
                       .length == 0
                       ? "UnSelect All"
                       : "Select All"}
@@ -276,8 +287,8 @@ const AddDiningOption = (props) => {
             color="success"
             onClick={submitDiningForm}
             disabled={
-              fields.dining_name == "" ||
-              storeId.filter((item) => item.isSelected == true).length == 0
+              fields.dining_name === "" ||
+              storeId.filter((item) => item.isSelected == true).length === 0
             }
           >
             SAVE

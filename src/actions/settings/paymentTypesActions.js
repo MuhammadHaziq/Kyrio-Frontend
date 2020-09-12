@@ -3,9 +3,19 @@ import {
   ADD_NEW_PAYMENT_TYPE,
   MESSAGE,
   ERROR_MESSAGE,
+  REDIRECT_BACK_PAYMENT,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_payment = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_PAYMENT,
+      response: status,
+    });
+  };
+};
 
 export const get_payment_types = () => {
   return (dispatch) => {
@@ -77,6 +87,7 @@ export const add_new_dining_option = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_payment(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

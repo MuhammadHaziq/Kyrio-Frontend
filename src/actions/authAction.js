@@ -30,7 +30,7 @@ export const login = (data) => {
               typeof error.response != "undefined"
                 ? error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -75,7 +75,7 @@ export const signup = (data) => {
               typeof error.response != "undefined"
                 ? error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

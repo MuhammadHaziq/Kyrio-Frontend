@@ -1,8 +1,9 @@
-import { GET_ITEM_LIST, GET_ITEM_STOCK } from "../constants/ActionTypes";
+import { GET_ITEM_LIST, GET_ITEM_STOCK, GET_ITEM_STORES } from "../../constants/ActionTypes";
 
 const initialState = {
   item_list: [],
   stock_list: [],
+  store_list:[]
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -15,6 +16,12 @@ const itemReducer = (state = initialState, action) => {
         ...state,
         stock_list: action.response,
       };
+    }
+    case GET_ITEM_STORES: {
+      return {
+        ...state,
+        store_list:action.response
+      }
     }
     default:
       return { ...state };

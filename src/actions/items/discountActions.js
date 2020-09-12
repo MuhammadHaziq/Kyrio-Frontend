@@ -1,25 +1,25 @@
 import {
-  GET_CATEGORY_LIST,
+  GET_DISCOUNT_LIST,
   MESSAGE,
   ERROR_MESSAGE,
-} from "../constants/ActionTypes";
-import { LocalUrl, LiveUrl } from "../constants/baseUrls";
+} from "../../constants/ActionTypes";
+import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
-export const get_category_list = (data) => {
+export const get_discount_list = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "get",
-        url: `${LocalUrl}items/categories`,
+        url: `${BaseUrl}items/discount`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: GET_CATEGORY_LIST, response: response.data });
+          dispatch({ type: GET_DISCOUNT_LIST, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

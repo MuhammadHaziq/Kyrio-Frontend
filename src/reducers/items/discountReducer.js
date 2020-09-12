@@ -1,4 +1,4 @@
-import { GET_DISCOUNT_LIST } from "../constants/ActionTypes";
+import { GET_DISCOUNT_LIST } from "../../constants/ActionTypes";
 
 const initialState = {
   discount_list: [],

@@ -1,0 +1,37 @@
+<CRow>
+  <CCol xs="12" sm="12">
+    <CCard>
+      <CCardHeader>Items Detail</CCardHeader>
+
+      <CCardBody>
+        <CDataTable
+          items={item.item_list}
+          fields={fields}
+          columnFilter
+          tableFilter
+          footer
+          itemsPerPageSelect
+          itemsPerPage={5}
+          hover
+          sorter
+          pagination
+          // loading
+          // onRowClick={(item,index,col,e) => console.log(item,index,col,e)}
+          onPageChange={(val) =>
+            // changeInPagination(val)
+            console.log("new page:", val)
+          }
+          onPagesChange={(val) => console.log("new pages:", val)}
+          onPaginationChange={(val) =>
+            // changeInLimit(val)
+            console.log("new pagination:", val)
+          }
+          // onFilteredItemsChange={(val) => console.log('new filtered items:', val)}
+          // onSorterValueChange={(val) => console.log('new sorter value:', val)}
+          // onTableFilterChange={(val) => console.log('new table filter:', val)}
+          // onColumnFilterChange={(val) => console.log('new column filter:', val)}
+        />
+      </CCardBody>
+    </CCard>
+  </CCol>
+</CRow>

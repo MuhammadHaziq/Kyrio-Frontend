@@ -1,4 +1,4 @@
-import { GET_CATEGORY_LIST } from "../constants/ActionTypes";
+import { GET_CATEGORY_LIST } from "../../constants/ActionTypes";
 
 const initialState = {
   category_list: [],

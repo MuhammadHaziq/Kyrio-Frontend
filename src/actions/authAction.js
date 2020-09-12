@@ -1,5 +1,6 @@
 import { LOGIN, MESSAGE, ERROR_MESSAGE } from "../constants/ActionTypes";
 import axios from "axios";
+import {BaseUrl} from "../constants/baseUrls";
 // import jwt from "jsonwebtoken";
 
 export const login = (data) => {
@@ -9,7 +10,7 @@ export const login = (data) => {
     try {
       axios({
         method: "post",
-        url: `http://localhost:3000/kyrio/v1/users/signin`,
+        url: `${BaseUrl}users/signin`,
         data: data,
       })
         .then((response) => {
@@ -54,7 +55,7 @@ export const signup = (data) => {
     try {
       axios({
         method: "post",
-        url: `http://localhost:3000/kyrio/v1/users/signup`,
+        url: `${BaseUrl}users/signup`,
         data: data,
       })
         .then((response) => {

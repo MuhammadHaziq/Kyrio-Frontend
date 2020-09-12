@@ -9,7 +9,7 @@ import {
   CDataTable,
 } from "@coreui/react";
 import usersData from "../users/UsersData.js";
-import { get_category_list } from "../../actions/categoryActions";
+import { get_category_list } from "../../actions/items/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
 
 const CategoryList = () => {

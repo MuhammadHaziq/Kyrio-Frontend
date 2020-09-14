@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_pos_single_select,
-  toggle_pso_all_select,
-} from "../../../actions/settings/posDeviceActions";
+  toggle_payments_single_select,
+  toggle_payments_all_select,
+} from "../../../actions/settings/paymentTypesActions";
 import { useDispatch } from "react-redux";
 
 const PaymentTypesDatatable = (props) => {
@@ -16,14 +16,14 @@ const PaymentTypesDatatable = (props) => {
    ***/
 
   const onRowSelect = (row, isSelected, e) => {
-    // dispatch(toggle_pos_single_select(row));
+    dispatch(toggle_payments_single_select(row));
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      // dispatch(toggle_pso_all_select(true));
+      dispatch(toggle_payments_all_select(true));
     } else {
-      // dispatch(toggle_pso_all_select(false));
+      dispatch(toggle_payments_all_select(false));
     }
   };
 
@@ -50,7 +50,7 @@ const PaymentTypesDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.pos_devices.length,
+        value: props.payments.length,
       },
     ],
     sizePerPage: 5,
@@ -58,7 +58,7 @@ const PaymentTypesDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.pos_devices}
+        data={props.payments}
         version="4"
         striped
         hover
@@ -73,7 +73,7 @@ const PaymentTypesDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="title" dataSort={true}>
+        <TableHeaderColumn dataField="name" dataSort={true}>
           Name
         </TableHeaderColumn>
       </BootstrapTable>

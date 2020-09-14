@@ -43,19 +43,6 @@ const posDeviceReducecr = (state = initialState, action) => {
           return item;
         }),
       });
-      // const pos_device_list = state.pos_device_list.slice().map((item) => {
-      //   if (item._id == action.response._id) {
-      //     return {
-      //       ...item,
-      //       isDeleted: !item.isDeleted,
-      //     };
-      //   }
-      //   return item;
-      // });
-      // return {
-      //   ...state,
-      //   pos_device_list,
-      // };
     }
 
     case TOGGLE_POS_ALL_SELECT: {

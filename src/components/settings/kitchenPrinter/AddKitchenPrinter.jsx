@@ -59,7 +59,7 @@ const AddKitchenPrinter = (props) => {
     }
   }, [kitchenPrinter.redirect_kitchen]);
   useEffect(() => {
-    setStoreId(auth.user.stores[0]._id);
+    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
   }, [auth]);
   const goBack = () => {
     props.goBack();

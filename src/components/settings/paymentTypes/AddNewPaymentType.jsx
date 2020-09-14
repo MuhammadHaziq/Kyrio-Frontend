@@ -19,25 +19,27 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
+import { add_new_payment_type } from "../../../actions/settings/paymentTypesActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
 const AddNewPaymentType = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ name: "" });
+  const [storeId, setStoreId] = useState();
   const [errors, setErrors] = useState({
-    pos_device_name: false,
+    name: false,
     paymentId: false,
   });
   const [PaymentType, setPaymentType] = useState({
-    paymentId: 0,
-    paymentName: "Select Payment Type",
+    paymentTypeId: 0,
+    paymentTypeName: "Select Payment Type",
   });
   const [selectedPaymentType, setSelectedPaymentId] = useState();
   const redirect_payment = useSelector(
     (state) => state.settingReducers.paymentTypesReducer.redirect_payment
   );
+  const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -52,20 +54,24 @@ const AddNewPaymentType = (props) => {
     }
   }, [redirect_payment]);
 
+  useEffect(() => {
+    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  }, [auth]);
   const goBack = () => {
     props.goBack();
   };
   const submitPaymentForm = (e) => {
     e.preventDefault();
-    if (PaymentType["paymentId"] === 0) {
+    if (PaymentType["paymentTypeId"] === 0) {
       alert("Select Payment Type");
     } else {
       const data = {
         name: fields.name,
-        PaymentType: JSON.stringify(PaymentType),
+        paymentTypes: JSON.stringify(PaymentType),
+        storeId: storeId,
       };
       console.log(data);
-      // dispatch(add_new_pos_device(data));
+      dispatch(add_new_payment_type(data));
     }
   };
   const handleOnChange = (e) => {
@@ -93,14 +99,18 @@ const AddNewPaymentType = (props) => {
     let paymentData;
     if (e.target.value === 0) {
       paymentData = {
-        paymentId: 0,
-        paymentName: "Select Payment Type",
+        paymentTypeId: 0,
+        paymentTypeName: "Select Payment Type",
       };
     } else {
       paymentData = {
-        paymentId: payment[0]._id || 0,
-        paymentName: payment[0].title || "Select Payment Type",
+        paymentTypeId: payment[0] ? payment[0]._id : 0,
+        paymentTypeName: payment[0] ? payment[0].title : "Select Payment Type",
       };
+      setFields({
+        ...fields,
+        name: payment[0] ? payment[0].title : "",
+      });
     }
 
     setPaymentType(paymentData);

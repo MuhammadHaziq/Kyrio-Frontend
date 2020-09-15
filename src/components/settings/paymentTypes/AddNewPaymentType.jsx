@@ -29,7 +29,7 @@ const AddNewPaymentType = (props) => {
   const [storeId, setStoreId] = useState();
   const [errors, setErrors] = useState({
     name: false,
-    paymentId: false,
+    selectedPaymentType: false,
   });
   const [PaymentType, setPaymentType] = useState({
     paymentTypeId: 0,
@@ -63,7 +63,11 @@ const AddNewPaymentType = (props) => {
   const submitPaymentForm = (e) => {
     e.preventDefault();
     if (PaymentType["paymentTypeId"] === 0) {
-      alert("Select Payment Type");
+      // alert("Select Payment Type");
+      setErrors({
+        ...errors,
+        selectedPaymentType: true,
+      });
     } else {
       const data = {
         name: fields.name,
@@ -88,10 +92,15 @@ const AddNewPaymentType = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+  const handleOnBlurSelect = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: value === "0" || "" ? true : false,
+    });
+  };
 
   const paymentHandleChange = (e) => {
-    console.log(e.target.value);
-
     const payment = props.payment_types.filter(
       (item) => item._id === e.target.value
     );
@@ -139,6 +148,8 @@ const AddNewPaymentType = (props) => {
                 size="md"
                 name="selectedPaymentType"
                 id="selectedPaymentType"
+                invalid={errors.selectedPaymentType}
+                onBlur={handleOnBlurSelect}
                 value={selectedPaymentType}
                 onChange={paymentHandleChange}
               >
@@ -147,6 +158,9 @@ const AddNewPaymentType = (props) => {
                   return <option value={item._id}>{item.title}</option>;
                 })}
               </CSelect>
+              <CInvalidFeedback>
+                {errors.selectedPaymentType ? "Please Select Payment Type" : ""}
+              </CInvalidFeedback>
             </CFormGroup>
             <CFormGroup row="row">
               <CCol md="12">
@@ -189,7 +203,7 @@ const AddNewPaymentType = (props) => {
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="danger"
+                  color="secondary"
                   onClick={goBack}
                 >
                   CANCEL
@@ -205,7 +219,9 @@ const AddNewPaymentType = (props) => {
                 <CButton
                   type="submit"
                   color="success"
-                  disabled={PaymentType["paymentId"] == 0 || fields.name == ""}
+                  disabled={
+                    PaymentType["paymentTypeId"] == 0 || fields.name == ""
+                  }
                   block
                   className="btn-pill pull-right"
                   variant="outline"

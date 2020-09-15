@@ -103,4 +103,7 @@ export const TOGGLE_PAYMENTS_SINGLE_SELECT = "TOGGLE_PAYMENTS_SINGLE_SELECT";
 export const TOOGLE_PAYMENTS_ALL_SELECT = "TOOGLE_PAYMENTS_ALL_SELECT";
 /**
  *  End Payment Types
+ * Start Loyalty
  ****/
+export const GET_LOYALTY = "GET_LOYALTY";
+export const ADD_NEW_LOYALTY = "ADD_NEW_LOYALTY";

@@ -76,6 +76,7 @@ const AddStore = (props) => {
   };
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
+    console.log("value Blur", value);
     setErrors({
       ...errors,
       [name]: validator.isEmpty(value),
@@ -145,6 +146,11 @@ const AddStore = (props) => {
                     onBlur={handleOnBlur}
                     value={fields.store_address}
                   />
+                  <CInvalidFeedback>
+                    {validator.isEmpty(fields.store_address)
+                      ? "Please Enter The Store Address"
+                      : ""}
+                  </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
             </CFormGroup>
@@ -181,6 +187,9 @@ const AddStore = (props) => {
                   onBlur={handleOnBlur}
                   value={fields.store_phone}
                 />
+                <CInvalidFeedback>
+                  {errors.store_phone ? "Please Enter The Store Phone" : ""}
+                </CInvalidFeedback>
               </CInputGroup>
 
               <CFormText color="muted">ex. (999) 999-9999</CFormText>
@@ -199,6 +208,11 @@ const AddStore = (props) => {
                     onBlur={handleOnBlur}
                     value={fields.store_description}
                   />
+                  <CInvalidFeedback>
+                    {errors.store_description
+                      ? "Please Enter The Store Description"
+                      : ""}
+                  </CInvalidFeedback>
                 </CInputGroup>
               </CCol>
             </CFormGroup>
@@ -208,7 +222,7 @@ const AddStore = (props) => {
                   block
                   variant="outline"
                   className="btn-pill pull-right"
-                  color="default"
+                  color="secondary"
                   onClick={goBack}
                 >
                   BACK

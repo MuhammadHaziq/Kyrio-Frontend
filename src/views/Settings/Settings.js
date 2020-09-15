@@ -21,6 +21,7 @@ import DiningOptions from "./diningOption/DiningOptions.jsx";
 import KitchenPrinter from "./kitchenPrinter/KitchenPrinter.jsx";
 import PaymentTypes from "./paymentTypes/PaymentTypes.jsx";
 import OpenTickets from "./openTickets/OpenTickets.jsx";
+import Loyalty from "./loyalty/Loyalty.jsx";
 import { get_stores } from "../../actions/settings/storeActions";
 // import { get_category_list } from "../../actions/items/categoryActions";
 import {
@@ -193,18 +194,7 @@ const Settings = () => {
                       <PaymentTypes />
                     </CTabPane>
                     <CTabPane active={activeTab === 3}>
-                      <p>
-                        Irure enim occaecat labore sit qui aliquip reprehenderit
-                        amet velit. Deserunt ullamco ex elit nostrud ut dolore
-                        nisi officia magna sit occaecat laboris sunt dolor. Nisi
-                        eu minim cillum occaecat aute est cupidatat aliqua
-                        labore aute occaecat ea aliquip sunt amet. Aute mollit
-                        dolor ut exercitation irure commodo non amet consectetur
-                        quis amet culpa. Quis ullamco nisi amet qui aute irure
-                        eu. Magna labore dolor quis ex labore id nostrud
-                        deserunt dolor eiusmod eu pariatur culpa mollit in
-                        irure.
-                      </p>
+                      <Loyalty />
                     </CTabPane>
                     <CTabPane active={activeTab === 4}>
                       <Taxes />

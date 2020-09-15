@@ -174,7 +174,7 @@ const AddPosDevice = (props) => {
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="danger"
+                  color="secondary"
                   onClick={goBack}
                 >
                   CANCEL

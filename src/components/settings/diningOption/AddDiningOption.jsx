@@ -261,7 +261,7 @@ const AddDiningOption = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="default"
+            color="secondary"
             onClick={goBack}
           >
             BACK

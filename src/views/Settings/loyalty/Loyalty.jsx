@@ -7,11 +7,9 @@ import {
   CRow,
   CFade,
 } from "@coreui/react";
-import { useSelector, useDispatch } from "react-redux";
 import AddLoyalty from "../../../components/settings/loyalty/AddLoyalty";
 const Loyalty = () => {
   const [timeout] = useState(300);
-  const dispatch = useDispatch();
   return (
     <React.Fragment>
       <div className="animated fadeIn">

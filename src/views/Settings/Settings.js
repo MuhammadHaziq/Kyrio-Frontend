@@ -32,14 +32,20 @@ import {
 } from "../../actions/settings/taxesActions";
 import { get_kitchen_printers } from "../../actions/settings/kitchenPrinterActions";
 import { get_payment_types } from "../../actions/settings/paymentTypesActions";
-
+import { get_loyalty } from "../../actions/settings/loyaltyActions";
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [storeId, setStoreId] = useState();
   const features = useSelector((state) => state.auth.user.roleData.features);
+  const auth = useSelector((state) => state.auth);
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
   );
+  useEffect(() => {
+    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  }, [auth]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(get_stores());
@@ -50,13 +56,17 @@ const Settings = () => {
     dispatch(get_item_taxes());
     dispatch(get_payment_types());
     if (
-      kitchenPrinter.kitchen_printers == undefined ||
+      kitchenPrinter.kitchen_printers === undefined ||
       kitchenPrinter.kitchen_printers.length === 0
     ) {
       dispatch(get_kitchen_printers());
     }
   }, []);
-
+  useEffect(() => {
+    if (storeId !== "" && typeof storeId !== "undefined") {
+      dispatch(get_loyalty(storeId));
+    }
+  }, [storeId]);
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
   ) : (

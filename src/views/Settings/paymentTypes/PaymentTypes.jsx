@@ -36,11 +36,10 @@ const PaymentTypes = () => {
   }, [auth]);
 
   useEffect(() => {
-    if (storeId !== "" && storeId !== "undefined") {
+    if (storeId !== "" && typeof storeId !== "undefined") {
       const data = {
         storeId,
       };
-      console.log(data);
       dispatch(get_payments_type(data));
     }
   }, [storeId]);

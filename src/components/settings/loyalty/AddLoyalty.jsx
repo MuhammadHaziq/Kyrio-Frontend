@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCollapse,
-  CFade,
   CCol,
   CFormGroup,
   CInput,
@@ -15,10 +10,7 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CFormText,
-  CLink,
-  CInputGroupAppend,
   CForm,
-  CTextarea,
   CInvalidFeedback,
 } from "@coreui/react";
 import validator from "validator";
@@ -72,7 +64,6 @@ const AddLoyalty = (props) => {
   };
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
-    console.log("value Blur", value);
     setErrors({
       ...errors,
       [name]: validator.isEmpty(value),

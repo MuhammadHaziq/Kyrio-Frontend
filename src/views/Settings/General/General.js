@@ -36,10 +36,11 @@ import {
   MdGTranslate,
 } from "react-icons/md";
 import validator from "validator";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import parse from "html-react-parser";
-
+import { toggle_feature_module } from "../../../actions/settings/featuresActions";
 const General = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [collapsed, setCollapsed] = React.useState([true, true]);
   const [sChecked, setChecked] = React.useState(user.roleData.features);
@@ -72,9 +73,23 @@ const General = () => {
     setChecked([...array]);
   };
   const handleBlur = (e) => {};
+
   const saveSettings = (event) => {
     event.preventDefault();
   };
+
+  const saveFeatures = () => {
+    console.log("sChecked", sChecked);
+    const features = (sChecked || []).map((item) => {
+      return { featureId: item.featureId, enable: item.enable };
+    });
+    console.log("features", features);
+    const data = {
+      features: JSON.stringify(features),
+    };
+    dispatch(toggle_feature_module(data));
+  };
+
   const handleLanguageChange = (event) => {
     console.log(sChecked);
   };
@@ -269,6 +284,7 @@ const General = () => {
             block
             className="btn-pill pull-right"
             outline="outline"
+            onClick={saveFeatures}
           >
             SAVE
           </CButton>

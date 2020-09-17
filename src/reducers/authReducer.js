@@ -1,4 +1,4 @@
-import { LOGIN } from "../constants/ActionTypes";
+import { LOGIN, TOGGLE_FEATURE_MODULE } from "../constants/ActionTypes";
 
 const initialState = {
   user: {},
@@ -8,8 +8,56 @@ const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN:
       return { ...state, user: action.response };
+
+    case TOGGLE_FEATURE_MODULE: {
+      const data = JSON.parse(action.response);
+      return Object.assign({}, state, {
+        user: Object.assign({}, state.user, {
+          roleData: Object.assign({}, state.user.roleData, {
+            features: state.user.roleData.features.slice().map((item) => {
+              return Object.assign({}, item, {
+                enable:
+                  data.filter((ite) => ite.featureId === item.featureId)
+                    .length > 0
+                    ? data
+                        .filter((ite) => ite.featureId === item.featureId)
+                        .map((ite) => {
+                          return ite.enable;
+                        })[0]
+                    : item.enable,
+              });
+            }),
+            settings: Object.assign({}, state.user.roleData.settings, {
+              settingModules: state.user.roleData.settings.settingModules
+                .slice()
+                .map((item) => {
+                  return Object.assign({}, item, {
+                    enable:
+                      data.filter((ite) => ite.featureId === item.featureId)
+                        .length > 0
+                        ? data
+                            .filter((ite) => ite.featureId === item.featureId)
+                            .map((ite) => {
+                              return ite.enable;
+                            })[0]
+                        : item.enable,
+                  });
+                }),
+            }),
+          }),
+        }),
+      });
+    }
+
     default:
       return state;
   }
 };
 export default settingsReducer;
+// data.filter((ite) => ite.featureId === item.featureId)
+//   ? data
+//       .filter((ite) => ite.featureId === item.featureId)
+//       .map((ite) => {
+//         return ite.enable;
+//       })[0]
+//   : item.enable,

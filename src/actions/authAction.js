@@ -1,6 +1,11 @@
-import { LOGIN, MESSAGE, ERROR_MESSAGE } from "../constants/ActionTypes";
+import {
+  LOGIN,
+  MESSAGE,
+  GET_SETTING_FEATURES,
+  ERROR_MESSAGE,
+} from "../constants/ActionTypes";
 import axios from "axios";
-import {BaseUrl} from "../constants/baseUrls";
+import { BaseUrl } from "../constants/baseUrls";
 // import jwt from "jsonwebtoken";
 
 export const login = (data) => {
@@ -15,6 +20,10 @@ export const login = (data) => {
       })
         .then((response) => {
           dispatch({ type: LOGIN, response: response.data });
+          // dispatch({
+          //   type: GET_SETTING_FEATURES,
+          //   response: response.data.roleData,
+          // });
           localStorage.setItem("kyrio", response.data.UserToken);
           let msg = {
             open: true,
@@ -60,6 +69,10 @@ export const signup = (data) => {
       })
         .then((response) => {
           dispatch({ type: LOGIN, response: response.data });
+          // dispatch({
+          //   type: GET_SETTING_FEATURES,
+          //   response: response.data.roleData,
+          // });
           localStorage.setItem("kyrio", response.data.UserToken);
           let msg = {
             open: true,

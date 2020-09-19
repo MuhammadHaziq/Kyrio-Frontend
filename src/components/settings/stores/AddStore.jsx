@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardHeader,
   CCollapse,
-  CFade,
   CCol,
   CFormGroup,
   CInput,
@@ -16,7 +15,6 @@ import {
   CInputGroupText,
   CFormText,
   CLink,
-  CInputGroupAppend,
   CForm,
   CTextarea,
   CInvalidFeedback,
@@ -58,14 +56,31 @@ const AddStore = (props) => {
   };
   const submitStoreForm = (e) => {
     e.preventDefault();
-    const data = {
-      title: fields.store_name,
-      address: fields.store_address,
-      phone: fields.store_phone,
-      description: fields.store_description,
-    };
-    dispatch(add_new_store(data));
-    console.log("sote_name", data);
+    if (fields.store_name === "") {
+      setErrors({
+        ...errors,
+        store_name: validator.isEmpty(fields.store_name),
+      });
+    } else if (fields.store_address === "") {
+      setErrors({
+        ...errors,
+        store_address: validator.isEmpty(fields.store_address),
+      });
+    } else if (fields.store_phone === "") {
+      setErrors({
+        ...errors,
+        store_phone: validator.isEmpty(fields.store_phone),
+      });
+    } else {
+      const data = {
+        title: fields.store_name,
+        address: fields.store_address,
+        phone: fields.store_phone,
+        description: fields.store_description,
+      };
+      dispatch(add_new_store(data));
+      console.log("sote_name", data);
+    }
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -76,7 +91,6 @@ const AddStore = (props) => {
   };
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
-    console.log("value Blur", value);
     setErrors({
       ...errors,
       [name]: validator.isEmpty(value),
@@ -180,7 +194,11 @@ const AddStore = (props) => {
                     /\d/,
                   ]}
                   Component={InputAdapter}
-                  className="form-control"
+                  className={
+                    errors.store_phone === true
+                      ? "form-control is-invalid"
+                      : "form-control"
+                  }
                   name="store_phone"
                   onChange={handleOnChange}
                   invalid={errors.store_phone}
@@ -252,7 +270,6 @@ const AddStore = (props) => {
                   variant="outline"
                   className="btn-pill pull-right"
                   color="success"
-                  disabled={fields.store_name == ""}
                 >
                   SAVE
                 </CButton>

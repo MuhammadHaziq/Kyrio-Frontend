@@ -36,8 +36,8 @@ const ModalSelectDiningOption = (props) => {
           <CFormGroup row>
             <CCol md="12">
               <CListGroup>
-                {props.dining.map((item) => (
-                  <CListGroupItem>
+                {props.dining.map((item, index) => (
+                  <CListGroupItem key={index}>
                     <CFormGroup variant="custom-checkbox" inline>
                       <CInputCheckbox
                         custom

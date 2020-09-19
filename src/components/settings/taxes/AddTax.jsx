@@ -177,7 +177,7 @@ const AddTax = (props) => {
   };
   const storeHandleChange = (e) => {
     let selectedStore = [];
-    if (e.target.value === 0) {
+    if (e.target.value === "0") {
       setFields({
         ...fields,
         checkedAll: !fields.checkedAll,
@@ -313,7 +313,7 @@ const AddTax = (props) => {
                       shape="pill"
                       className={"mx-1 float-right"}
                       color={"success"}
-                      size="md"
+                      size="sm"
                       value={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
@@ -433,7 +433,6 @@ const AddTax = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            disabled={fields.tax_name === ""}
             onClick={submitTaxForm}
           >
             SAVE

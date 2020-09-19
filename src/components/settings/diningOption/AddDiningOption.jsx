@@ -31,7 +31,7 @@ const AddDiningOption = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ dining_name: "", checkAll: true });
   const [errors, setErrors] = useState({
-    dining_name_error: false,
+    dining_name: false,
     checkAll_error: false,
   });
   const [storeId, setStoreId] = useState([]);
@@ -69,6 +69,11 @@ const AddDiningOption = (props) => {
     // if (storeId.length == 0) {
     if (storeId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Store");
+    } else if (fields.dining_name === "") {
+      setErrors({
+        ...errors,
+        dining_name: validator.isEmpty(fields.dining_name),
+      });
     } else {
       const store = storeId.filter((item) => item.isSelected === true);
       let storeData = [];
@@ -104,8 +109,7 @@ const AddDiningOption = (props) => {
   };
   const storeHandleChange = (e) => {
     let selectedStore = [];
-
-    if (e.target.value === 0) {
+    if (e.target.value === '0') {
       setFields({
         ...fields,
         checkAll: !fields.checkAll,
@@ -158,8 +162,10 @@ const AddDiningOption = (props) => {
                   invalid={errors.dining_name}
                   onBlur={handleOnBlur}
                 />
-                <CInvalidFeedback style={{ display: "block" }}>
-                  {errors.dining_name == true ? "Please Enter Dining Name" : ""}
+                <CInvalidFeedback>
+                  {errors.dining_name === true
+                    ? "Please Enter Dining Name"
+                    : ""}
                 </CInvalidFeedback>
               </CInputGroup>
             </CCol>
@@ -217,15 +223,15 @@ const AddDiningOption = (props) => {
                 <CFormGroup variant="custom-checkbox" inline>
                   <CInputCheckbox
                     custom
-                    name="storeId"
-                    id={"storeId"}
+                    name="checkAll"
+                    id={"checkAll"}
                     value={0}
                     checked={fields.checkAll}
                     onChange={storeHandleChange}
                   />
-                  <CLabel variant="custom-checkbox" htmlFor={"storeId"}>
+                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
                     {storeId.filter((item) => item.isSelected === false)
-                      .length == 0
+                      .length === 0
                       ? "UnSelect All"
                       : "Select All"}
                   </CLabel>
@@ -286,10 +292,6 @@ const AddDiningOption = (props) => {
             className="btn-pill pull-right"
             color="success"
             onClick={submitDiningForm}
-            disabled={
-              fields.dining_name === "" ||
-              storeId.filter((item) => item.isSelected == true).length === 0
-            }
           >
             SAVE
           </CButton>

@@ -68,6 +68,11 @@ const AddNewPaymentType = (props) => {
         ...errors,
         selectedPaymentType: true,
       });
+    } else if (fields.name === "") {
+      setErrors({
+        ...errors,
+        name: true,
+      });
     } else {
       const data = {
         name: fields.name,
@@ -219,9 +224,6 @@ const AddNewPaymentType = (props) => {
                 <CButton
                   type="submit"
                   color="success"
-                  disabled={
-                    PaymentType["paymentTypeId"] == 0 || fields.name == ""
-                  }
                   block
                   className="btn-pill pull-right"
                   variant="outline"

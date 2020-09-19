@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CCard,
   CCardBody,
-  CCardHeader,
-  CCol,
   CListGroup,
   CListGroupItem,
-  CRow,
 } from "@coreui/react";
 import ModalSelectDiningOption from "./ModalSelectDiningOption";
 import ModalSelectItemsTax from "./ModalSelectItemsTax";
@@ -67,18 +63,18 @@ const TaxDiningOption = (props) => {
                 size="sm"
                 onClick={() => setModalDining(!modalDining)}
               >
-                {taxes.tax_dining_list.filter((item) => item.isSelected == true)
-                  .length == 0
+                {taxes.tax_dining_list.filter((item) => item.isSelected === true)
+                  .length === 0
                   ? "SELECT"
                   : "EDIT"}
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-15px" }}>
-              {taxes.tax_dining_list.filter((item) => item.isSelected == true)
-                .length == 0
+              {taxes.tax_dining_list.filter((item) => item.isSelected === true)
+                .length === 0
                 ? "No dining options selected"
                 : taxes.tax_dining_list.filter(
-                    (item) => item.isSelected == true
+                    (item) => item.isSelected === true
                   ).length + " dinings are selected"}
             </div>
           </CListGroupItem>
@@ -93,18 +89,18 @@ const TaxDiningOption = (props) => {
                 onClick={() => setModalItems(!modalItems)}
               >
                 {taxes.tax_category_list.filter(
-                  (item) => item.isSelected == true
-                ).length == 0
+                  (item) => item.isSelected === true
+                ).length === 0
                   ? "SELECT"
                   : "EDIT"}
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-8px" }}>
-              {taxes.tax_category_list.filter((item) => item.isSelected == true)
-                .length == 0
+              {taxes.tax_category_list.filter((item) => item.isSelected === true)
+                .length === 0
                 ? " No items selected"
                 : taxes.tax_category_list.filter(
-                    (item) => item.isSelected == true
+                    (item) => item.isSelected === true
                   ).length + " items are selected"}
             </div>
           </CListGroupItem>

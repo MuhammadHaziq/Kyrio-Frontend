@@ -21,7 +21,6 @@ import {
   add_new_open_ticket,
   redirect_back_ticket,
 } from "../../../actions/settings/openTicketActions";
-import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
 

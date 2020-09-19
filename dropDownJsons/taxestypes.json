@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "5f52988584bc96246e06007f"
+  },
+  "createdAt": {
+    "$date": "2020-09-04T19:40:21.946Z"
+  },
+  "title": "Included in the price",
+  "createdBy": "5f3d691a243f971fbaedbb91",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f52989484bc96246e060080"
+  },
+  "createdAt": {
+    "$date": "2020-09-04T19:40:21.946Z"
+  },
+  "title": "Added to the price",
+  "createdBy": "5f3d691a243f971fbaedbb91",
+  "__v": 0
+}]

@@ -32,7 +32,7 @@ const AddPosDevice = (props) => {
   const [fields, setFields] = useState({ pos_device_name: "" });
   const [errors, setErrors] = useState({
     pos_device_name: false,
-    storeId: false,
+    selectedStoreId: false,
   });
   const [storeId, setStoreId] = useState({
     storeId: 0,
@@ -56,8 +56,16 @@ const AddPosDevice = (props) => {
   };
   const submitStoreForm = (e) => {
     e.preventDefault();
-    if (storeId["storeId"] === "0") {
-      alert("Select Store");
+    if (fields.pos_device_name === "") {
+      setErrors({
+        ...errors,
+        pos_device_name: validator.isEmpty(fields.pos_device_name),
+      });
+    } else if (storeId["storeId"] === 0) {
+      setErrors({
+        ...errors,
+        selectedStoreId: true,
+      });
     } else {
       const data = {
         title: fields.pos_device_name,
@@ -80,11 +88,18 @@ const AddPosDevice = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
-
+  const handleOnBlurSelect = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: value === "0" || "" ? true : false,
+    });
+  };
   const storeHandleChange = (e) => {
+    console.log("e.target.value", e.target.value);
     const store = props.stores.filter((item) => item._id === e.target.value);
     let storeData;
-    if (e.target.value === 0) {
+    if (e.target.value === "0") {
       storeData = {
         storeId: 0,
         storeName: "Select Store",
@@ -146,16 +161,21 @@ const AddPosDevice = (props) => {
               <CSelect
                 custom
                 size="md"
-                name="selectStore"
-                id="selectStore"
+                name="selectedStoreId"
+                id="selectedStoreId"
                 value={selectedStoreId}
                 onChange={storeHandleChange}
+                invalid={errors.selectedStoreId}
+                onBlur={handleOnBlurSelect}
               >
                 <option value="0">Select Store</option>
                 {props.stores.map((item) => {
                   return <option value={item._id}>{item.title}</option>;
                 })}
               </CSelect>
+              <CInvalidFeedback>
+                {errors.selectedStoreId ? "Please Select One Store" : ""}
+              </CInvalidFeedback>
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
@@ -190,9 +210,6 @@ const AddPosDevice = (props) => {
                 <CButton
                   type="submit"
                   color="success"
-                  disabled={
-                    storeId["storeId"] === 0 || fields.pos_device_name === ""
-                  }
                   block
                   className="btn-pill pull-right"
                   variant="outline"

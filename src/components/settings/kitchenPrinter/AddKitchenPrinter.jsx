@@ -46,6 +46,13 @@ const AddKitchenPrinter = (props) => {
           isSelected: true,
         };
       });
+      setFields({
+        ...fields,
+        checkAll:
+          categoryId.filter((item) => item.isSelected).length === 0
+            ? false
+            : true,
+      });
       setCategoryId(categories);
     }
   }, [props.category]);
@@ -67,8 +74,14 @@ const AddKitchenPrinter = (props) => {
   const saveKitchenPrinter = () => {
     // e.preventDefault();
     // if (categoryId.length == 0) {
-    if (categoryId.filter((item) => item.isSelected === true).length === 0) {
-      alert("Select Category");
+    // if (categoryId.filter((item) => item.isSelected === true).length === 0) {
+    //   alert("Select Category");
+    // }
+    if (fields.kitchen_name === "") {
+      setErrors({
+        ...errors,
+        kitchen_name: validator.isEmpty(fields.kitchen_name),
+      });
     } else {
       const category = categoryId.filter((item) => item.isSelected === true);
       let categoryData = [];
@@ -130,7 +143,6 @@ const AddKitchenPrinter = (props) => {
 
     setCategoryId(selectedCategory);
   };
-  console.log(props.category);
   return (
     <React.Fragment>
       <CCard>
@@ -182,10 +194,9 @@ const AddKitchenPrinter = (props) => {
                   onChange={categoryHandleChange}
                 />
                 <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
-                  {categoryId.filter((item) => item.isSelected === false)
-                    .length === 0
-                    ? "UnSelect All"
-                    : "Select All"}
+                  {categoryId.filter((item) => item.isSelected).length === 0
+                    ? "Select All"
+                    : "UnSelect All"}
                 </CLabel>
               </CFormGroup>
               <CCol md="8">
@@ -242,11 +253,6 @@ const AddKitchenPrinter = (props) => {
                   className="btn-pill pull-right"
                   color="success"
                   onClick={saveKitchenPrinter}
-                  disabled={
-                    fields.kitchen_name === "" ||
-                    categoryId.filter((item) => item.isSelected === true)
-                      .length === 0
-                  }
                 >
                   SAVE
                 </CButton>

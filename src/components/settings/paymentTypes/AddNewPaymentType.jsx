@@ -19,42 +19,63 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
+import { add_new_payment_type } from "../../../actions/settings/paymentTypesActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
 const AddNewPaymentType = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ name: "" });
+  const [storeId, setStoreId] = useState();
   const [errors, setErrors] = useState({
-    pos_device_name: false,
-    paymentId: false,
+    name: false,
+    selectedPaymentType: false,
   });
   const [PaymentType, setPaymentType] = useState({
-    paymentId: 0,
-    paymentName: "Select Payment Type",
+    paymentTypeId: 0,
+    paymentTypeName: "Select Payment Type",
   });
   const [selectedPaymentType, setSelectedPaymentId] = useState();
+  const redirect_payment = useSelector(
+    (state) => state.settingReducers.paymentTypesReducer.redirect_payment
+  );
+  const auth = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
+
+  useEffect(() => {
+    if (redirect_payment !== undefined && redirect_payment === true) {
+      props.goBack();
+    }
+  }, [redirect_payment]);
+
+  useEffect(() => {
+    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  }, [auth]);
   const goBack = () => {
     props.goBack();
   };
   const submitPaymentForm = (e) => {
     e.preventDefault();
-    if (PaymentType["paymentId"] === 0) {
-      alert("Select Payment Type");
+    if (PaymentType["paymentTypeId"] === 0) {
+      // alert("Select Payment Type");
+      setErrors({
+        ...errors,
+        selectedPaymentType: true,
+      });
     } else {
       const data = {
         name: fields.name,
-        PaymentType: JSON.stringify(PaymentType),
+        paymentTypes: JSON.stringify(PaymentType),
+        storeId: storeId,
       };
       console.log(data);
-      // dispatch(add_new_pos_device(data));
+      dispatch(add_new_payment_type(data));
     }
   };
   const handleOnChange = (e) => {
@@ -71,10 +92,15 @@ const AddNewPaymentType = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+  const handleOnBlurSelect = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: value === "0" || "" ? true : false,
+    });
+  };
 
   const paymentHandleChange = (e) => {
-    console.log(e.target.value);
-
     const payment = props.payment_types.filter(
       (item) => item._id === e.target.value
     );
@@ -82,14 +108,18 @@ const AddNewPaymentType = (props) => {
     let paymentData;
     if (e.target.value === 0) {
       paymentData = {
-        paymentId: 0,
-        paymentName: "Select Payment Type",
+        paymentTypeId: 0,
+        paymentTypeName: "Select Payment Type",
       };
     } else {
       paymentData = {
-        paymentId: payment[0]._id || 0,
-        paymentName: payment[0].title || "Select Payment Type",
+        paymentTypeId: payment[0] ? payment[0]._id : 0,
+        paymentTypeName: payment[0] ? payment[0].title : "Select Payment Type",
       };
+      setFields({
+        ...fields,
+        name: payment[0] ? payment[0].title : "",
+      });
     }
 
     setPaymentType(paymentData);
@@ -118,6 +148,8 @@ const AddNewPaymentType = (props) => {
                 size="md"
                 name="selectedPaymentType"
                 id="selectedPaymentType"
+                invalid={errors.selectedPaymentType}
+                onBlur={handleOnBlurSelect}
                 value={selectedPaymentType}
                 onChange={paymentHandleChange}
               >
@@ -126,6 +158,9 @@ const AddNewPaymentType = (props) => {
                   return <option value={item._id}>{item.title}</option>;
                 })}
               </CSelect>
+              <CInvalidFeedback>
+                {errors.selectedPaymentType ? "Please Select Payment Type" : ""}
+              </CInvalidFeedback>
             </CFormGroup>
             <CFormGroup row="row">
               <CCol md="12">
@@ -168,7 +203,7 @@ const AddNewPaymentType = (props) => {
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="danger"
+                  color="secondary"
                   onClick={goBack}
                 >
                   CANCEL
@@ -184,7 +219,9 @@ const AddNewPaymentType = (props) => {
                 <CButton
                   type="submit"
                   color="success"
-                  disabled={PaymentType["paymentId"] == 0 || fields.name == ""}
+                  disabled={
+                    PaymentType["paymentTypeId"] == 0 || fields.name == ""
+                  }
                   block
                   className="btn-pill pull-right"
                   variant="outline"

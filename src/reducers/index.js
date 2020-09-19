@@ -10,6 +10,8 @@ import diningOptionReducer from "./settings/diningOptionReducer";
 import taxesReducer from "./settings/taxesReducer";
 import kitchenPrinterReducer from "./settings/kitchenPrinterReducer";
 import paymentTypesReducer from "./settings/paymentTypesReducer";
+import loyaltyReducer from "./settings/loyaltyReducer";
+import featuresReducer from "./settings/featuresReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -25,12 +27,14 @@ const items = combineReducers({
   discountReducer,
 });
 const settingReducers = combineReducers({
-  storeReducer,
-  posDeviceReducer,
-  diningOptionReducer,
+  featuresReducer,
+  paymentTypesReducer,
+  loyaltyReducer,
   taxesReducer,
   kitchenPrinterReducer,
-  paymentTypesReducer,
+  diningOptionReducer,
+  storeReducer,
+  posDeviceReducer,
 });
 const rootReducer = combineReducers({
   settings: settingsReducer,

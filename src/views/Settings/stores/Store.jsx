@@ -11,22 +11,26 @@ import {
 } from "@coreui/react";
 import StoreDatatable from "../../../datatables/settings/stores/StoreDatatable";
 import { CIcon } from "@coreui/icons-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AddStore from "../../../components/settings/stores/AddStore";
+import { redirect_back_store } from "../../../actions/settings/storeActions";
 const Stores = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeStore, setFadeStore] = useState(true);
   const [fadeAddStore, setFadeAddStore] = useState(false);
   const [timeout] = useState(300);
+  const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
   const addNewStore = () => {
     setFadeStore(false);
     setFadeAddStore(true);
+    dispatch(redirect_back_store(false));
   };
   const goBack = () => {
     setFadeStore(true);
     setFadeAddStore(false);
+    dispatch(redirect_back_store(true));
   };
   const toggleCollapse = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));

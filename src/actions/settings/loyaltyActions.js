@@ -1,34 +1,24 @@
 import {
-  GET_STORES,
-  ADD_NEW_STORE,
+  GET_LOYALTY,
+  ADD_NEW_LOYALTY,
   MESSAGE,
   ERROR_MESSAGE,
-  REDIRECT_BACK_STORE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 
-export const redirect_back_store = (status) => {
-  return (dispatch) => {
-    dispatch({
-      type: REDIRECT_BACK_STORE,
-      response: status,
-    });
-  };
-};
-
-export const get_stores = () => {
+export const get_loyalty = (storeId) => {
   return (dispatch) => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}stores`,
+        url: `${BaseUrl}settingsLoyalty/${storeId}`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          dispatch({ type: GET_STORES, response: response.data });
+          dispatch({ type: GET_LOYALTY, response: response.data.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -54,7 +44,7 @@ export const get_stores = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -66,12 +56,12 @@ export const get_stores = () => {
   };
 };
 
-export const add_new_store = (data) => {
+export const add_new_loyalty = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "post",
-        url: `${BaseUrl}stores`,
+        url: `${BaseUrl}settingsLoyalty`,
         data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
@@ -79,33 +69,44 @@ export const add_new_store = (data) => {
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: ADD_NEW_STORE, response: response.data });
+          dispatch({ type: ADD_NEW_LOYALTY, response: response.data.data });
+
           let msg = {
             open: true,
-            message: `Store Save Successfully`,
+            message: `Save Successfully`,
             object: {},
             error: false,
           };
-          dispatch(redirect_back_store(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
+          let msg;
+          let errors = [];
           console.log("err", error.response);
-          let msg = {
-            open: true,
-            message:
-              typeof error.response != "undefined"
-                ? error.response.status == 404
-                  ? error.response.statusText
-                  : error.response.data.message
-                : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
-            error: true,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          if (typeof error.response !== "undefined") {
+            if (typeof error.response.data.errors !== "undefined") {
+              (error.response.data.errors || []).map((item) => {
+                errors.push(item + " ");
+              });
+            }
+            msg = {
+              open: true,
+              message:
+                typeof error.response != "undefined"
+                  ? error.response.status === 404
+                    ? error.response.statusText
+                    : errors.length > 0
+                    ? errors
+                    : error.response.data.message
+                  : ERROR_MESSAGE,
+              object:
+                typeof error.response != "undefined"
+                  ? error.response.data || {}
+                  : {},
+              error: true,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          }
         });
     } catch (error) {
       console.log("err catch", error);
@@ -113,7 +114,7 @@ export const add_new_store = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

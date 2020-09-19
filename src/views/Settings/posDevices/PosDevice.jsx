@@ -18,6 +18,7 @@ import {
   get_pos_devices,
   get_store_pos_device,
   delete_pos_devices,
+  redirect_back_pos_devices,
 } from "../../../actions/settings/posDeviceActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 
@@ -38,10 +39,12 @@ const PosDevice = () => {
   }, [dispatch]);
 
   const addNewPosDevice = () => {
+    dispatch(redirect_back_pos_devices(false));
     setFadePosDevice(false);
     setFadeAddPosDevice(true);
   };
   const goBack = () => {
+    dispatch(redirect_back_pos_devices(true));
     setFadePosDevice(true);
     setFadeAddPosDevice(false);
   };
@@ -103,12 +106,7 @@ const PosDevice = () => {
                         )}
                       </CCol>
 
-                      <CCol
-                        sm="6"
-                        md="6"
-                        xl="xl"
-                        className="mb-3 mb-xl-0"
-                      >
+                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                         <CFormGroup>
                           <CSelect
                             custom

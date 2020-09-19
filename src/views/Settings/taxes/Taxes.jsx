@@ -18,10 +18,10 @@ import AddTax from "../../../components/settings/taxes/AddTax";
 import {
   delete_item_taxes,
   get_store_item_taxes,
+  redirect_back_taxes,
 } from "../../../actions/settings/taxesActions";
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
-  const [checked, setChecked] = useState([true, true]);
   const [fadeTaxes, setFadeTaxes] = useState(true);
   const [fadeAddTaxes, setFadeAddTaxes] = useState(false);
   const [timeout, setTimeout] = useState(300);
@@ -30,10 +30,12 @@ const Taxes = () => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   const addNewTax = () => {
+    dispatch(redirect_back_taxes(false));
     setFadeTaxes(false);
     setFadeAddTaxes(true);
   };
   const goBack = () => {
+    dispatch(redirect_back_taxes(true));
     setFadeTaxes(true);
     setFadeAddTaxes(false);
   };
@@ -137,8 +139,9 @@ const Taxes = () => {
                     </div> */}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>
-                    <CCardBody></CCardBody>
-                    <TaxesDatatable taxes={taxes.item_taxes} />
+                    <CCardBody>
+                      <TaxesDatatable taxes={taxes.item_taxes} />
+                    </CCardBody>
                   </CCollapse>
                 </CCard>
               </CCol>

@@ -11,7 +11,10 @@ import {
 import KitchenPrinterDatatable from "../../../datatables/settings/kitchenPrinter/KitchenPrinterDatatable";
 import { useSelector, useDispatch } from "react-redux";
 import AddKitchenPrinter from "../../../components/settings/kitchenPrinter/AddKitchenPrinter";
-import { delete_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions";
+import {
+  delete_kitchen_printer,
+  redirect_back_kitchen,
+} from "../../../actions/settings/kitchenPrinterActions";
 const KitchenPrinter = () => {
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
@@ -23,10 +26,13 @@ const KitchenPrinter = () => {
   const category = useSelector((state) => state.items.categoryReducer);
 
   const addNewKitchenPrinter = () => {
+    dispatch(redirect_back_kitchen(false));
     setFadeKitchenPrinter(false);
     setFadeAddKitchenPrinter(true);
   };
   const goBack = () => {
+    dispatch(redirect_back_kitchen(true));
+
     setFadeKitchenPrinter(true);
     setFadeAddKitchenPrinter(false);
   };

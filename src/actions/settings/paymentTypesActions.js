@@ -1,11 +1,25 @@
 import {
   GET_PAYMENT_TYPES,
   ADD_NEW_PAYMENT_TYPE,
+  GET_PAYMENTS_TYPE,
+  DELETE_PAYMENTS_TYPE,
   MESSAGE,
   ERROR_MESSAGE,
+  REDIRECT_BACK_PAYMENT,
+  TOGGLE_PAYMENTS_SINGLE_SELECT,
+  TOOGLE_PAYMENTS_ALL_SELECT,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
+
+export const redirect_back_payment = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_PAYMENT,
+      response: status,
+    });
+  };
+};
 
 export const get_payment_types = () => {
   return (dispatch) => {
@@ -44,7 +58,7 @@ export const get_payment_types = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -56,12 +70,12 @@ export const get_payment_types = () => {
   };
 };
 
-export const add_new_dining_option = (data) => {
+export const add_new_payment_type = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "post",
-        url: `${BaseUrl}dining`,
+        url: `${BaseUrl}paymentsType`,
         data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
@@ -73,29 +87,41 @@ export const add_new_dining_option = (data) => {
 
           let msg = {
             open: true,
-            message: `Dining Save Successfully`,
+            message: `Payment Save Successfully`,
             object: {},
             error: false,
           };
+          dispatch(redirect_back_payment(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
+          let msg;
+          let errors = [];
           console.log("err", error.response);
-          let msg = {
-            open: true,
-            message:
-              typeof error.response != "undefined"
-                ? error.response.status == 404
-                  ? error.response.statusText
-                  : error.response.data.message
-                : ERROR_MESSAGE,
-            object:
-              typeof error.response != "undefined"
-                ? error.response.data || {}
-                : {},
-            error: true,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          if (typeof error.response !== "undefined") {
+            if (typeof error.response.data.errors !== "undefined") {
+              (error.response.data.errors || []).map((item) => {
+                errors.push(item + " ");
+              });
+            }
+            msg = {
+              open: true,
+              message:
+                typeof error.response != "undefined"
+                  ? error.response.status === 404
+                    ? error.response.statusText
+                    : errors.length > 0
+                    ? errors
+                    : error.response.data.message
+                  : ERROR_MESSAGE,
+              object:
+                typeof error.response != "undefined"
+                  ? error.response.data || {}
+                  : {},
+              error: true,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          }
         });
     } catch (error) {
       console.log("err catch", error);
@@ -103,7 +129,7 @@ export const add_new_dining_option = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -115,34 +141,32 @@ export const add_new_dining_option = (data) => {
   };
 };
 
-export const update_dining_option = (data) => {
+export const get_payments_type = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "patch",
-        url: `${BaseUrl}dining`,
-        data: data,
+        method: "get",
+        url: `${BaseUrl}paymentsType`,
+        params: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          let msg = {
-            open: true,
-            message: `Dining Option Updated Successfully`,
-            object: {},
-            error: false,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({
+            type: GET_PAYMENTS_TYPE,
+            response: response.data,
+          });
         })
         .catch((error) => {
           console.log("err", error.response);
+
           let msg = {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -160,7 +184,7 @@ export const update_dining_option = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -171,27 +195,41 @@ export const update_dining_option = (data) => {
     }
   };
 };
+export const toggle_payments_single_select = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_PAYMENTS_SINGLE_SELECT,
+      response: data,
+    });
+  };
+};
+export const toggle_payments_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOOGLE_PAYMENTS_ALL_SELECT,
+      response: status,
+    });
+  };
+};
 
-export const get_store_dining = (data) => {
+export const delete_payments_type = (id) => {
   return (dispatch) => {
     try {
       axios({
-        method: "post",
-        url: `${BaseUrl}dining/getStoreDining`,
-        data: data,
+        method: "delete",
+        url: `${BaseUrl}paymentsType/${id}`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          // dispatch({ type: GET_DINING_OPTION, response: response.data });
+          dispatch({ type: DELETE_PAYMENTS_TYPE, response: id });
           let msg = {
             open: true,
-            message:
-              response.data.length === 0
-                ? `No Dining Found `
-                : `Selected Store Dining`,
+            message: response.data.message
+              ? response.data.message
+              : `Payment Type Deleted Successfully`,
             object: {},
             error: false,
           };
@@ -202,13 +240,13 @@ export const get_store_dining = (data) => {
           let msg = {
             open: true,
             message:
-              typeof error.response != "undefined"
-                ? error.response.status == 404
+              typeof error.response !== "undefined"
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
             object:
-              typeof error.response != "undefined"
+              typeof error.response !== "undefined"
                 ? error.response.data || {}
                 : {},
             error: true,
@@ -220,8 +258,8 @@ export const get_store_dining = (data) => {
       let msg = {
         open: true,
         message:
-          typeof error.response != "undefined"
-            ? error.response.status == 404
+          typeof error.response !== "undefined"
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

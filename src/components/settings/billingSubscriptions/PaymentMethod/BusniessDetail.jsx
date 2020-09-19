@@ -121,8 +121,8 @@ const BusniessDetail = (props) => {
                     <CButton
                       size="md"
                       color="secondary"
-                      className="float-left btn-block"
-                      variant="ghost"
+                      className="float-left btn-block btn-pill"
+                      variant="outline"
                       onClick={props.goBack}
                     >
                       BACK
@@ -132,8 +132,8 @@ const BusniessDetail = (props) => {
                     <CButton
                       size="md"
                       color="danger"
-                      className="float-left btn-block"
-                      variant="ghost"
+                      className="float-left btn-block btn-pill"
+                      variant="outline"
                       onClick={props.goBack}
                     >
                       CANCEL
@@ -143,8 +143,8 @@ const BusniessDetail = (props) => {
                     <CButton
                       size="md"
                       color="success"
-                      className="float-right btn-block"
-                      variant="ghost"
+                      className="float-right btn-block btn-pill"
+                      variant="outline"
                       onClick={saveBusinessDetail}
                     >
                       SAVE

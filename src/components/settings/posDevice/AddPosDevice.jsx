@@ -25,6 +25,9 @@ import validator from "validator";
 
 const AddPosDevice = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const redirect_pos_devices = useSelector(
+    (state) => state.settingReducers.posDeviceReducer.redirect_pos_devices
+  );
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ pos_device_name: "" });
   const [errors, setErrors] = useState({
@@ -37,6 +40,12 @@ const AddPosDevice = (props) => {
   });
   const [selectedStoreId, setSelectedStoreId] = useState();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (redirect_pos_devices !== undefined && redirect_pos_devices === true) {
+      props.goBack();
+    }
+  }, [redirect_pos_devices]);
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -165,7 +174,7 @@ const AddPosDevice = (props) => {
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="danger"
+                  color="secondary"
                   onClick={goBack}
                 >
                   CANCEL

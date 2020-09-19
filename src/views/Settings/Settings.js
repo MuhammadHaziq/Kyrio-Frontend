@@ -21,6 +21,7 @@ import DiningOptions from "./diningOption/DiningOptions.jsx";
 import KitchenPrinter from "./kitchenPrinter/KitchenPrinter.jsx";
 import PaymentTypes from "./paymentTypes/PaymentTypes.jsx";
 import OpenTickets from "./openTickets/OpenTickets.jsx";
+import Loyalty from "./loyalty/Loyalty.jsx";
 import { get_stores } from "../../actions/settings/storeActions";
 // import { get_category_list } from "../../actions/items/categoryActions";
 import {
@@ -31,14 +32,28 @@ import {
 } from "../../actions/settings/taxesActions";
 import { get_kitchen_printers } from "../../actions/settings/kitchenPrinterActions";
 import { get_payment_types } from "../../actions/settings/paymentTypesActions";
-
+import { get_loyalty } from "../../actions/settings/loyaltyActions";
 import Taxes from "./taxes/Taxes.jsx";
 const Settings = () => {
+  // featuresReducer
   const [activeTab, setActiveTab] = useState(0);
+  const [storeId, setStoreId] = useState();
   const features = useSelector((state) => state.auth.user.roleData.features);
+  // const features = useSelector((state) => state.auth.user.roleData.features);
+  const auth = useSelector((state) => state.auth);
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
   );
+
+  // const allowBackoffice = useSelector(
+  //   (state) => state.settingReducers.featuresReducer.setting_features
+  // )
+  const settings = useSelector((state) => state.auth.user.roleData.settings);
+  console.log("settings", settings);
+  useEffect(() => {
+    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  }, [auth]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(get_stores());
@@ -49,13 +64,17 @@ const Settings = () => {
     dispatch(get_item_taxes());
     dispatch(get_payment_types());
     if (
-      kitchenPrinter.kitchen_printers == undefined ||
+      kitchenPrinter.kitchen_printers === undefined ||
       kitchenPrinter.kitchen_printers.length === 0
     ) {
       dispatch(get_kitchen_printers());
     }
   }, []);
-
+  useEffect(() => {
+    if (storeId !== "" && typeof storeId !== "undefined") {
+      dispatch(get_loyalty(storeId));
+    }
+  }, [storeId]);
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
   ) : (
@@ -80,105 +99,34 @@ const Settings = () => {
                         </small>
                       </h5>
                     </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(0)}
-                      action
-                      active={activeTab === 0}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      General
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(1)}
-                      action
-                      active={activeTab === 1}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Billing &amp; subscriptions
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(2)}
-                      action
-                      active={activeTab === 2}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Payment types
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(3)}
-                      action
-                      active={activeTab === 3}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Loyalty
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(4)}
-                      action
-                      active={activeTab === 4}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Taxes
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(5)}
-                      action
-                      active={activeTab === 5}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Receipt
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(6)}
-                      action
-                      active={activeTab === 6}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Open tickets
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(7)}
-                      action
-                      active={activeTab === 7}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Kitchen printers
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(8)}
-                      action
-                      active={activeTab === 8}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Dining options
-                    </CListGroupItem>
-                    <CListGroupItem action active={false}>
-                      <h5>
-                        <MdStore style={{ fontSize: "30px" }} />
-                        <strong>&nbsp;Stores</strong>
-                        <br />
-                        <small>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store
-                          &amp; POS settings
-                        </small>
-                      </h5>
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(9)}
-                      action
-                      active={activeTab === 9}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      Stores
-                    </CListGroupItem>
-                    <CListGroupItem
-                      onClick={() => setActiveTab(10)}
-                      action
-                      active={activeTab === 10}
-                      style={{ paddingLeft: "40px" }}
-                    >
-                      POS devices
-                    </CListGroupItem>
+                    {(settings.settingModules || []).map((item, index) =>
+                      index !== 9 ? (
+                        item.enable === true ? (
+                          <CListGroupItem
+                            onClick={() => setActiveTab(index)}
+                            action
+                            active={activeTab === index}
+                            style={{ paddingLeft: "40px" }}
+                          >
+                            {item.moduleName}
+                          </CListGroupItem>
+                        ) : (
+                          ""
+                        )
+                      ) : (
+                        <CListGroupItem action active={false}>
+                          <h5>
+                            <MdStore style={{ fontSize: "30px" }} />
+                            <strong>&nbsp;Stores</strong>
+                            <br />
+                            <small>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store
+                              &amp; POS settings
+                            </small>
+                          </h5>
+                        </CListGroupItem>
+                      )
+                    )}
                   </CListGroup>
                 </CCol>
                 <CCol xs="8">
@@ -193,18 +141,7 @@ const Settings = () => {
                       <PaymentTypes />
                     </CTabPane>
                     <CTabPane active={activeTab === 3}>
-                      <p>
-                        Irure enim occaecat labore sit qui aliquip reprehenderit
-                        amet velit. Deserunt ullamco ex elit nostrud ut dolore
-                        nisi officia magna sit occaecat laboris sunt dolor. Nisi
-                        eu minim cillum occaecat aute est cupidatat aliqua
-                        labore aute occaecat ea aliquip sunt amet. Aute mollit
-                        dolor ut exercitation irure commodo non amet consectetur
-                        quis amet culpa. Quis ullamco nisi amet qui aute irure
-                        eu. Magna labore dolor quis ex labore id nostrud
-                        deserunt dolor eiusmod eu pariatur culpa mollit in
-                        irure.
-                      </p>
+                      <Loyalty />
                     </CTabPane>
                     <CTabPane active={activeTab === 4}>
                       <Taxes />
@@ -218,10 +155,10 @@ const Settings = () => {
                     <CTabPane active={activeTab === 8}>
                       <DiningOptions />
                     </CTabPane>
-                    <CTabPane active={activeTab === 9}>
+                    <CTabPane active={activeTab === 10}>
                       <Store />
                     </CTabPane>
-                    <CTabPane active={activeTab === 10}>
+                    <CTabPane active={activeTab === 11}>
                       <PosDevice />
                     </CTabPane>
                   </CTabContent>

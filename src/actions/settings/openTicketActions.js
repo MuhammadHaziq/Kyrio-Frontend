@@ -4,10 +4,19 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
   GET_DINING_TAX,
+  REDIRECT_BACK_TICKET,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 
+export const redirect_back_ticket = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_TICKET,
+      response: status,
+    });
+  };
+};
 export const add_new_open_ticket = (data) => {
   return (dispatch) => {
     try {
@@ -32,6 +41,7 @@ export const add_new_open_ticket = (data) => {
             object: {},
             error: false,
           };
+          dispatch(redirect_back_ticket(true));
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {

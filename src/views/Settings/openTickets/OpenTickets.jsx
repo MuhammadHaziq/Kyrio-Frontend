@@ -17,14 +17,16 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
-import { add_new_open_ticket } from "../../../actions/settings/openTicketActions";
+import {
+  add_new_open_ticket,
+  redirect_back_ticket,
+} from "../../../actions/settings/openTicketActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
 
 const OpenTickets = () => {
   const [fadeOpenTicket, setFadeOpenTicket] = useState(true);
-  const [fadeAddOpenTicket, setFadeAddOpenTicket] = useState(false);
   const [timeout] = useState(300);
   const [sChecked, setChecked] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState("");
@@ -43,8 +45,11 @@ const OpenTickets = () => {
   // }, [dispatch]);
 
   const goBack = () => {
+    dispatch(redirect_back_ticket(true));
+    setItems([]);
+    setValues([]);
+    setErrors([]);
     setFadeOpenTicket(true);
-    setFadeAddOpenTicket(false);
   };
 
   const storeHandleChange = (e) => {

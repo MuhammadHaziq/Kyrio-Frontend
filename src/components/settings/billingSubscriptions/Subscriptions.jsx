@@ -41,8 +41,8 @@ const Subscriptions = () => {
         <FaAddressCard /> &nbsp;Employee management{" "}
         <CButton
           color="success"
-          className="float-right"
-          variant="ghost"
+          className="float-right btn-pill"
+          variant="outline"
           onClick={() => handleSubscribe(1)}
         >
           SUBSCRIBE{" "}
@@ -65,8 +65,8 @@ const Subscriptions = () => {
         <FaLuggageCart /> &nbsp;Advance Inventory{" "}
         <CButton
           color="success"
-          className="float-right"
-          variant="ghost"
+          className="float-right btn-pill"
+          variant="outline"
           onClick={() => handleSubscribe(2)}
         >
           SUBSCRIBE{" "}

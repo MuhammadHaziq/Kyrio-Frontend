@@ -10,7 +10,6 @@ import {
   CFormGroup,
   CLabel,
   CInput,
-  CValidFeedback,
   CInvalidFeedback,
   CInputGroup,
   CInputGroupAppend,
@@ -81,7 +80,11 @@ const General = () => {
   const saveFeatures = () => {
     console.log("sChecked", sChecked);
     const features = (sChecked || []).map((item) => {
-      return { featureId: item.featureId, enable: item.enable };
+      return {
+        featureId: item.featureId,
+        enable: item.enable,
+        feature_id: item._id,
+      };
     });
     console.log("features", features);
     const data = {
@@ -238,7 +241,7 @@ const General = () => {
         <CCollapse show={collapsed[1]}>
           <CCardBody>
             <CListGroup>
-              {user.roleData.features.map((itm, index) => {
+              {(user.roleData.features || []).map((itm, index) => {
                 return (
                   <CListGroupItem
                     key={index}
@@ -246,7 +249,7 @@ const General = () => {
                     style={{ marginBottom: "2%" }}
                   >
                     <h5>
-                      {parse(itm.icon)}&nbsp;{itm.featureName}
+                      {parse(itm.icon || "")}&nbsp;{itm.featureName || ""}
                       <CSwitch
                         className={"mx-1 float-right"}
                         shape="pill"

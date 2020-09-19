@@ -21,7 +21,10 @@ export const get_setting_features = (storeId) => {
       })
         .then((response) => {
           if (response.data.status === true) {
-            dispatch({ type: GET_SETTING_FEATURES, response: response.data.data });
+            dispatch({
+              type: GET_SETTING_FEATURES,
+              response: response.data.data,
+            });
           } else {
             let msg = {
               open: true,
@@ -70,71 +73,69 @@ export const get_setting_features = (storeId) => {
 
 export const toggle_feature_module = (data) => {
   return (dispatch) => {
-      dispatch({ type: TOGGLE_FEATURE_MODULE, response: data.features });
-    // try {
-    //   axios({
-    //     method: "post",
-    //     url: `${BaseUrl}settingsLoyalty`,
-    //     data: data,
-    //     headers: {
-    //       kyrioToken: `${localStorage.getItem("kyrio")}`,
-    //     },
-    //   })
-    //     .then((response) => {
-    //       console.log(response);
-    //       dispatch({ type: ADD_NEW_LOYALTY, response: response.data.data });
-    //
-    //       let msg = {
-    //         open: true,
-    //         message: `Save Successfully`,
-    //         object: {},
-    //         error: false,
-    //       };
-    //       dispatch({ type: MESSAGE, data: msg });
-    //     })
-    //     .catch((error) => {
-    //       let msg;
-    //       let errors = [];
-    //       console.log("err", error.response);
-    //       if (typeof error.response !== "undefined") {
-    //         if (typeof error.response.data.errors !== "undefined") {
-    //           (error.response.data.errors || []).map((item) => {
-    //             errors.push(item + " ");
-    //           });
-    //         }
-    //         msg = {
-    //           open: true,
-    //           message:
-    //             typeof error.response != "undefined"
-    //               ? error.response.status === 404
-    //                 ? error.response.statusText
-    //                 : errors.length > 0
-    //                 ? errors
-    //                 : error.response.data.message
-    //               : ERROR_MESSAGE,
-    //           object:
-    //             typeof error.response != "undefined"
-    //               ? error.response.data || {}
-    //               : {},
-    //           error: true,
-    //         };
-    //         dispatch({ type: MESSAGE, data: msg });
-    //       }
-    //     });
-    // } catch (error) {
-    //   console.log("err catch", error);
-    //   let msg = {
-    //     open: true,
-    //     message:
-    //       typeof error.response != "undefined"
-    //         ? error.response.status === 404
-    //           ? error.response.statusText
-    //           : error.response.data.message
-    //         : ERROR_MESSAGE,
-    //     object: {},
-    //     error: true,
-    //   };
-    //   dispatch({ type: MESSAGE, data: msg });
-    // }
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}features`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: TOGGLE_FEATURE_MODULE, response: data.features });
+          let msg = {
+            open: true,
+            message: response.data.message,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          let msg;
+          let errors = [];
+          console.log("err", error.response);
+          if (typeof error.response !== "undefined") {
+            if (typeof error.response.data.errors !== "undefined") {
+              (error.response.data.errors || []).map((item) => {
+                errors.push(item + " ");
+              });
+            }
+            msg = {
+              open: true,
+              message:
+                typeof error.response != "undefined"
+                  ? error.response.status === 404
+                    ? error.response.statusText
+                    : errors.length > 0
+                    ? errors
+                    : error.response.data.message
+                  : ERROR_MESSAGE,
+              object:
+                typeof error.response != "undefined"
+                  ? error.response.data || {}
+                  : {},
+              error: true,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          }
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };

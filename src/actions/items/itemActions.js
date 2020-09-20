@@ -34,7 +34,7 @@ export const get_items_list = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -49,7 +49,7 @@ export const get_items_list = (data) => {
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
-        object: {},
+        object: error,
         error: true,
       };
       dispatch({ type: MESSAGE, data: msg });
@@ -95,7 +95,7 @@ export const get_items_stock = () => {
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
-        object: {},
+        object: error,
         error: true,
       };
       dispatch({ type: MESSAGE, data: msg });
@@ -126,7 +126,7 @@ export const search_item_list = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -141,7 +141,7 @@ export const search_item_list = (data) => {
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
-        object: {},
+        object: error,
         error: true,
       };
       dispatch({ type: MESSAGE, data: msg });
@@ -171,7 +171,7 @@ export const get_items_store = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object: error,
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -186,7 +186,7 @@ export const get_items_store = () => {
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
-        object: {},
+        object: error,
         error: true,
       };
       dispatch({ type: MESSAGE, data: msg });

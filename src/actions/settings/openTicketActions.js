@@ -45,7 +45,7 @@ export const add_new_open_ticket = (data) => {
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
-          console.log("err", error.response);
+          // console.log("err", error.response);
           let msg = {
             open: true,
             message:

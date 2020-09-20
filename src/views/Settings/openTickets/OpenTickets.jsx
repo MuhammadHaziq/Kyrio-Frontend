@@ -58,7 +58,7 @@ const OpenTickets = () => {
     let storeId = {};
     if (e.target.value !== "0") {
       storeId = {
-        store_id: storeObject[0]._id,
+        id: storeObject[0]._id,
         name: storeObject[0].title,
       };
     }
@@ -189,7 +189,7 @@ const OpenTickets = () => {
       ticket_name: values,
       store: selectedStoreObject,
     };
-    console.log("saveOpenTicket", sendData);
+    // console.log("saveOpenTicket", sendData);
     dispatch(add_new_open_ticket(sendData));
   };
   return (

@@ -27,7 +27,8 @@ const TaxesDatatable = (props) => {
   };
 
   const taxRate = (cell, row) => {
-    return cell.toLocaleString("en-US") + " %";
+    // return cell.toLocaleString("en-US") + " %";
+    return cell + " %";
   };
 
   const onRowSelect = (row, isSelected, e) => {

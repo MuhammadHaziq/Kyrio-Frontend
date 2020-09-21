@@ -114,3 +114,9 @@ export const ADD_NEW_LOYALTY = "ADD_NEW_LOYALTY";
 export const GET_SETTING_FEATURES = "GET_SETTING_FEATURES";
 export const UPDATE_SETTING_FEATURES = "UPDATE_SETTING_FEATURES";
 export const TOGGLE_FEATURE_MODULE = "TOGGLE_FEATURE_MODULE";
+/**
+ * End Features
+ * Start Receipt
+ */
+export const GET_RECEIPT = "GET_RECEIPT";
+export const ADD_NEW_RECEIPT = "ADD_NEW_RECEIPT";

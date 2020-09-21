@@ -21,14 +21,7 @@ import {
   CLink,
 } from "@coreui/react";
 import {
-  MdAccessTime,
-  MdAccessAlarms,
-  MdReceipt,
-  MdLocalPrintshop,
-  MdDevices,
-  MdLocalDining,
   MdEmail,
-  MdShoppingBasket,
   MdKeyboardArrowUp,
   MdKeyboardArrowDown,
   MdBusiness,

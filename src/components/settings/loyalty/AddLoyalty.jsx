@@ -72,7 +72,7 @@ const AddLoyalty = (props) => {
 
   return (
     <CForm onSubmit={submitStoreForm}>
-      <CFormGroup row="row">
+      <CFormGroup row={true}>
         <CCol md="12">
           <CLabel htmlFor="store_name">Loyalty type</CLabel>
           <CInputGroup>
@@ -99,7 +99,7 @@ const AddLoyalty = (props) => {
           </CInputGroup>
         </CCol>
       </CFormGroup>
-      <CFormGroup row="row">
+      <CFormGroup row={true}>
         <CLabel>
           A percentage of the purchase amount to be credited to the points
           account of the customer

@@ -232,7 +232,7 @@ const OpenTickets = () => {
                           <option value="0">Select Store</option>
                           {store.stores_list.map((item, index) => {
                             return (
-                              <option value={item._id} PosDevicekey={index}>
+                              <option value={item._id} key={index}>
                                 {item.title}
                               </option>
                             );
@@ -245,9 +245,9 @@ const OpenTickets = () => {
                 <CCardBody>
                   <CRow>
                     <CCol sm="12">
-                      <h7 style={{ display: "block" }}>
+                      <h6 style={{ display: "block" }}>
                         Use predefined tickets
-                      </h7>
+                      </h6>
                       <span>
                         <small>
                           This feature allows you to quickly assign names to
@@ -258,7 +258,7 @@ const OpenTickets = () => {
                         shape="pill"
                         className={"mx-1 float-right"}
                         color={"success"}
-                        size="md"
+                        size="sm"
                         value={sChecked}
                         onChange={() => setChecked(!sChecked)}
                       />

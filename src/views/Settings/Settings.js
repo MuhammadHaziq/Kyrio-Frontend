@@ -34,6 +34,7 @@ import { get_kitchen_printers } from "../../actions/settings/kitchenPrinterActio
 import { get_payment_types } from "../../actions/settings/paymentTypesActions";
 import { get_loyalty } from "../../actions/settings/loyaltyActions";
 import Taxes from "./taxes/Taxes.jsx";
+import Receipt from "./receipt/Receipt.js";
 const Settings = () => {
   // featuresReducer
   const [activeTab, setActiveTab] = useState(0);
@@ -107,6 +108,7 @@ const Settings = () => {
                             action
                             active={activeTab === index}
                             style={{ paddingLeft: "40px" }}
+                            key={index}
                           >
                             {item.moduleName}
                           </CListGroupItem>
@@ -114,7 +116,7 @@ const Settings = () => {
                           ""
                         )
                       ) : (
-                        <CListGroupItem action active={false}>
+                        <CListGroupItem action active={false} key={index}>
                           <h5>
                             <MdStore style={{ fontSize: "30px" }} />
                             <strong>&nbsp;Stores</strong>
@@ -145,6 +147,9 @@ const Settings = () => {
                     </CTabPane>
                     <CTabPane active={activeTab === 4}>
                       <Taxes />
+                    </CTabPane>
+                    <CTabPane active={activeTab === 5}>
+                      <Receipt />
                     </CTabPane>
                     <CTabPane active={activeTab === 6}>
                       <OpenTickets />

@@ -14,10 +14,17 @@ import {
   CFade,
   CSwitch,
   CImg,
+  CInvalidFeedback,
 } from "@coreui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_receipt } from "../../../actions/settings/receiptActions";
+import {
+  add_new_receipt,
+  get_receipt,
+} from "../../../actions/settings/receiptActions";
+import validator from "validator";
+import { imageBaseUrl } from "../../../constants/baseUrls";
+
 const Receipt = (props) => {
   const [checked, setChecked] = useState([false, false]);
   const [fadeReceipt, setFadeReceipt] = useState(true);
@@ -34,12 +41,73 @@ const Receipt = (props) => {
   const [printedReceiptImage, setPrintedReceiptImage] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [printedReceiptHover, setPrintedReceiptHover] = useState(false);
-
+  const [errors, setErrors] = useState({
+    header: false,
+    footer: false,
+    selectedLanguage: false,
+  });
   // Create a reference to the hidden file input element
   // const hiddenFileInput = useRef(null);
   // const hiddenFileInputPrintedReceipt = useRef(null);
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const auth = useSelector((state) => state.auth);
+  const receiptData = useSelector(
+    (state) => state.settingReducers.receiptReducer.receipt_data
+  );
+  useEffect(() => {
+    setSelectedStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  }, [auth]);
+
+  useEffect(() => {
+    setChecked([false, false]);
+    setFadeReceipt(true);
+    setTimeOut(300);
+    setSelectedLanguage("");
+    setValues({
+      header: "",
+      footer: "",
+    });
+    setrReceiptFile("");
+    setPrintedReceiptFile("");
+    setReceiptImage(null);
+    setPrintedReceiptImage(null);
+    setIsHovered(false);
+    setPrintedReceiptHover(false);
+    if (
+      selectedStoreId !== undefined &&
+      selectedStoreId !== null &&
+      selectedStoreId !== "" &&
+      selectedStoreId !== "0"
+    ) {
+      dispatch(get_receipt(selectedStoreId));
+    }
+  }, [dispatch, selectedStoreId]);
+
+  useEffect(() => {
+    if (
+      receiptData !== undefined &&
+      receiptData !== null &&
+      Object.keys(receiptData).length > 0
+    ) {
+      setSelectedStoreId(receiptData.storeId);
+      setSelectedLanguage(receiptData.language);
+      setValues({
+        header: receiptData.header || "",
+        footer: receiptData.footer || "",
+      });
+      setReceiptImage(
+        receiptData.receiptImage === ""
+          ? null
+          : imageBaseUrl + receiptData.receiptImage
+      );
+      setPrintedReceiptImage(
+        receiptData.printedReceiptImage === ""
+          ? null
+          : imageBaseUrl + receiptData.printedReceiptImage
+      );
+    }
+  }, [receiptData]);
 
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
@@ -48,13 +116,13 @@ const Receipt = (props) => {
     setFadeReceipt(true);
   };
 
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  // const toBase64 = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
 
   const uploadReceiptImage = (e) => {
     setrReceiptFile(e.target.files[0]);
@@ -93,19 +161,54 @@ const Receipt = (props) => {
     const state = checked.map((x, index) => (tab === index ? !x : x));
     setChecked(state);
   };
-  const saveReceipt = (e) => {
-    let data = new FormData();
 
-    data.append("receiptImage", receiptFile);
-    data.append("printedReceiptImage", printedReceiptFile);
-    data.append("footer", values.footer);
-    data.append("header", values.header);
-    data.append("show_customer_info", checked[0]);
-    data.append("show_comments", checked[1]);
-    data.append("language", selectedLanguage);
-    data.append("storeId", selectedStoreId);
-    console.log(...data);
-    dispatch(add_new_receipt(data));
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
+    });
+  };
+  const handleOnBlurSelect = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: value === "0" ? true : false,
+    });
+  };
+
+  const saveReceipt = (e) => {
+    if (values.header === "") {
+      setErrors({
+        ...errors,
+        header: true,
+      });
+    } else if (values.footer === "") {
+      setErrors({
+        ...errors,
+        footer: true,
+      });
+    } else if (selectedLanguage === "0") {
+      setErrors({
+        ...errors,
+        selectedLanguage: true,
+      });
+    } else {
+      let data = new FormData();
+
+      data.append("receiptImage", receiptFile);
+      data.append("receiptImagePath", receiptImage);
+      data.append("printedReceiptImage", printedReceiptFile);
+      data.append("printedReceiptImagePath", printedReceiptImage);
+      data.append("footer", values.footer);
+      data.append("header", values.header);
+      data.append("show_customer_info", checked[0]);
+      data.append("show_comments", checked[1]);
+      data.append("language", selectedLanguage);
+      data.append("storeId", selectedStoreId);
+      console.log(...data);
+      dispatch(add_new_receipt(data));
+    }
   };
 
   return (
@@ -238,9 +341,15 @@ const Receipt = (props) => {
                           name="header"
                           value={values.header}
                           placeholder="Name"
-                          required
                           onChange={handleOnChange}
+                          invalid={errors.header}
+                          onBlur={handleOnBlur}
                         />
+                        <CInvalidFeedback>
+                          {validator.isEmpty(values.header)
+                            ? "Please Enter The Header Name"
+                            : ""}
+                        </CInvalidFeedback>
                       </CInputGroup>
                     </CFormGroup>
                   </CCol>
@@ -254,9 +363,15 @@ const Receipt = (props) => {
                           name="footer"
                           placeholder="Name"
                           value={values.footer}
-                          required
                           onChange={handleOnChange}
+                          invalid={errors.footer}
+                          onBlur={handleOnBlur}
                         />
+                        <CInvalidFeedback>
+                          {validator.isEmpty(values.footer)
+                            ? "Please Enter The Footer  Name"
+                            : ""}
+                        </CInvalidFeedback>
                       </CInputGroup>
                     </CFormGroup>
                   </CCol>
@@ -298,6 +413,8 @@ const Receipt = (props) => {
                         id="selectedLanguage"
                         value={selectedLanguage}
                         onChange={handleSelectedLanguage}
+                        invalid={errors.selectedLanguage}
+                        onBlur={handleOnBlurSelect}
                       >
                         <option value="0">Select Language</option>
                         <option value="English">English</option>
@@ -305,6 +422,11 @@ const Receipt = (props) => {
                         <option value="Korean">Korean</option>
                         <option value="Chinese">Chinese</option>
                       </CSelect>
+                      <CInvalidFeedback>
+                        {errors.selectedLanguage
+                          ? "Please Select The Language"
+                          : ""}
+                      </CInvalidFeedback>
                     </CFormGroup>
                   </CCol>
                 </CRow>

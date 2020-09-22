@@ -9,6 +9,7 @@ import axios from "axios";
 
 export const get_receipt = (storeId) => {
   return (dispatch) => {
+    console.log(storeId);
     try {
       axios({
         method: "get",
@@ -18,7 +19,7 @@ export const get_receipt = (storeId) => {
         },
       })
         .then((response) => {
-          dispatch({ type: GET_RECEIPT, response: response.data.data });
+          dispatch({ type: GET_RECEIPT, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

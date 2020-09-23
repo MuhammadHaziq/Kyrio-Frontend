@@ -126,12 +126,27 @@ const Receipt = (props) => {
 
   const uploadReceiptImage = (e) => {
     setrReceiptFile(e.target.files[0]);
-    setReceiptImage(URL.createObjectURL(e.target.files[0]));
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+      setReceiptImage(reader.result);
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+
+    // setReceiptImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const uploadPrintedReceiptImage = (e) => {
     setPrintedReceiptFile(e.target.files[0]);
-    setPrintedReceiptImage(URL.createObjectURL(e.target.files[0]));
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+      setPrintedReceiptImage(reader.result);
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+    // setPrintedReceiptImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleSelectedLanguage = (e) => {

@@ -13,6 +13,7 @@ import paymentTypesReducer from "./settings/paymentTypesReducer";
 import loyaltyReducer from "./settings/loyaltyReducer";
 import featuresReducer from "./settings/featuresReducer";
 import receiptReducer from "./settings/receiptReducer";
+import openTicketReducer from "./settings/openTicketReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -31,6 +32,7 @@ const settingReducers = combineReducers({
   featuresReducer,
   paymentTypesReducer,
   loyaltyReducer,
+  openTicketReducer,
   taxesReducer,
   kitchenPrinterReducer,
   diningOptionReducer,

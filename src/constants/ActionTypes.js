@@ -90,6 +90,7 @@ export const REDIRECT_BACK_KITCHEN = "REDIRECT_BACK_KITCHEN";
  ****/
 export const ADD_NEW_OPEN_TICKET = "ADD_NEW_OPEN_TICKET";
 export const REDIRECT_BACK_TICKET = "REDIRECT_BACK_TICKET";
+export const GET_STORE_OPEN_TICKET = "GET_STORE_OPEN_TICKET";
 /**
  *  End Open Ticket
  *  Start Payment Types

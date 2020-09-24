@@ -13,7 +13,10 @@ import StoreDatatable from "../../../datatables/settings/stores/StoreDatatable";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddStore from "../../../components/settings/stores/AddStore";
-import { redirect_back_store } from "../../../actions/settings/storeActions";
+import {
+  redirect_back_store,
+  get_stores,
+} from "../../../actions/settings/storeActions";
 const Stores = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeStore, setFadeStore] = useState(true);
@@ -21,6 +24,10 @@ const Stores = () => {
   const [timeout] = useState(300);
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
+
+  useEffect(() => {
+    dispatch(get_stores());
+  }, [dispatch]);
 
   const addNewStore = () => {
     setFadeStore(false);

@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   add_new_open_ticket,
   redirect_back_ticket,
+  get_store_open_ticket,
 } from "../../../actions/settings/openTicketActions";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
@@ -37,11 +38,10 @@ const OpenTickets = () => {
   const posDevice = useSelector(
     (state) => state.settingReducers.posDeviceReducer
   );
+  const store_tickets = useSelector(
+    (state) => state.settingReducers.openTicketReducer.store_ticket
+  );
   const store = useSelector((state) => state.settingReducers.storeReducer);
-
-  // useEffect(() => {
-  //   dispatch(get_pos_devices());
-  // }, [dispatch]);
 
   const goBack = () => {
     dispatch(redirect_back_ticket(true));
@@ -50,6 +50,15 @@ const OpenTickets = () => {
     setErrors([]);
     setFadeOpenTicket(true);
   };
+
+  useEffect(() => {
+    if (Object.keys(store_tickets).length > 0) {
+      setChecked(store_tickets.checked);
+      setItems(store_tickets.items);
+      setValues(store_tickets.values);
+      setErrors(store_tickets.errors);
+    }
+  }, [store_tickets]);
 
   const storeHandleChange = (e) => {
     const storeObject = store.stores_list.filter((item) => {
@@ -66,12 +75,12 @@ const OpenTickets = () => {
     setSelectedStoreObject(storeId);
     setSelectedStoreId(e.target.value);
 
-    // dispatch(get_store_pos_device(e.target.value));
+    dispatch(get_store_open_ticket(e.target.value));
   };
 
   const deleteOpenTicket = () => {
     const data = posDevice.pos_device_list
-      .filter((item) => item.isDeleted == true)
+      .filter((item) => item.isDeleted === true)
       .map((item) => {
         return item._id;
       });
@@ -189,7 +198,6 @@ const OpenTickets = () => {
       ticket_name: values,
       store: selectedStoreObject,
     };
-    // console.log("saveOpenTicket", sendData);
     dispatch(add_new_open_ticket(sendData));
   };
   return (
@@ -259,7 +267,7 @@ const OpenTickets = () => {
                         className={"mx-1 float-right"}
                         color={"success"}
                         size="sm"
-                        value={sChecked}
+                        checked={sChecked}
                         onChange={() => setChecked(!sChecked)}
                       />
                     </CCol>

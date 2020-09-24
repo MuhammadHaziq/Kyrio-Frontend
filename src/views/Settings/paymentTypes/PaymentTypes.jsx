@@ -15,6 +15,7 @@ import {
   redirect_back_payment,
   get_payments_type,
   delete_payments_type,
+  get_payment_types,
 } from "../../../actions/settings/paymentTypesActions";
 const PaymentTypes = () => {
   const [fadePaymentTypes, setPaymentTypes] = useState(true);
@@ -36,13 +37,18 @@ const PaymentTypes = () => {
   }, [auth]);
 
   useEffect(() => {
+    if (payment_types.length === 0 || payment_types === undefined) {
+      dispatch(get_payment_types());
+    }
+  }, [dispatch, payment_types]);
+  useEffect(() => {
     if (storeId !== "" && typeof storeId !== "undefined") {
       const data = {
         storeId,
       };
       dispatch(get_payments_type(data));
     }
-  }, [storeId]);
+  }, [dispatch, storeId]);
   const addNewPaymentType = () => {
     dispatch(redirect_back_payment(false));
     setPaymentTypes(false);

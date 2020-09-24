@@ -26,7 +26,7 @@ const PosDevice = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadePosDevice, setFadePosDevice] = useState(true);
   const [fadeAddPosDevice, setFadeAddPosDevice] = useState(false);
-  const [timeout, setTimeout] = useState(300);
+  const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
   const posDevice = useSelector(
@@ -35,7 +35,12 @@ const PosDevice = () => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
   useEffect(() => {
+    // if (
+    //   posDevice.pos_device_list === undefined ||
+    //   posDevice.pos_device_list.length === 0
+    // ) {
     dispatch(get_pos_devices());
+    // }
   }, [dispatch]);
 
   const addNewPosDevice = () => {
@@ -59,7 +64,7 @@ const PosDevice = () => {
   };
   const deletePosDevices = () => {
     const data = posDevice.pos_device_list
-      .filter((item) => item.isDeleted == true)
+      .filter((item) => item.isDeleted === true)
       .map((item) => {
         return item._id;
       });

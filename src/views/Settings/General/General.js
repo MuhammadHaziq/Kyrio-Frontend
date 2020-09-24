@@ -66,12 +66,7 @@ const General = () => {
   };
   const handleBlur = (e) => {};
 
-  const saveSettings = (event) => {
-    event.preventDefault();
-  };
-
   const saveFeatures = () => {
-    console.log("sChecked", sChecked);
     const features = (sChecked || []).map((item) => {
       return {
         featureId: item.featureId,

@@ -24,7 +24,12 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { save_item_taxes } from "../../../actions/settings/taxesActions.js";
+import {
+  save_item_taxes,
+  get_tax_category_list,
+  get_taxes_type,
+  get_taxes_option,
+} from "../../../actions/settings/taxesActions.js";
 import validator from "validator";
 const AddTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -49,6 +54,16 @@ const AddTax = (props) => {
   });
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(get_tax_category_list());
+  }, [dispatch]);
+  useEffect(() => {
+    if (taxes.tax_types === undefined || taxes.tax_types.length === 0) {
+      dispatch(get_taxes_type());
+      dispatch(get_taxes_option());
+    }
+  }, [dispatch, taxes.tax_types]);
+
+  useEffect(() => {
     if (store.stores_list !== undefined) {
       const stores = store.stores_list.slice().map((item) => {
         return {
@@ -61,10 +76,10 @@ const AddTax = (props) => {
   }, [store.stores_list]);
 
   useEffect(() => {
-    if (taxes.redirect === true) {
+    if (taxes.redirect_taxes === true) {
       props.goBack();
     }
-  }, [taxes.redirect_taxes]);
+  }, [props, taxes.redirect_taxes]);
 
   useEffect(() => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {

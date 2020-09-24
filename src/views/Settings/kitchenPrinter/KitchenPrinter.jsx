@@ -14,17 +14,25 @@ import AddKitchenPrinter from "../../../components/settings/kitchenPrinter/AddKi
 import {
   delete_kitchen_printer,
   redirect_back_kitchen,
+  get_kitchen_printers,
 } from "../../../actions/settings/kitchenPrinterActions";
 const KitchenPrinter = () => {
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
-  const [timeout, setTimeout] = useState(300);
+  const [timeout] = useState(300);
   const dispatch = useDispatch();
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
   );
   const category = useSelector((state) => state.items.categoryReducer);
-
+  useEffect(() => {
+    // if (
+    //   kitchenPrinter.kitchen_printers === undefined ||
+    //   kitchenPrinter.kitchen_printers.length === 0
+    // ) {
+    dispatch(get_kitchen_printers());
+    // }
+  }, [dispatch]);
   const addNewKitchenPrinter = () => {
     dispatch(redirect_back_kitchen(false));
     setFadeKitchenPrinter(false);

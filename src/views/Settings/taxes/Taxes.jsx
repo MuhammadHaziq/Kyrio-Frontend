@@ -19,16 +19,22 @@ import {
   delete_item_taxes,
   get_store_item_taxes,
   redirect_back_taxes,
+  get_item_taxes,
 } from "../../../actions/settings/taxesActions";
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeTaxes, setFadeTaxes] = useState(true);
   const [fadeAddTaxes, setFadeAddTaxes] = useState(false);
-  const [timeout, setTimeout] = useState(300);
+  const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
+
+  useEffect(() => {
+    dispatch(get_item_taxes());
+  }, [dispatch]);
+
   const addNewTax = () => {
     dispatch(redirect_back_taxes(false));
     setFadeTaxes(false);

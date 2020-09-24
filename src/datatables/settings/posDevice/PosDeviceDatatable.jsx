@@ -17,6 +17,10 @@ const PosDeviceDatatable = (props) => {
   const getStoreName = (cell, row) => {
     return row.store.storeName;
   };
+  const status = (cell, row) => {
+    return cell === false ? "Not activated" : "Activated";
+  };
+
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_pos_single_select(row));
   };
@@ -85,7 +89,11 @@ const PosDeviceDatatable = (props) => {
         >
           Store
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="isActive" dataSort={true}>
+        <TableHeaderColumn
+          dataField="isActive"
+          dataSort={true}
+          dataFormat={status}
+        >
           Status
         </TableHeaderColumn>
       </BootstrapTable>

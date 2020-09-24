@@ -19,12 +19,15 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
+import {
+  update_pos_device,
+  delete_pos_devices,
+  update_redirect_states_after_delete,
+} from "../../../actions/settings/posDeviceActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
-const AddPosDevice = (props) => {
-  const store = useSelector((state) => state.settingReducers.storeReducer);
+const UpdatePosDevice = (props) => {
   const redirect_pos_devices = useSelector(
     (state) => state.settingReducers.posDeviceReducer.redirect_pos_devices
   );
@@ -34,7 +37,7 @@ const AddPosDevice = (props) => {
     pos_device_name: false,
     selectedStoreId: false,
   });
-  const [storeId, setStoreId] = useState({
+  const [storeObject, setStore] = useState({
     storeId: 0,
     storeName: "Select Store",
   });
@@ -45,8 +48,20 @@ const AddPosDevice = (props) => {
     if (redirect_pos_devices !== undefined && redirect_pos_devices === true) {
       props.goBack();
     }
-  }, [redirect_pos_devices]);
+  }, [props, redirect_pos_devices]);
 
+  useEffect(() => {
+    if (props.posDevices !== undefined) {
+      setFields({
+        pos_device_name: props.posDevices.title || "",
+      });
+      setStore({
+        storeId: props.posDevices.store.storeId || "0",
+        storeName: props.posDevices.store.storeName || "Select STore",
+      });
+      setSelectedStoreId(props.posDevices.store.storeId || "0");
+    }
+  }, [props.posDevices]);
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -54,24 +69,21 @@ const AddPosDevice = (props) => {
   const goBack = () => {
     props.goBack();
   };
-  const submitStoreForm = (e) => {
+  const updatePosDevice = (e) => {
     e.preventDefault();
     if (fields.pos_device_name === "") {
       setErrors({
         ...errors,
         pos_device_name: validator.isEmpty(fields.pos_device_name),
       });
-    } else if (storeId["storeId"] === 0) {
-      setErrors({
-        ...errors,
-        selectedStoreId: true,
-      });
     } else {
       const data = {
         title: fields.pos_device_name,
-        store: JSON.stringify(storeId),
+        // store: JSON.stringify(storeObject),
+        _id: props.posDevices._id,
       };
-      dispatch(add_new_pos_device(data));
+      console.log(data);
+      dispatch(update_pos_device(data));
     }
   };
   const handleOnChange = (e) => {
@@ -88,37 +100,17 @@ const AddPosDevice = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
-  const handleOnBlurSelect = (e) => {
-    const { name, value } = e.target;
-    setErrors({
-      ...errors,
-      [name]: value === "0" || "" ? true : false,
-    });
-  };
-  const storeHandleChange = (e) => {
-    console.log("e.target.value", e.target.value);
-    const store = props.stores.filter((item) => item._id === e.target.value);
-    let storeData;
-    if (e.target.value === "0") {
-      storeData = {
-        storeId: 0,
-        storeName: "Select Store",
-      };
-    } else {
-      storeData = {
-        storeId: store[0]._id,
-        storeName: store[0].title,
-      };
-    }
 
-    setStoreId(storeData);
-    setSelectedStoreId(e.target.value);
+  const pos_device_delete = () => {
+    const id = [props.posDevices._id];
+    dispatch(delete_pos_devices(JSON.stringify(id)));
+    dispatch(update_redirect_states_after_delete());
   };
   return (
     <CCard>
       <CCardHeader>
         <h4>
-          <strong>Create Pos Device</strong>
+          <strong>Update Pos Device</strong>
           <div className="card-header-actions">
             <CLink className="card-header-action" onClick={() => toggle(0)}>
               <CIcon
@@ -130,7 +122,7 @@ const AddPosDevice = (props) => {
       </CCardHeader>
       <CCollapse show={collapse[0]}>
         <CCardBody>
-          <CForm onSubmit={submitStoreForm}>
+          <CForm onSubmit={updatePosDevice}>
             <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_name">Pos Device Name</CLabel>
@@ -164,29 +156,23 @@ const AddPosDevice = (props) => {
                 name="selectedStoreId"
                 id="selectedStoreId"
                 value={selectedStoreId}
-                onChange={storeHandleChange}
-                invalid={errors.selectedStoreId}
-                onBlur={handleOnBlurSelect}
+                disabled
               >
-                <option value="0">Select Store</option>
-                {props.stores.map((item) => {
-                  return <option value={item._id}>{item.title}</option>;
-                })}
+                <option value={storeObject.storeId || "0"}>
+                  {storeObject.storeName || "Select Store"}
+                </option>
               </CSelect>
-              <CInvalidFeedback>
-                {errors.selectedStoreId ? "Please Select One Store" : ""}
-              </CInvalidFeedback>
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
                   block
-                  className="btn-pill pull-right"
+                  className="btn-pill pull-left"
                   variant="outline"
-                  color="default"
-                  onClick={goBack}
+                  color="danger"
+                  onClick={pos_device_delete}
                 >
-                  BACK
+                  <CIcon name="cil-trash" /> DELETE
                 </CButton>
               </CCol>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
@@ -214,7 +200,7 @@ const AddPosDevice = (props) => {
                   className="btn-pill pull-right"
                   variant="outline"
                 >
-                  SAVE
+                  Update
                 </CButton>
               </CCol>
             </CRow>
@@ -225,4 +211,4 @@ const AddPosDevice = (props) => {
   );
 };
 
-export default AddPosDevice;
+export default UpdatePosDevice;

@@ -21,11 +21,12 @@ import {
   redirect_back_pos_devices,
 } from "../../../actions/settings/posDeviceActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
-
+import UpdatePosDevice from "../../../components/settings/posDevice/UpdatePosDevice";
 const PosDevice = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadePosDevice, setFadePosDevice] = useState(true);
   const [fadeAddPosDevice, setFadeAddPosDevice] = useState(false);
+  const [fadeUpdatePosDevice, setFadeUpdatePosDevice] = useState(false);
   const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
@@ -35,23 +36,30 @@ const PosDevice = () => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
   useEffect(() => {
-    // if (
-    //   posDevice.pos_device_list === undefined ||
-    //   posDevice.pos_device_list.length === 0
-    // ) {
     dispatch(get_pos_devices());
-    // }
   }, [dispatch]);
 
+  useEffect(() => {
+    if (
+      posDevice.redirect_pos_device_update !== undefined &&
+      posDevice.redirect_pos_device_update === true
+    ) {
+      setFadeUpdatePosDevice(true);
+      setFadePosDevice(false);
+      setFadeAddPosDevice(false);
+    }
+  }, [posDevice.redirect_pos_device_update]);
   const addNewPosDevice = () => {
     dispatch(redirect_back_pos_devices(false));
     setFadePosDevice(false);
     setFadeAddPosDevice(true);
+    setFadeUpdatePosDevice(false);
   };
   const goBack = () => {
     dispatch(redirect_back_pos_devices(true));
     setFadePosDevice(true);
     setFadeAddPosDevice(false);
+    setFadeUpdatePosDevice(false);
   };
 
   const storeHandleChange = (e) => {
@@ -73,6 +81,16 @@ const PosDevice = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdatePosDevice ? (
+          <CFade timeout={timeout} in={fadeUpdatePosDevice}>
+            <UpdatePosDevice
+              goBack={goBack}
+              posDevices={posDevice.pos_device_row}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddPosDevice ? (
           <CFade timeout={timeout} in={fadeAddPosDevice}>
             <AddPosDevice goBack={goBack} stores={store.stores_list} />

@@ -7,6 +7,9 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
   REDIRECT_BACK_POS_DEVICES,
+  SELECT_ROW_DATA_UPDATE,
+  UPDATE_POS_DEVICE,
+  UPDATE_POS_DEIVCES_REDIRECT_STATES,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -39,7 +42,7 @@ export const get_pos_devices = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -57,7 +60,7 @@ export const get_pos_devices = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -85,7 +88,7 @@ export const add_new_pos_device = (data) => {
           dispatch({ type: ADD_NEW_POS_DEVICE, response: response.data });
           let msg = {
             open: true,
-            message: `Store Save Successfully`,
+            message: `Pos Device Add Successfully`,
             object: {},
             error: false,
           };
@@ -98,7 +101,7 @@ export const add_new_pos_device = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -116,7 +119,7 @@ export const add_new_pos_device = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -152,7 +155,7 @@ export const get_store_pos_device = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -170,7 +173,65 @@ export const get_store_pos_device = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_pos_device = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}devices/${data._id}`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_POS_DEVICE, response: data });
+          let msg = {
+            open: true,
+            message: response.data.message,
+            object: {},
+            error: false,
+          };
+          dispatch(redirect_back_pos_devices(true));
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -201,7 +262,7 @@ export const delete_pos_devices = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -219,7 +280,7 @@ export const delete_pos_devices = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -228,6 +289,15 @@ export const delete_pos_devices = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const select_row_data_update = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_ROW_DATA_UPDATE,
+      response: data,
+    });
   };
 };
 
@@ -245,6 +315,14 @@ export const toggle_pso_all_select = (status) => {
     dispatch({
       type: TOGGLE_POS_ALL_SELECT,
       response: status,
+    });
+  };
+};
+
+export const update_redirect_states_after_delete = () => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_POS_DEIVCES_REDIRECT_STATES,
     });
   };
 };

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_pos_single_select,
   toggle_pso_all_select,
+  select_row_data_update,
 } from "../../../actions/settings/posDeviceActions";
 import { useDispatch } from "react-redux";
 
@@ -35,7 +36,6 @@ const PosDeviceDatatable = (props) => {
 
   const selectRowProp = {
     mode: "checkbox",
-    clickToSelect: true,
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
   };
@@ -60,6 +60,9 @@ const PosDeviceDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
+    onRowClick: function (row) {
+      dispatch(select_row_data_update(row));
+    },
   };
   return (
     <React.Fragment>
@@ -69,7 +72,7 @@ const PosDeviceDatatable = (props) => {
         striped
         hover
         selectRow={selectRowProp}
-        option={options}
+        options={options}
       >
         <TableHeaderColumn
           dataField="_id"

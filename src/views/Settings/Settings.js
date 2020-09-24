@@ -69,6 +69,7 @@ const Settings = () => {
                       index !== 9 ? (
                         item.enable === true ? (
                           <Link
+                            key={index}
                             to={`${url}/${item.moduleName.replace(/\s/g, "")}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                           >

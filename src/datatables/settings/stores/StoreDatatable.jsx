@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import { get_store_row } from "../../../actions/settings/storeActions";
+import { useDispatch } from "react-redux";
 
 const StoreDatatable = (props) => {
+  const dispatch = useDispatch();
   const options = {
     sizePerPageList: [
       {
@@ -19,6 +22,10 @@ const StoreDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
+    onRowClick: function (row) {
+      console.log(row);
+      dispatch(get_store_row(row));
+    },
   };
   return (
     <React.Fragment>
@@ -27,7 +34,7 @@ const StoreDatatable = (props) => {
         version="4"
         striped
         hover
-        option={options}
+        options={options}
       >
         <TableHeaderColumn
           dataField="_id"

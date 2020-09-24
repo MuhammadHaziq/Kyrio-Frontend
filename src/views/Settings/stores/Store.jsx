@@ -13,6 +13,7 @@ import StoreDatatable from "../../../datatables/settings/stores/StoreDatatable";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddStore from "../../../components/settings/stores/AddStore";
+import UpdateStore from "../../../components/settings/stores/UpdateStore";
 import {
   redirect_back_store,
   get_stores,
@@ -20,6 +21,7 @@ import {
 const Stores = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeStore, setFadeStore] = useState(true);
+  const [fadeUpdateStore, setUpdateStore] = useState(false);
   const [fadeAddStore, setFadeAddStore] = useState(false);
   const [timeout] = useState(300);
   const dispatch = useDispatch();
@@ -29,14 +31,24 @@ const Stores = () => {
     dispatch(get_stores());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (store.redirect_update !== undefined && store.redirect_update === true) {
+      setUpdateStore(true);
+      setFadeStore(false);
+      setFadeAddStore(false);
+    }
+  }, [store.redirect_update]);
+
   const addNewStore = () => {
     setFadeStore(false);
     setFadeAddStore(true);
+    setUpdateStore(false);
     dispatch(redirect_back_store(false));
   };
   const goBack = () => {
     setFadeStore(true);
     setFadeAddStore(false);
+    setUpdateStore(false);
     dispatch(redirect_back_store(true));
   };
   const toggleCollapse = (tab) => {
@@ -46,6 +58,16 @@ const Stores = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdateStore ? (
+          <CFade timeout={timeout} in={fadeUpdateStore}>
+            <UpdateStore
+              goBack={goBack}
+              update_store_data={store.update_store_data}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddStore ? (
           <CFade timeout={timeout} in={fadeAddStore}>
             <AddStore goBack={goBack} />

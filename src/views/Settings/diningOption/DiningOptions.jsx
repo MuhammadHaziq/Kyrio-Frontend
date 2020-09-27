@@ -21,6 +21,7 @@ import {
 } from "../../../actions/settings/diningOptionActions";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
+
 // const getItems = (data) =>
 //   data.map((item, index) => ({
 //     id: item._id,
@@ -45,14 +46,16 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
+  background: isDragging ? "#80808024" : "#80808024",
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
+  background: isDraggingOver
+    ? "rgb(128 128 128 / 6%)"
+    : "rgb(128 128 128 / 6%)",
   padding: grid,
   // width: 250,
 });
@@ -178,6 +181,18 @@ class DiningOptions extends Component {
                           className="btn-square pull right"
                           onClick={this.addDiningOpt}
                         >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="c-icon c-icon-sm"
+                            role="img"
+                          >
+                            <polygon
+                              fill="var(--ci-primary-color, currentColor)"
+                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                              class="ci-primary"
+                            ></polygon>
+                          </svg>
                           DINING OPTION
                         </CButton>
                       </CCol>

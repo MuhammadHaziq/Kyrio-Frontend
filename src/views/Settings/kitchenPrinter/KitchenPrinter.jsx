@@ -16,6 +16,8 @@ import {
   redirect_back_kitchen,
   get_kitchen_printers,
 } from "../../../actions/settings/kitchenPrinterActions";
+import { CIcon } from "@coreui/icons-react";
+
 const KitchenPrinter = () => {
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
@@ -74,6 +76,18 @@ const KitchenPrinter = () => {
                     <CRow>
                       <CCol sm="8" md="8" xl="xl" className="mb-3 mb-xl-0">
                         <CButton color="success" onClick={addNewKitchenPrinter}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="c-icon c-icon-sm"
+                            role="img"
+                          >
+                            <polygon
+                              fill="var(--ci-primary-color, currentColor)"
+                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                              class="ci-primary"
+                            ></polygon>
+                          </svg>
                           ADD PRINTER GROUP
                         </CButton>
                         {kitchenPrinter.kitchen_printers.filter(
@@ -85,6 +99,7 @@ const KitchenPrinter = () => {
                             className="btn-square pull-right ml-2"
                             onClick={deleteTaxes}
                           >
+                            <CIcon name="cil-trash" />
                             DELETE
                           </CButton>
                         ) : (

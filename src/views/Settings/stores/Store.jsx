@@ -90,6 +90,18 @@ const Stores = () => {
                         className="mb-3 mb-xl-0"
                       >
                         <CButton color="success" onClick={addNewStore}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="c-icon c-icon-sm"
+                            role="img"
+                          >
+                            <polygon
+                              fill="var(--ci-primary-color, currentColor)"
+                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                              class="ci-primary"
+                            ></polygon>
+                          </svg>
                           ADD STORE
                         </CButton>
                       </CCol>

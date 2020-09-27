@@ -6,6 +6,11 @@ import { useDispatch } from "react-redux";
 
 const StoreDatatable = (props) => {
   const dispatch = useDispatch();
+
+  const number_of_pos = (cell, row) => {
+    // return cell === null ? 1 : cell;
+    return 1;
+  };
   const options = {
     sizePerPageList: [
       {
@@ -23,7 +28,6 @@ const StoreDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(get_store_row(row));
     },
   };
@@ -48,7 +52,11 @@ const StoreDatatable = (props) => {
           Name
         </TableHeaderColumn>
         <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
-        <TableHeaderColumn dataField="pos" dataSort={true}>
+        <TableHeaderColumn
+          dataField="pos"
+          dataSort={true}
+          dataFormat={number_of_pos}
+        >
           Number Of Pos
         </TableHeaderColumn>
       </BootstrapTable>

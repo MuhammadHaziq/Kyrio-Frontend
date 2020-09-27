@@ -17,6 +17,8 @@ import {
   delete_payments_type,
   get_payment_types,
 } from "../../../actions/settings/paymentTypesActions";
+import { CIcon } from "@coreui/icons-react";
+
 const PaymentTypes = () => {
   const [fadePaymentTypes, setPaymentTypes] = useState(true);
   const [fadeAddPaymentTypes, setFadeAddPaymentTypes] = useState(false);
@@ -87,6 +89,18 @@ const PaymentTypes = () => {
                     <CRow>
                       <CCol sm="8" md="8" xl="xl" className="mb-3 mb-xl-0">
                         <CButton color="success" onClick={addNewPaymentType}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="c-icon c-icon-sm"
+                            role="img"
+                          >
+                            <polygon
+                              fill="var(--ci-primary-color, currentColor)"
+                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                              class="ci-primary"
+                            ></polygon>
+                          </svg>
                           ADD PAYMENT TYPE
                         </CButton>
                         {payments_type.filter((item) => item.isDeleted === true)
@@ -97,6 +111,7 @@ const PaymentTypes = () => {
                             className="btn-square pull-right ml-2"
                             onClick={deletePayments}
                           >
+                            <CIcon name="cil-trash" />
                             DELETE
                           </CButton>
                         ) : (

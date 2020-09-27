@@ -5,6 +5,7 @@ import {
   UPDATE_STORE_ROW_DATA,
   UPDATE_STORE_REDIRECT_STATES,
   UPDATE_STORE,
+  DELETE_STORE,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -59,6 +60,19 @@ const storeReducer = (state = initialState, action) => {
         redirect_store: true,
         redirect_update: false,
       });
+    }
+
+    case DELETE_STORE: {
+      let stores_list = state.stores_list;
+      for (const id of JSON.parse(action.response)) {
+        stores_list = stores_list.filter((item) => item._id !== id);
+      }
+      return {
+        ...state,
+        stores_list,
+        redirect_update: false,
+        redirect_store: true,
+      };
     }
     case UPDATE_STORE_REDIRECT_STATES: {
       return Object.assign({}, state, {

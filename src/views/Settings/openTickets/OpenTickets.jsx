@@ -220,6 +220,7 @@ const OpenTickets = () => {
                           color="danger"
                           onClick={deleteOpenTicket}
                         >
+                          <CIcon name="cil-trash" />
                           DELETE
                         </CButton>
                       ) : (

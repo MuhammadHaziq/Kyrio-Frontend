@@ -49,7 +49,7 @@ export const get_item_taxes = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -67,7 +67,7 @@ export const get_item_taxes = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -99,7 +99,7 @@ export const get_taxes_type = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -117,7 +117,7 @@ export const get_taxes_type = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -149,7 +149,7 @@ export const get_taxes_option = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -167,7 +167,7 @@ export const get_taxes_option = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -200,7 +200,7 @@ export const get_tax_category_list = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -218,7 +218,7 @@ export const get_tax_category_list = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -250,7 +250,7 @@ export const get_catgeory_item = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -268,7 +268,7 @@ export const get_catgeory_item = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -310,7 +310,7 @@ export const save_item_taxes = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -328,7 +328,7 @@ export const save_item_taxes = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -369,7 +369,7 @@ export const delete_item_taxes = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -387,7 +387,7 @@ export const delete_item_taxes = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -420,7 +420,7 @@ export const get_store_item_taxes = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -438,7 +438,7 @@ export const get_store_item_taxes = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

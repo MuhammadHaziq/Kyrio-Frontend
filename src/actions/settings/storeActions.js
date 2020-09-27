@@ -7,6 +7,7 @@ import {
   UPDATE_STORE_ROW_DATA,
   UPDATE_STORE_REDIRECT_STATES,
   UPDATE_STORE,
+  DELETE_STORE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -142,6 +143,64 @@ export const update_store = (data) => {
         .then((response) => {
           console.log(response);
           dispatch({ type: UPDATE_STORE, response: data });
+          let msg = {
+            open: true,
+            message: response.data.message,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status == 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+
+export const delete_store = (ids) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "delete",
+        url: `${BaseUrl}stores/${ids}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: DELETE_STORE, response: ids });
           let msg = {
             open: true,
             message: response.data.message,

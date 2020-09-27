@@ -22,7 +22,10 @@ import {
 import validator from "validator";
 import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { update_store } from "../../../actions/settings/storeActions.js";
+import {
+  update_store,
+  delete_store,
+} from "../../../actions/settings/storeActions.js";
 import { useDispatch, useSelector } from "react-redux";
 const UpdateStore = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -112,9 +115,9 @@ const UpdateStore = (props) => {
     });
   };
 
-  const delete_store = () => {
-    const id = [props.update_store_data._id || ""];
-    console.log(id);
+  const delete_str = () => {
+    const data = [props.update_store_data._id];
+    dispatch(delete_store(JSON.stringify(data)));
   };
 
   return (
@@ -134,7 +137,7 @@ const UpdateStore = (props) => {
       <CCollapse show={collapse[0]}>
         <CCardBody>
           <CForm onSubmit={submitStoreForm}>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_name">Store Name</CLabel>
                 <CInputGroup>
@@ -160,7 +163,7 @@ const UpdateStore = (props) => {
                 </CInputGroup>
               </CCol>
             </CFormGroup>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_address">Store Addresss</CLabel>
                 <CInputGroup>
@@ -174,7 +177,7 @@ const UpdateStore = (props) => {
                     name="store_address"
                     placeholder="Store Address"
                     onChange={handleOnChange}
-                    invalid={errors.store_address}
+                    invalid={errors.store_address || ""}
                     onBlur={handleOnBlur}
                     value={fields.store_address}
                   />
@@ -230,7 +233,7 @@ const UpdateStore = (props) => {
 
               <CFormText color="muted">ex. (999) 999-9999</CFormText>
             </CFormGroup>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_description">Store Description</CLabel>
                 <CInputGroup>
@@ -259,7 +262,7 @@ const UpdateStore = (props) => {
                   variant="outline"
                   className="btn-pill pull-right"
                   color="danger"
-                  onClick={delete_store}
+                  onClick={delete_str}
                 >
                   <CIcon name="cil-trash" /> DELETE
                 </CButton>

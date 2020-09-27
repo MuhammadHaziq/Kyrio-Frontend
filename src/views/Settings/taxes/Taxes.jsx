@@ -83,11 +83,22 @@ const Taxes = () => {
                     <CRow>
                       <CCol sm="4" md="6" xl="xl" className="mb-3 mb-xl-0">
                         <CButton
-                          variant="outline"
+                          className="btn-square pull right"
                           color="success"
-                          className="btn-square pull-right"
                           onClick={addNewTax}
                         >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            class="c-icon c-icon-sm"
+                            role="img"
+                          >
+                            <polygon
+                              fill="var(--ci-primary-color, currentColor)"
+                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                              class="ci-primary"
+                            ></polygon>
+                          </svg>
                           ADD TAXES
                         </CButton>
                         {taxes.item_taxes.filter(
@@ -99,6 +110,7 @@ const Taxes = () => {
                             className="btn-square pull-right ml-2"
                             onClick={deleteTaxes}
                           >
+                            <CIcon name="cil-trash" />
                             DELETE
                           </CButton>
                         ) : (

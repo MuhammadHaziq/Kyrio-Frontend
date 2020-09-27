@@ -8,8 +8,7 @@ const StoreDatatable = (props) => {
   const dispatch = useDispatch();
 
   const number_of_pos = (cell, row) => {
-    // return cell === null ? 1 : cell;
-    return 1;
+    return cell;
   };
   const options = {
     sizePerPageList: [
@@ -53,7 +52,7 @@ const StoreDatatable = (props) => {
         </TableHeaderColumn>
         <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
         <TableHeaderColumn
-          dataField="pos"
+          dataField="devices"
           dataSort={true}
           dataFormat={number_of_pos}
         >

@@ -2,6 +2,8 @@ import {
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  TOGGLE_ITEM_DELETE_SELECT,
+  TOGGLE_ALL_ITEM_DELETE_SELECT,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -30,7 +32,7 @@ export const get_items_list = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -45,7 +47,7 @@ export const get_items_list = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -76,7 +78,7 @@ export const get_items_stock = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -91,7 +93,7 @@ export const get_items_stock = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -122,7 +124,7 @@ export const search_item_list = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -137,7 +139,7 @@ export const search_item_list = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -167,7 +169,7 @@ export const get_items_store = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -182,7 +184,7 @@ export const get_items_store = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -191,5 +193,23 @@ export const get_items_store = () => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const toggle_item_single_select = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ITEM_DELETE_SELECT,
+      response: data,
+    });
+  };
+};
+
+export const toggle_item_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ALL_ITEM_DELETE_SELECT,
+      response: status,
+    });
   };
 };

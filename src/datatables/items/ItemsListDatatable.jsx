@@ -1,84 +1,131 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import { CCard, CCardHeader, CCardBody } from "@coreui/react";
-const showCategory = (cell, row) => {
-  return row.category ? row.category.name || "" : "";
-};
-const showMargin = (cell, row) => {
-  const margin = (+row.cost / +row.price) * 100;
-  return margin + " %";
-};
-const showPrice = (cell, row) => {
-  return row.price.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-};
-const showCost = (cell, row) => {
-  return row.cost.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-};
+import {
+  toggle_item_single_select,
+  toggle_item_all_select,
+} from "../../actions/items/itemActions";
+import { useSelector, useDispatch } from "react-redux";
+
 const ItemsListDatatable = (props) => {
+  const dispatch = useDispatch();
+
+  const showCategory = (cell, row) => {
+    return row.category ? row.category.name || "" : "";
+  };
+  const showMargin = (cell, row) => {
+    const margin = (+row.cost / +row.price) * 100;
+    return margin + " %";
+  };
+  const showPrice = (cell, row) => {
+    return row.price.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+  };
+  const showCost = (cell, row) => {
+    return row.cost.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+  };
+  const onRowSelect = (row, isSelected, e) => {
+    dispatch(toggle_item_single_select(row));
+    console.log(row);
+  };
+
+  const onSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      dispatch(toggle_item_all_select(true));
+      console.log(true);
+    } else {
+      dispatch(toggle_item_all_select(false));
+      console.log(false);
+    }
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    onSelect: onRowSelect,
+    onSelectAll: onSelectAll,
+  };
+  /**
+   *
+   *  Datatable functions End
+   *
+   ***/
+  const options = {
+    sizePerPageList: [
+      {
+        text: "5",
+        value: 5,
+      },
+      {
+        text: "10",
+        value: 10,
+      },
+      {
+        text: "All",
+        value: props.itemList.length,
+      },
+    ],
+    sizePerPage: 5,
+    onRowClick: function (row) {
+      console.log(row);
+      // dispatch(select_row_data_update(row));
+    },
+  };
   return (
     <React.Fragment>
-      <CCard>
-        <CCardHeader>Item List Detail</CCardHeader>
-        <CCardBody>
-          <BootstrapTable
-            data={props.itemList}
-            version="4"
-            striped="striped"
-            hover="hover"
-            pagination="pagination"
-            search="search"
-          >
-            <TableHeaderColumn
-              dataField="createdAt"
-              dataSort="dataSort"
-              hidden="hidden"
-            >
-              Created Date
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="name" dataSort="dataSort">
-              Name
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              isKey="isKey"
-              dataField="name"
-              dataFormat={showCategory}
-            >
-              Category
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="price"
-              dataSort="dataSort"
-              dataFormat={showPrice}
-            >
-              Price
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="cost"
-              dataSort="dataSort"
-              dataFormat={showCost}
-            >
-              Cost
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="margin"
-              dataSort="dataSort"
-              dataFormat={showMargin}
-            >
-              Margin %
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="stockQty" dataSort="dataSort">
-              Stock
-            </TableHeaderColumn>
-          </BootstrapTable>
-        </CCardBody>
-      </CCard>
+      <BootstrapTable
+        data={props.itemList}
+        version="4"
+        striped="striped"
+        hover="hover"
+        selectRow={selectRowProp}
+        options={options}
+        pagination="pagination"
+        search="search"
+      >
+        <TableHeaderColumn
+          dataField="_id"
+          dataSort="dataSort"
+          hidden={true}
+          isKey={true}
+        >
+          Id
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="name" dataSort="dataSort">
+          Name
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="name" dataFormat={showCategory}>
+          Category
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="price"
+          dataSort="dataSort"
+          dataFormat={showPrice}
+        >
+          Price
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="cost"
+          dataSort="dataSort"
+          dataFormat={showCost}
+        >
+          Cost
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="margin"
+          dataSort="dataSort"
+          dataFormat={showMargin}
+        >
+          Margin %
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="stockQty" dataSort="dataSort">
+          Stock
+        </TableHeaderColumn>
+      </BootstrapTable>
     </React.Fragment>
   );
 };

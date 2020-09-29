@@ -4,6 +4,7 @@ import messageReducer from "./messageReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
+import modifiresReducer from "./items/modifiresReducer";
 import storeReducer from "./settings/storeReducer";
 import posDeviceReducer from "./settings/posDeviceReducer";
 import diningOptionReducer from "./settings/diningOptionReducer";
@@ -27,6 +28,7 @@ const items = combineReducers({
   itemReducer,
   categoryReducer,
   discountReducer,
+  modifiresReducer,
 });
 const settingReducers = combineReducers({
   featuresReducer,

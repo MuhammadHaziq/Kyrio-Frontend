@@ -26,6 +26,8 @@ export const TOGGLE_ALL_CATEGORY_DELETE_SELECT =
   "TOGGLE_ALL_CATEGORY_DELETE_SELECT";
 // Discount List
 export const GET_DISCOUNT_LIST = "GET_DISCOUNT_LIST";
+//  Modifires
+export const GET_MODIFIRES_LIST = "GET_MODIFIRES_LIST";
 /**
  *  Items End
  **/

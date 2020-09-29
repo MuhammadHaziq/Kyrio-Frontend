@@ -11,38 +11,56 @@ import {
 import KitchenPrinterDatatable from "../../../datatables/settings/kitchenPrinter/KitchenPrinterDatatable";
 import { useSelector, useDispatch } from "react-redux";
 import AddKitchenPrinter from "../../../components/settings/kitchenPrinter/AddKitchenPrinter";
+import UpdateKitchenPrinter from "../../../components/settings/kitchenPrinter/UpdateKitchenPrinter";
 import {
   delete_kitchen_printer,
   redirect_back_kitchen,
   get_kitchen_printers,
 } from "../../../actions/settings/kitchenPrinterActions";
+import { get_category_list } from "../../../actions/items/categoryActions";
+
 import { CIcon } from "@coreui/icons-react";
 
 const KitchenPrinter = () => {
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
+  const [fadeUpdateKitchenPrinter, setFadeUpdateKitchenPrinter] = useState(
+    false
+  );
   const [timeout] = useState(300);
   const dispatch = useDispatch();
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
   );
+  const update_row = useSelector(
+    (state) => state.settingReducers.kitchenPrinterReducer.update_row
+  );
   const category = useSelector((state) => state.items.categoryReducer);
   useEffect(() => {
-    // if (
-    //   kitchenPrinter.kitchen_printers === undefined ||
-    //   kitchenPrinter.kitchen_printers.length === 0
-    // ) {
     dispatch(get_kitchen_printers());
-    // }
+    dispatch(get_category_list());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      kitchenPrinter.update_redirect !== undefined &&
+      kitchenPrinter.update_redirect === true
+    ) {
+      setFadeKitchenPrinter(false);
+      setFadeAddKitchenPrinter(false);
+      setFadeUpdateKitchenPrinter(true);
+    }
+  }, [kitchenPrinter.update_redirect]);
+
   const addNewKitchenPrinter = () => {
     dispatch(redirect_back_kitchen(false));
     setFadeKitchenPrinter(false);
     setFadeAddKitchenPrinter(true);
+    setFadeUpdateKitchenPrinter(false);
   };
   const goBack = () => {
     dispatch(redirect_back_kitchen(true));
-
+    setFadeUpdateKitchenPrinter(false);
     setFadeKitchenPrinter(true);
     setFadeAddKitchenPrinter(false);
   };
@@ -57,6 +75,17 @@ const KitchenPrinter = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdateKitchenPrinter ? (
+          <CFade timeout={timeout} in={fadeUpdateKitchenPrinter}>
+            <UpdateKitchenPrinter
+              goBack={goBack}
+              update_data={update_row}
+              category={category.category_list}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddKitchenPrinter ? (
           <CFade timeout={timeout} in={fadeAddKitchenPrinter}>
             <AddKitchenPrinter

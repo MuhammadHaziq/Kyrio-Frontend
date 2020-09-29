@@ -4,6 +4,8 @@ import {
   DELETE_KITCHEN_PRINTER,
   TOGGLE_KITCHEN_PRINTER_SINGLE_SELECT,
   TOGGLE_KITCHEN_PRINTER_SELECT_ALL,
+  SELECT_UPDATE_ROW,
+  UPDATE_KICTCH_PRINTER,
   MESSAGE,
   ERROR_MESSAGE,
   REDIRECT_BACK_KITCHEN,
@@ -39,7 +41,7 @@ export const get_kitchen_printers = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -57,7 +59,7 @@ export const get_kitchen_printers = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -86,7 +88,7 @@ export const add_new_kitchen_printer = (data) => {
 
           let msg = {
             open: true,
-            message: `Dining Save Successfully`,
+            message: `Kitchen Printer Save Successfully`,
             object: {},
             error: false,
           };
@@ -99,7 +101,7 @@ export const add_new_kitchen_printer = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -117,7 +119,7 @@ export const add_new_kitchen_printer = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -142,10 +144,13 @@ export const update_kitchen_printer = (data) => {
       })
         .then((response) => {
           console.log(response);
-          // dispatch({type:GET_KICTCH_PRINTER, response:response.data})
+          dispatch({
+            type: UPDATE_KICTCH_PRINTER,
+            response: response.data.data,
+          });
           let msg = {
             open: true,
-            message: `Dining Option Updated Successfully`,
+            message: response.data.message,
             object: {},
             error: false,
           };
@@ -157,7 +162,7 @@ export const update_kitchen_printer = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -175,7 +180,7 @@ export const update_kitchen_printer = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -216,7 +221,7 @@ export const delete_kitchen_printer = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -234,7 +239,7 @@ export const delete_kitchen_printer = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -243,6 +248,15 @@ export const delete_kitchen_printer = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const select_update_row = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_UPDATE_ROW,
+      response: data,
+    });
   };
 };
 

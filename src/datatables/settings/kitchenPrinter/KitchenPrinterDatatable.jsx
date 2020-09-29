@@ -4,6 +4,7 @@ import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_kitchen_printer_single_select,
   toggle_kitchen_printer_select_all,
+  select_update_row,
 } from "../../../actions/settings/kitchenPrinterActions";
 import { useDispatch } from "react-redux";
 const KitchenPrinterDatatable = (props) => {
@@ -35,7 +36,6 @@ const KitchenPrinterDatatable = (props) => {
 
   const selectRowProp = {
     mode: "checkbox",
-    clickToSelect: true,
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
   };
@@ -60,6 +60,10 @@ const KitchenPrinterDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
+    onRowClick: function (row) {
+      console.log(row);
+      dispatch(select_update_row(row));
+    },
   };
   return (
     <React.Fragment>
@@ -69,7 +73,7 @@ const KitchenPrinterDatatable = (props) => {
         striped
         hover
         selectRow={selectRowProp}
-        option={options}
+        options={options}
       >
         <TableHeaderColumn
           dataField="_id"

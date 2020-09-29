@@ -3,6 +3,8 @@ import {
   ADD_NEW_PAYMENT_TYPE,
   GET_PAYMENTS_TYPE,
   DELETE_PAYMENTS_TYPE,
+  UPDATE_ROW_DATA_PAYMENT_TYPE,
+  UPDATE_PAYMENT_TYPE,
   MESSAGE,
   ERROR_MESSAGE,
   REDIRECT_BACK_PAYMENT,
@@ -40,7 +42,7 @@ export const get_payment_types = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -101,7 +103,7 @@ export const add_new_payment_type = (data) => {
           if (typeof error.response !== "undefined") {
             if (typeof error.response.data.errors !== "undefined") {
               (error.response.data.errors || []).map((item) => {
-                errors.push(item + " ");
+                return errors.push(item + " ");
               });
             }
             msg = {
@@ -223,7 +225,6 @@ export const delete_payments_type = (id) => {
         },
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: DELETE_PAYMENTS_TYPE, response: id });
           let msg = {
             open: true,
@@ -268,5 +269,73 @@ export const delete_payments_type = (id) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const update_payment_type = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}paymentsType/${data.id}`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_PAYMENT_TYPE, response: response.data.data });
+          let msg = {
+            open: true,
+            message: response.data.message
+              ? response.data.message
+              : `Update Successfully`,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response !== "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response !== "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response !== "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_row_data = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_ROW_DATA_PAYMENT_TYPE,
+      response: data,
+    });
   };
 };

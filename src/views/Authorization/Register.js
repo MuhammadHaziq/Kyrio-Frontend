@@ -21,6 +21,11 @@ import {
 } from "@coreui/react";
 import { MdPerson, MdLock, MdBusiness, MdFlag } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  CountryDropdown,
+  RegionDropdown,
+  CountryRegionData,
+} from "react-country-region-selector";
 import { signup } from "../../actions/authAction";
 import validator from "validator";
 
@@ -76,6 +81,24 @@ const Register = () => {
       values: {
         ...formState.values,
         [event.target.name]: event.target.value,
+      },
+    }));
+  };
+  const selectCountry = (val) => {
+    setFormState({
+      ...formState,
+      values: {
+        ...formState.values,
+        country: val,
+      },
+    });
+  };
+  const handleOnBlur = (e) => {
+    setFormState((formState) => ({
+      ...formState,
+      errors: {
+        ...formState.errors,
+        country: validator.isEmpty(formState.values.country) ? true : false,
       },
     }));
   };
@@ -291,7 +314,28 @@ const Register = () => {
                         <MdFlag />
                       </CInputGroupText>
                     </CInputGroupPrepend>
-                    <CInput
+                    <CountryDropdown
+                      className={
+                        formState.errors.country === true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      placeholder="Country"
+                      name="country"
+                      value={formState.values.country}
+                      onChange={(val) => selectCountry(val)}
+                      invalid={
+                        formState.errors.country
+                          ? validator.isEmpty(formState.values.country)
+                            ? "true"
+                            : "false"
+                          : "false"
+                      }
+                      onBlur={handleOnBlur}
+                    />
+                    {/*
+
+                      <CInput
                       type="text"
                       placeholder="Country"
                       autoComplete="country"
@@ -305,7 +349,12 @@ const Register = () => {
                       name="country"
                       value={formState.values.country}
                       onChange={(e) => handleChange(e)}
-                    />
+                      {validator.isEmpty(formState.errors.country) ? (
+                        <CInvalidFeedback>This cannot be blank</CInvalidFeedback>
+                      ) : (
+                        ""
+                      )}
+                    />*/}
                     {validator.isEmpty(formState.values.country) ? (
                       <CInvalidFeedback>This cannot be blank</CInvalidFeedback>
                     ) : (

@@ -1,6 +1,7 @@
 import {
   GET_DINING_OPTION,
   ADD_NEW_DINING_OPTION,
+  UPDATE_ROW_DATA_DINING_OPTION,
   MESSAGE,
   ERROR_MESSAGE,
   GET_DINING_TAX,
@@ -38,7 +39,7 @@ export const get_dining_options = () => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -56,7 +57,7 @@ export const get_dining_options = () => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -98,7 +99,7 @@ export const add_new_dining_option = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -116,7 +117,7 @@ export const add_new_dining_option = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -156,7 +157,7 @@ export const update_dining_option = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -174,7 +175,7 @@ export const update_dining_option = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -217,7 +218,7 @@ export const get_store_dining = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -235,7 +236,7 @@ export const get_store_dining = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -244,5 +245,13 @@ export const get_store_dining = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+export const update_dining_row_data = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_ROW_DATA_DINING_OPTION,
+      response: data,
+    });
   };
 };

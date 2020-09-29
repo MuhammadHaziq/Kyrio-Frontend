@@ -5,11 +5,15 @@ import {
   TOGGLE_KITCHEN_PRINTER_SINGLE_SELECT,
   TOGGLE_KITCHEN_PRINTER_SELECT_ALL,
   REDIRECT_BACK_KITCHEN,
+  SELECT_UPDATE_ROW,
+  UPDATE_KICTCH_PRINTER,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   kitchen_printers: [],
   redirect_kitchen: true,
+  update_row: {},
+  update_redirect: false,
 };
 const kitchenPrinterReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -17,6 +21,7 @@ const kitchenPrinterReducer = (state = initialState, action) => {
     case REDIRECT_BACK_KITCHEN: {
       return Object.assign({}, state, {
         redirect_kitchen: action.response,
+        update_redirect: false,
       });
     }
 
@@ -54,6 +59,18 @@ const kitchenPrinterReducer = (state = initialState, action) => {
       });
     }
 
+    case UPDATE_KICTCH_PRINTER: {
+      return Object.assign({}, state, {
+        kitchen_printers: state.kitchen_printers.slice().map((item) => {
+          if (item._id === action.response._id) {
+            return action.response;
+          }
+          return item;
+        }),
+        update_redirect: false,
+        redirect_kitchen: true,
+      });
+    }
     case DELETE_KITCHEN_PRINTER: {
       let kitchen_printers = state.kitchen_printers;
       for (const id of JSON.parse(action.response)) {
@@ -63,6 +80,14 @@ const kitchenPrinterReducer = (state = initialState, action) => {
         ...state,
         kitchen_printers,
       };
+    }
+
+    case SELECT_UPDATE_ROW: {
+      return Object.assign({}, state, {
+        update_row: action.response,
+        update_redirect: true,
+        redirect_kitchen: false,
+      });
     }
     default:
       return { ...state };

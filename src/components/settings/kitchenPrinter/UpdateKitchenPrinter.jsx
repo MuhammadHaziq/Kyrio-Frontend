@@ -18,18 +18,21 @@ import {
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
+import { update_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
-const AddKitchenPrinter = (props) => {
+const UpdateKitchenPrinter = (props) => {
   // const store = useSelector((state) => state.settingReducers.storeReducer);
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
   );
   const [collapse, setCollapse] = useState([true, true]);
   const [storeId, setStoreId] = useState();
-  const [fields, setFields] = useState({ kitchen_name: "", checkAll: true });
+  const [fields, setFields] = useState({
+    kitchen_name: "",
+    checkAll: true,
+  });
   const [errors, setErrors] = useState({
     kitchen_name_error: false,
     checkAll_error: false,
@@ -38,24 +41,34 @@ const AddKitchenPrinter = (props) => {
 
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (props.category !== undefined) {
-      const categories = props.category.slice().map((item) => {
-        return {
-          ...item,
-          isSelected: true,
-        };
+      let categories = props.category;
+      (props.update_data.categories || []).map((ite) => {
+        return (categories = categories.slice().map((item) => {
+          if (item._id === ite.categoryId) {
+            return {
+              ...item,
+              isSelected: true,
+            };
+          }
+          return item;
+        }));
       });
+
       setFields({
         ...fields,
+        kitchen_name: props.update_data.name || "",
         checkAll:
-          categories.filter((item) => item.isSelected).length === 0
-            ? false
-            : true,
+          categories.filter((item) => item.isSelected === true).length ===
+          props.category.length
+            ? true
+            : false,
       });
       setCategoryId(categories);
     }
-  }, [props.category]);
+  }, [props.category, props.update_data]);
 
   useEffect(() => {
     if (
@@ -64,19 +77,14 @@ const AddKitchenPrinter = (props) => {
     ) {
       props.goBack();
     }
-  }, [kitchenPrinter.redirect_kitchen]);
+  }, [kitchenPrinter.redirect_kitchen, props]);
   useEffect(() => {
     setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
   }, [auth]);
   const goBack = () => {
     props.goBack();
   };
-  const saveKitchenPrinter = () => {
-    // e.preventDefault();
-    // if (categoryId.length == 0) {
-    // if (categoryId.filter((item) => item.isSelected === true).length === 0) {
-    //   alert("Select Category");
-    // }
+  const updateKitchenPrinter = () => {
     if (fields.kitchen_name === "") {
       setErrors({
         ...errors,
@@ -91,14 +99,14 @@ const AddKitchenPrinter = (props) => {
           categoryName: item.catTitle,
         });
       });
-
       const data = {
+        id: props.update_data._id,
         name: fields.kitchen_name,
         categories: JSON.stringify(categoryData),
         storeId: storeId,
       };
       console.log(data);
-      dispatch(add_new_kitchen_printer(data));
+      dispatch(update_kitchen_printer(data));
     }
   };
   const handleOnChange = (e) => {
@@ -126,7 +134,8 @@ const AddKitchenPrinter = (props) => {
       selectedCategory = categoryId.slice().map((item) => {
         return {
           ...item,
-          isSelected: !item.isSelected,
+          isSelected: !fields.checkAll === true ? true : false,
+          // !item.isSelected,
         };
       });
     } else {
@@ -140,7 +149,13 @@ const AddKitchenPrinter = (props) => {
         return item;
       });
     }
-
+    // setFields({
+    //   ...fields,
+    //   checkAll:
+    //     selectedCategory.map((item) => item.isSelected !== false).length === 0
+    //       ? true
+    //       : false,
+    // });
     setCategoryId(selectedCategory);
   };
   return (
@@ -252,9 +267,9 @@ const AddKitchenPrinter = (props) => {
                   variant="outline"
                   className="btn-pill pull-right"
                   color="success"
-                  onClick={saveKitchenPrinter}
+                  onClick={updateKitchenPrinter}
                 >
-                  SAVE
+                  Update
                 </CButton>
               </CCol>
             </CRow>
@@ -265,4 +280,4 @@ const AddKitchenPrinter = (props) => {
   );
 };
 
-export default AddKitchenPrinter;
+export default UpdateKitchenPrinter;

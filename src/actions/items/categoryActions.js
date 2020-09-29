@@ -1,5 +1,7 @@
 import {
   GET_CATEGORY_LIST,
+  TOGGLE_CATEGORY_DELETE_SELECT,
+  TOGGLE_ALL_CATEGORY_DELETE_SELECT,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -26,7 +28,7 @@ export const get_category_list = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -41,7 +43,7 @@ export const get_category_list = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,
@@ -50,5 +52,22 @@ export const get_category_list = (data) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+export const toggle_category_single_select = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_CATEGORY_DELETE_SELECT,
+      response: data,
+    });
+  };
+};
+
+export const toggle_category_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ALL_CATEGORY_DELETE_SELECT,
+      response: status,
+    });
   };
 };

@@ -4,6 +4,7 @@ import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_payments_single_select,
   toggle_payments_all_select,
+  update_row_data,
 } from "../../../actions/settings/paymentTypesActions";
 import { useDispatch } from "react-redux";
 
@@ -29,7 +30,6 @@ const PaymentTypesDatatable = (props) => {
 
   const selectRowProp = {
     mode: "checkbox",
-    clickToSelect: true,
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
   };
@@ -54,6 +54,9 @@ const PaymentTypesDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
+    onRowClick: function (row) {
+      dispatch(update_row_data(row));
+    },
   };
   return (
     <React.Fragment>
@@ -63,7 +66,7 @@ const PaymentTypesDatatable = (props) => {
         striped
         hover
         selectRow={selectRowProp}
-        option={options}
+        options={options}
       >
         <TableHeaderColumn
           dataField="_id"

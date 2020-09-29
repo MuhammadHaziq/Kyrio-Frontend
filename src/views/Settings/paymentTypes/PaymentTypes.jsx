@@ -11,6 +11,7 @@ import {
 import PaymentTypesDatatable from "../../../datatables/settings/paymentTypes/PaymentTypesDatatable";
 import { useSelector, useDispatch } from "react-redux";
 import AddNewPaymentType from "../../../components/settings/paymentTypes/AddNewPaymentType";
+import UpdatePaymentType from "../../../components/settings/paymentTypes/UpdatePaymentType";
 import {
   redirect_back_payment,
   get_payments_type,
@@ -22,6 +23,7 @@ import { CIcon } from "@coreui/icons-react";
 const PaymentTypes = () => {
   const [fadePaymentTypes, setPaymentTypes] = useState(true);
   const [fadeAddPaymentTypes, setFadeAddPaymentTypes] = useState(false);
+  const [fadeUpdatePaymentTypes, setFadeUpdatePaymentTypes] = useState(false);
   const [timeout] = useState(300);
   const [storeId, setStoreId] = useState();
 
@@ -31,6 +33,12 @@ const PaymentTypes = () => {
   );
   const payments_type = useSelector(
     (state) => state.settingReducers.paymentTypesReducer.payments_type
+  );
+  const update_redirect = useSelector(
+    (state) => state.settingReducers.paymentTypesReducer.update_redirect
+  );
+  const row_data = useSelector(
+    (state) => state.settingReducers.paymentTypesReducer.row_data
   );
   const auth = useSelector((state) => state.auth);
 
@@ -51,15 +59,25 @@ const PaymentTypes = () => {
       dispatch(get_payments_type(data));
     }
   }, [dispatch, storeId]);
+
+  useEffect(() => {
+    if (update_redirect === true && update_redirect !== undefined) {
+      setFadeUpdatePaymentTypes(true);
+      setPaymentTypes(false);
+      setFadeAddPaymentTypes(false);
+    }
+  }, [update_redirect]);
   const addNewPaymentType = () => {
     dispatch(redirect_back_payment(false));
     setPaymentTypes(false);
     setFadeAddPaymentTypes(true);
+    setFadeUpdatePaymentTypes(false);
   };
   const goBack = () => {
     dispatch(redirect_back_payment(true));
     setPaymentTypes(true);
     setFadeAddPaymentTypes(false);
+    setFadeUpdatePaymentTypes(false);
   };
   const deletePayments = () => {
     const deletedPaymentsId = payments_type
@@ -73,6 +91,17 @@ const PaymentTypes = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdatePaymentTypes ? (
+          <CFade timeout={timeout} in={fadeUpdatePaymentTypes}>
+            <UpdatePaymentType
+              goBack={goBack}
+              payment_types={payment_types}
+              update_data={row_data}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddPaymentTypes ? (
           <CFade timeout={timeout} in={fadeAddPaymentTypes}>
             <AddNewPaymentType goBack={goBack} payment_types={payment_types} />

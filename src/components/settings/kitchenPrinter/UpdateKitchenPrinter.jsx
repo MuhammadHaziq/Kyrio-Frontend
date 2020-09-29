@@ -61,9 +61,10 @@ const UpdateKitchenPrinter = (props) => {
         ...fields,
         kitchen_name: props.update_data.name || "",
         checkAll:
-          categories.filter((item) => item.isSelected).length === 0
-            ? false
-            : true,
+          categories.filter((item) => item.isSelected === true).length ===
+          props.category.length
+            ? true
+            : false,
       });
       setCategoryId(categories);
     }
@@ -133,7 +134,8 @@ const UpdateKitchenPrinter = (props) => {
       selectedCategory = categoryId.slice().map((item) => {
         return {
           ...item,
-          isSelected: !item.isSelected,
+          isSelected: !fields.checkAll === true ? true : false,
+          // !item.isSelected,
         };
       });
     } else {
@@ -147,7 +149,13 @@ const UpdateKitchenPrinter = (props) => {
         return item;
       });
     }
-
+    // setFields({
+    //   ...fields,
+    //   checkAll:
+    //     selectedCategory.map((item) => item.isSelected !== false).length === 0
+    //       ? true
+    //       : false,
+    // });
     setCategoryId(selectedCategory);
   };
   return (

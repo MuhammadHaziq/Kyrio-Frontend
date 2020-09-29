@@ -18,16 +18,11 @@ import {
   update_dining_option,
   get_store_dining,
   redirect_back_dining,
+  update_dining_row_data,
 } from "../../../actions/settings/diningOptionActions";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
-
-// const getItems = (data) =>
-//   data.map((item, index) => ({
-//     id: item._id,
-//     content: item.title,
-//   }));
-
+import UpdateDiningOption from "../../../components/settings/diningOption/UpdateDiningOption";
 // a little function to help us with reordering the result
 const reorder = (data, startIndex, endIndex) => {
   const result = data;
@@ -67,6 +62,7 @@ class DiningOptions extends Component {
       checked: [false, false],
       fadeDiningOption: true,
       fadeAddDiningOption: false,
+      fadeUpdateDiningOption: false,
       items: [],
       selectedStoreId: "",
     };
@@ -95,6 +91,16 @@ class DiningOptions extends Component {
       };
       this.props.get_store_dining(data);
     }
+    if (
+      prevProps.redirect_update !== this.props.redirect_update &&
+      this.props.redirect_update === true
+    ) {
+      this.setState({
+        fadeDiningOption: false,
+        fadeAddDiningOption: false,
+        fadeUpdateDiningOption: true,
+      });
+    }
   }
 
   onDragEnd(result) {
@@ -122,6 +128,7 @@ class DiningOptions extends Component {
     this.setState({
       fadeDiningOption: false,
       fadeAddDiningOption: true,
+      fadeUpdateDiningOption: false,
     });
     this.props.redirect_back_dining(false);
   };
@@ -129,6 +136,7 @@ class DiningOptions extends Component {
     this.setState({
       fadeDiningOption: true,
       fadeAddDiningOption: false,
+      fadeUpdateDiningOption: false,
     });
     this.props.redirect_back_dining(true);
   };
@@ -158,9 +166,25 @@ class DiningOptions extends Component {
     this.props.update_dining_option(data);
   };
   render() {
-    const { timeout, fadeDiningOption, fadeAddDiningOption } = this.state;
+    const {
+      timeout,
+      fadeDiningOption,
+      fadeAddDiningOption,
+      fadeUpdateDiningOption,
+    } = this.state;
     return (
       <React.Fragment>
+        {fadeUpdateDiningOption ? (
+          <CFade timeout={timeout} in={fadeUpdateDiningOption}>
+            <UpdateDiningOption
+              goBack={this.goBack}
+              store={this.props.store}
+              update_data={this.props.update_data}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddDiningOption ? (
           <CFade timeout={timeout} in={fadeAddDiningOption}>
             <AddDiningOption goBack={this.goBack} store={this.props.store} />
@@ -271,7 +295,15 @@ class DiningOptions extends Component {
                                           provided.draggableProps.style
                                         )}
                                       >
-                                        <CRow>
+                                        <CRow
+                                          onClick={() =>
+                                            this.props.update_dining_row_data(
+                                              this.props.dining_option_list.filter(
+                                                (ite) => ite._id === item.id
+                                              )[0]
+                                            )
+                                          }
+                                        >
                                           <CCol sm="6" className="pull-left">
                                             {item.content}
                                           </CCol>
@@ -322,6 +354,8 @@ const mapStateToProps = (state) => {
   return {
     dining_option_list:
       state.settingReducers.diningOptionReducer.dining_option_list,
+    redirect_update: state.settingReducers.diningOptionReducer.redirect_update,
+    update_data: state.settingReducers.diningOptionReducer.update_data,
     store: state.settingReducers.storeReducer.stores_list,
   };
 };
@@ -330,4 +364,5 @@ export default connect(mapStateToProps, {
   update_dining_option,
   get_store_dining,
   redirect_back_dining,
+  update_dining_row_data,
 })(DiningOptions);

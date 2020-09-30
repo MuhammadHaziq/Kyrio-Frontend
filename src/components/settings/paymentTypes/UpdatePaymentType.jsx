@@ -155,7 +155,7 @@ const UpdatePaymentType = (props) => {
     <CCard>
       <CCardHeader>
         <h4>
-          <strong>Create Payment Type</strong>
+          <strong>Update Payment Type</strong>
           <div className="card-header-actions">
             <CLink className="card-header-action" onClick={() => toggle(0)}>
               <CIcon

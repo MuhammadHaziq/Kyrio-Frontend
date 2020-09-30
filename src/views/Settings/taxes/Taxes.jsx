@@ -15,6 +15,7 @@ import TaxesDatatable from "../../../datatables/settings/taxes/TaxesDatatable";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddTax from "../../../components/settings/taxes/AddTax";
+import UpdateTax from "../../../components/settings/taxes/UpdateTax";
 import {
   delete_item_taxes,
   get_store_item_taxes,
@@ -25,6 +26,7 @@ const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeTaxes, setFadeTaxes] = useState(true);
   const [fadeAddTaxes, setFadeAddTaxes] = useState(false);
+  const [fadeUpdateTaxes, setFadeUpdateTaxes] = useState(false);
   const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
@@ -35,15 +37,25 @@ const Taxes = () => {
     dispatch(get_item_taxes());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (taxes.update_redirect !== undefined && taxes.update_redirect === true) {
+      setFadeTaxes(false);
+      setFadeAddTaxes(false);
+      setFadeUpdateTaxes(true);
+    }
+  }, [taxes.update_redirect]);
+
   const addNewTax = () => {
     dispatch(redirect_back_taxes(false));
     setFadeTaxes(false);
     setFadeAddTaxes(true);
+    setFadeUpdateTaxes(false);
   };
   const goBack = () => {
     dispatch(redirect_back_taxes(true));
     setFadeTaxes(true);
     setFadeAddTaxes(false);
+    setFadeUpdateTaxes(false);
   };
   const toggleCollapse = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -67,6 +79,13 @@ const Taxes = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdateTaxes ? (
+          <CFade timeout={timeout} in={fadeUpdateTaxes}>
+            <UpdateTax goBack={goBack} />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddTaxes ? (
           <CFade timeout={timeout} in={fadeAddTaxes}>
             <AddTax goBack={goBack} />

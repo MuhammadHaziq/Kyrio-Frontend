@@ -92,6 +92,8 @@ export const TOGGLE_TAXES_SELECT_ALL = "TOGGLE_TAXES_SELECT_ALL";
 export const INSERT_NEW_TAX = "INSERT_NEW_TAX";
 export const DELETE_ITEM_TAXES = "DELETE_ITEM_TAXES";
 export const REDIRECT_BACK_TAXES = "REDIRECT_BACK_TAXES";
+export const UPDATE_ROW_DATA_TAX = "UPDATE_ROW_DATA_TAX";
+export const UPDATE_TAX = "UPDATE_TAX";
 /**
  *  Taxes  End
  *    Start Kitchen Printer

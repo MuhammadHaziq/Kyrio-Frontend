@@ -16,6 +16,8 @@ import {
   DELETE_ITEM_TAXES,
   GET_CATEGORY_LIST,
   REDIRECT_BACK_TAXES,
+  UPDATE_ROW_DATA_TAX,
+  UPDATE_TAX,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -491,6 +493,15 @@ export const toggle_select_all = (status) => {
     dispatch({
       type: TOGGLE_TAXES_SELECT_ALL,
       response: status,
+    });
+  };
+};
+
+export const update_row_data_tax = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_ROW_DATA_TAX,
+      response: data,
     });
   };
 };

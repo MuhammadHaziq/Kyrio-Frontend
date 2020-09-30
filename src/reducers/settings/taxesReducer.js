@@ -13,6 +13,8 @@ import {
   INSERT_NEW_TAX,
   DELETE_ITEM_TAXES,
   REDIRECT_BACK_TAXES,
+  UPDATE_ROW_DATA_TAX,
+  UPDATE_TAX,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -23,6 +25,8 @@ const initialState = {
   tax_options: [],
   item_taxes: [],
   redirect_taxes: true,
+  update_redirect: false,
+  tax_row_data: {},
 };
 const taxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -30,6 +34,7 @@ const taxesReducer = (state = initialState, action) => {
     case REDIRECT_BACK_TAXES: {
       return Object.assign({}, state, {
         redirect_taxes: action.response,
+        update_redirect: false,
       });
     }
 
@@ -154,7 +159,7 @@ const taxesReducer = (state = initialState, action) => {
       let category_items = [];
       let tax_category_list = [];
       category_items = state.category_items.slice().map((item) => {
-        if (item._id == action.categoryItems.itemId) {
+        if (item._id === action.categoryItems.itemId) {
           return {
             ...item,
             isSelected: !item.isSelected,
@@ -164,20 +169,19 @@ const taxesReducer = (state = initialState, action) => {
       });
       const check_category_item_id = category_items.filter(
         (item) =>
-          item.category.categoryId == action.category.categoryId &&
-          item.isSelected == true
+          item.category.categoryId === action.category.categoryId &&
+          item.isSelected === true
       );
       tax_category_list = state.tax_category_list.slice().map((item) => {
-        if (item._id == action.category.categoryId) {
+        if (item._id === action.category.categoryId) {
           return {
             ...item,
-            isSelected: check_category_item_id.length == 0 ? false : true,
+            isSelected: check_category_item_id.length === 0 ? false : true,
           };
         }
         return item;
       });
-      if (action.categoryItems.length == 0 && action.category.length == 0) {
-        console.log("action", action);
+      if (action.categoryItems.length === 0 && action.category.length === 0) {
         category_items = state.category_items.slice().map((item) => {
           return {
             ...item,
@@ -198,6 +202,13 @@ const taxesReducer = (state = initialState, action) => {
       };
     }
 
+    case UPDATE_ROW_DATA_TAX: {
+      return Object.assign({}, state, {
+        tax_row_data: action.response,
+        update_redirect: true,
+        redirect_taxes: false,
+      });
+    }
     default:
       return { ...state };
   }

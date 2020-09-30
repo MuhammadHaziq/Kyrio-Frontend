@@ -148,16 +148,17 @@ const UpdateKitchenPrinter = (props) => {
         }
         return item;
       });
+      setFields({
+        ...fields,
+        checkAll:
+          selectedCategory.filter((item) => {
+            return item.isSelected !== false && item.isSelected;
+          }).length === props.category.length && props.category.length > 0
+            ? true
+            : false,
+      });
     }
-    setFields({
-      ...fields,
-      checkAll:
-        selectedCategory.filter((item) => {
-          return item.isSelected !== false && item.isSelected;
-        }).length === props.category.length && props.category.length > 0
-          ? true
-          : false,
-    });
+
     setCategoryId(selectedCategory);
   };
   return (
@@ -165,7 +166,7 @@ const UpdateKitchenPrinter = (props) => {
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Create Dining Option</strong>
+            <strong>Update Dining Option</strong>
           </h4>
         </CCardHeader>
         <CCollapse show={collapse[0]}>

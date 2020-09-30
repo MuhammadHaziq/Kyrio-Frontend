@@ -113,11 +113,13 @@ const ModalSelectItemsTax = (props) => {
                           }}
                         >
                           {taxes.tax_category_list.filter(
-                            (item) => item.isSelected == true
-                          ).length == 0
+                            (ite) =>
+                              ite.isSelected === true && ite._id === item._id
+                          ).length === 0
                             ? " No items selected"
                             : taxes.tax_category_list.filter(
-                                (item) => item.isSelected == true
+                                (ite) =>
+                                  ite.isSelected == true && item._id === ite._id
                               ).length + " items are selected"}
                         </div>
                       </CListGroupItem>

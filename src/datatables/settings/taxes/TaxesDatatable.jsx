@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import { useDispatch } from "react-redux";
 import {
   toggle_select_single,
   toggle_select_all,
+  update_row_data_tax,
 } from "../../../actions/settings/taxesActions";
 
 const TaxesDatatable = (props) => {
@@ -45,7 +46,6 @@ const TaxesDatatable = (props) => {
 
   const selectRowProp = {
     mode: "checkbox",
-    clickToSelect: true,
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
   };
@@ -70,6 +70,9 @@ const TaxesDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
+    onRowClick: function (row) {
+      dispatch(update_row_data_tax(row));
+    },
   };
   return (
     <React.Fragment>
@@ -81,7 +84,7 @@ const TaxesDatatable = (props) => {
         pagination
         search
         selectRow={selectRowProp}
-        option={options}
+        options={options}
       >
         <TableHeaderColumn
           dataField="_id"

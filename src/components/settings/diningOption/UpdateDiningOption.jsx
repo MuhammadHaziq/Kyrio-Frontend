@@ -147,15 +147,15 @@ const UpdateDiningOption = (props) => {
         }
         return item;
       });
+      setFields({
+        ...fields,
+        checkAll:
+          selectedStore.filter((item) => item.isSelected === true).length ===
+            props.store.length && props.store.length > 0
+            ? true
+            : false,
+      });
     }
-    setFields({
-      ...fields,
-      checkAll:
-        selectedStore.filter((item) => item.isSelected === true).length ===
-          props.store.length && props.store.length > 0
-          ? true
-          : false,
-    });
 
     setStoreId(selectedStore);
   };
@@ -164,7 +164,7 @@ const UpdateDiningOption = (props) => {
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Create Dining Option</strong>
+            <strong>Update Dining Option</strong>
           </h4>
         </CCardHeader>
 

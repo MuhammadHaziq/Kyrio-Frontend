@@ -31,8 +31,9 @@ import {
   get_taxes_option,
 } from "../../../actions/settings/taxesActions.js";
 import { get_dining_options } from "../../../actions/settings/diningOptionActions";
+
 import validator from "validator";
-const AddTax = (props) => {
+const UpdateTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
   const diningOptions = useSelector(
@@ -46,15 +47,11 @@ const AddTax = (props) => {
   const [fields, setFields] = useState({
     tax_name: "",
     tax_rate: "",
-    tax_type: "",
-    tax_option: "",
     checkedAll: true,
   });
   const [errors, setErrors] = useState({
     tax_name: false,
     tax_rate: false,
-    tax_type: false,
-    tax_option: false,
   });
   const dispatch = useDispatch();
   useEffect(() => {
@@ -95,10 +92,60 @@ const AddTax = (props) => {
 
   useEffect(() => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
-      setTaxOption(0);
-      setTaxType(taxes.tax_types[0]._id || "");
+      // setTaxOption(0);
+      // setTaxType(taxes.tax_types[0]._id || "");
+      setTaxOption(
+        taxes.tax_row_data.tax_option !== undefined &&
+          taxes.tax_row_data.tax_option !== null
+          ? taxes.tax_row_data.tax_option.id || 0
+          : 0
+      );
+      setTaxType(
+        taxes.tax_row_data.tax_type !== undefined &&
+          taxes.tax_row_data.tax_type !== null
+          ? taxes.tax_row_data.tax_type.id || ""
+          : ""
+      );
     }
-  }, [taxes.tax_types]);
+  }, [
+    taxes.tax_row_data.tax_option,
+    taxes.tax_row_data.tax_type,
+    taxes.tax_types,
+  ]);
+
+  useEffect(() => {
+    if (
+      taxes.tax_row_data !== undefined &&
+      Object.keys(taxes.tax_row_data).length > 0
+    ) {
+      if (store.stores_list !== undefined) {
+        var stores = store.stores_list;
+        (taxes.tax_row_data.stores || []).map((ite) => {
+          return (stores = stores.slice().map((item) => {
+            if (item._id === ite.storeId) {
+              return {
+                ...item,
+                isSelected: true,
+              };
+            }
+            return item;
+          }));
+        });
+        setStoreId(stores);
+      }
+
+      setFields({
+        ...fields,
+        tax_name: taxes.tax_row_data ? taxes.tax_row_data.title || "" : "",
+        tax_rate: taxes.tax_row_data ? taxes.tax_row_data.tax_rate || 0 : 0,
+        checkedAll:
+          stores.filter((item) => item.isSelected === true).length ===
+            store.stores_list.length && store.stores_list.length > 0
+            ? true
+            : false,
+      });
+    }
+  }, [store.stores_list, taxes.tax_row_data]);
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -179,7 +226,7 @@ const AddTax = (props) => {
       items: JSON.stringify(selectedCategoryItems),
     };
     console.log("sote_name", data);
-    dispatch(save_item_taxes(data));
+    // dispatch(save_item_taxes(data));
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -212,7 +259,8 @@ const AddTax = (props) => {
       selectedStore = storeId.slice().map((item) => {
         return {
           ...item,
-          isSelected: !item.isSelected,
+          isSelected: !fields.checkedAll === true ? true : false,
+          // !item.isSelected,
         };
       });
     } else {
@@ -225,6 +273,14 @@ const AddTax = (props) => {
         }
         return item;
       });
+      setFields({
+        ...fields,
+        checkedAll:
+          selectedStore.filter((item) => item.isSelected === true).length ===
+            store.stores_list.length && store.stores_list.length > 0
+            ? true
+            : false,
+      });
     }
 
     setStoreId(selectedStore);
@@ -235,7 +291,7 @@ const AddTax = (props) => {
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Create Tax</strong>
+            <strong>Update Tax</strong>
             <div className="card-header-actions">
               <CLink className="card-header-action" onClick={() => toggle(0)}>
                 <CIcon
@@ -299,7 +355,7 @@ const AddTax = (props) => {
                   onChange={typeHandleChange}
                   invalid={errors.taxTypeId}
                   onBlur={handleOnBlur}
-                  value={fields.taxTypeId}
+                  value={taxTypeId}
                 >
                   {taxes.tax_types.map((item, index) => {
                     return (
@@ -470,4 +526,4 @@ const AddTax = (props) => {
   );
 };
 
-export default AddTax;
+export default UpdateTax;

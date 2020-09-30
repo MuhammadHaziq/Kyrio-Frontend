@@ -46,13 +46,7 @@ const AddKitchenPrinter = (props) => {
           isSelected: true,
         };
       });
-      setFields({
-        ...fields,
-        checkAll:
-          categories.filter((item) => item.isSelected).length === 0
-            ? false
-            : true,
-      });
+
       setCategoryId(categories);
     }
   }, [props.category]);
@@ -126,7 +120,8 @@ const AddKitchenPrinter = (props) => {
       selectedCategory = categoryId.slice().map((item) => {
         return {
           ...item,
-          isSelected: !item.isSelected,
+          isSelected: !fields.checkAll === true ? true : false,
+          // !item.isSelected,
         };
       });
     } else {
@@ -140,6 +135,15 @@ const AddKitchenPrinter = (props) => {
         return item;
       });
     }
+    setFields({
+      ...fields,
+      checkAll:
+        selectedCategory.filter((item) => {
+          return item.isSelected !== false && item.isSelected;
+        }).length === props.category.length && props.category.length > 0
+          ? true
+          : false,
+    });
 
     setCategoryId(selectedCategory);
   };
@@ -194,9 +198,10 @@ const AddKitchenPrinter = (props) => {
                   onChange={categoryHandleChange}
                 />
                 <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
-                  {categoryId.filter((item) => item.isSelected).length === 0
-                    ? "Select All"
-                    : "UnSelect All"}
+                  {categoryId.filter((item) => item.isSelected !== true)
+                    .length === 0
+                    ? "UnSelect All"
+                    : "Select All"}
                 </CLabel>
               </CFormGroup>
               <CCol md="8">

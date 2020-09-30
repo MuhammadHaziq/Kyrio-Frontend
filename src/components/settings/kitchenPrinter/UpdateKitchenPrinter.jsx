@@ -61,8 +61,9 @@ const UpdateKitchenPrinter = (props) => {
         ...fields,
         kitchen_name: props.update_data.name || "",
         checkAll:
-          categories.filter((item) => item.isSelected === true).length ===
-          props.category.length
+          categories.filter((item) => {
+            return item.isSelected !== false && item.isSelected;
+          }).length === props.category.length && props.category.length > 0
             ? true
             : false,
       });
@@ -105,7 +106,6 @@ const UpdateKitchenPrinter = (props) => {
         categories: JSON.stringify(categoryData),
         storeId: storeId,
       };
-      console.log(data);
       dispatch(update_kitchen_printer(data));
     }
   };
@@ -149,13 +149,15 @@ const UpdateKitchenPrinter = (props) => {
         return item;
       });
     }
-    // setFields({
-    //   ...fields,
-    //   checkAll:
-    //     selectedCategory.map((item) => item.isSelected !== false).length === 0
-    //       ? true
-    //       : false,
-    // });
+    setFields({
+      ...fields,
+      checkAll:
+        selectedCategory.filter((item) => {
+          return item.isSelected !== false && item.isSelected;
+        }).length === props.category.length && props.category.length > 0
+          ? true
+          : false,
+    });
     setCategoryId(selectedCategory);
   };
   return (
@@ -209,9 +211,10 @@ const UpdateKitchenPrinter = (props) => {
                   onChange={categoryHandleChange}
                 />
                 <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
-                  {categoryId.filter((item) => item.isSelected).length === 0
-                    ? "Select All"
-                    : "UnSelect All"}
+                  {categoryId.filter((item) => item.isSelected !== true)
+                    .length === 0
+                    ? "UnSelect All"
+                    : "Select All"}
                 </CLabel>
               </CFormGroup>
               <CCol md="8">

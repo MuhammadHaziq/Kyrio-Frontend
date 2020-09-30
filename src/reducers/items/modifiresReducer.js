@@ -1,7 +1,8 @@
 import {
   GET_MODIFIRES_LIST,
-  TOGGLE_CATEGORY_DELETE_SELECT,
-  TOGGLE_ALL_CATEGORY_DELETE_SELECT,
+  DELETE_MODIFIRES,
+  TOGGLE_MODIFIRES_DELETE_SELECT,
+  TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -15,9 +16,20 @@ const modifiresReducer = (state = initialState, action) => {
         modifiers_list: action.response,
       });
     }
-    case TOGGLE_CATEGORY_DELETE_SELECT: {
+
+    case DELETE_MODIFIRES: {
+      let modifiers_list = state.modifiers_list;
+      for (const id of JSON.parse(action.response)) {
+        modifiers_list = modifiers_list.filter((item) => item._id !== id);
+      }
+      return {
+        ...state,
+        modifiers_list,
+      };
+    }
+    case TOGGLE_MODIFIRES_DELETE_SELECT: {
       return Object.assign({}, state, {
-        category_list: state.category_list.map((item) => {
+        modifiers_list: state.modifiers_list.map((item) => {
           if (item._id === action.response._id) {
             return Object.assign({}, item, {
               isDeleted: !item.isDeleted,
@@ -27,9 +39,9 @@ const modifiresReducer = (state = initialState, action) => {
         }),
       });
     }
-    case TOGGLE_ALL_CATEGORY_DELETE_SELECT: {
+    case TOGGLE_ALL_MODIFIRES_DELETE_SELECT: {
       return Object.assign({}, state, {
-        category_list: state.category_list.map((item) => {
+        modifiers_list: state.modifiers_list.map((item) => {
           return Object.assign({}, item, {
             isDeleted: action.response,
           });

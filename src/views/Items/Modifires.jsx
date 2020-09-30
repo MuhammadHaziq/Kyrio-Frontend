@@ -12,17 +12,15 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
-import { get_modifires_list } from "../../actions/items/modifiresActions";
+import {
+  get_modifires_list,
+  delete_modifire,
+} from "../../actions/items/modifiresActions";
 import ModifireList from "../../components/items/ModifireList";
-const Modifires = () => {
+const Modifires = (props) => {
   const dispatch = useDispatch();
 
-  const [storeId, setStoreId] = useState({
-    storeId: 0,
-    storeName: "Select Store",
-  });
   const [selectedStoreId, setSelectedStoreId] = useState();
-  const [sendCall, setSendCall] = useState(false);
 
   const auth = useSelector((state) => state.auth);
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -33,62 +31,16 @@ const Modifires = () => {
     if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {
       dispatch(get_modifires_list(auth.user.stores[0]._id));
     }
-  }, [auth]);
+  }, [auth, dispatch]);
 
   useEffect(() => {
     dispatch(get_stores());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (
-      store.stores_list !== undefined &&
-      store.stores_list.length > 0 &&
-      auth.user.stores.length > 0
-    ) {
-      const storeId = store.stores_list.filter((item) => {
-        return item._id === auth.user.stores[0]._id;
-      })[0];
-      const stores = {
-        storeId: storeId._id || "0",
-        storeName: storeId.title || "Select Store",
-      };
-      setStoreId(stores);
-    }
-  }, [store.stores_list]);
-
-  // useEffect(() => {
-  //   if (storeId !== undefined) {
-  //     searchFilterRecords();
-  //   }
-  // }, [sendCall]);
-
   const storeHandleChange = (e) => {
-    const stores = (store.stores_list || []).filter(
-      (item) => item._id === e.target.value
-    );
-    let storeData;
-    if (e.target.value === "0") {
-      storeData = {
-        storeId: 0,
-        storeName: "Select Store",
-      };
-    } else {
-      storeData = {
-        storeId: stores[0]._id,
-        storeName: stores[0].title,
-      };
-    }
-
-    setStoreId(storeData);
     setSelectedStoreId(e.target.value);
+    dispatch(get_modifires_list(e.target.value));
   };
-  // const searchModiferOnChange = () => {
-  //   let data;
-  //   data = {
-  //     storeId: selectedStoreId,
-  //   };
-  //   console.log(data);
-  // };
 
   const deleteItem = () => {
     const modifire_id = modifire.modifiers_list
@@ -96,6 +48,7 @@ const Modifires = () => {
       .map((item) => {
         return item._id;
       });
+    dispatch(delete_modifire(JSON.stringify(modifire_id)));
     console.log(modifire_id);
   };
 
@@ -111,13 +64,13 @@ const Modifires = () => {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
-                      class="c-icon c-icon-sm"
+                      className="c-icon c-icon-sm"
                       role="img"
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
                         points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        class="ci-primary"
+                        className="ci-primary"
                       ></polygon>
                     </svg>
                     ADD MODIFIRE
@@ -148,9 +101,13 @@ const Modifires = () => {
                       value={selectedStoreId}
                       onChange={storeHandleChange}
                     >
-                      <option value="0">Select Store</option>
+                      <option value="0">All Store</option>
                       {(store.stores_list || []).map((item) => {
-                        return <option value={item._id}>{item.title}</option>;
+                        return (
+                          <option value={item._id} key={item._id}>
+                            {item.title}
+                          </option>
+                        );
                       })}
                     </CSelect>
                   </CFormGroup>
@@ -160,7 +117,10 @@ const Modifires = () => {
             <CCardBody>
               <CRow>
                 <CCol sm="12" lg="12" md="12">
-                  <ModifireList modifiers_list={modifire.modifiers_list} />
+                  <ModifireList
+                    modifiers_list={modifire.modifiers_list}
+                    {...props}
+                  />
                 </CCol>
               </CRow>
             </CCardBody>

@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
   CCol,
   CRow,
   CFormGroup,
-  CFade,
-  CSelect,
+  CListGroup,
+  CListGroupItem,
   CInputCheckbox,
 } from "@coreui/react";
 // fake data generator
-
+import {
+  toggle_modifire_all_select,
+  toggle_modifire_single_select,
+} from "../../actions/items/modifiresActions";
 import { connect } from "react-redux";
 
 // a little function to help us with reordering the result
@@ -52,12 +51,7 @@ class ModifireList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: [false, false],
-      fadeModifireOption: true,
-      fadeAddModifireOption: false,
-      fadeUpdateModifireOption: false,
       items: [],
-      selectedStoreId: "",
       checkAll: false,
     };
     this.onDragEnd = this.onDragEnd.bind(this);
@@ -73,30 +67,21 @@ class ModifireList extends Component {
             return item.name;
           })
           .join(","),
+        isDeleted: item.isDeleted,
       }));
-      // isActive: item.isActive,
       this.setState({
         ...this.state,
         items: data,
-      });
-    }
-    if (prevState.selectedStoreId !== this.state.selectedStoreId) {
-      const data = {
-        storeId: this.state.selectedStoreId,
-      }; // this.props.get_store_dining(data);
-    }
-    if (
-      prevProps.redirect_update !== this.props.redirect_update &&
-      this.props.redirect_update === true
-    ) {
-      this.setState({
-        fadeModifireOption: false,
-        fadeAddModifireOption: false,
-        fadeUpdateModifireOption: true,
+        checkAll:
+          this.props.modifiers_list.filter((item) => {
+            return item.isDelected !== false && item.isDeleted;
+          }).length === this.props.modifiers_list.length &&
+          this.props.modifiers_list.length > 0
+            ? true
+            : false,
       });
     }
   }
-
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
@@ -118,51 +103,26 @@ class ModifireList extends Component {
   }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
-  addDiningOpt = () => {
-    this.setState({
-      fadeModifireOption: false,
-      fadeAddModifireOption: true,
-      fadeUpdateModifireOption: false,
-    });
-    this.props.redirect_back_dining(false);
-  };
-  goBack = () => {
-    this.setState({
-      fadeModifireOption: true,
-      fadeAddModifireOption: false,
-      fadeUpdateModifireOption: false,
-    });
-    this.props.redirect_back_dining(true);
-  };
-  storeHandleChange = (e) => {
+
+  selectAll = (e) => {
     this.setState({
       ...this.state,
-      selectedStoreId: e.target.value,
+      checkAll: !this.state.checkAll,
     });
+    this.props.toggle_modifire_all_select(!this.state.checkAll);
   };
-  diningHandleCheck = (id) => {
-    const items = this.state.items.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          isActive: !item.isActive,
-        };
-      }
-      return item;
-    });
-    this.setState({
-      ...this.state,
-      items,
-    });
-    const data = {
-      data: JSON.stringify(items),
-    };
-    console.log(data);
+  modifireCheckHandle = (e) => {
+    const row = this.props.modifiers_list.filter((item) => {
+      return item._id === e.target.value;
+    })[0];
+
+    this.props.toggle_modifire_single_select(row);
   };
+
   render() {
     return (
       <React.Fragment>
-        <CRow style={{ marginBottom: "1%" }}>
+        <CRow>
           <CCol xs="12">
             <CFormGroup inline className="pull-right">
               <CInputCheckbox
@@ -170,6 +130,7 @@ class ModifireList extends Component {
                 id={"checkAll"}
                 value={0}
                 checked={this.state.checkAll}
+                onChange={this.selectAll}
                 style={{
                   marginTop: "24px",
                   marginLeft: "25px",
@@ -196,53 +157,70 @@ class ModifireList extends Component {
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {this.state.items.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                      >
-                        <CRow onClick={() => console.log(item)}>
-                          <CCol sm="12">
-                            <CFormGroup
-                              inline
-                              key={index}
-                              className="pull-right"
+                <CRow>
+                  <CCol sm="12">
+                    <CListGroup>
+                      {this.state.items.map((item, index) => (
+                        <Draggable
+                          key={item.id}
+                          draggableId={item.id}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
                             >
-                              <CInputCheckbox
-                                name="modifer_id"
-                                id={"modifer_id" + item.id}
-                                value={item.id}
-                                checked={item.isActive}
-                                style={{ marginTop: "20px", marginLeft: "0px" }}
-                              />
-                            </CFormGroup>
-                            <p style={{ marginLeft: "25px" }}>
-                              <b>{item.content}</b>
-                              <span>
-                                <small
+                              <CListGroupItem action key={index}>
+                                <CFormGroup
+                                  inline
+                                  key={index}
+                                  className="pull-right"
+                                >
+                                  <CInputCheckbox
+                                    name="modifer_id"
+                                    id={"modifer_id" + item.id}
+                                    value={item.id}
+                                    checked={item.isDeleted}
+                                    style={{
+                                      marginTop: "18px",
+                                      marginLeft: "5px",
+                                    }}
+                                    onChange={this.modifireCheckHandle}
+                                  />
+                                </CFormGroup>
+                                <h6
+                                  className="d-flex w-100  justify-content-between"
                                   style={{
-                                    display: "grid",
-                                    marginLeft: "10px",
-                                    marginTop: "0px",
+                                    marginBottom: "0px",
+                                    marginLeft: "29px",
+                                    color: "#20202a",
+                                  }}
+                                >
+                                  <b>{item.content}</b>
+                                </h6>
+                                <small
+                                  className="mb-1"
+                                  style={{
+                                    marginLeft: "45px",
+                                    color: "#20202ad1",
                                   }}
                                 >
                                   {item.options}
                                 </small>
-                              </span>
-                            </p>
-                          </CCol>
-                        </CRow>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                              </CListGroupItem>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </CListGroup>
+                  </CCol>
+                </CRow>
                 {provided.placeholder}
               </div>
             )}
@@ -253,12 +231,9 @@ class ModifireList extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  return {
-    dining_option_list:
-      state.settingReducers.diningOptionReducer.dining_option_list,
-    redirect_update: state.settingReducers.diningOptionReducer.redirect_update,
-    update_data: state.settingReducers.diningOptionReducer.update_data,
-    store: state.settingReducers.storeReducer.stores_list,
-  };
+  return null;
 };
-export default connect(mapStateToProps, null)(ModifireList);
+export default connect(mapStateToProps, {
+  toggle_modifire_all_select,
+  toggle_modifire_single_select,
+})(ModifireList);

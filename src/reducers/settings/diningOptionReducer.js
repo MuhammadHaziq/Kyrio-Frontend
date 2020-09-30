@@ -2,6 +2,7 @@ import {
   GET_DINING_OPTION,
   ADD_NEW_DINING_OPTION,
   REDIRECT_BACK_DINING,
+  UPDATE_DINING_OPTION,
   UPDATE_ROW_DATA_DINING_OPTION,
 } from "../../constants/ActionTypes";
 
@@ -32,6 +33,19 @@ const diningOptionReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         save_dining_option: !state.save_store,
         dining_option_list: [action.response, ...state.dining_option_list],
+      });
+    }
+
+    case UPDATE_DINING_OPTION: {
+      return Object.assign({}, state, {
+        dining_option_list: state.dining_option_list.slice().map((item) => {
+          if (item._id === action.response._id) {
+            return action.response;
+          }
+          return item;
+        }),
+        redirect_update: false,
+        redirect_dining: true,
       });
     }
     case UPDATE_ROW_DATA_DINING_OPTION: {

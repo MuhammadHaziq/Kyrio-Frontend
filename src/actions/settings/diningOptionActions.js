@@ -2,6 +2,7 @@ import {
   GET_DINING_OPTION,
   ADD_NEW_DINING_OPTION,
   UPDATE_ROW_DATA_DINING_OPTION,
+  UPDATE_DINING_OPTION,
   MESSAGE,
   ERROR_MESSAGE,
   GET_DINING_TAX,
@@ -142,7 +143,10 @@ export const update_dining_option = (data) => {
       })
         .then((response) => {
           console.log(response);
-          // dispatch({type:GET_DINING_OPTION, response:response.data})
+          dispatch({
+            type: UPDATE_DINING_OPTION,
+            response: response.data.data,
+          });
           let msg = {
             open: true,
             message: `Dining Option Updated Successfully`,

@@ -109,7 +109,7 @@ const AddDiningOption = (props) => {
   };
   const storeHandleChange = (e) => {
     let selectedStore = [];
-    if (e.target.value === '0') {
+    if (e.target.value === "0") {
       setFields({
         ...fields,
         checkAll: !fields.checkAll,
@@ -117,7 +117,8 @@ const AddDiningOption = (props) => {
       selectedStore = storeId.slice().map((item) => {
         return {
           ...item,
-          isSelected: !item.isSelected,
+          isSelected: !fields.checkAll === true ? true : false,
+          // !item.isSelected,
         };
       });
     } else {
@@ -131,6 +132,14 @@ const AddDiningOption = (props) => {
         return item;
       });
     }
+    setFields({
+      ...fields,
+      checkAll:
+        selectedStore.filter((item) => item.isSelected === true).length ===
+          props.store.length && props.store.length > 0
+          ? true
+          : false,
+    });
 
     setStoreId(selectedStore);
   };
@@ -230,7 +239,7 @@ const AddDiningOption = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    {storeId.filter((item) => item.isSelected === false)
+                    {storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
                       : "Select All"}

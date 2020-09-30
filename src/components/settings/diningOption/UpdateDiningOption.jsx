@@ -19,7 +19,7 @@ import {
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { add_new_dining_option } from "../../../actions/settings/diningOptionActions.js";
+import { update_dining_option } from "../../../actions/settings/diningOptionActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
@@ -37,18 +37,6 @@ const UpdateDiningOption = (props) => {
   const [storeId, setStoreId] = useState([]);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (props.store !== undefined) {
-  //     const stores = props.store.slice().map((item) => {
-  //       return {
-  //         ...item,
-  //         isSelected: true,
-  //       };
-  //     });
-  //     setStoreId(stores);
-  //   }
-  // }, [props.store]);
-  //
   useEffect(() => {
     if (props.store !== undefined) {
       let stores = props.store;
@@ -68,7 +56,7 @@ const UpdateDiningOption = (props) => {
         dining_name: props.update_data.title,
         checkAll:
           stores.filter((item) => item.isSelected === true).length ===
-          props.store.length
+            props.store.length && props.store.length > 0
             ? true
             : false,
       });
@@ -116,10 +104,9 @@ const UpdateDiningOption = (props) => {
         store: JSON.stringify(storeData),
         isSelected: true,
         id: props.update_data._id,
-        // store: JSON.stringify(storeId),
       };
       console.log(data);
-      // dispatch(add_new_dining_option(data));
+      dispatch(update_dining_option(data));
     }
   };
   const handleOnChange = (e) => {
@@ -161,13 +148,14 @@ const UpdateDiningOption = (props) => {
         return item;
       });
     }
-    // setFields({
-    //   ...fields,
-    //   checkAll:
-    //     selectedStore.map((item) => item.isSelected !== false).length === 0
-    //       ? true
-    //       : false,
-    // });
+    setFields({
+      ...fields,
+      checkAll:
+        selectedStore.filter((item) => item.isSelected === true).length ===
+          props.store.length && props.store.length > 0
+          ? true
+          : false,
+    });
 
     setStoreId(selectedStore);
   };

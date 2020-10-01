@@ -30,15 +30,11 @@ import {
   get_taxes_type,
   get_taxes_option,
 } from "../../../actions/settings/taxesActions.js";
-import { get_dining_options } from "../../../actions/settings/diningOptionActions";
 
 import validator from "validator";
 const UpdateTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
-  const diningOptions = useSelector(
-    (state) => state.settingReducers.diningOptionReducer
-  );
   const [collapse, setCollapse] = useState([true, false]);
   const [taxTypeId, setTaxType] = useState("");
   const [taxOptionId, setTaxOption] = useState("");
@@ -64,14 +60,6 @@ const UpdateTax = (props) => {
     }
   }, [dispatch, taxes.tax_types]);
 
-  useEffect(() => {
-    if (
-      diningOptions.dining_option_list === undefined ||
-      diningOptions.dining_option_list.length === 0
-    ) {
-      dispatch(get_dining_options());
-    }
-  }, [dispatch, diningOptions.dining_option_list]);
   useEffect(() => {
     if (store.stores_list !== undefined) {
       const stores = store.stores_list.slice().map((item) => {
@@ -113,6 +101,28 @@ const UpdateTax = (props) => {
     taxes.tax_types,
   ]);
 
+  // useEffect(() => {
+  //   if (
+  //     taxes.tax_dining_list !== undefined &&
+  //     taxes.tax_dining_list.length > 0
+  //   ) {
+  //     // setTaxOption(0);
+  //     // setTaxType(taxes.tax_types[0]._id || "");
+  //     setTaxOption(
+  //       taxes.tax_row_data.tax_option !== undefined &&
+  //         taxes.tax_row_data.tax_option !== null
+  //         ? taxes.tax_row_data.tax_option.id || 0
+  //         : 0
+  //     );
+  //     setTaxType(
+  //       taxes.tax_row_data.tax_type !== undefined &&
+  //         taxes.tax_row_data.tax_type !== null
+  //         ? taxes.tax_row_data.tax_type.id || ""
+  //         : ""
+  //     );
+  //   }
+  // }, [taxes.tax_row_data.dinings, taxes.tax_dining_list]);
+  useEffect(() => {});
   useEffect(() => {
     if (
       taxes.tax_row_data !== undefined &&

@@ -22,6 +22,8 @@ import {
   redirect_back_taxes,
   get_item_taxes,
 } from "../../../actions/settings/taxesActions";
+import { get_dining_options } from "../../../actions/settings/diningOptionActions";
+
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeTaxes, setFadeTaxes] = useState(true);
@@ -32,11 +34,21 @@ const Taxes = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
-
+  const diningOptions = useSelector(
+    (state) => state.settingReducers.diningOptionReducer
+  );
   useEffect(() => {
     dispatch(get_item_taxes());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (
+      diningOptions.dining_option_list === undefined ||
+      diningOptions.dining_option_list.length === 0
+    ) {
+      dispatch(get_dining_options());
+    }
+  }, [dispatch, diningOptions.dining_option_list]);
   useEffect(() => {
     if (taxes.update_redirect !== undefined && taxes.update_redirect === true) {
       setFadeTaxes(false);

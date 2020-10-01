@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  CButton,
-  CCardBody,
-  CListGroup,
-  CListGroupItem,
-} from "@coreui/react";
+import { CButton, CCardBody, CListGroup, CListGroupItem } from "@coreui/react";
 import ModalSelectDiningOption from "./ModalSelectDiningOption";
 import ModalSelectItemsTax from "./ModalSelectItemsTax";
 import {
@@ -37,6 +32,27 @@ const TaxDiningOption = (props) => {
     setModalItems(!modalItems);
   };
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
+  // useEffect(() => {
+  //   if (Object.keys(taxes.tax_row_data).length > 0) {
+  //     if (
+  //       taxes.tax_row_data !== undefined &&
+  //       taxes.tax_row_data.dinings.length > 0
+  //     ) {
+  //       let diningData = [];
+  //       taxes.tax_row_data.dinings.map((ite) => {
+  //         const dining = (taxes.tax_dining_list || []).filter(
+  //           (item) => item._id === ite.diningId
+  //         );
+  //         return diningData.push({
+  //           diningId: dining[0]._id,
+  //           diningName: dining[0].title,
+  //         });
+  //       });
+  //       console.log(diningData);
+  //       dispatch(toggle_dinings(diningData));
+  //     }
+  //   }
+  // }, [dispatch, taxes.tax_row_data]);
   return (
     <React.Fragment>
       <ModalSelectDiningOption
@@ -63,8 +79,9 @@ const TaxDiningOption = (props) => {
                 size="sm"
                 onClick={() => setModalDining(!modalDining)}
               >
-                {taxes.tax_dining_list.filter((item) => item.isSelected === true)
-                  .length === 0
+                {taxes.tax_dining_list.filter(
+                  (item) => item.isSelected === true
+                ).length === 0
                   ? "SELECT"
                   : "EDIT"}
               </CButton>
@@ -96,8 +113,9 @@ const TaxDiningOption = (props) => {
               </CButton>
             </h5>
             <div style={{ color: "rgba(0,0,0,0.54)", marginTop: "-8px" }}>
-              {taxes.tax_category_list.filter((item) => item.isSelected === true)
-                .length === 0
+              {taxes.tax_category_list.filter(
+                (item) => item.isSelected === true
+              ).length === 0
                 ? " No items selected"
                 : taxes.tax_category_list.filter(
                     (item) => item.isSelected === true

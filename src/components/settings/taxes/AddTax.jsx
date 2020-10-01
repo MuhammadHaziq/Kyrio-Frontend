@@ -30,14 +30,13 @@ import {
   get_taxes_type,
   get_taxes_option,
 } from "../../../actions/settings/taxesActions.js";
-import { get_dining_options } from "../../../actions/settings/diningOptionActions";
+// import { get_dining_options } from "../../../actions/settings/diningOptionActions";
 import validator from "validator";
 const AddTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
-  const diningOptions = useSelector(
-    (state) => state.settingReducers.diningOptionReducer
-  );
+  // const diningOptions = useSelector((state) => state.settingReducers.diningOptionReducer);
+
   const [collapse, setCollapse] = useState([true, false]);
   const [taxTypeId, setTaxType] = useState("");
   const [taxOptionId, setTaxOption] = useState("");
@@ -67,14 +66,14 @@ const AddTax = (props) => {
     }
   }, [dispatch, taxes.tax_types]);
 
-  useEffect(() => {
-    if (
-      diningOptions.dining_option_list === undefined ||
-      diningOptions.dining_option_list.length === 0
-    ) {
-      dispatch(get_dining_options());
-    }
-  }, [dispatch, diningOptions.dining_option_list]);
+  // useEffect(() => {
+  //   if (
+  //     diningOptions.dining_option_list === undefined ||
+  //     diningOptions.dining_option_list.length === 0
+  //   ) {
+  //     dispatch(get_dining_options());
+  //   }
+  // }, [dispatch, diningOptions.dining_option_list]);
   useEffect(() => {
     if (store.stores_list !== undefined) {
       const stores = store.stores_list.slice().map((item) => {

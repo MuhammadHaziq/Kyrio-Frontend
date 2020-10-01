@@ -26,6 +26,7 @@ const ModalSelectDiningOption = (props) => {
     };
     dispatch(toggle_dinings(diningData));
   };
+
   return (
     <React.Fragment>
       <CModal show={props.show} onClose={props.toggle} closeOnBackdrop={false}>

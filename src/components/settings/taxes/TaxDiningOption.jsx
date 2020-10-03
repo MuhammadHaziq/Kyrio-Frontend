@@ -17,12 +17,18 @@ const TaxDiningOption = (props) => {
   const toggleDining = () => {
     setModalDining(!modalDining);
     const data = [];
-    dispatch(toggle_dinings(data));
+    if(Object.keys(taxes.tax_row_data).length  === 0) {
+      dispatch(toggle_dinings(data));
+
+    }
   };
   const toggleItems = () => {
     setModalItems(!modalItems);
     const data = [];
+    if(Object.keys(taxes.tax_row_data).length  === 0) {
     dispatch(toggle_category_item(data, data));
+    }
+
   };
 
   const doneDining = () => {
@@ -32,27 +38,46 @@ const TaxDiningOption = (props) => {
     setModalItems(!modalItems);
   };
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
-  // useEffect(() => {
-  //   if (Object.keys(taxes.tax_row_data).length > 0) {
-  //     if (
-  //       taxes.tax_row_data !== undefined &&
-  //       taxes.tax_row_data.dinings.length > 0
-  //     ) {
-  //       let diningData = [];
-  //       taxes.tax_row_data.dinings.map((ite) => {
-  //         const dining = (taxes.tax_dining_list || []).filter(
-  //           (item) => item._id === ite.diningId
-  //         );
-  //         return diningData.push({
-  //           diningId: dining[0]._id,
-  //           diningName: dining[0].title,
-  //         });
-  //       });
-  //       console.log(diningData);
-  //       dispatch(toggle_dinings(diningData));
-  //     }
-  //   }
-  // }, [dispatch, taxes.tax_row_data]);
+  useEffect(() => {
+    if (Object.keys(taxes.tax_row_data).length > 0) {
+      if (
+        taxes.tax_row_data !== undefined &&
+        taxes.tax_row_data.dinings.length > 0
+      ) {
+        let diningData = [];
+        taxes.tax_row_data.dinings.map((ite) => {
+          const dining = (taxes.tax_dining_list || []).filter(
+            (item) => item._id === ite.diningId
+          );
+          return diningData.push({
+            diningId: dining[0]._id,
+            diningName: dining[0].title,
+          });
+        });
+        console.log(diningData);
+        dispatch(toggle_dinings(diningData));
+      }
+      if (
+        taxes.tax_row_data !== undefined &&
+        taxes.tax_row_data.categories.length > 0
+      ) {
+        let categoryData = [];
+
+        (taxes.tax_row_data.categories||[]).map((ite) => {
+          const category = (taxes.tax_category_list || []).filter(
+            (item) => item._id === ite.categoryId
+          );
+          return categoryData.push({
+            categoryId: category[0]._id,
+            categoryName: category[0].catTitle,
+          });
+        });
+      dispatch(toggle_category(categoryData));
+      }
+
+    }
+
+  }, [dispatch, taxes.tax_row_data]);
   return (
     <React.Fragment>
       <ModalSelectDiningOption

@@ -29,6 +29,8 @@ import {
   get_tax_category_list,
   get_taxes_type,
   get_taxes_option,
+  remove_row_update_data,
+  get_catgeory_item
 } from "../../../actions/settings/taxesActions.js";
 
 import validator from "validator";
@@ -142,6 +144,10 @@ const UpdateTax = (props) => {
           }));
         });
         setStoreId(stores);
+        const data = {
+          storeId:JSON.stringify(stores.filter(item=> item.isSelected === true).map(item=> item._id))
+        }
+        dispatch(get_catgeory_item(data))
       }
 
       setFields({
@@ -163,6 +169,7 @@ const UpdateTax = (props) => {
   };
   const goBack = () => {
     props.goBack();
+    dispatch(remove_row_update_data());
   };
   const submitTaxForm = (e) => {
     e.preventDefault();

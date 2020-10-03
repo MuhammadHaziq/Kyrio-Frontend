@@ -94,6 +94,7 @@ export const DELETE_ITEM_TAXES = "DELETE_ITEM_TAXES";
 export const REDIRECT_BACK_TAXES = "REDIRECT_BACK_TAXES";
 export const UPDATE_ROW_DATA_TAX = "UPDATE_ROW_DATA_TAX";
 export const UPDATE_TAX = "UPDATE_TAX";
+export const REMOVE_UPDATE_ROW_DATA= 'REMOVE_UPDATE_ROW_DATA'
 /**
  *  Taxes  End
  *    Start Kitchen Printer

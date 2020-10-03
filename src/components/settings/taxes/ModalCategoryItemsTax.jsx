@@ -18,20 +18,32 @@ import { toggle_category_item } from "../../../actions/settings/taxesActions.js"
 const ModalCategoryItemsTax = (props) => {
   const dispatch = useDispatch();
   const [itemId, setItemId] = useState([]);
-
+const [categoryItems, setCategoryItems] =useState(props.category_items)
+useEffect(()=> {
+  setCategoryItems(props.category_items)
+}, [props.category_items])
   const categoryHandleChange = (e) => {
-    const category = props.category_items.filter(
+    const category = categoryItems.filter(
       (item) => item._id == e.target.value
     );
+    setCategoryItems(categoryItems.map(item=> {
+      if(item._id === e.target.value) {
+        return  {
+          ...item,
+          isSelected:!item.isSelected
+        }
+      }
+      return item
+    }))
     let category_item;
     category_item = {
       itemId: category[0]._id,
       itemName: category[0].name,
-      categoryId: category[0].category.categoryId,
+      categoryId: category[0].category.id,
     };
     const categoryData = {
-      categoryId: category[0].category.categoryId,
-      categoryName: category[0].category.categoryName,
+      categoryId: category[0].category.id,
+      categoryName: category[0].category.name,
     };
     dispatch(toggle_category_item(category_item, categoryData));
   };
@@ -41,7 +53,9 @@ const ModalCategoryItemsTax = (props) => {
       <CFormGroup row>
         <CCol md="12">
           <CListGroup>
-            {props.category_items.map((item) => (
+          {(categoryItems || []).length > 0 ?
+            (categoryItems||[]).map((item) => (
+
               <CListGroupItem>
                 <CFormGroup variant="custom-checkbox" inline>
                   <CInputCheckbox
@@ -60,8 +74,11 @@ const ModalCategoryItemsTax = (props) => {
                   </CLabel>
                 </CFormGroup>
               </CListGroupItem>
-            ))}
-          </CListGroup>
+            )) : <CListGroupItem>
+              No Reacord Found
+            </CListGroupItem>
+        }
+        </CListGroup>
         </CCol>
       </CFormGroup>
     </React.Fragment>

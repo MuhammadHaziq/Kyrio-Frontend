@@ -17,6 +17,7 @@ import { CIcon } from "@coreui/icons-react";
 import {
   toggle_category,
   get_catgeory_item,
+  // filter_category_item
 } from "../../../actions/settings/taxesActions.js";
 import ModalCategoryItemsTax from "./ModalCategoryItemsTax";
 const ModalSelectItemsTax = (props) => {
@@ -29,6 +30,7 @@ const ModalSelectItemsTax = (props) => {
   const [storeId, setStoreId] = useState();
   const [categoryFilter, setCategoryFilter] = useState();
   const [categoryId, setCategoryId] = useState();
+  const [category_items, setCategoryItems] = useState([])
   const categoryHandleChange = (e) => {
     const category = props.category.filter(
       (item) => item._id == e.target.value
@@ -56,9 +58,14 @@ const ModalSelectItemsTax = (props) => {
     setCategoryId(id);
     setFadeCategory(true);
     setFadeItems(false);
-    if (id != categoryId) {
-      dispatch(get_catgeory_item(data));
-    }
+    // if (id != categoryId) {
+      // const category_items =[]
+      const category_items = taxes.category_items.filter(item=> item.category !== null && item.category !== undefined ? item.category['id'] === id : item._id === id )
+      console.log('category_items', category_items)
+      setCategoryItems(category_items)
+      // dispatch(filter_category_item(data))
+      // dispatch(get_catgeory_item(data));
+    // }
   };
   useEffect(() => {
     setFadeCategory(false);
@@ -132,7 +139,7 @@ const ModalSelectItemsTax = (props) => {
             ""
           )}
           {!fadeItems ? (
-            <ModalCategoryItemsTax category_items={taxes.category_items} />
+            <ModalCategoryItemsTax category_items={category_items} />
           ) : (
             ""
           )}
@@ -158,3 +165,4 @@ const ModalSelectItemsTax = (props) => {
   );
 };
 export default ModalSelectItemsTax;
+// <ModalCategoryItemsTax category_items={taxes.category_items} />

@@ -18,6 +18,7 @@ import {
   REDIRECT_BACK_TAXES,
   UPDATE_ROW_DATA_TAX,
   UPDATE_TAX,
+  REMOVE_UPDATE_ROW_DATA
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -452,6 +453,8 @@ export const get_store_item_taxes = (data) => {
   };
 };
 
+
+
 export const toggle_dinings = (data) => {
   return (dispatch) => {
     dispatch({
@@ -502,6 +505,14 @@ export const update_row_data_tax = (data) => {
     dispatch({
       type: UPDATE_ROW_DATA_TAX,
       response: data,
+    });
+  };
+};
+
+export const remove_row_update_data = () => {
+  return dispatch => {;
+    dispatch({
+      type:REMOVE_UPDATE_ROW_DATA
     });
   };
 };

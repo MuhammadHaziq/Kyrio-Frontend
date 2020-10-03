@@ -14,7 +14,7 @@ import {
   DELETE_ITEM_TAXES,
   REDIRECT_BACK_TAXES,
   UPDATE_ROW_DATA_TAX,
-  UPDATE_TAX,
+  UPDATE_ITEM_TAX,
   REMOVE_UPDATE_ROW_DATA
 } from "../../constants/ActionTypes";
 
@@ -32,6 +32,7 @@ const initialState = {
 const taxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+
     case REDIRECT_BACK_TAXES: {
       return Object.assign({}, state, {
         redirect_taxes: action.response,
@@ -81,6 +82,7 @@ const taxesReducer = (state = initialState, action) => {
         item_taxes,
       };
     }
+
     case GET_TAXES_TYPE: {
       return Object.assign({}, state, {
         tax_types: action.response,
@@ -244,7 +246,7 @@ const taxesReducer = (state = initialState, action) => {
                 }
                 return item;
               }
-  return item;
+                return item;
             }
 
           } else {
@@ -302,6 +304,41 @@ const taxesReducer = (state = initialState, action) => {
         tax_category_list,
       };
     }
+
+    case UPDATE_ITEM_TAX: {
+      return Object.assign({}, state, {
+item_taxes:state.item_taxes.slice().map(item=> {
+  if(item._id === action.response._id){
+    return  action.response
+    }
+        return item
+      }),
+      update_redirect: false,
+      redirect_taxes: true,
+      tax_row_data:{},
+      tax_dining_list: state.tax_dining_list.map((item) => {
+        return Object.assign({}, item, {
+          isSelected: false,
+        });
+      }),
+      tax_category_list: state.tax_category_list.map((item) => {
+        return Object.assign({}, item, {
+          isSelected: false,
+        });
+      }),
+      tax_category_list: state.tax_category_list.map((item) => {
+        return Object.assign({}, item, {
+          isSelected: false,
+        });
+      }),
+      category_items: state.category_items.map((item) => {
+        return Object.assign({}, item, {
+          isSelected: false,
+        });
+      }),
+    })
+  }
+
 
     case UPDATE_ROW_DATA_TAX: {
       return Object.assign({}, state, {

@@ -61,17 +61,19 @@ const AddStore = (props) => {
         ...errors,
         store_name: validator.isEmpty(fields.store_name),
       });
-    } else if (fields.store_address === "") {
-      setErrors({
-        ...errors,
-        store_address: validator.isEmpty(fields.store_address),
-      });
-    } else if (fields.store_phone === "") {
-      setErrors({
-        ...errors,
-        store_phone: validator.isEmpty(fields.store_phone),
-      });
-    } else {
+    }
+    // else if (fields.store_address === "") {
+    //   setErrors({
+    //     ...errors,
+    //     store_address: validator.isEmpty(fields.store_address),
+    //   });
+    // } else if (fields.store_phone === "") {
+    //   setErrors({
+    //     ...errors,
+    //     store_phone: validator.isEmpty(fields.store_phone),
+    //   });
+    // }
+    else {
       const data = {
         title: fields.store_name,
         address: fields.store_address,
@@ -116,7 +118,7 @@ const AddStore = (props) => {
       <CCollapse show={collapse[0]}>
         <CCardBody>
           <CForm onSubmit={submitStoreForm}>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_name">Store Name</CLabel>
                 <CInputGroup>
@@ -142,7 +144,7 @@ const AddStore = (props) => {
                 </CInputGroup>
               </CCol>
             </CFormGroup>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_address">Store Addresss</CLabel>
                 <CInputGroup>
@@ -156,15 +158,15 @@ const AddStore = (props) => {
                     name="store_address"
                     placeholder="Store Address"
                     onChange={handleOnChange}
-                    invalid={errors.store_address}
-                    onBlur={handleOnBlur}
+                    // invalid={errors.store_address}
+                    // onBlur={handleOnBlur}
                     value={fields.store_address}
                   />
-                  <CInvalidFeedback>
+                  {/*<CInvalidFeedback>
                     {validator.isEmpty(fields.store_address)
                       ? "Please Enter The Store Address"
                       : ""}
-                  </CInvalidFeedback>
+                  </CInvalidFeedback>*/}
                 </CInputGroup>
               </CCol>
             </CFormGroup>
@@ -194,25 +196,26 @@ const AddStore = (props) => {
                     /\d/,
                   ]}
                   Component={InputAdapter}
-                  className={
-                    errors.store_phone === true
-                      ? "form-control is-invalid"
-                      : "form-control"
-                  }
+                  // className={
+                  //   errors.store_phone === true
+                  //     ? "form-control is-invalid"
+                  //     : "form-control"
+                  // }
+                  className={"form-control"}
                   name="store_phone"
                   onChange={handleOnChange}
-                  invalid={errors.store_phone}
-                  onBlur={handleOnBlur}
+                  // invalid={errors.store_phone}
+                  // onBlur={handleOnBlur}
                   value={fields.store_phone}
                 />
-                <CInvalidFeedback>
+                {/*<CInvalidFeedback>
                   {errors.store_phone ? "Please Enter The Store Phone" : ""}
-                </CInvalidFeedback>
+                </CInvalidFeedback>*/}
               </CInputGroup>
 
               <CFormText color="muted">ex. (999) 999-9999</CFormText>
             </CFormGroup>
-            <CFormGroup row="row">
+            <CFormGroup row={true}>
               <CCol md="12">
                 <CLabel htmlFor="store_description">Store Description</CLabel>
                 <CInputGroup>
@@ -222,15 +225,15 @@ const AddStore = (props) => {
                     rows="9"
                     placeholder="Store Description"
                     onChange={handleOnChange}
-                    invalid={errors.store_description}
-                    onBlur={handleOnBlur}
+                    // invalid={errors.store_description}
+                    // onBlur={handleOnBlur}
                     value={fields.store_description}
                   />
-                  <CInvalidFeedback>
+                  {/*<CInvalidFeedback>
                     {errors.store_description
                       ? "Please Enter The Store Description"
                       : ""}
-                  </CInvalidFeedback>
+                  </CInvalidFeedback>*/}
                 </CInputGroup>
               </CCol>
             </CFormGroup>

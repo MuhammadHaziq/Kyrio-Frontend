@@ -208,13 +208,13 @@ class DiningOptions extends Component {
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 512 512"
-                            class="c-icon c-icon-sm"
+                            className="c-icon c-icon-sm"
                             role="img"
                           >
                             <polygon
                               fill="var(--ci-primary-color, currentColor)"
                               points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                              class="ci-primary"
+                              className="ci-primary"
                             ></polygon>
                           </svg>
                           DINING OPTION
@@ -230,7 +230,7 @@ class DiningOptions extends Component {
                             value={this.state.selectedStoreId}
                             onChange={this.storeHandleChange}
                           >
-                            <option value="0">Select Store</option>
+                            <option value="0">All Stores</option>
                             {this.props.store.map((item, index) => {
                               return (
                                 <option value={item._id} key={index}>

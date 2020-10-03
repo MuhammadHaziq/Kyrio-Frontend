@@ -30,7 +30,8 @@ import {
   get_taxes_type,
   get_taxes_option,
   remove_row_update_data,
-  get_catgeory_item
+  get_catgeory_item,
+  update_item_tax
 } from "../../../actions/settings/taxesActions.js";
 
 import validator from "validator";
@@ -224,6 +225,7 @@ const UpdateTax = (props) => {
       (item) => item._id === taxOptionId
     );
     const data = {
+      id:taxes.tax_row_data._id||0,
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
       tax_type: JSON.stringify({
@@ -243,7 +245,7 @@ const UpdateTax = (props) => {
       items: JSON.stringify(selectedCategoryItems),
     };
     console.log("sote_name", data);
-    // dispatch(save_item_taxes(data));
+    dispatch(update_item_tax(data));
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;

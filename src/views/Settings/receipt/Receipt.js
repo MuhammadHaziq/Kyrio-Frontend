@@ -42,8 +42,8 @@ const Receipt = (props) => {
   const [isHovered, setIsHovered] = useState(false);
   const [printedReceiptHover, setPrintedReceiptHover] = useState(false);
   const [errors, setErrors] = useState({
-    header: false,
-    footer: false,
+    // header: false,
+    // footer: false,
     selectedLanguage: false,
   });
   // Create a reference to the hidden file input element
@@ -193,17 +193,18 @@ const Receipt = (props) => {
   };
 
   const saveReceipt = (e) => {
-    if (values.header === "") {
-      setErrors({
-        ...errors,
-        header: true,
-      });
-    } else if (values.footer === "") {
-      setErrors({
-        ...errors,
-        footer: true,
-      });
-    } else if (selectedLanguage === "0") {
+    // if (values.header === "") {
+    //   setErrors({
+    //     ...errors,
+    //     header: true,
+    //   });
+    // } else if (values.footer === "") {
+    //   setErrors({
+    //     ...errors,
+    //     footer: true,
+    //   });
+    // } else
+    if (selectedLanguage === "0") {
       setErrors({
         ...errors,
         selectedLanguage: true,
@@ -357,14 +358,14 @@ const Receipt = (props) => {
                           value={values.header}
                           placeholder="Name"
                           onChange={handleOnChange}
-                          invalid={errors.header}
-                          onBlur={handleOnBlur}
+                          // invalid={errors.header}
+                          // onBlur={handleOnBlur}
                         />
-                        <CInvalidFeedback>
+                        {/*<CInvalidFeedback>
                           {validator.isEmpty(values.header)
                             ? "Please Enter The Header Name"
                             : ""}
-                        </CInvalidFeedback>
+                        </CInvalidFeedback>*/}
                       </CInputGroup>
                     </CFormGroup>
                   </CCol>
@@ -379,14 +380,14 @@ const Receipt = (props) => {
                           placeholder="Name"
                           value={values.footer}
                           onChange={handleOnChange}
-                          invalid={errors.footer}
-                          onBlur={handleOnBlur}
+                          // invalid={errors.footer}
+                          // onBlur={handleOnBlur}
                         />
-                        <CInvalidFeedback>
+                        {/*<CInvalidFeedback>
                           {validator.isEmpty(values.footer)
                             ? "Please Enter The Footer  Name"
                             : ""}
-                        </CInvalidFeedback>
+                        </CInvalidFeedback>*/}
                       </CInputGroup>
                     </CFormGroup>
                   </CCol>

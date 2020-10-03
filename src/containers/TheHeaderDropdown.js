@@ -36,13 +36,13 @@ const TheHeaderDropdown = () => {
         >
           <strong>Settings</strong>
         </CDropdownItem>
-        <CDropdownItem>
+        <CDropdownItem tag='span'>
           <MdPerson />
-          <CHeaderNavLink to="/">Profile</CHeaderNavLink>
+          <CHeaderNavLink to="/"> Profile</CHeaderNavLink>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem>
-          <MdLock /> 
+        <CDropdownItem tag='span'> 
+          <MdLock />
           <CHeaderNavLink to="/login">Lock Account</CHeaderNavLink>
         </CDropdownItem>
       </CDropdownMenu>

@@ -60,6 +60,9 @@ const OpenTickets = () => {
     }
   }, [store_tickets]);
 
+useEffect(()=> {
+    dispatch(get_store_open_ticket('0'));
+},[])
   const storeHandleChange = (e) => {
     const storeObject = store.stores_list.filter((item) => {
       return item._id === e.target.value;
@@ -238,7 +241,7 @@ const OpenTickets = () => {
                           value={selectedStoreId}
                           onChange={storeHandleChange}
                         >
-                          <option value="0">Select Store</option>
+                          <option value="0">All Stores</option>
                           {store.stores_list.map((item, index) => {
                             return (
                               <option value={item._id} key={index}>

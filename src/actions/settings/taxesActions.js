@@ -17,7 +17,7 @@ import {
   GET_CATEGORY_LIST,
   REDIRECT_BACK_TAXES,
   UPDATE_ROW_DATA_TAX,
-  UPDATE_TAX,
+  UPDATE_ITEM_TAX,
   REMOVE_UPDATE_ROW_DATA
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
@@ -452,6 +452,56 @@ export const get_store_item_taxes = (data) => {
     }
   };
 };
+export const update_item_tax = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}tax/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_ITEM_TAX, response: response.data });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+}
 
 
 

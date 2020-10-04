@@ -15,7 +15,7 @@ import {
   REDIRECT_BACK_TAXES,
   UPDATE_ROW_DATA_TAX,
   UPDATE_ITEM_TAX,
-  REMOVE_UPDATE_ROW_DATA
+  REMOVE_UPDATE_ROW_DATA,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -32,7 +32,6 @@ const initialState = {
 const taxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
-
     case REDIRECT_BACK_TAXES: {
       return Object.assign({}, state, {
         redirect_taxes: action.response,
@@ -59,11 +58,6 @@ const taxesReducer = (state = initialState, action) => {
             isSelected: false,
           });
         }),
-        tax_category_list: state.tax_category_list.map((item) => {
-          return Object.assign({}, item, {
-            isSelected: false,
-          });
-        }),
         category_items: state.category_items.map((item) => {
           return Object.assign({}, item, {
             isSelected: false,
@@ -80,6 +74,8 @@ const taxesReducer = (state = initialState, action) => {
       return {
         ...state,
         item_taxes,
+        update_redirect: false,
+        redirect_taxes: true,
       };
     }
 
@@ -143,32 +139,32 @@ const taxesReducer = (state = initialState, action) => {
     case DINING_SELECT_STATUS: {
       return Object.assign({}, state, {
         tax_dining_list: state.tax_dining_list.map((item) => {
-          console.log('tate.tax_dining_list', item)
+          console.log("tate.tax_dining_list", item);
           if (action.response.length !== 0) {
             /**
-            *This code use when user update the taxes
-            *
-            */
-            if(Array.isArray(action.response) == true){
-                const ids = new Set(action.response.map(ite=>ite.diningId))
-                  if(ids.has(item._id )) {
-                    return Object.assign({}, item, {
-                      isSelected: !item.isSelected,
-                    });
-                  }
-                  return item
-                  /**
-                  *End This code use when user update the taxes
-                  *
-                  */
-            }else {
-              if (item._id === action.response.diningId) {
-              return Object.assign({}, item, {
-                isSelected: !item.isSelected,
-              });
-            }
+             *This code use when user update the taxes
+             *
+             */
+            if (Array.isArray(action.response) == true) {
+              const ids = new Set(action.response.map((ite) => ite.diningId));
+              if (ids.has(item._id)) {
+                return Object.assign({}, item, {
+                  isSelected: !item.isSelected,
+                });
+              }
               return item;
-          }
+              /**
+               *End This code use when user update the taxes
+               *
+               */
+            } else {
+              if (item._id === action.response.diningId) {
+                return Object.assign({}, item, {
+                  isSelected: !item.isSelected,
+                });
+              }
+              return item;
+            }
             // if (item._id === action.response.diningId) {
             //   return Object.assign({}, item, {
             //     isSelected: !item.isSelected,
@@ -185,59 +181,62 @@ const taxesReducer = (state = initialState, action) => {
     }
 
     case CATEGORY_SELECT_STATUS: {
-      let status = false
+      let status = false;
       return Object.assign({}, state, {
         tax_category_list: state.tax_category_list.map((item) => {
           if (action.response.length !== 0) {
             /*
-            *  Use For Update Screen
-            **/
-            if(Array.isArray(action.response)  === true) {
-              const ids = new Set(action.response.map(ite=>ite.categoryId))
-                if(ids.has(item._id )) {
-                  return Object.assign({}, item, {
-                    isSelected: !item.isSelected,
-                  });
-                }
-                return item
-                /**
-                *End This code use when user update the Categoires
-                */
-            }else {
+             *  Use For Update Screen
+             **/
+            if (Array.isArray(action.response) === true) {
+              const ids = new Set(action.response.map((ite) => ite.categoryId));
+              if (ids.has(item._id)) {
+                return Object.assign({}, item, {
+                  isSelected: !item.isSelected,
+                });
+              }
+              return item;
+              /**
+               *End This code use when user update the Categoires
+               */
+            } else {
               if (item._id === action.response.categoryId) {
-                status = !item.isSelected
+                status = !item.isSelected;
                 return Object.assign({}, item, {
                   isSelected: !item.isSelected,
                 });
               }
               return item;
             }
-
           } else {
             return Object.assign({}, item, {
               isSelected: false,
             });
           }
         }),
-        category_items:state.category_items.map(item=> {
+        category_items: state.category_items.map((item) => {
           if (action.response.length !== 0) {
             /*
-            *  Use For Update Screen
-            **/
-            if(Array.isArray(action.response) === true) {
+             *  Use For Update Screen
+             **/
+            if (Array.isArray(action.response) === true) {
               // const ids= action.response.map(item=> {return item.itemId  || []})
-              const ids= new Set(state.tax_row_data.items || []).map(item=> {return item.itemId})
-              if(ids.has(item._id )) {
+              const ids = new Set(state.tax_row_data.items || []).map(
+                (item) => {
+                  return item.itemId;
+                }
+              );
+              if (ids.has(item._id)) {
                 return Object.assign({}, item, {
                   isSelected: !item.isSelected,
                 });
               }
-              return item
+              return item;
               /**
-              *End This code use when user update the Categoires
-              */
-            }else {
-              if(item.category !== undefined && item.category !== null){
+               *End This code use when user update the Categoires
+               */
+            } else {
+              if (item.category !== undefined && item.category !== null) {
                 if (item.category.id === action.response.categoryId) {
                   return Object.assign({}, item, {
                     isSelected: status,
@@ -246,15 +245,14 @@ const taxesReducer = (state = initialState, action) => {
                 }
                 return item;
               }
-                return item;
+              return item;
             }
-
           } else {
             return Object.assign({}, item, {
               isSelected: false,
             });
           }
-        })
+        }),
       });
     }
 
@@ -272,7 +270,9 @@ const taxesReducer = (state = initialState, action) => {
       });
       const check_category_item_id = category_items.filter(
         (item) =>
-          item.category !== undefined && item.category !== null && item.category.id === action.category.categoryId &&
+          item.category !== undefined &&
+          item.category !== null &&
+          item.category.id === action.category.categoryId &&
           item.isSelected === true
       );
       tax_category_list = state.tax_category_list.slice().map((item) => {
@@ -307,55 +307,16 @@ const taxesReducer = (state = initialState, action) => {
 
     case UPDATE_ITEM_TAX: {
       return Object.assign({}, state, {
-item_taxes:state.item_taxes.slice().map(item=> {
-  if(item._id === action.response._id){
-    return  action.response
-    }
-        return item
-      }),
-      update_redirect: false,
-      redirect_taxes: true,
-      tax_row_data:{},
-      tax_dining_list: state.tax_dining_list.map((item) => {
-        return Object.assign({}, item, {
-          isSelected: false,
-        });
-      }),
-      tax_category_list: state.tax_category_list.map((item) => {
-        return Object.assign({}, item, {
-          isSelected: false,
-        });
-      }),
-      tax_category_list: state.tax_category_list.map((item) => {
-        return Object.assign({}, item, {
-          isSelected: false,
-        });
-      }),
-      category_items: state.category_items.map((item) => {
-        return Object.assign({}, item, {
-          isSelected: false,
-        });
-      }),
-    })
-  }
-
-
-    case UPDATE_ROW_DATA_TAX: {
-      return Object.assign({}, state, {
-        tax_row_data: action.response,
-        update_redirect: true,
-        redirect_taxes: false,
-      });
-    }
-    case REMOVE_UPDATE_ROW_DATA: {
-      return Object.assign({}, state, {
-        tax_row_data:{},
-        tax_dining_list: state.tax_dining_list.map((item) => {
-          return Object.assign({}, item, {
-            isSelected: false,
-          });
+        item_taxes: state.item_taxes.slice().map((item) => {
+          if (item._id === action.response._id) {
+            return action.response;
+          }
+          return item;
         }),
-        tax_category_list: state.tax_category_list.map((item) => {
+        update_redirect: false,
+        redirect_taxes: true,
+        tax_row_data: {},
+        tax_dining_list: state.tax_dining_list.map((item) => {
           return Object.assign({}, item, {
             isSelected: false,
           });
@@ -370,7 +331,36 @@ item_taxes:state.item_taxes.slice().map(item=> {
             isSelected: false,
           });
         }),
-      })
+      });
+    }
+
+    case UPDATE_ROW_DATA_TAX: {
+      return Object.assign({}, state, {
+        tax_row_data: action.response,
+        update_redirect: true,
+        redirect_taxes: false,
+      });
+    }
+    case REMOVE_UPDATE_ROW_DATA: {
+      return Object.assign({}, state, {
+        tax_row_data: {},
+        tax_dining_list: state.tax_dining_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+        tax_category_list: state.tax_category_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+      
+        category_items: state.category_items.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+      });
     }
     default:
       return { ...state };

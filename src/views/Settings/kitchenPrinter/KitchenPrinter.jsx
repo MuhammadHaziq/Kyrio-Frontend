@@ -12,6 +12,7 @@ import KitchenPrinterDatatable from "../../../datatables/settings/kitchenPrinter
 import { useSelector, useDispatch } from "react-redux";
 import AddKitchenPrinter from "../../../components/settings/kitchenPrinter/AddKitchenPrinter";
 import UpdateKitchenPrinter from "../../../components/settings/kitchenPrinter/UpdateKitchenPrinter";
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import {
   delete_kitchen_printer,
   redirect_back_kitchen,
@@ -22,6 +23,7 @@ import { get_category_list } from "../../../actions/items/categoryActions";
 import { CIcon } from "@coreui/icons-react";
 
 const KitchenPrinter = () => {
+  const [showAlert, setShowAlert] = useState(false);
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
   const [fadeUpdateKitchenPrinter, setFadeUpdateKitchenPrinter] = useState(
@@ -64,7 +66,7 @@ const KitchenPrinter = () => {
     setFadeKitchenPrinter(true);
     setFadeAddKitchenPrinter(false);
   };
-  const deleteTaxes = () => {
+  const delete_printer = () => {
     const deleteIds = kitchenPrinter.kitchen_printers
       .filter((item) => item.isDeleted === true)
       .map((item) => {
@@ -72,6 +74,11 @@ const KitchenPrinter = () => {
       });
     dispatch(delete_kitchen_printer(JSON.stringify(deleteIds)));
   };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -126,7 +133,7 @@ const KitchenPrinter = () => {
                             variant="outline"
                             color="danger"
                             className="btn-square pull-right ml-2"
-                            onClick={deleteTaxes}
+                            onClick={hideAlert}
                           >
                             <CIcon name="cil-trash" />
                             DELETE
@@ -149,6 +156,14 @@ const KitchenPrinter = () => {
         ) : (
           ""
         )}
+        <ConformationAlert
+          button_text="Delete"
+          heading="Delete Printer Group"
+          section="Are you sure you want to delete printer group"
+          buttonAction={delete_printer}
+          show_alert={showAlert}
+          hideAlert={setShowAlert}
+        />
       </div>
     </React.Fragment>
   );

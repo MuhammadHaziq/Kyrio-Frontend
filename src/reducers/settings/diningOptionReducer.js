@@ -4,6 +4,7 @@ import {
   REDIRECT_BACK_DINING,
   UPDATE_DINING_OPTION,
   UPDATE_ROW_DATA_DINING_OPTION,
+  DELETE_DINING_OPTION,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -44,6 +45,15 @@ const diningOptionReducer = (state = initialState, action) => {
           }
           return item;
         }),
+        redirect_update: false,
+        redirect_dining: true,
+      });
+    }
+    case DELETE_DINING_OPTION: {
+      return Object.assign({}, state, {
+        dining_option_list: state.dining_option_list.filter(
+          (item) => item._id !== action.response
+        ),
         redirect_update: false,
         redirect_dining: true,
       });

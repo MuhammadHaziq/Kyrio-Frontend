@@ -7,6 +7,7 @@ import {
   ERROR_MESSAGE,
   GET_DINING_TAX,
   REDIRECT_BACK_DINING,
+  DELETE_DINING_OPTION,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -154,6 +155,121 @@ export const update_dining_option = (data) => {
             error: false,
           };
           dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_dining_option_postion = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}dining/update_position`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          let msg = {
+            open: true,
+            message:
+              response.data.message || `Dining Option Updated Successfully`,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const delete_dining_option = (id) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "delete",
+        url: `${BaseUrl}dining/${id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: DELETE_DINING_OPTION, response: id });
+          let msg = {
+            open: true,
+            message:
+              response.data.message || `Dining Option Deleted Successfully`,
+            object: {},
+            error: false,
+          };
+            dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);

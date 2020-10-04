@@ -19,7 +19,11 @@ import {
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { update_dining_option } from "../../../actions/settings/diningOptionActions.js";
+import {
+  update_dining_option,
+  delete_dining_option,
+} from "../../../actions/settings/diningOptionActions.js";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
@@ -28,6 +32,7 @@ const UpdateDiningOption = (props) => {
   const dinings = useSelector(
     (state) => state.settingReducers.diningOptionReducer
   );
+  const [showAlert, setShowAlert] = useState(false);
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ dining_name: "", checkAll: true });
   const [errors, setErrors] = useState({
@@ -78,8 +83,8 @@ const UpdateDiningOption = (props) => {
   const goBack = () => {
     props.goBack();
   };
-  // const submitDiningForm = (e) => {
-  const submitDiningForm = () => {
+  // const updateDiningOptions = (e) => {
+  const updateDiningOptions = () => {
     // e.preventDefault();
     // if (storeId.length == 0) {
     if (storeId.filter((item) => item.isSelected === true).length === 0) {
@@ -158,6 +163,14 @@ const UpdateDiningOption = (props) => {
     }
 
     setStoreId(selectedStore);
+  };
+
+  const delete_dining = () => {
+    const id = props.update_data._id;
+    dispatch(delete_dining_option(id));
+  };
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
   };
   return (
     <React.Fragment>
@@ -292,10 +305,10 @@ const UpdateDiningOption = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="secondary"
-            onClick={goBack}
+            color="danger"
+            onClick={hideAlert}
           >
-            BACK
+            <CIcon name="cil-trash" /> DELETE
           </CButton>
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
@@ -303,10 +316,10 @@ const UpdateDiningOption = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="danger"
+            color="secondary"
             onClick={goBack}
           >
-            CANCEL
+            Back
           </CButton>
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
@@ -316,12 +329,20 @@ const UpdateDiningOption = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            onClick={submitDiningForm}
+            onClick={updateDiningOptions}
           >
-            SAVE
+            Update
           </CButton>
         </CCol>
       </CRow>
+      <ConformationAlert
+        button_text="Delete"
+        heading="Delete Dining Option"
+        section={`Are you sure you want to delete dining option (${fields.dining_name})`}
+        buttonAction={delete_dining}
+        show_alert={showAlert}
+        hideAlert={setShowAlert}
+      />
     </React.Fragment>
   );
 };

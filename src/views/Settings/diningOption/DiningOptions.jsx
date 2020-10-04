@@ -19,6 +19,7 @@ import {
   get_store_dining,
   redirect_back_dining,
   update_dining_row_data,
+  update_dining_option_postion,
 } from "../../../actions/settings/diningOptionActions";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
@@ -78,6 +79,7 @@ class DiningOptions extends Component {
         id: item._id,
         content: item.title,
         isActive: item.isActive,
+        position: item.position,
       }));
       // isActive: item.isActive,
       this.setState({
@@ -115,9 +117,13 @@ class DiningOptions extends Component {
       result.destination.index
     );
     const data = {
-      data: JSON.stringify(items),
+      data: JSON.stringify(
+        items.map((item, index) => {
+          return { id: item.id, position: index, title:item.content };
+        })
+      ),
     };
-    this.props.update_dining_option(data);
+    this.props.update_dining_option_postion(data);
     this.setState({
       items,
     });
@@ -365,4 +371,5 @@ export default connect(mapStateToProps, {
   get_store_dining,
   redirect_back_dining,
   update_dining_row_data,
+  update_dining_option_postion,
 })(DiningOptions);

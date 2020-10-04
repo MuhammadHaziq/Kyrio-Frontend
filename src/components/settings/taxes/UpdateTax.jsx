@@ -23,6 +23,7 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import TaxDiningOption from "./TaxDiningOption.jsx";
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import {
   save_item_taxes,
@@ -31,7 +32,8 @@ import {
   get_taxes_option,
   remove_row_update_data,
   get_catgeory_item,
-  update_item_tax
+  update_item_tax,
+  delete_item_taxes,
 } from "../../../actions/settings/taxesActions.js";
 // import ConformationAlert from '../conformationALert/ConformationAlert'
 import validator from "validator";
@@ -43,7 +45,7 @@ const UpdateTax = (props) => {
   const [taxOptionId, setTaxOption] = useState("");
   const [storeId, setStoreId] = useState([]);
   const [sChecked, setChecked] = useState(false);
-  const [showAlert, setShowAlert] =useState(false)
+  const [showAlert, setShowAlert] = useState(false);
   const [fields, setFields] = useState({
     tax_name: "",
     tax_rate: "",
@@ -54,7 +56,6 @@ const UpdateTax = (props) => {
     tax_name: false,
     tax_rate: false,
   });
-
 
   const dispatch = useDispatch();
 
@@ -130,9 +131,13 @@ const UpdateTax = (props) => {
         });
         setStoreId(stores);
         const data = {
-          storeId:JSON.stringify(stores.filter(item=> item.isSelected === true).map(item=> item._id))
-        }
-        dispatch(get_catgeory_item(data))
+          storeId: JSON.stringify(
+            stores
+              .filter((item) => item.isSelected === true)
+              .map((item) => item._id)
+          ),
+        };
+        dispatch(get_catgeory_item(data));
       }
 
       setFields({
@@ -156,7 +161,7 @@ const UpdateTax = (props) => {
     props.goBack();
     dispatch(remove_row_update_data());
   };
-  const submitTaxForm = (e) => {
+  const updateItemTax = (e) => {
     e.preventDefault();
     if (fields.tax_name === "") {
       setErrors({
@@ -209,7 +214,7 @@ const UpdateTax = (props) => {
       (item) => item._id === taxOptionId
     );
     const data = {
-      id:taxes.tax_row_data._id||0,
+      id: taxes.tax_row_data._id || 0,
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
       tax_type: JSON.stringify({
@@ -288,9 +293,13 @@ const UpdateTax = (props) => {
 
     setStoreId(selectedStore);
   };
-const hideAlert =() => {
-  setShowAlert(!showAlert)
-}
+  const delete_tax = () => {
+    const deleteIds = [taxes.tax_row_data._id || 0];
+    dispatch(delete_item_taxes(JSON.stringify(deleteIds)));
+  };
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
   return (
     <React.Fragment>
       <CCard>
@@ -497,10 +506,10 @@ const hideAlert =() => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="default"
-            onClick={goBack}
+            color="danger"
+            onClick={hideAlert}
           >
-            BACK
+            Delete
           </CButton>
         </CCol>
         <CCol sm="2" md="4" className="mb-3 mb-xl-0">
@@ -508,7 +517,7 @@ const hideAlert =() => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="danger"
+            color="default"
             onClick={goBack}
           >
             CANCEL
@@ -521,12 +530,20 @@ const hideAlert =() => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            onClick={submitTaxForm}
+            onClick={updateItemTax}
           >
-            SAVE
+            Update
           </CButton>
         </CCol>
       </CRow>
+      <ConformationAlert
+        button_text="Delete"
+        heading="Delete Item Tax"
+        section={`Are you sure you want to delete item tax (${fields.tax_name})`}
+        buttonAction={delete_tax}
+        show_alert={showAlert}
+        hideAlert={setShowAlert}
+      />
     </React.Fragment>
   );
 };

@@ -18,7 +18,7 @@ import {
   REDIRECT_BACK_TAXES,
   UPDATE_ROW_DATA_TAX,
   UPDATE_ITEM_TAX,
-  REMOVE_UPDATE_ROW_DATA
+  REMOVE_UPDATE_ROW_DATA,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -465,6 +465,13 @@ export const update_item_tax = (data) => {
       })
         .then((response) => {
           dispatch({ type: UPDATE_ITEM_TAX, response: response.data });
+          let msg = {
+            open: true,
+            message: "Tax Deleted Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -501,9 +508,7 @@ export const update_item_tax = (data) => {
       dispatch({ type: MESSAGE, data: msg });
     }
   };
-}
-
-
+};
 
 export const toggle_dinings = (data) => {
   return (dispatch) => {
@@ -560,9 +565,9 @@ export const update_row_data_tax = (data) => {
 };
 
 export const remove_row_update_data = () => {
-  return dispatch => {;
+  return (dispatch) => {
     dispatch({
-      type:REMOVE_UPDATE_ROW_DATA
+      type: REMOVE_UPDATE_ROW_DATA,
     });
   };
 };

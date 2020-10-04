@@ -17,18 +17,16 @@ const TaxDiningOption = (props) => {
   const toggleDining = () => {
     setModalDining(!modalDining);
     const data = [];
-    if(Object.keys(taxes.tax_row_data).length  === 0) {
+    if (Object.keys(taxes.tax_row_data).length === 0) {
       dispatch(toggle_dinings(data));
-
     }
   };
   const toggleItems = () => {
     setModalItems(!modalItems);
     const data = [];
-    if(Object.keys(taxes.tax_row_data).length  === 0) {
-    dispatch(toggle_category_item(data, data));
+    if (Object.keys(taxes.tax_row_data).length === 0) {
+      dispatch(toggle_category_item(data, data));
     }
-
   };
 
   const doneDining = () => {
@@ -63,7 +61,7 @@ const TaxDiningOption = (props) => {
       ) {
         let categoryData = [];
 
-        (taxes.tax_row_data.categories||[]).map((ite) => {
+        (taxes.tax_row_data.categories || []).map((ite) => {
           const category = (taxes.tax_category_list || []).filter(
             (item) => item._id === ite.categoryId
           );
@@ -72,11 +70,9 @@ const TaxDiningOption = (props) => {
             categoryName: category[0].catTitle,
           });
         });
-      dispatch(toggle_category(categoryData));
+        dispatch(toggle_category(categoryData));
       }
-
     }
-
   }, [dispatch, taxes.tax_row_data]);
   return (
     <React.Fragment>
@@ -115,9 +111,11 @@ const TaxDiningOption = (props) => {
               {taxes.tax_dining_list.filter((item) => item.isSelected === true)
                 .length === 0
                 ? "No dining options selected"
-                : taxes.tax_dining_list.filter(
-                    (item) => item.isSelected === true
-                  ).length + " dinings are selected"}
+                : (taxes.tax_dining_list || [])
+                    .map((item) => {
+                      return item.title;
+                    })
+                    .join(",")}
             </div>
           </CListGroupItem>
           <CListGroupItem>
@@ -154,3 +152,9 @@ const TaxDiningOption = (props) => {
 };
 
 export default TaxDiningOption;
+// {taxes.tax_dining_list.filter((item) => item.isSelected === true)
+//   .length === 0
+//   ? "No dining options selected"
+//   : taxes.tax_dining_list.filter(
+//       (item) => item.isSelected === true
+//     ).length + " dinings are selected"}

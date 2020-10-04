@@ -33,7 +33,7 @@ import {
   get_catgeory_item,
   update_item_tax
 } from "../../../actions/settings/taxesActions.js";
-
+// import ConformationAlert from '../conformationALert/ConformationAlert'
 import validator from "validator";
 const UpdateTax = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -43,19 +43,25 @@ const UpdateTax = (props) => {
   const [taxOptionId, setTaxOption] = useState("");
   const [storeId, setStoreId] = useState([]);
   const [sChecked, setChecked] = useState(false);
+  const [showAlert, setShowAlert] =useState(false)
   const [fields, setFields] = useState({
     tax_name: "",
     tax_rate: "",
     checkedAll: true,
   });
+
   const [errors, setErrors] = useState({
     tax_name: false,
     tax_rate: false,
   });
+
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(get_tax_category_list());
   }, [dispatch]);
+
   useEffect(() => {
     if (taxes.tax_types === undefined || taxes.tax_types.length === 0) {
       dispatch(get_taxes_type());
@@ -104,28 +110,6 @@ const UpdateTax = (props) => {
     taxes.tax_types,
   ]);
 
-  // useEffect(() => {
-  //   if (
-  //     taxes.tax_dining_list !== undefined &&
-  //     taxes.tax_dining_list.length > 0
-  //   ) {
-  //     // setTaxOption(0);
-  //     // setTaxType(taxes.tax_types[0]._id || "");
-  //     setTaxOption(
-  //       taxes.tax_row_data.tax_option !== undefined &&
-  //         taxes.tax_row_data.tax_option !== null
-  //         ? taxes.tax_row_data.tax_option.id || 0
-  //         : 0
-  //     );
-  //     setTaxType(
-  //       taxes.tax_row_data.tax_type !== undefined &&
-  //         taxes.tax_row_data.tax_type !== null
-  //         ? taxes.tax_row_data.tax_type.id || ""
-  //         : ""
-  //     );
-  //   }
-  // }, [taxes.tax_row_data.dinings, taxes.tax_dining_list]);
-  useEffect(() => {});
   useEffect(() => {
     if (
       taxes.tax_row_data !== undefined &&
@@ -304,7 +288,9 @@ const UpdateTax = (props) => {
 
     setStoreId(selectedStore);
   };
-
+const hideAlert =() => {
+  setShowAlert(!showAlert)
+}
   return (
     <React.Fragment>
       <CCard>

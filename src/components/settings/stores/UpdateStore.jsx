@@ -26,6 +26,7 @@ import {
   update_store,
   delete_store,
 } from "../../../actions/settings/storeActions.js";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 const UpdateStore = (props) => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -42,6 +43,8 @@ const UpdateStore = (props) => {
     store_description: false,
     store_phone: false,
   });
+  const [showAlert, setShowAlert] = useState(false);
+
   const dispatch = useDispatch();
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -122,6 +125,9 @@ const UpdateStore = (props) => {
     dispatch(delete_store(JSON.stringify(data)));
   };
 
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
   return (
     <CCard>
       <CCardHeader>
@@ -265,7 +271,7 @@ const UpdateStore = (props) => {
                   variant="outline"
                   className="btn-pill pull-right"
                   color="danger"
-                  onClick={delete_str}
+                  onClick={hideAlert}
                 >
                   <CIcon name="cil-trash" /> DELETE
                 </CButton>
@@ -302,6 +308,14 @@ const UpdateStore = (props) => {
           </CForm>
         </CCardBody>
       </CCollapse>
+      <ConformationAlert
+        button_text="Delete"
+        heading="Delete Store"
+        section="Are you sure you want to delete Store"
+        buttonAction={delete_str}
+        show_alert={showAlert}
+        hideAlert={setShowAlert}
+      />
     </CCard>
   );
 };

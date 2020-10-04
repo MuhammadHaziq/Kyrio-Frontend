@@ -18,7 +18,12 @@ import {
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { update_kitchen_printer, delete_kitchen_printer, update_redirect_states_after_pos_delete } from "../../../actions/settings/kitchenPrinterActions.js";
+import {
+  update_kitchen_printer,
+  delete_kitchen_printer,
+  update_redirect_states_after_pos_delete,
+} from "../../../actions/settings/kitchenPrinterActions.js";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
@@ -29,6 +34,7 @@ const UpdateKitchenPrinter = (props) => {
   );
   const [collapse, setCollapse] = useState([true, true]);
   const [storeId, setStoreId] = useState();
+  const [showAlert, setShowAlert] = useState(false);
   const [fields, setFields] = useState({
     kitchen_name: "",
     checkAll: true,
@@ -162,11 +168,13 @@ const UpdateKitchenPrinter = (props) => {
     setCategoryId(selectedCategory);
   };
   const delete_printer = () => {
-    const deleteIds = [props.update_data._id]
+    const deleteIds = [props.update_data._id];
     dispatch(delete_kitchen_printer(JSON.stringify(deleteIds)));
     dispatch(update_redirect_states_after_pos_delete());
-
-  }
+  };
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
   return (
     <React.Fragment>
       <CCard>
@@ -249,22 +257,22 @@ const UpdateKitchenPrinter = (props) => {
           <CCardFooter>
             <CRow>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-              <CButton
-                block
-                variant="outline"
-                className="btn-pill pull-right"
-                color="danger"
-                onClick={delete_printer}
-              >
-                <CIcon name="cil-trash" /> DELETE
-              </CButton>
+                <CButton
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
+                  color="danger"
+                  onClick={hideAlert}
+                >
+                  <CIcon name="cil-trash" /> DELETE
+                </CButton>
               </CCol>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                block
-                variant="outline"
-                className="btn-pill pull-right"
-                color="secondary"
+                  block
+                  variant="outline"
+                  className="btn-pill pull-right"
+                  color="secondary"
                   onClick={goBack}
                 >
                   CANCEL
@@ -285,6 +293,14 @@ const UpdateKitchenPrinter = (props) => {
             </CRow>
           </CCardFooter>
         </CCollapse>
+        <ConformationAlert
+          button_text="Delete"
+          heading="Delete Printer Group"
+          section="Are you sure you want to delete printer group"
+          buttonAction={delete_printer}
+          show_alert={showAlert}
+          hideAlert={setShowAlert}
+        />
       </CCard>
     </React.Fragment>
   );

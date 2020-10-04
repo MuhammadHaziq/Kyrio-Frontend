@@ -18,7 +18,7 @@ import {
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { update_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
+import { update_kitchen_printer, delete_kitchen_printer, update_redirect_states_after_pos_delete } from "../../../actions/settings/kitchenPrinterActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
@@ -161,12 +161,18 @@ const UpdateKitchenPrinter = (props) => {
 
     setCategoryId(selectedCategory);
   };
+  const delete_printer = () => {
+    const deleteIds = [props.update_data._id]
+    dispatch(delete_kitchen_printer(JSON.stringify(deleteIds)));
+    dispatch(update_redirect_states_after_pos_delete());
+
+  }
   return (
     <React.Fragment>
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Update Dining Option</strong>
+            <strong>Update Printer Group</strong>
           </h4>
         </CCardHeader>
         <CCollapse show={collapse[0]}>
@@ -243,22 +249,22 @@ const UpdateKitchenPrinter = (props) => {
           <CCardFooter>
             <CRow>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
-                  variant="outline"
-                  className="btn-pill pull-right"
-                  color="secondary"
-                  onClick={goBack}
-                >
-                  BACK
-                </CButton>
+              <CButton
+                block
+                variant="outline"
+                className="btn-pill pull-right"
+                color="danger"
+                onClick={delete_printer}
+              >
+                <CIcon name="cil-trash" /> DELETE
+              </CButton>
               </CCol>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
-                  block
-                  variant="outline"
-                  className="btn-pill pull-right"
-                  color="danger"
+                block
+                variant="outline"
+                className="btn-pill pull-right"
+                color="secondary"
                   onClick={goBack}
                 >
                   CANCEL

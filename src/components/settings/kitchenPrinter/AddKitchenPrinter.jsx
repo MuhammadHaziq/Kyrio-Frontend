@@ -152,7 +152,7 @@ const AddKitchenPrinter = (props) => {
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Create Dining Option</strong>
+            <strong>Create Printer Group</strong>
           </h4>
         </CCardHeader>
         <CCollapse show={collapse[0]}>

@@ -9,6 +9,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CInputGroupAppend,
   CFormText,
   CForm,
   CInvalidFeedback,
@@ -105,11 +106,6 @@ const AddLoyalty = (props) => {
           account of the customer
         </CLabel>
         <CInputGroup>
-          <CInputGroupPrepend>
-            <CInputGroupText>
-              <CIcon name="cil-dollar" />
-            </CInputGroupText>
-          </CInputGroupPrepend>
           <TextMask
             mask={[/\d/, /\d/, ".", /\d/]}
             Component={InputAdapter}
@@ -120,6 +116,11 @@ const AddLoyalty = (props) => {
             onBlur={handleOnBlur}
             value={fields.loyalty_amount}
           />
+          <CInputGroupAppend>
+            <CInputGroupText>
+              %
+            </CInputGroupText>
+          </CInputGroupAppend>
         </CInputGroup>
         <CFormText color="muted">ex. 99.9</CFormText>
       </CFormGroup>

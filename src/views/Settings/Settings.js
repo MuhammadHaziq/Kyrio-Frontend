@@ -181,18 +181,3 @@ const Settings = () => {
 };
 
 export default Settings;
-// {settingRoutes.map(({ path, name, Component }, index) => {
-//    return (
-//      <Route
-//        key={index}
-//        path={`${url}/${path}`}
-//        exact
-//        name={name}
-//        render={(props) => (
-//          <CFade>
-//            <Component {...props} />
-//          </CFade>
-//        )}
-//      />
-//    );
-//  })}

@@ -9,6 +9,7 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
   REDIRECT_BACK_KITCHEN,
+  UPDATE_KITCHEN_PRINTER_REDIRECT_STATES
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -274,6 +275,14 @@ export const toggle_kitchen_printer_select_all = (status) => {
     dispatch({
       type: TOGGLE_KITCHEN_PRINTER_SELECT_ALL,
       response: status,
+    });
+  };
+};
+
+export const update_redirect_states_after_pos_delete = () => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_KITCHEN_PRINTER_REDIRECT_STATES,
     });
   };
 };

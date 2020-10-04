@@ -7,6 +7,7 @@ import {
   REDIRECT_BACK_KITCHEN,
   SELECT_UPDATE_ROW,
   UPDATE_KICTCH_PRINTER,
+  UPDATE_KITCHEN_PRINTER_REDIRECT_STATES,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -88,6 +89,12 @@ const kitchenPrinterReducer = (state = initialState, action) => {
         update_redirect: true,
         redirect_kitchen: false,
       });
+    }
+    case UPDATE_KITCHEN_PRINTER_REDIRECT_STATES: {
+      return Object.assign({}, state, {
+        update_redirect: false,
+        redirect_kitchen: true,
+      })
     }
     default:
       return { ...state };

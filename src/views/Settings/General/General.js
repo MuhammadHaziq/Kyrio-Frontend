@@ -31,9 +31,12 @@ import validator from "validator";
 import { useSelector, useDispatch } from "react-redux";
 import parse from "html-react-parser";
 import { toggle_feature_module } from "../../../actions/settings/featuresActions";
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+
 const General = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const [showAlert, setShowAlert] = useState(false);
   const [collapsed, setCollapsed] = React.useState([true, true]);
   const [sChecked, setChecked] = React.useState(user.roleData.features);
   const [formState, setFormState] = useState({
@@ -74,12 +77,36 @@ const General = () => {
         feature_id: item._id,
       };
     });
+
     console.log("features", features);
     const data = {
       features: JSON.stringify(features),
     };
     dispatch(toggle_feature_module(data));
   };
+  // const checkAlertFeatures = () => {
+  //   const filterRecord = (sChecked || []).filter(
+  //     (item) =>
+  //       item.enable == false &&
+  //       item.featureName.toUpperCase() === "Kitchen printers".toUpperCase()
+  //   );
+  //   const filterMainRecord = (user.roleData.features || []).filter(
+  //     (item) =>
+  //       item.enable == false &&
+  //       item.featureName.toUpperCase() === "Kitchen printers".toUpperCase()
+  //   );
+  //   console.log(filterRecord)
+  //   console.log(filterMainRecord)
+  //
+  //   if (filterRecord.length !== filterMainRecord.length) {
+  //     setShowAlert(!showAlert);
+  //   }
+    // console.log("features", features);
+    // const data = {
+    //   features: JSON.stringify(features),
+    // };
+    // dispatch(toggle_feature_module(data));
+  // };
 
   const handleLanguageChange = (event) => {
     console.log(sChecked);
@@ -281,6 +308,14 @@ const General = () => {
           </CButton>
         </CCol>
       </CRow>
+      <ConformationAlert
+        button_text="Disable"
+        heading="Disable kitchen printers"
+        section={`Are you sure you want to disable kitchen printers? All settings of the kitchen printers will be lost.`}
+        buttonAction={saveFeatures}
+        show_alert={showAlert}
+        hideAlert={setShowAlert}
+      />
     </div>
   );
 };

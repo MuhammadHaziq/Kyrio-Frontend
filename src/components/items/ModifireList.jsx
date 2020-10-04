@@ -145,7 +145,7 @@ class ModifireList extends Component {
               }}
             >
               {" "}
-              Modifire
+              Modifier
             </h4>
           </CCol>
         </CRow>

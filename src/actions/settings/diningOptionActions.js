@@ -136,7 +136,7 @@ export const update_dining_option = (data) => {
     try {
       axios({
         method: "patch",
-        url: `${BaseUrl}dining`,
+        url: `${BaseUrl}dining/`,
         data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
@@ -151,6 +151,66 @@ export const update_dining_option = (data) => {
           let msg = {
             open: true,
             message: `Dining Option Updated Successfully`,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_dining_availablity = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}dining/update_availabilty`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+
+          let msg = {
+            open: true,
+            message:
+              response.data.message ||
+              `Dining Option Availablity Updated Successfully`,
             object: {},
             error: false,
           };
@@ -269,7 +329,7 @@ export const delete_dining_option = (id) => {
             object: {},
             error: false,
           };
-            dispatch({ type: MESSAGE, data: msg });
+          dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);

@@ -12,6 +12,8 @@ import PaymentTypesDatatable from "../../../datatables/settings/paymentTypes/Pay
 import { useSelector, useDispatch } from "react-redux";
 import AddNewPaymentType from "../../../components/settings/paymentTypes/AddNewPaymentType";
 import UpdatePaymentType from "../../../components/settings/paymentTypes/UpdatePaymentType";
+import UpdatePaymentTypeCash from "../../../components/settings/paymentTypes/UpdatePaymentTypeCash";
+
 import {
   redirect_back_payment,
   get_payments_type,
@@ -92,13 +94,23 @@ const PaymentTypes = () => {
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeUpdatePaymentTypes ? (
-          <CFade timeout={timeout} in={fadeUpdatePaymentTypes}>
-            <UpdatePaymentType
-              goBack={goBack}
-              payment_types={payment_types}
-              update_data={row_data}
-            />
-          </CFade>
+          row_data.name.toUpperCase() === "Cash".toUpperCase() ? (
+            <CFade timeout={timeout} in={fadeUpdatePaymentTypes}>
+              <UpdatePaymentTypeCash
+                goBack={goBack}
+                payment_types={payment_types}
+                update_data={row_data}
+              />
+            </CFade>
+          ) : (
+            <CFade timeout={timeout} in={fadeUpdatePaymentTypes}>
+              <UpdatePaymentType
+                goBack={goBack}
+                payment_types={payment_types}
+                update_data={row_data}
+              />
+            </CFade>
+          )
         ) : (
           ""
         )}

@@ -37,10 +37,11 @@ const UpdateKitchenPrinter = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [fields, setFields] = useState({
     kitchen_name: "",
-    noCategory: true,
+    checkAll: true,
   });
   const [errors, setErrors] = useState({
     kitchen_name_error: false,
+    checkAll_error: false,
   });
   const [categoryId, setCategoryId] = useState([]);
 
@@ -65,9 +66,10 @@ const UpdateKitchenPrinter = (props) => {
       setFields({
         ...fields,
         kitchen_name: props.update_data.name || "",
-        noCategory:
-          props.update_data.categories.filter((item) => item.categoryId === "0")
-            .length === 1
+        checkAll:
+          categories.filter((item) => {
+            return item.isSelected !== false && item.isSelected;
+          }).length === props.category.length && props.category.length > 0
             ? true
             : false,
       });
@@ -104,12 +106,6 @@ const UpdateKitchenPrinter = (props) => {
           categoryName: item.catTitle,
         });
       });
-      if (fields.noCategory === true) {
-        categoryData.push({
-          categoryId: "0",
-          categoryName: "No Category",
-        });
-      }
       const data = {
         id: props.update_data._id,
         name: fields.kitchen_name,
@@ -139,7 +135,14 @@ const UpdateKitchenPrinter = (props) => {
     if (e.target.value === "0") {
       setFields({
         ...fields,
-        noCategory: !fields.noCategory,
+        checkAll: !fields.checkAll,
+      });
+      selectedCategory = categoryId.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: !fields.checkAll === true ? true : false,
+          // !item.isSelected,
+        };
       });
     } else {
       selectedCategory = categoryId.slice().map((item) => {
@@ -151,8 +154,18 @@ const UpdateKitchenPrinter = (props) => {
         }
         return item;
       });
-      setCategoryId(selectedCategory);
+      setFields({
+        ...fields,
+        checkAll:
+          selectedCategory.filter((item) => {
+            return item.isSelected !== false && item.isSelected;
+          }).length === props.category.length && props.category.length > 0
+            ? true
+            : false,
+      });
     }
+
+    setCategoryId(selectedCategory);
   };
   const delete_printer = () => {
     const deleteIds = [props.update_data._id];
@@ -209,31 +222,36 @@ const UpdateKitchenPrinter = (props) => {
                   name="categoryId"
                   id={"categoryId"}
                   value={0}
-                  checked={fields.noCategory}
+                  checked={fields.checkAll}
                   onChange={categoryHandleChange}
                 />
                 <CLabel variant="custom-checkbox" htmlFor={"categoryId"}>
-                  No Category
+                  {categoryId.filter((item) => item.isSelected !== true)
+                    .length === 0
+                    ? "UnSelect All"
+                    : "Select All"}
                 </CLabel>
               </CFormGroup>
-              {categoryId.map((item, index) => (
-                <CFormGroup variant="custom-checkbox" inline key={index}>
-                  <CInputCheckbox
-                    custom
-                    name="categoryId"
-                    id={"categoryId" + item._id}
-                    value={item._id}
-                    checked={item.isSelected}
-                    onChange={categoryHandleChange}
-                  />
-                  <CLabel
-                    variant="custom-checkbox"
-                    htmlFor={"categoryId" + item._id}
-                  >
-                    {item.catTitle}
-                  </CLabel>
-                </CFormGroup>
-              ))}
+              <CCol md="8">
+                {categoryId.map((item, index) => (
+                  <CFormGroup variant="custom-checkbox" inline key={index}>
+                    <CInputCheckbox
+                      custom
+                      name="categoryId"
+                      id={"categoryId" + item._id}
+                      value={item._id}
+                      checked={item.isSelected}
+                      onChange={categoryHandleChange}
+                    />
+                    <CLabel
+                      variant="custom-checkbox"
+                      htmlFor={"categoryId" + item._id}
+                    >
+                      {item.catTitle}
+                    </CLabel>
+                  </CFormGroup>
+                ))}
+              </CCol>
             </CCol>
           </CCardBody>
           <CCardFooter>

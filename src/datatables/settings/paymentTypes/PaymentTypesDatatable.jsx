@@ -27,11 +27,16 @@ const PaymentTypesDatatable = (props) => {
       dispatch(toggle_payments_all_select(false));
     }
   };
-
+  var disableId = (props.payments || [])
+    .filter((item) => item.name.toUpperCase() === "Cash".toUpperCase())
+    .map((item) => {
+      return item._id;
+    })[0];
   const selectRowProp = {
     mode: "checkbox",
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
+    unselectable: disableId || 0,
   };
   /**
    *
@@ -55,7 +60,11 @@ const PaymentTypesDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      dispatch(update_row_data(row));
+      if (row.name.toUpperCase() === "Cash".toUpperCase()) {
+        dispatch(update_row_data(row));
+      } else {
+        dispatch(update_row_data(row));
+      }
     },
   };
   return (

@@ -73,6 +73,7 @@ const KitchenPrinter = () => {
         return item._id;
       });
     dispatch(delete_kitchen_printer(JSON.stringify(deleteIds)));
+    setShowAlert(!showAlert);
   };
 
   const hideAlert = () => {

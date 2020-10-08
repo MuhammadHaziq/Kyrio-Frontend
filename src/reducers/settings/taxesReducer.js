@@ -354,7 +354,7 @@ const taxesReducer = (state = initialState, action) => {
             isSelected: false,
           });
         }),
-      
+
         category_items: state.category_items.map((item) => {
           return Object.assign({}, item, {
             isSelected: false,

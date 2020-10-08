@@ -30,7 +30,7 @@ const ModalSelectItemsTax = (props) => {
   const [storeId, setStoreId] = useState();
   const [categoryFilter, setCategoryFilter] = useState();
   const [categoryId, setCategoryId] = useState();
-  const [category_items, setCategoryItems] = useState([])
+  const [category_items, setCategoryItems] = useState([]);
   const categoryHandleChange = (e) => {
     const category = props.category.filter(
       (item) => item._id == e.target.value
@@ -59,12 +59,16 @@ const ModalSelectItemsTax = (props) => {
     setFadeCategory(true);
     setFadeItems(false);
     // if (id != categoryId) {
-      // const category_items =[]
-      const category_items = taxes.category_items.filter(item=> item.category !== null && item.category !== undefined ? item.category['id'] === id : item._id === id )
-      console.log('category_items', category_items)
-      setCategoryItems(category_items)
-      // dispatch(filter_category_item(data))
-      // dispatch(get_catgeory_item(data));
+    // const category_items =[]
+    const category_items = taxes.category_items.filter((item) =>
+      item.category !== null && item.category !== undefined
+        ? item.category["id"] === id
+        : item._id === id
+    );
+    console.log("category_items", category_items);
+    setCategoryItems(category_items);
+    // dispatch(filter_category_item(data))
+    // dispatch(get_catgeory_item(data));
     // }
   };
   useEffect(() => {
@@ -77,7 +81,7 @@ const ModalSelectItemsTax = (props) => {
         show={props.show}
         onClose={props.toggle}
         closeOnBackdrop={false}
-        size="md"
+        size="lg"
       >
         <CModalHeader closeButton>
           <h4>Select Items</h4>
@@ -88,8 +92,8 @@ const ModalSelectItemsTax = (props) => {
               <CFormGroup row>
                 <CCol md="12">
                   <CListGroup>
-                    {props.category.map((item) => (
-                      <CListGroupItem>
+                    {props.category.map((item, index) => (
+                      <CListGroupItem key={index}>
                         <CFormGroup variant="custom-checkbox" inline>
                           <CInputCheckbox
                             custom

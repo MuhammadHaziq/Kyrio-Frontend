@@ -92,12 +92,7 @@ const UpdateTax = (props) => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
       // setTaxOption(0);
       // setTaxType(taxes.tax_types[0]._id || "");
-      setTaxOption(
-        taxes.tax_row_data.tax_option !== undefined &&
-          taxes.tax_row_data.tax_option !== null
-          ? taxes.tax_row_data.tax_option.id || 0
-          : 0
-      );
+
       setTaxType(
         taxes.tax_row_data.tax_type !== undefined &&
           taxes.tax_row_data.tax_type !== null
@@ -105,11 +100,25 @@ const UpdateTax = (props) => {
           : ""
       );
     }
-  }, [
-    taxes.tax_row_data.tax_option,
-    taxes.tax_row_data.tax_type,
-    taxes.tax_types,
-  ]);
+  }, [taxes.tax_row_data.tax_type, taxes.tax_types]);
+  useEffect(() => {
+    if (taxes.tax_options !== undefined && taxes.tax_options.length > 0) {
+      const taxOption = (taxes.tax_options || [])
+        .filter((item) => {
+          return (
+            item.title.toUpperCase() ===
+            "Apply the tax to the new items".toUpperCase()
+          );
+        })
+        .map((item) => item._id)[0];
+      setTaxOption(
+        taxes.tax_row_data.tax_option !== undefined &&
+          taxes.tax_row_data.tax_option !== null
+          ? taxes.tax_row_data.tax_option.id || 0
+          : taxOption
+      );
+    }
+  }, [taxes.tax_row_data.tax_option, taxes.tax_options]);
 
   useEffect(() => {
     if (

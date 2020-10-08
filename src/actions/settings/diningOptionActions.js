@@ -33,7 +33,6 @@ export const get_dining_options = () => {
       })
         .then((response) => {
           dispatch({ type: GET_DINING_OPTION, response: response.data });
-          dispatch({ type: GET_DINING_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

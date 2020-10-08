@@ -112,6 +112,7 @@ const TaxDiningOption = (props) => {
                 .length === 0
                 ? "No dining options selected"
                 : (taxes.tax_dining_list || [])
+                    .filter((item) => item.isSelected === true)
                     .map((item) => {
                       return item.title;
                     })

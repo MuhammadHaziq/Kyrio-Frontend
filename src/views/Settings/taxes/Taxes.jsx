@@ -44,14 +44,18 @@ const Taxes = () => {
   useEffect(() => {
     const storeIds = store.stores_list.map((item) => item._id);
 
-    if (storeIds.length > 0) {
+    if (
+      (taxes.tax_dining_list === undefined ||
+        taxes.tax_dining_list.length === 0) &&
+      storeIds.length > 0
+    ) {
       const data = {
         storeId: JSON.stringify(storeIds),
       };
       console.log(data);
       dispatch(get_tax_dining_options(data));
     }
-  }, [dispatch, store.stores_list]);
+  }, [dispatch, taxes.tax_dining_list, store.stores_list]);
   useEffect(() => {
     if (taxes.update_redirect !== undefined && taxes.update_redirect === true) {
       setFadeTaxes(false);

@@ -48,8 +48,8 @@ const TaxDiningOption = (props) => {
             (item) => item._id === ite.diningId
           );
           return diningData.push({
-            diningId: dining[0]._id,
-            diningName: dining[0].title,
+            diningId: dining[0] ? dining[0]._id : "0",
+            diningName: dining[0] ? dining[0].title : "None",
           });
         });
         console.log(diningData);
@@ -66,8 +66,8 @@ const TaxDiningOption = (props) => {
             (item) => item._id === ite.categoryId
           );
           return categoryData.push({
-            categoryId: category[0]._id,
-            categoryName: category[0].catTitle,
+            categoryId: category[0] ? category[0]._id : "0",
+            categoryName: category[0] ? category[0].catTitle : "None",
           });
         });
         dispatch(toggle_category(categoryData));

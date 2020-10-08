@@ -107,7 +107,7 @@ const AddLoyalty = (props) => {
         </CLabel>
         <CInputGroup>
           <TextMask
-            mask={[/\d/, /\d/, ".", /\d/]}
+            mask={[/\d/, ".", /\d/, /\d/]}
             Component={InputAdapter}
             className="form-control"
             name="loyalty_amount"
@@ -117,12 +117,10 @@ const AddLoyalty = (props) => {
             value={fields.loyalty_amount}
           />
           <CInputGroupAppend>
-            <CInputGroupText>
-              %
-            </CInputGroupText>
+            <CInputGroupText>%</CInputGroupText>
           </CInputGroupAppend>
         </CInputGroup>
-        <CFormText color="muted">ex. 99.9</CFormText>
+        <CFormText color="muted">ex. 9.99</CFormText>
       </CFormGroup>
       <CRow>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">

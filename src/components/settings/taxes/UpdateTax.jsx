@@ -547,8 +547,8 @@ const UpdateTax = (props) => {
       </CRow>
       <ConformationAlert
         button_text="Delete"
-        heading="Delete Item Tax"
-        section={`Are you sure you want to delete item tax (${fields.tax_name})`}
+        heading="Delete Tax"
+        section={`Are you sure you want to delete item tax (${fields.tax_name}) ?`}
         buttonAction={delete_tax}
         show_alert={showAlert}
         hideAlert={setShowAlert}

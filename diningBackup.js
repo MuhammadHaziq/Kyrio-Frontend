@@ -11,6 +11,8 @@ import {
   CFade,
   CSelect,
   CInputCheckbox,
+  CListGroup,
+  CListGroupItem,
 } from "@coreui/react";
 // fake data generator
 import {
@@ -20,7 +22,9 @@ import {
   redirect_back_dining,
   update_dining_row_data,
   update_dining_option_postion,
+  update_dining_availablity,
 } from "../../../actions/settings/diningOptionActions";
+import { CIcon } from "@coreui/icons-react";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
 import UpdateDiningOption from "../../../components/settings/diningOption/UpdateDiningOption";
@@ -39,10 +43,10 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
   padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+  margin: `-20px 0px 0px`,
 
   // change background colour if dragging
-  background: isDragging ? "#80808024" : "#80808024",
+  background: isDragging ? "rgb(128 128 128 / 0%)" : "rgb(128 128 128 / 0%)",
 
   // styles we need to apply on draggables
   ...draggableStyle,
@@ -50,8 +54,8 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
 const getListStyle = (isDraggingOver) => ({
   background: isDraggingOver
-    ? "rgb(128 128 128 / 6%)"
-    : "rgb(128 128 128 / 6%)",
+    ? "rgb(128 128 128 / 0%)"
+    : "rgb(128 128 128 / 0%)",
   padding: grid,
   // width: 250,
 });
@@ -169,7 +173,7 @@ class DiningOptions extends Component {
     const data = {
       data: JSON.stringify(items),
     };
-    this.props.update_dining_option(data);
+    this.props.update_dining_availablity(data);
   };
   render() {
     const {
@@ -252,33 +256,33 @@ class DiningOptions extends Component {
                   <CCardBody>
                     <CRow>
                       <CCol xs="12" lg="12">
-                        <CRow style={{ marginBottom: "1%" }}>
+                        <CRow style={{ marginBottom: "2px" }}>
                           <CCol
-                            xs="6"
-                            className=" mt-3"
+                            xs="4"
                             style={{
                               fontSize: "13px",
                               fontWeight: "500",
                               color: "rgba(0,0,0,0.54)",
+                              marginLeft: "30px",
+                              display: "flex",
                             }}
                           >
                             Name
                           </CCol>
-                          {/*
                           <CCol
                             xs="4"
-                            className=" mt-3"
                             style={{
                               fontSize: "13px",
                               fontWeight: "500",
                               color: "rgba(0,0,0,0.54)",
-                              marginLeft: "-1.75rem !important",
+                              display: "flex",
+                              marginLeft: "-50px",
                             }}
                           >
                             Available
                           </CCol>
-                          */}
                         </CRow>
+
                         <DragDropContext onDragEnd={this.onDragEnd}>
                           <Droppable droppableId="droppable">
                             {(provided, snapshot) => (
@@ -287,58 +291,74 @@ class DiningOptions extends Component {
                                 ref={provided.innerRef}
                                 style={getListStyle(snapshot.isDraggingOver)}
                               >
-                                {this.state.items.map((item, index) => (
-                                  <Draggable
-                                    key={item.id}
-                                    draggableId={item.id}
-                                    index={index}
-                                  >
-                                    {(provided, snapshot) => (
-                                      <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={getItemStyle(
-                                          snapshot.isDragging,
-                                          provided.draggableProps.style
-                                        )}
-                                      >
-                                        <CRow
-                                          onClick={() =>
-                                            this.props.update_dining_row_data(
-                                              this.props.dining_option_list.filter(
-                                                (ite) => ite._id === item.id
-                                              )[0]
-                                            )
-                                          }
+                                <CListGroup>
+                                  {this.state.items.map((item, index) => (
+                                    <Draggable
+                                      key={item.id}
+                                      draggableId={item.id}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => (
+                                        <div
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                          style={getItemStyle(
+                                            snapshot.isDragging,
+                                            provided.draggableProps.style
+                                          )}
                                         >
-                                          <CCol sm="6" className="pull-left">
-                                            {item.content}
-                                          </CCol>
-                                          {/*<CCol sm="4">
-                                            <CFormGroup
-                                              inline
-                                              key={index}
-                                              className="pull-right"
-                                            >
-                                              <CInputCheckbox
-                                                name="diningId"
-                                                id={"diningId" + item.id}
-                                                value={item.id}
-                                                checked={item.isActive}
-                                                onChange={() =>
-                                                  this.diningHandleCheck(
-                                                    item.id
+                                          <CRow>
+                                            <CListGroupItem action key={index}>
+                                              <CCol
+                                                sm="4"
+                                                style={{ float: "left" }}
+                                                onClick={() =>
+                                                  this.props.update_dining_row_data(
+                                                    this.props.dining_option_list.filter(
+                                                      (ite) =>
+                                                        ite._id === item.id
+                                                    )[0]
                                                   )
                                                 }
-                                              />
-                                            </CFormGroup>
-                                          </CCol>*/}
-                                        </CRow>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                ))}
+                                              >
+                                                {item.content}
+                                              </CCol>
+                                              <CCol
+                                                sm="4"
+                                                style={{ float: "left" }}
+                                              >
+                                                <CInputCheckbox
+                                                  name="diningId"
+                                                  id={"diningId" + item.id}
+                                                  value={item.id}
+                                                  checked={item.isActive}
+                                                  onChange={() =>
+                                                    this.diningHandleCheck(
+                                                      item.id
+                                                    )
+                                                  }
+                                                />
+                                              </CCol>
+                                              <CCol
+                                                sm="4"
+                                                style={{ float: "right" }}
+                                              >
+                                                {index === 0 &&
+                                                item.isActive === true
+                                                  ? "Default Dining Option"
+                                                  : ""}
+                                              </CCol>
+
+                                              <CIcon name={"cil-view-list"} />
+                                            </CListGroupItem>
+                                          </CRow>
+                                        </div>
+                                      )}
+                                    </Draggable>
+                                  ))}
+                                </CListGroup>
+
                                 {provided.placeholder}
                               </div>
                             )}
@@ -374,4 +394,5 @@ export default connect(mapStateToProps, {
   redirect_back_dining,
   update_dining_row_data,
   update_dining_option_postion,
+  update_dining_availablity,
 })(DiningOptions);

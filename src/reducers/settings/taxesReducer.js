@@ -244,8 +244,15 @@ const taxesReducer = (state = initialState, action) => {
                   // isSelected: !item.isSelected,
                 }
                 return item;
+                //  nrew Add For Null Catregory Id Uncategories
+              } else {
+                if (item.category === null || item.category === undefined) {
+                  return Object.assign({}, item, {
+                    isSelected: status,
+                  });
+                }
+                return item;
               }
-              return item;
             }
           } else {
             return Object.assign({}, item, {

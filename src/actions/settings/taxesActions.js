@@ -238,7 +238,7 @@ export const get_tax_category_list = (data) => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}items/categories`,
+        url: `${BaseUrl}tax/categories`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -246,7 +246,6 @@ export const get_tax_category_list = (data) => {
         .then((response) => {
           console.log(response);
           dispatch({ type: GET_CATEGORY_TAX, response: response.data });
-          dispatch({ type: GET_CATEGORY_LIST, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

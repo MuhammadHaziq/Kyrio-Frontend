@@ -161,7 +161,10 @@ const AddTax = (props) => {
         return selectedCategoryItems.push({
           itemId: item._id,
           itemName: item.name,
-          categoryId: item.category.categoryId,
+          categoryId:
+            item.category !== undefined && item.category !== null
+              ? item.category.id
+              : "0",
         });
       });
     const types = (taxes.tax_types || []).filter(

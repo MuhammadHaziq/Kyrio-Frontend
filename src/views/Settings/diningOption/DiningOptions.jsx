@@ -156,6 +156,23 @@ class DiningOptions extends Component {
       selectedStoreId: e.target.value,
     });
   };
+
+  compare = (a, b) => {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.isActive;
+    const bandB = b.isActive;
+
+    let comparison = 0;
+    if (bandA > bandB) {
+      // comparison = 1;
+      comparison = -1;
+    } else if (bandA < bandB) {
+      comparison = 1;
+      // comparison = -1;
+    }
+    return comparison;
+  };
+
   diningHandleCheck = (id) => {
     const items = this.state.items.map((item) => {
       if (item.id === id) {
@@ -166,6 +183,7 @@ class DiningOptions extends Component {
       }
       return item;
     });
+    items.sort(this.compare);
     this.setState({
       ...this.state,
       items,
@@ -348,9 +366,15 @@ class DiningOptions extends Component {
                                                 item.isActive === true
                                                   ? "Default Dining Option"
                                                   : ""}
+                                                {item.isActive === true ? (
+                                                  <CIcon
+                                                    style={{ float: "right" }}
+                                                    name={"cil-align-center"}
+                                                  />
+                                                ) : (
+                                                  ""
+                                                )}
                                               </CCol>
-
-                                              <CIcon name={"cil-view-list"} />
                                             </CListGroupItem>
                                           </CRow>
                                         </div>

@@ -22,6 +22,7 @@ import {
   redirect_back_taxes,
   get_item_taxes,
   get_tax_dining_options,
+  get_catgeory_item,
 } from "../../../actions/settings/taxesActions";
 
 const Taxes = () => {
@@ -50,6 +51,7 @@ const Taxes = () => {
       };
       console.log(data);
       dispatch(get_tax_dining_options(data));
+      dispatch(get_catgeory_item(data));
     }
   }, [dispatch, store.stores_list]);
 

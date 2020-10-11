@@ -35,6 +35,22 @@ const taxesReducer = (state = initialState, action) => {
     case REDIRECT_BACK_TAXES: {
       return Object.assign({}, state, {
         redirect_taxes: action.response,
+        tax_dining_list: state.tax_dining_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+        tax_category_list: state.tax_category_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+
+        category_items: state.category_items.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
         update_redirect: false,
       });
     }

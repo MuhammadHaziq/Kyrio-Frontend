@@ -33,15 +33,43 @@ const diningOptionReducer = (state = initialState, action) => {
     case ADD_NEW_DINING_OPTION: {
       return Object.assign({}, state, {
         save_dining_option: !state.save_store,
-        dining_option_list: [action.response, ...state.dining_option_list],
+        dining_option_list: state.dining_option_list.slice().map((item) => {
+          const ids = new Set(action.store.map((ite) => ite.storeId));
+          if (ids.has(item.storeId)) {
+            return Object.assign({}, item, {
+              data: [action.response, ...item.data],
+            });
+          }
+          return item;
+        }),
+
+        // dining_option_list: [action.response, ...state.dining_option_list],
       });
     }
 
     case UPDATE_DINING_OPTION: {
+      // return Object.assign({}, state, {
+      //   dining_option_list: state.dining_option_list.slice().map((item) => {
+      //     if (item._id === action.response._id) {
+      //       return action.response;
+      //     }
+      //     return item;
+      //   }),
+      //   redirect_update: false,
+      //   redirect_dining: true,
+      // });
       return Object.assign({}, state, {
         dining_option_list: state.dining_option_list.slice().map((item) => {
-          if (item._id === action.response._id) {
-            return action.response;
+          if (item.storeId === action.storeId) {
+            return Object.assign({}, item, {
+              data: item.data.slice().map((ite) => {
+                if (ite._id === action.response._id) {
+                  console.log(action.storeId);
+                  return action.response;
+                }
+                return ite;
+              }),
+            });
           }
           return item;
         }),
@@ -51,12 +79,23 @@ const diningOptionReducer = (state = initialState, action) => {
     }
     case DELETE_DINING_OPTION: {
       return Object.assign({}, state, {
-        dining_option_list: state.dining_option_list.filter(
-          (item) => item._id !== action.response
-        ),
+        dining_option_list: state.dining_option_list.map((item) => {
+          return {
+            ...item,
+            data: item.data.filter((ite) => ite._id !== action.response),
+          };
+        }),
         redirect_update: false,
         redirect_dining: true,
       });
+
+      // return Object.assign({}, state, {
+      //   dining_option_list: state.dining_option_list.filter(
+      //     (item) => item._id !== action.response
+      //   ),
+      //   redirect_update: false,
+      //   redirect_dining: true,
+      // });
     }
     case UPDATE_ROW_DATA_DINING_OPTION: {
       return Object.assign({}, state, {

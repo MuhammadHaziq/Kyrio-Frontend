@@ -139,7 +139,6 @@ const taxesReducer = (state = initialState, action) => {
     case DINING_SELECT_STATUS: {
       return Object.assign({}, state, {
         tax_dining_list: state.tax_dining_list.map((item) => {
-          console.log("tate.tax_dining_list", item);
           if (action.response.length !== 0) {
             /**
              *This code use when user update the taxes
@@ -149,7 +148,8 @@ const taxesReducer = (state = initialState, action) => {
               const ids = new Set(action.response.map((ite) => ite.diningId));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;
@@ -192,7 +192,8 @@ const taxesReducer = (state = initialState, action) => {
               const ids = new Set(action.response.map((ite) => ite.categoryId));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;
@@ -228,7 +229,8 @@ const taxesReducer = (state = initialState, action) => {
               );
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;

@@ -17,8 +17,7 @@ export const login = (data) => {
         method: "post",
         url: `${BaseUrl}users/signin`,
         data: data,
-      })
-        .then((response) => {
+      }).then((response) => {
           dispatch({ type: LOGIN, response: response.data });
           // dispatch({
           //   type: GET_SETTING_FEATURES,

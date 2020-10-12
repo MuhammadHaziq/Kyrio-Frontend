@@ -124,12 +124,7 @@ class DiningOptions extends Component {
       });
       this.setState({
         ...this.state,
-        items: result.map((item) => {
-          return {
-            ...item,
-            data: item.data.sort(this.comparePostion),
-          };
-        }),
+        items: result,
       });
     }
     if (prevState.selectedStoreId !== this.state.selectedStoreId) {
@@ -150,26 +145,11 @@ class DiningOptions extends Component {
     }
   }
 
-  comparePostion = (a, b) => {
-    // Use toUpperCase() to ignore character casing
-    const bandA = a.position;
-    const bandB = b.position;
-
-    let comparison = 0;
-    if (bandA > bandB) {
-      comparison = 1;
-    } else if (bandA < bandB) {
-      comparison = -1;
-    }
-    return comparison;
-  };
-
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
       return;
     }
-
     const storeDinings = this.state.items
       .filter((item) => item.storeId === result.source.droppableId)
       .map((item) => {
@@ -272,6 +252,7 @@ class DiningOptions extends Component {
       .map((item) => {
         return item.data;
       })[0];
+    console.log(reorderCheck);
     reorderCheck.sort(this.compare);
 
     items = items.map((item) => {

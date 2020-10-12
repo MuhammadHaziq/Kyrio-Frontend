@@ -37,7 +37,7 @@ const diningOptionReducer = (state = initialState, action) => {
           const ids = new Set(action.store.map((ite) => ite.storeId));
           if (ids.has(item.storeId)) {
             return Object.assign({}, item, {
-              data: [action.response, ...item.data],
+              data: [...item.data, action.response],
             });
           }
           return item;
@@ -64,7 +64,6 @@ const diningOptionReducer = (state = initialState, action) => {
             return Object.assign({}, item, {
               data: item.data.slice().map((ite) => {
                 if (ite._id === action.response._id) {
-                  console.log(action.storeId);
                   return action.response;
                 }
                 return ite;

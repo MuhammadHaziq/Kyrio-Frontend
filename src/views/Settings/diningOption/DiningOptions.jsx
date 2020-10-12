@@ -29,10 +29,31 @@ import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
 import UpdateDiningOption from "../../../components/settings/diningOption/UpdateDiningOption";
 // a little function to help us with reordering the result
-const reorder = (data, startIndex, endIndex) => {
+const reorder = (data, startIndex, endIndex, storeId) => {
   const result = data;
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
+
+  // result.map((item) => {
+  //   if (item.storeId === storeId) {
+  //     console.log("splice", item.data.splice(startIndex, 1)[0]);
+  //     return item.data.splice(startIndex, 1);
+  //     // return removed.push(item.data.splice(startIndex, 1)[0]);
+  //     // return removed;
+  //   }
+  //   return item;
+  //   return item.data.splice(startIndex, 1);
+  // });
+  // result.map((item) => {
+  //   if (item.storeId === storeId) {
+  //     return {
+  //       ...item,
+  //       data: item.data.splice(endIndex, 0, removed),
+  //     };
+  //   }
+  //   return item;
+  //   // return item.data.splice(endIndex, 0, removed);
+  // });
 
   return result;
 };
@@ -70,6 +91,7 @@ class DiningOptions extends Component {
       fadeUpdateDiningOption: false,
       items: [],
       selectedStoreId: "",
+      click_Check: false,
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -79,16 +101,22 @@ class DiningOptions extends Component {
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.dining_option_list !== this.props.dining_option_list) {
-      const data = this.props.dining_option_list.map((item, index) => ({
-        id: item._id,
-        content: item.title,
-        isActive: item.isActive,
-        position: item.position,
-      }));
-      // isActive: item.isActive,
+      let result = [];
+      this.props.dining_option_list.map((item, index) => {
+        return result.push({
+          storeId: item.storeId,
+          storeName: item.storeName,
+          data: item.data.map((ite) => ({
+            id: ite._id,
+            content: ite.title,
+            isActive: ite.isActive,
+            position: ite.position,
+          })),
+        });
+      });
       this.setState({
         ...this.state,
-        items: data,
+        items: result,
       });
     }
     if (prevState.selectedStoreId !== this.state.selectedStoreId) {
@@ -114,12 +142,18 @@ class DiningOptions extends Component {
     if (!result.destination) {
       return;
     }
-
+    const storeDinings = this.state.items
+      .filter((item) => item.storeId === result.source.droppableId)
+      .map((item) => {
+        return item.data;
+      })[0];
     const items = reorder(
-      this.state.items,
+      storeDinings,
       result.source.index,
-      result.destination.index
+      result.destination.index,
+      result.source.droppableId
     );
+
     const data = {
       data: JSON.stringify(
         items.map((item, index) => {
@@ -127,9 +161,21 @@ class DiningOptions extends Component {
         })
       ),
     };
+
+    const reorderedDinings = this.state.items.slice().map((item) => {
+      if (item.storeId === result.source.droppableId) {
+        return {
+          ...item,
+          data: items,
+        };
+      }
+      return item;
+    });
+
     this.props.update_dining_option_postion(data);
     this.setState({
-      items,
+      ...this.state,
+      items: reorderedDinings,
     });
   }
   // Normally you would want to split things out into separate components.
@@ -156,16 +202,60 @@ class DiningOptions extends Component {
       selectedStoreId: e.target.value,
     });
   };
-  diningHandleCheck = (id) => {
-    const items = this.state.items.map((item) => {
-      if (item.id === id) {
+
+  compare = (a, b) => {
+    // Use toUpperCase() to ignore character casing
+    const bandA = a.isActive;
+    const bandB = b.isActive;
+
+    let comparison = 0;
+    if (bandA > bandB) {
+      // comparison = 1;
+      comparison = -1;
+    } else if (bandA < bandB) {
+      comparison = 1;
+      // comparison = -1;
+    }
+    return comparison;
+  };
+
+  diningHandleCheck = (id, storeId) => {
+    let items = this.state.items.slice().map((item) => {
+      if (item.storeId === storeId) {
         return {
           ...item,
-          isActive: !item.isActive,
+          data: item.data.map((ite) => {
+            if (ite.id === id) {
+              return {
+                ...ite,
+                isActive: !ite.isActive,
+              };
+            }
+            return ite;
+          }),
         };
       }
       return item;
     });
+
+    const reorderCheck = items
+      .filter((item) => item.storeId === storeId)
+      .map((item) => {
+        return item.data;
+      })[0];
+
+    reorderCheck.sort(this.compare);
+
+    items = items.map((item) => {
+      if (item.storeId === storeId) {
+        return {
+          ...item,
+          data: reorderCheck,
+        };
+      }
+      return item;
+    });
+
     this.setState({
       ...this.state,
       items,
@@ -174,6 +264,15 @@ class DiningOptions extends Component {
       data: JSON.stringify(items),
     };
     this.props.update_dining_availablity(data);
+  };
+
+  dining_row = (storeId, dining_id) => {
+    const data = this.props.dining_option_list
+      .filter((item) => item.storeId === storeId)
+      .map((item) => {
+        return item.data.filter((ite) => ite._id === dining_id);
+      })[0][0];
+    this.props.update_dining_row_data(data);
   };
   render() {
     const {
@@ -253,120 +352,153 @@ class DiningOptions extends Component {
                       </CCol>
                     </CRow>
                   </CCardHeader>
-                  <CCardBody>
-                    <CRow>
-                      <CCol xs="12" lg="12">
-                        <CRow style={{ marginBottom: "2px" }}>
-                          <CCol
-                            xs="4"
-                            style={{
-                              fontSize: "13px",
-                              fontWeight: "500",
-                              color: "rgba(0,0,0,0.54)",
-                              marginLeft: "30px",
-                              display: "flex",
-                            }}
-                          >
-                            Name
-                          </CCol>
-                          <CCol
-                            xs="4"
-                            style={{
-                              fontSize: "13px",
-                              fontWeight: "500",
-                              color: "rgba(0,0,0,0.54)",
-                              display: "flex",
-                              marginLeft: "-50px",
-                            }}
-                          >
-                            Available
-                          </CCol>
-                        </CRow>
+                  {this.state.items.map((dinings, index) =>
+                    (dinings.data || []).length > 0 ? (
+                      <React.Fragment>
+                        <CCardBody key={index}>
+                          <CRow>
+                            <CCol>
+                              <h4>{dinings.storeName}</h4>
+                            </CCol>
+                          </CRow>
+                          <CRow>
+                            <CCol xs="12" lg="12">
+                              <CRow style={{ marginBottom: "2px" }}>
+                                <CCol
+                                  xs="4"
+                                  style={{
+                                    fontSize: "13px",
+                                    fontWeight: "500",
+                                    color: "rgba(0,0,0,0.54)",
+                                    marginLeft: "30px",
+                                    display: "flex",
+                                  }}
+                                >
+                                  Name
+                                </CCol>
+                                <CCol
+                                  xs="4"
+                                  style={{
+                                    fontSize: "13px",
+                                    fontWeight: "500",
+                                    color: "rgba(0,0,0,0.54)",
+                                    display: "flex",
+                                    marginLeft: "-50px",
+                                  }}
+                                >
+                                  Available
+                                </CCol>
+                              </CRow>
 
-                        <DragDropContext onDragEnd={this.onDragEnd}>
-                          <Droppable droppableId="droppable">
-                            {(provided, snapshot) => (
-                              <div
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                                style={getListStyle(snapshot.isDraggingOver)}
-                              >
-                                <CListGroup>
-                                  {this.state.items.map((item, index) => (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id}
-                                      index={index}
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                          style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                          )}
-                                        >
-                                          <CRow>
-                                            <CListGroupItem action key={index}>
-                                              <CCol
-                                                sm="4"
-                                                style={{ float: "left" }}
-                                                onClick={() =>
-                                                  this.props.update_dining_row_data(
-                                                    this.props.dining_option_list.filter(
-                                                      (ite) =>
-                                                        ite._id === item.id
-                                                    )[0]
-                                                  )
-                                                }
-                                              >
-                                                {item.content}
-                                              </CCol>
-                                              <CCol
-                                                sm="4"
-                                                style={{ float: "left" }}
-                                              >
-                                                <CInputCheckbox
-                                                  name="diningId"
-                                                  id={"diningId" + item.id}
-                                                  value={item.id}
-                                                  checked={item.isActive}
-                                                  onChange={() =>
-                                                    this.diningHandleCheck(
-                                                      item.id
-                                                    )
-                                                  }
-                                                />
-                                              </CCol>
-                                              <CCol
-                                                sm="4"
-                                                style={{ float: "right" }}
-                                              >
-                                                {index === 0 &&
-                                                item.isActive === true
-                                                  ? "Default Dining Option"
-                                                  : ""}
-                                              </CCol>
-
-                                              <CIcon name={"cil-view-list"} />
-                                            </CListGroupItem>
-                                          </CRow>
-                                        </div>
+                              <DragDropContext onDragEnd={this.onDragEnd}>
+                                <Droppable droppableId={dinings.storeId}>
+                                  {(provided, snapshot) => (
+                                    <div
+                                      {...provided.droppableProps}
+                                      ref={provided.innerRef}
+                                      style={getListStyle(
+                                        snapshot.isDraggingOver
                                       )}
-                                    </Draggable>
-                                  ))}
-                                </CListGroup>
+                                    >
+                                      <CListGroup>
+                                        {dinings.data.map((item, index) => (
+                                          <Draggable
+                                            key={item.id}
+                                            draggableId={item.id}
+                                            index={index}
+                                          >
+                                            {(provided, snapshot) => (
+                                              <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                style={getItemStyle(
+                                                  snapshot.isDragging,
+                                                  provided.draggableProps.style
+                                                )}
+                                              >
+                                                <CRow>
+                                                  <CListGroupItem
+                                                    action
+                                                    key={index}
+                                                  >
+                                                    <CCol
+                                                      sm="4"
+                                                      style={{ float: "left" }}
+                                                      onClick={() =>
+                                                        this.dining_row(
+                                                          dinings.storeId,
+                                                          item.id
+                                                        )
+                                                      }
+                                                    >
+                                                      {item.content}
+                                                    </CCol>
+                                                    <CCol
+                                                      sm="4"
+                                                      style={{ float: "left" }}
+                                                    >
+                                                      <CInputCheckbox
+                                                        name="diningId"
+                                                        id={
+                                                          "diningId" + item.id
+                                                        }
+                                                        value={item.id}
+                                                        checked={item.isActive}
+                                                        onChange={() =>
+                                                          this.diningHandleCheck(
+                                                            item.id,
+                                                            dinings.storeId
+                                                          )
+                                                        }
+                                                      />
+                                                    </CCol>
+                                                    <CCol
+                                                      sm="4"
+                                                      style={{
+                                                        float: "right",
+                                                        fontSize: "12px",
+                                                      }}
+                                                    >
+                                                      {index === 0 &&
+                                                      item.isActive === true
+                                                        ? "Default Dining Option"
+                                                        : ""}
+                                                      {item.isActive ===
+                                                      true ? (
+                                                        <CIcon
+                                                          style={{
+                                                            float: "right",
+                                                          }}
+                                                          name={
+                                                            "cil-align-center"
+                                                          }
+                                                        />
+                                                      ) : (
+                                                        ""
+                                                      )}
+                                                    </CCol>
+                                                  </CListGroupItem>
+                                                </CRow>
+                                              </div>
+                                            )}
+                                          </Draggable>
+                                        ))}
+                                      </CListGroup>
 
-                                {provided.placeholder}
-                              </div>
-                            )}
-                          </Droppable>
-                        </DragDropContext>
-                      </CCol>
-                    </CRow>{" "}
-                  </CCardBody>{" "}
+                                      {provided.placeholder}
+                                    </div>
+                                  )}
+                                </Droppable>
+                              </DragDropContext>
+                            </CCol>
+                          </CRow>{" "}
+                        </CCardBody>{" "}
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )
+                  )}
                 </CCard>{" "}
               </CCol>{" "}
             </CRow>{" "}

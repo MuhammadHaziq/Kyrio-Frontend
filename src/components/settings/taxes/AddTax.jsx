@@ -94,10 +94,22 @@ const AddTax = (props) => {
 
   useEffect(() => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
-      setTaxOption(0);
       setTaxType(taxes.tax_types[0]._id || "");
     }
   }, [taxes.tax_types]);
+  useEffect(() => {
+    if (taxes.tax_options !== undefined && taxes.tax_options.length > 0) {
+      const taxOption = (taxes.tax_options || [])
+        .filter((item) => {
+          return (
+            item.title.toUpperCase() ===
+            "Apply the tax to the new items".toUpperCase()
+          );
+        })
+        .map((item) => item._id)[0];
+      setTaxOption(taxOption);
+    }
+  }, [taxes.tax_options]);
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -149,7 +161,10 @@ const AddTax = (props) => {
         return selectedCategoryItems.push({
           itemId: item._id,
           itemName: item.name,
-          categoryId: item.category.categoryId,
+          categoryId:
+            item.category !== undefined && item.category !== null
+              ? item.category.id
+              : "0",
         });
       });
     const types = (taxes.tax_types || []).filter(
@@ -340,7 +355,7 @@ const AddTax = (props) => {
                       className={"mx-1 float-right"}
                       color={"success"}
                       size="sm"
-                      value={sChecked}
+                      checked={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
                   </p>

@@ -45,27 +45,29 @@ const UpdateDiningOption = (props) => {
   useEffect(() => {
     if (props.store !== undefined) {
       let stores = props.store;
-      (props.update_data.stores || []).map((ite) => {
-        return (stores = stores.slice().map((item) => {
-          if (item._id === ite.storeId) {
-            return {
-              ...item,
-              isSelected: true,
-            };
-          }
-          return item;
-        }));
-      });
-      setFields({
-        ...fields,
-        dining_name: props.update_data.title,
-        checkAll:
-          stores.filter((item) => item.isSelected === true).length ===
-            props.store.length && props.store.length > 0
-            ? true
-            : false,
-      });
-      setStoreId(stores);
+      if (props.update_data !== undefined) {
+        (props.update_data.stores || []).map((ite) => {
+          return (stores = stores.slice().map((item) => {
+            if (item._id === ite.storeId) {
+              return {
+                ...item,
+                isSelected: true,
+              };
+            }
+            return item;
+          }));
+        });
+        setFields({
+          ...fields,
+          dining_name: props.update_data.title,
+          checkAll:
+            stores.filter((item) => item.isSelected === true).length ===
+              props.store.length && props.store.length > 0
+              ? true
+              : false,
+        });
+        setStoreId(stores);
+      }
     }
   }, [props, props.update_data]);
 

@@ -24,13 +24,15 @@ import {
 } from "../../../actions/settings/receiptActions";
 import validator from "validator";
 import { imageBaseUrl } from "../../../constants/baseUrls";
+var languages = require("language-list")();
 
 const Receipt = (props) => {
   const [checked, setChecked] = useState([false, false]);
   const [fadeReceipt, setFadeReceipt] = useState(true);
   const [timeout, setTimeOut] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [language] = useState(languages.getData());
   const [values, setValues] = useState({
     header: "",
     footer: "",
@@ -106,6 +108,9 @@ const Receipt = (props) => {
           ? null
           : imageBaseUrl + receiptData.printedReceiptImage
       );
+      setChecked([receiptData.show_customer_info, receiptData.show_comments]);
+    } else {
+      setSelectedLanguage("en");
     }
   }, [receiptData]);
 
@@ -193,17 +198,6 @@ const Receipt = (props) => {
   };
 
   const saveReceipt = (e) => {
-    // if (values.header === "") {
-    //   setErrors({
-    //     ...errors,
-    //     header: true,
-    //   });
-    // } else if (values.footer === "") {
-    //   setErrors({
-    //     ...errors,
-    //     footer: true,
-    //   });
-    // } else
     if (selectedLanguage === "0") {
       setErrors({
         ...errors,
@@ -226,7 +220,6 @@ const Receipt = (props) => {
       dispatch(add_new_receipt(data));
     }
   };
-
   return (
     <div className="animated fadeIn">
       <CFade timeout={timeout} in={fadeReceipt}>
@@ -432,11 +425,13 @@ const Receipt = (props) => {
                         invalid={errors.selectedLanguage}
                         onBlur={handleOnBlurSelect}
                       >
-                        <option value="0">Select Language</option>
-                        <option value="English">English</option>
-                        <option value="Urdu">Urdu</option>
-                        <option value="Korean">Korean</option>
-                        <option value="Chinese">Chinese</option>
+                        {language.map((item, index) => {
+                          return (
+                            <option value={item.code} key={index}>
+                              {item.language}
+                            </option>
+                          );
+                        })}
                       </CSelect>
                       <CInvalidFeedback>
                         {errors.selectedLanguage

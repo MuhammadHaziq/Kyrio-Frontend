@@ -33,7 +33,6 @@ export const get_dining_options = () => {
       })
         .then((response) => {
           dispatch({ type: GET_DINING_OPTION, response: response.data });
-          dispatch({ type: GET_DINING_TAX, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -73,6 +72,7 @@ export const get_dining_options = () => {
 
 export const add_new_dining_option = (data) => {
   return (dispatch) => {
+    const store = JSON.parse(data.store);
     try {
       axios({
         method: "post",
@@ -84,7 +84,11 @@ export const add_new_dining_option = (data) => {
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: ADD_NEW_DINING_OPTION, response: response.data });
+          dispatch({
+            type: ADD_NEW_DINING_OPTION,
+            response: response.data,
+            store: store,
+          });
 
           let msg = {
             open: true,
@@ -133,6 +137,7 @@ export const add_new_dining_option = (data) => {
 
 export const update_dining_option = (data) => {
   return (dispatch) => {
+    const storeId = JSON.parse(data.store);
     try {
       axios({
         method: "patch",
@@ -147,6 +152,10 @@ export const update_dining_option = (data) => {
           dispatch({
             type: UPDATE_DINING_OPTION,
             response: response.data.data,
+            storeId:
+              storeId !== undefined && storeId !== null && storeId.length > 0
+                ? storeId[0].storeId
+                : "",
           });
           let msg = {
             open: true,
@@ -204,8 +213,6 @@ export const update_dining_availablity = (data) => {
         },
       })
         .then((response) => {
-          console.log(response);
-
           let msg = {
             open: true,
             message:
@@ -427,6 +434,7 @@ export const get_store_dining = (data) => {
     }
   };
 };
+
 export const update_dining_row_data = (data) => {
   return (dispatch) => {
     dispatch({

@@ -48,11 +48,10 @@ const TaxDiningOption = (props) => {
             (item) => item._id === ite.diningId
           );
           return diningData.push({
-            diningId: dining[0]._id,
-            diningName: dining[0].title,
+            diningId: dining[0] ? dining[0]._id : "0",
+            diningName: dining[0] ? dining[0].title : "None",
           });
         });
-        console.log(diningData);
         dispatch(toggle_dinings(diningData));
       }
       if (
@@ -66,8 +65,8 @@ const TaxDiningOption = (props) => {
             (item) => item._id === ite.categoryId
           );
           return categoryData.push({
-            categoryId: category[0]._id,
-            categoryName: category[0].catTitle,
+            categoryId: category[0] ? category[0]._id : "0",
+            categoryName: category[0] ? category[0].catTitle : "None",
           });
         });
         dispatch(toggle_category(categoryData));
@@ -112,6 +111,7 @@ const TaxDiningOption = (props) => {
                 .length === 0
                 ? "No dining options selected"
                 : (taxes.tax_dining_list || [])
+                    .filter((item) => item.isSelected === true)
                     .map((item) => {
                       return item.title;
                     })

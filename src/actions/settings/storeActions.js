@@ -187,7 +187,6 @@ export const update_store = (data) => {
   };
 };
 
-
 export const delete_store = (ids) => {
   return (dispatch) => {
     try {
@@ -200,14 +199,34 @@ export const delete_store = (ids) => {
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: DELETE_STORE, response: ids });
-          let msg = {
-            open: true,
-            message: response.data.message,
-            object: {},
-            error: false,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          let ids = [];
+          // let msg = {
+          //   open: true,
+          //   message: response.data.message,
+          //   object: {},
+          //   error: false,
+          // };
+          // dispatch({ type: MESSAGE, data: msg });
+          if (response.data.message.length > 0) {
+            response.data.message.map((item) => {
+              let msg = {
+                open: true,
+                message: item.message,
+                object: {},
+                error: item.error,
+              };
+              dispatch({ type: MESSAGE, data: msg });
+              if (item.error === false) {
+                ids.push(item.storeId);
+              }
+            });
+          }
+          ids = JSON.stringify(ids);
+          console.log("ids", ids);
+          dispatch({
+            type: DELETE_STORE,
+            response: ids,
+          });
         })
         .catch((error) => {
           console.log("err", error.response);

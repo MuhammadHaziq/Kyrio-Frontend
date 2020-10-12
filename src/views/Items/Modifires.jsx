@@ -73,7 +73,7 @@ const Modifires = (props) => {
                         className="ci-primary"
                       ></polygon>
                     </svg>
-                    ADD MODIFIRE
+                    ADD MODIFIER
                   </CButton>
                   {modifire.modifiers_list.filter(
                     (item) => item.isDeleted === true

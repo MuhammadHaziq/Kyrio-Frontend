@@ -21,8 +21,10 @@ import {
   get_store_item_taxes,
   redirect_back_taxes,
   get_item_taxes,
+  get_tax_dining_options,
+  get_catgeory_item,
+  get_tax_category_list,
 } from "../../../actions/settings/taxesActions";
-import { get_dining_options } from "../../../actions/settings/diningOptionActions";
 
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
@@ -42,13 +44,34 @@ const Taxes = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (
-      diningOptions.dining_option_list === undefined ||
-      diningOptions.dining_option_list.length === 0
-    ) {
-      dispatch(get_dining_options());
+    const storeIds = store.stores_list.map((item) => item._id);
+
+    if (storeIds.length > 0) {
+      const data = {
+        storeId: JSON.stringify(storeIds),
+      };
+      console.log(data);
+      dispatch(get_tax_dining_options(data));
+      dispatch(get_catgeory_item(data));
+      dispatch(get_tax_category_list());
     }
-  }, [dispatch, diningOptions.dining_option_list]);
+  }, [dispatch, store.stores_list]);
+
+  // useEffect(() => {
+  //   const storeIds = store.stores_list.map((item) => item._id);
+  //
+  //   if (
+  //     (taxes.tax_dining_list === undefined ||
+  //       taxes.tax_dining_list.length === 0) &&
+  //     storeIds.length > 0
+  //   ) {
+  //     const data = {
+  //       storeId: JSON.stringify(storeIds),
+  //     };
+  //     console.log(data);
+  //     dispatch(get_tax_dining_options(data));
+  //   }
+  // }, [dispatch, taxes.tax_dining_list]);
   useEffect(() => {
     if (taxes.update_redirect !== undefined && taxes.update_redirect === true) {
       setFadeTaxes(false);
@@ -130,7 +153,7 @@ const Taxes = () => {
                               className="ci-primary"
                             ></polygon>
                           </svg>
-                          ADD TAXES
+                          ADD TAX
                         </CButton>
                         {taxes.item_taxes.filter(
                           (item) => item.isDeleted === true

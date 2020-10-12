@@ -19,6 +19,7 @@ import { CIcon } from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_loyalty } from "../../../actions/settings/loyaltyActions.js";
 import { useDispatch, useSelector } from "react-redux";
+import NumberFormat from "react-number-format";
 const AddLoyalty = (props) => {
   const auth = useSelector((state) => state.auth);
   const loyalty = useSelector((state) => state.settingReducers.loyaltyReducer);
@@ -70,6 +71,30 @@ const AddLoyalty = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+  const limit = (val, max) => {
+    if (val.length === 1 && val[0] > max[0]) {
+      val = "0" + val;
+    }
+
+    if (val.length === 2) {
+      if (Number(val) === 0) {
+        val = "0";
+
+        //this can happen when user paste number
+      } else if (val > max) {
+        val = max;
+      }
+    }
+
+    return val;
+  };
+
+  const amountFormat = (val) => {
+    let number = limit(val.substring(0, 2), "99");
+    let points = val.substring(2, 4);
+
+    return number + (points.length ? "." + points : "." + "00");
+  };
 
   return (
     <CForm onSubmit={submitStoreForm}>
@@ -106,23 +131,19 @@ const AddLoyalty = (props) => {
           account of the customer
         </CLabel>
         <CInputGroup>
-          <TextMask
-            mask={[/\d/, /\d/, ".", /\d/]}
-            Component={InputAdapter}
+          <NumberFormat
             className="form-control"
             name="loyalty_amount"
+            defaultValue={fields.loyalty_amount}
+            format={amountFormat}
             onChange={handleOnChange}
-            invalid={errors.loyalty_amount}
-            onBlur={handleOnBlur}
             value={fields.loyalty_amount}
           />
           <CInputGroupAppend>
-            <CInputGroupText>
-              %
-            </CInputGroupText>
+            <CInputGroupText>%</CInputGroupText>
           </CInputGroupAppend>
         </CInputGroup>
-        <CFormText color="muted">ex. 99.9</CFormText>
+        {/*  <CFormText color="muted">ex. 9.99</CFormText> */}
       </CFormGroup>
       <CRow>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">

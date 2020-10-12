@@ -35,6 +35,22 @@ const taxesReducer = (state = initialState, action) => {
     case REDIRECT_BACK_TAXES: {
       return Object.assign({}, state, {
         redirect_taxes: action.response,
+        tax_dining_list: state.tax_dining_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+        tax_category_list: state.tax_category_list.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
+
+        category_items: state.category_items.map((item) => {
+          return Object.assign({}, item, {
+            isSelected: false,
+          });
+        }),
         update_redirect: false,
       });
     }
@@ -139,7 +155,6 @@ const taxesReducer = (state = initialState, action) => {
     case DINING_SELECT_STATUS: {
       return Object.assign({}, state, {
         tax_dining_list: state.tax_dining_list.map((item) => {
-          console.log("tate.tax_dining_list", item);
           if (action.response.length !== 0) {
             /**
              *This code use when user update the taxes
@@ -149,7 +164,8 @@ const taxesReducer = (state = initialState, action) => {
               const ids = new Set(action.response.map((ite) => ite.diningId));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;
@@ -192,7 +208,8 @@ const taxesReducer = (state = initialState, action) => {
               const ids = new Set(action.response.map((ite) => ite.categoryId));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;
@@ -228,7 +245,8 @@ const taxesReducer = (state = initialState, action) => {
               );
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
-                  isSelected: !item.isSelected,
+                  // isSelected: !item.isSelected,
+                  isSelected: true,
                 });
               }
               return item;
@@ -244,8 +262,15 @@ const taxesReducer = (state = initialState, action) => {
                   // isSelected: !item.isSelected,
                 }
                 return item;
+                //  nrew Add For Null Catregory Id Uncategories
+              } else {
+                if (item.category === null || item.category === undefined) {
+                  return Object.assign({}, item, {
+                    isSelected: status,
+                  });
+                }
+                return item;
               }
-              return item;
             }
           } else {
             return Object.assign({}, item, {
@@ -354,7 +379,7 @@ const taxesReducer = (state = initialState, action) => {
             isSelected: false,
           });
         }),
-      
+
         category_items: state.category_items.map((item) => {
           return Object.assign({}, item, {
             isSelected: false,

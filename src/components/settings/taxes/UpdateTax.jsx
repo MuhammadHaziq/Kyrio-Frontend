@@ -59,9 +59,9 @@ const UpdateTax = (props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(get_tax_category_list());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(get_tax_category_list());
+  // }, [dispatch]);
 
   useEffect(() => {
     if (taxes.tax_types === undefined || taxes.tax_types.length === 0) {
@@ -92,12 +92,7 @@ const UpdateTax = (props) => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
       // setTaxOption(0);
       // setTaxType(taxes.tax_types[0]._id || "");
-      setTaxOption(
-        taxes.tax_row_data.tax_option !== undefined &&
-          taxes.tax_row_data.tax_option !== null
-          ? taxes.tax_row_data.tax_option.id || 0
-          : 0
-      );
+
       setTaxType(
         taxes.tax_row_data.tax_type !== undefined &&
           taxes.tax_row_data.tax_type !== null
@@ -105,11 +100,25 @@ const UpdateTax = (props) => {
           : ""
       );
     }
-  }, [
-    taxes.tax_row_data.tax_option,
-    taxes.tax_row_data.tax_type,
-    taxes.tax_types,
-  ]);
+  }, [taxes.tax_row_data.tax_type, taxes.tax_types]);
+  useEffect(() => {
+    if (taxes.tax_options !== undefined && taxes.tax_options.length > 0) {
+      const taxOption = (taxes.tax_options || [])
+        .filter((item) => {
+          return (
+            item.title.toUpperCase() ===
+            "Apply the tax to the new items".toUpperCase()
+          );
+        })
+        .map((item) => item._id)[0];
+      setTaxOption(
+        taxes.tax_row_data.tax_option !== undefined &&
+          taxes.tax_row_data.tax_option !== null
+          ? taxes.tax_row_data.tax_option.id || 0
+          : taxOption
+      );
+    }
+  }, [taxes.tax_row_data.tax_option, taxes.tax_options]);
 
   useEffect(() => {
     if (
@@ -153,12 +162,33 @@ const UpdateTax = (props) => {
     }
   }, [store.stores_list, taxes.tax_row_data]);
 
+  useEffect(() => {
+    if (
+      (taxes.tax_category_list !== undefined &&
+        taxes.tax_category_list.length > 0) ||
+      (taxes.category_items !== undefined && taxes.category_items.length > 0)
+    ) {
+      if (
+        taxes.tax_row_data !== undefined &&
+        Object.keys(taxes.tax_row_data).length > 0
+      ) {
+        setChecked(
+          taxes.tax_row_data.items.length > 0 ||
+            taxes.tax_row_data.categories.length > 0
+            ? true
+            : false
+        );
+      }
+    }
+  }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
+
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
   const goBack = () => {
     props.goBack();
+    setChecked(!sChecked);
     dispatch(remove_row_update_data());
   };
   const updateItemTax = (e) => {
@@ -204,7 +234,10 @@ const UpdateTax = (props) => {
         return selectedCategoryItems.push({
           itemId: item._id,
           itemName: item.name,
-          categoryId: item.category.categoryId,
+          categoryId:
+            item.category !== undefined && item.category !== null
+              ? item.category.id
+              : "0",
         });
       });
     const types = (taxes.tax_types || []).filter(
@@ -411,7 +444,7 @@ const UpdateTax = (props) => {
                       className={"mx-1 float-right"}
                       color={"success"}
                       size="sm"
-                      value={sChecked}
+                      checked={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
                   </p>
@@ -538,8 +571,8 @@ const UpdateTax = (props) => {
       </CRow>
       <ConformationAlert
         button_text="Delete"
-        heading="Delete Item Tax"
-        section={`Are you sure you want to delete item tax (${fields.tax_name})`}
+        heading="Delete Tax"
+        section={`Are you sure you want to delete item tax (${fields.tax_name}) ?`}
         buttonAction={delete_tax}
         show_alert={showAlert}
         hideAlert={setShowAlert}

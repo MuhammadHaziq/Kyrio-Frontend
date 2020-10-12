@@ -59,9 +59,9 @@ const UpdateTax = (props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(get_tax_category_list());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(get_tax_category_list());
+  // }, [dispatch]);
 
   useEffect(() => {
     if (taxes.tax_types === undefined || taxes.tax_types.length === 0) {
@@ -162,12 +162,33 @@ const UpdateTax = (props) => {
     }
   }, [store.stores_list, taxes.tax_row_data]);
 
+  useEffect(() => {
+    if (
+      (taxes.tax_category_list !== undefined &&
+        taxes.tax_category_list.length > 0) ||
+      (taxes.category_items !== undefined && taxes.category_items.length > 0)
+    ) {
+      if (
+        taxes.tax_row_data !== undefined &&
+        Object.keys(taxes.tax_row_data).length > 0
+      ) {
+        setChecked(
+          taxes.tax_row_data.items.length > 0 ||
+            taxes.tax_row_data.categories.length > 0
+            ? true
+            : false
+        );
+      }
+    }
+  }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
+
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
   const goBack = () => {
     props.goBack();
+    setChecked(!sChecked);
     dispatch(remove_row_update_data());
   };
   const updateItemTax = (e) => {
@@ -423,7 +444,7 @@ const UpdateTax = (props) => {
                       className={"mx-1 float-right"}
                       color={"success"}
                       size="sm"
-                      value={sChecked}
+                      checked={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
                   </p>

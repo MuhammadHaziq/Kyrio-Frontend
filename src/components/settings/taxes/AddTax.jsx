@@ -355,7 +355,7 @@ const AddTax = (props) => {
                       className={"mx-1 float-right"}
                       color={"success"}
                       size="sm"
-                      value={sChecked}
+                      checked={sChecked}
                       onChange={() => setChecked(!sChecked)}
                     />
                   </p>

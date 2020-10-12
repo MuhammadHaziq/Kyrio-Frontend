@@ -23,6 +23,7 @@ import {
   get_item_taxes,
   get_tax_dining_options,
   get_catgeory_item,
+  get_tax_category_list,
 } from "../../../actions/settings/taxesActions";
 
 const Taxes = () => {
@@ -52,6 +53,7 @@ const Taxes = () => {
       console.log(data);
       dispatch(get_tax_dining_options(data));
       dispatch(get_catgeory_item(data));
+      dispatch(get_tax_category_list());
     }
   }, [dispatch, store.stores_list]);
 

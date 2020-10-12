@@ -52,7 +52,6 @@ const TaxDiningOption = (props) => {
             diningName: dining[0] ? dining[0].title : "None",
           });
         });
-        console.log(diningData);
         dispatch(toggle_dinings(diningData));
       }
       if (

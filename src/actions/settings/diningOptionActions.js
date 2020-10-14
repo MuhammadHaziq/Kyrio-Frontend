@@ -148,7 +148,6 @@ export const update_dining_option = (data) => {
         },
       })
         .then((response) => {
-          console.log(response);
           dispatch({
             type: UPDATE_DINING_OPTION,
             response: response.data.data,
@@ -164,6 +163,8 @@ export const update_dining_option = (data) => {
             error: false,
           };
           dispatch({ type: MESSAGE, data: msg });
+          const storeData = { storeId: data.propStoreId };
+          dispatch(get_store_dining(storeData));
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -316,19 +317,20 @@ export const update_dining_option_postion = (data) => {
   };
 };
 
-export const delete_dining_option = (id) => {
+export const delete_dining_option = (data) => {
   return (dispatch) => {
     try {
       axios({
         method: "delete",
-        url: `${BaseUrl}dining/${id}`,
+        url: `${BaseUrl}dining/${data.id}`,
+        data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
           console.log(response);
-          dispatch({ type: DELETE_DINING_OPTION, response: id });
+          dispatch({ type: DELETE_DINING_OPTION, response: data });
           let msg = {
             open: true,
             message:

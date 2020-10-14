@@ -24,6 +24,7 @@ import {
   delete_pos_devices,
   update_redirect_states_after_delete,
 } from "../../../actions/settings/posDeviceActions.js";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 
@@ -41,6 +42,7 @@ const UpdatePosDevice = (props) => {
     storeId: 0,
     storeName: "Select Store",
   });
+  const [showAlert, setShowAlert] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState();
   const dispatch = useDispatch();
 
@@ -82,7 +84,6 @@ const UpdatePosDevice = (props) => {
         // store: JSON.stringify(storeObject),
         _id: props.posDevices._id,
       };
-      console.log(data);
       dispatch(update_pos_device(data));
     }
   };
@@ -93,12 +94,17 @@ const UpdatePosDevice = (props) => {
       [name]: value,
     });
   };
+
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     setErrors({
       ...errors,
       [name]: validator.isEmpty(value),
     });
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
   };
 
   const pos_device_delete = () => {
@@ -170,7 +176,7 @@ const UpdatePosDevice = (props) => {
                   className="btn-pill pull-left"
                   variant="outline"
                   color="danger"
-                  onClick={pos_device_delete}
+                  onClick={hideAlert}
                 >
                   <CIcon name="cil-trash" /> DELETE
                 </CButton>
@@ -207,6 +213,14 @@ const UpdatePosDevice = (props) => {
           </CForm>
         </CCardBody>
       </CCollapse>
+      <ConformationAlert
+        button_text="Delete"
+        heading="Delete POS"
+        section="Are you sure you want to delete POS? Loyverse POS app will be deactivated on the device assigned to this POS."
+        buttonAction={pos_device_delete}
+        show_alert={showAlert}
+        hideAlert={setShowAlert}
+      />
     </CCard>
   );
 };

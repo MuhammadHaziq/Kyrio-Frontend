@@ -39,7 +39,7 @@ const paymentTypesReducer = (state = initialState, action) => {
     }
     case ADD_NEW_PAYMENT_TYPE: {
       return Object.assign({}, state, {
-        payments_type: [action.response, ...state.payments_type],
+        payments_type: [...state.payments_type, action.response],
       });
     }
     case TOGGLE_PAYMENTS_SINGLE_SELECT: {
@@ -77,6 +77,8 @@ const paymentTypesReducer = (state = initialState, action) => {
       return {
         ...state,
         payments_type,
+        redirect_payment: true,
+        update_redirect: false,
       };
     }
     case UPDATE_PAYMENT_TYPE: {

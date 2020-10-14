@@ -6,16 +6,6 @@ import {
   CListGroup,
   CListGroupItem,
   CRow,
-  CCreateElement,
-  CSidebar,
-  CSidebarBrand,
-  CSidebarNav,
-  CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
-  CSidebarNavDropdown,
-  CSidebarNavItem,
-  CToggler,
 } from "@coreui/react";
 import { Redirect } from "react-router-dom";
 import { MdSettings, MdStore } from "react-icons/md";
@@ -45,31 +35,11 @@ import {
 const Settings = () => {
   let { path, url } = useRouteMatch();
   const settings = useSelector((state) => state.auth.user.roleData.settings);
-  const [show, setShow] = useState(true);
-  const [settingBar, setSettingBar] = useState([]);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(get_stores());
   }, [dispatch]);
-  const setting = [];
-  useEffect(() => {
-    if (settings !== undefined && settings.settingModules) {
-      (settings.settingModules || []).map((item, index) =>
-        index !== 9
-          ? item.enable === true
-            ? setting.push({
-                _tag: "CSidebarNavItem",
-                name: item.moduleName,
-                moduleName: item.moduleName,
-                to: `${url}/${item.moduleName.replace(/\s/g, "")}`,
-              })
-            : ""
-          : ""
-      );
-      setSettingBar(setting);
-    }
-  }, [settings]);
 
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
@@ -79,17 +49,9 @@ const Settings = () => {
         <CCard>
           <CCardBody>
             <CRow>
-              <CCol xs="12" sm="12" md="4" lg="4">
+              <CCol xs="4">
                 <CListGroup id="list-tab" role="tablist">
-                  <CSidebar
-                    show={show}
-                    colorScheme="light"
-                    size="lg"
-                    fixed={false}
-                    show={show}
-                    onShowChange={() => setShow(!show)}
-                    style={{ width: "100%" }}
-                  >
+                  <CListGroupItem action active={false}>
                     <h5>
                       <MdSettings style={{ fontSize: "30px" }} />
                       {/* <strong>&nbsp;{t('Settings.settings')}</strong> */}
@@ -101,19 +63,42 @@ const Settings = () => {
                         settings
                       </small>
                     </h5>
-                    <CSidebarNav>
-                      <CCreateElement
-                        items={settingBar}
-                        components={{
-                          CSidebarNavDivider,
-                          CSidebarNavItem,
-                        }}
-                      />
-                    </CSidebarNav>
-                  </CSidebar>
+                  </CListGroupItem>
+                  {(settings.settingModules || []).map((item, index) =>
+                    index !== 9 ? (
+                      item.enable === true ? (
+                        <Link
+                          key={index}
+                          to={`${url}/${item.moduleName.replace(/\s/g, "")}`}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <CListGroupItem
+                            style={{ paddingLeft: "40px" }}
+                            key={index}
+                          >
+                            {item.moduleName}
+                          </CListGroupItem>
+                        </Link>
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      <CListGroupItem action active={false} key={index}>
+                        <h5>
+                          <MdStore style={{ fontSize: "30px" }} />
+                          <strong>&nbsp;Stores</strong>
+                          <br />
+                          <small>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store
+                            &amp; POS settings
+                          </small>
+                        </h5>
+                      </CListGroupItem>
+                    )
+                  )}
                 </CListGroup>
               </CCol>
-              <CCol xs="12" sm="12" md="8" lg="8">
+              <CCol xs="8">
                 <HashRouter>
                   <Switch>
                     <Route

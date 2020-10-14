@@ -96,7 +96,6 @@ const AddPosDevice = (props) => {
     });
   };
   const storeHandleChange = (e) => {
-    console.log("e.target.value", e.target.value);
     const store = props.stores.filter((item) => item._id === e.target.value);
     let storeData;
     if (e.target.value === "0") {

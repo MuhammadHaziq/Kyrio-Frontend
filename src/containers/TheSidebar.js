@@ -71,7 +71,7 @@ const TheSidebar = () => {
       }
     }
   }, [user]);
-
+  console.log(navigation);
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
   ) : (
@@ -105,7 +105,6 @@ const TheSidebar = () => {
           }}
         />
       </CSidebarNav>
-      <CSidebarMinimizer className="c-d-md-down-none" />
     </CSidebar>
   );
 };

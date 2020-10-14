@@ -57,10 +57,14 @@ const paymentTypesReducer = (state = initialState, action) => {
 
     case TOOGLE_PAYMENTS_ALL_SELECT: {
       return Object.assign({}, state, {
-        payments_type: state.payments_type.map((item) => {
-          return Object.assign({}, item, {
-            isDeleted: action.response,
-          });
+        payments_type: state.payments_type.slice().map((item) => {
+          if (item.name.toUpperCase() !== "Cash".toUpperCase()) {
+            return Object.assign({}, item, {
+              isDeleted: action.response,
+            });
+          } else {
+            return item;
+          }
         }),
       });
     }

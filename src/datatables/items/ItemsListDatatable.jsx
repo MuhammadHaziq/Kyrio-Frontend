@@ -14,8 +14,12 @@ const ItemsListDatatable = (props) => {
     return row.category ? row.category.name || "" : "";
   };
   const showMargin = (cell, row) => {
-    const margin = (+row.cost / +row.price) * 100;
-    return margin + " %";
+    if (+row.cost === +row.price) {
+      return "0 %";
+    } else {
+      const margin = (+row.cost / +row.price) * 100;
+      return margin + " %";
+    }
   };
   const showPrice = (cell, row) => {
     return row.price.toLocaleString("en-US", {

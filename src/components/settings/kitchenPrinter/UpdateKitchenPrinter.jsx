@@ -239,15 +239,18 @@ const UpdateKitchenPrinter = (props) => {
           <CCardFooter>
             <CRow>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
+                <ConformationAlert
+                  button_text="Delete"
+                  heading="Delete Printer Group"
+                  section="Are you sure you want to delete printer group"
+                  buttonAction={delete_printer}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
                   variant="outline"
                   className="btn-pill pull-right"
                   color="danger"
-                  onClick={hideAlert}
-                >
-                  <CIcon name="cil-trash" /> DELETE
-                </CButton>
+                  block={true}
+                />
               </CCol>
               <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
@@ -275,14 +278,6 @@ const UpdateKitchenPrinter = (props) => {
             </CRow>
           </CCardFooter>
         </CCollapse>
-        <ConformationAlert
-          button_text="Delete"
-          heading="Delete Printer Group"
-          section="Are you sure you want to delete printer group"
-          buttonAction={delete_printer}
-          show_alert={showAlert}
-          hideAlert={setShowAlert}
-        />
       </CCard>
     </React.Fragment>
   );

@@ -146,7 +146,7 @@ const UpdateTax = (props) => {
               .map((item) => item._id)
           ),
         };
-        dispatch(get_catgeory_item(data));
+        // dispatch(get_catgeory_item(data));
       }
 
       setFields({
@@ -535,15 +535,18 @@ const UpdateTax = (props) => {
 
       <CRow>
         <CCol sm="2" md="4" className="mb-3 mb-xl-0">
-          <CButton
-            block
+          <ConformationAlert
+            button_text="Delete"
+            heading="Delete Tax"
+            section={`Are you sure you want to delete item tax (${fields.tax_name}) ?`}
+            buttonAction={delete_tax}
+            show_alert={showAlert}
+            hideAlert={setShowAlert}
             variant="outline"
             className="btn-pill pull-right"
             color="danger"
-            onClick={hideAlert}
-          >
-            Delete
-          </CButton>
+            block={true}
+          />
         </CCol>
         <CCol sm="2" md="4" className="mb-3 mb-xl-0">
           <CButton
@@ -569,14 +572,6 @@ const UpdateTax = (props) => {
           </CButton>
         </CCol>
       </CRow>
-      <ConformationAlert
-        button_text="Delete"
-        heading="Delete Tax"
-        section={`Are you sure you want to delete item tax (${fields.tax_name}) ?`}
-        buttonAction={delete_tax}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </React.Fragment>
   );
 };

@@ -171,15 +171,18 @@ const UpdatePosDevice = (props) => {
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
-                  className="btn-pill pull-left"
+                <ConformationAlert
+                  button_text="Delete"
+                  heading="Delete POS"
+                  section="Are you sure you want to delete POS? Loyverse POS app will be deactivated on the device assigned to this POS."
+                  buttonAction={pos_device_delete}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
                   variant="outline"
                   color="danger"
-                  onClick={hideAlert}
-                >
-                  <CIcon name="cil-trash" /> DELETE
-                </CButton>
+                  className="btn-pill pull-left"
+                  block={true}
+                />
               </CCol>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
@@ -213,14 +216,6 @@ const UpdatePosDevice = (props) => {
           </CForm>
         </CCardBody>
       </CCollapse>
-      <ConformationAlert
-        button_text="Delete"
-        heading="Delete POS"
-        section="Are you sure you want to delete POS? Loyverse POS app will be deactivated on the device assigned to this POS."
-        buttonAction={pos_device_delete}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </CCard>
   );
 };

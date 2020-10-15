@@ -1,32 +1,39 @@
-import React, { useEffect, useState } from "react";
-import {
-  CModal,
-  CModalHeader,
-  CModalBody,
-  CModalFooter,
-  CButton,
-} from "@coreui/react";
+import React from "react";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { CButton } from "@coreui/react";
+import { CIcon } from "@coreui/icons-react";
+
 const ConformationAlert = (props) => {
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => {
-    props.hideAlert();
+  const submit = () => {
+    confirmAlert({
+      title: props.heading,
+      message: props.section,
+      buttons: [
+        {
+          label: "Cancle",
+          onClick: props.hideAlert,
+        },
+        {
+          label: props.button_text,
+          onClick: props.buttonAction,
+        },
+      ],
+    });
   };
-
   return (
-    <CModal show={props.show_alert} onClose={toggle}>
-      <CModalHeader closeButton>{props.heading}</CModalHeader>
-      <CModalBody>{props.section}</CModalBody>
-      <CModalFooter>
-        <CButton color="secondary" onClick={toggle}>
-          Cancel
-        </CButton>
-        <CButton color="primary" onClick={props.buttonAction}>
-          {" "}
-          {props.button_text}
-        </CButton>{" "}
-      </CModalFooter>
-    </CModal>
+    <React.Fragment>
+      <CButton
+        variant={props.variant}
+        className={props.className}
+        color={props.color}
+        onClick={submit}
+        block={props.block}
+      >
+        <CIcon name="cil-trash" />
+        DELETE
+      </CButton>
+    </React.Fragment>
   );
 };
 export default ConformationAlert;

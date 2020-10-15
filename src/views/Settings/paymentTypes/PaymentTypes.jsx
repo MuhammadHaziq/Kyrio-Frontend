@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import AddNewPaymentType from "../../../components/settings/paymentTypes/AddNewPaymentType";
 import UpdatePaymentType from "../../../components/settings/paymentTypes/UpdatePaymentType";
 import UpdatePaymentTypeCash from "../../../components/settings/paymentTypes/UpdatePaymentTypeCash";
-
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import {
   redirect_back_payment,
   get_payments_type,
@@ -23,6 +23,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 
 const PaymentTypes = () => {
+  const [showAlert, setShowAlert] = useState(false);
   const [fadePaymentTypes, setPaymentTypes] = useState(true);
   const [fadeAddPaymentTypes, setFadeAddPaymentTypes] = useState(false);
   const [fadeUpdatePaymentTypes, setFadeUpdatePaymentTypes] = useState(false);
@@ -90,6 +91,10 @@ const PaymentTypes = () => {
     dispatch(delete_payments_type(JSON.stringify(deletedPaymentsId)));
   };
 
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -146,15 +151,23 @@ const PaymentTypes = () => {
                         </CButton>
                         {payments_type.filter((item) => item.isDeleted === true)
                           .length > 0 ? (
-                          <CButton
+                          <ConformationAlert
+                            button_text="Confirm"
+                            heading="Delete payment type"
+                            section={`Are you sure you want to delete the payment type (${payments_type
+                              .filter((item) => item.isDeleted === true)
+                              .map((item) => {
+                                return item.name;
+                              })
+                              .join(",")}) ?`}
+                            buttonAction={deletePayments}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
                             variant="outline"
                             color="danger"
                             className="btn-square pull-right ml-2"
-                            onClick={deletePayments}
-                          >
-                            <CIcon name="cil-trash" />
-                            DELETE
-                          </CButton>
+                            block={false}
+                          />
                         ) : (
                           ""
                         )}

@@ -325,15 +325,18 @@ const UpdateDiningOption = (props) => {
       </CCollapse>
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-          <CButton
-            block
+          <ConformationAlert
+            button_text="Delete"
+            heading="Delete Dining Option"
+            section={`Are you sure you want to delete dining option (${fields.dining_name})`}
+            buttonAction={delete_dining}
+            show_alert={showAlert}
+            hideAlert={setShowAlert}
             variant="outline"
             className="btn-pill pull-right"
             color="danger"
-            onClick={hideAlert}
-          >
-            <CIcon name="cil-trash" /> DELETE
-          </CButton>
+            block={true}
+          />
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <CButton
@@ -359,14 +362,6 @@ const UpdateDiningOption = (props) => {
           </CButton>
         </CCol>
       </CRow>
-      <ConformationAlert
-        button_text="Delete"
-        heading="Delete Dining Option"
-        section={`Are you sure you want to delete dining option (${fields.dining_name})`}
-        buttonAction={delete_dining}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </React.Fragment>
   );
 };

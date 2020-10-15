@@ -266,15 +266,18 @@ const UpdateStore = (props) => {
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
+                <ConformationAlert
+                  button_text="Delete"
+                  heading="Delete Store"
+                  section="Are you sure you want to delete Store"
+                  buttonAction={delete_str}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
                   variant="outline"
                   className="btn-pill pull-right"
                   color="danger"
-                  onClick={hideAlert}
-                >
-                  <CIcon name="cil-trash" /> DELETE
-                </CButton>
+                  block={true}
+                />
               </CCol>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
@@ -308,14 +311,6 @@ const UpdateStore = (props) => {
           </CForm>
         </CCardBody>
       </CCollapse>
-      <ConformationAlert
-        button_text="Delete"
-        heading="Delete Store"
-        section="Are you sure you want to delete Store"
-        buttonAction={delete_str}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </CCard>
   );
 };

@@ -231,15 +231,18 @@ const UpdatePaymentType = (props) => {
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
+                <ConformationAlert
+                  button_text="Confirm"
+                  heading="Delete payment type"
+                  section="Are you sure you want to delete the payment type?"
+                  buttonAction={delete_payment_types}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
                   className="btn-pill pull-left"
                   variant="outline"
                   color="danger"
-                  onClick={hideAlert}
-                >
-                  <CIcon name="cil-trash" /> DELETE
-                </CButton>
+                  block={true}
+                />
               </CCol>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
@@ -273,14 +276,6 @@ const UpdatePaymentType = (props) => {
           </CForm>
         </CCardBody>
       </CCollapse>
-      <ConformationAlert
-        button_text="Confirm"
-        heading="Delete payment type"
-        section="Are you sure you want to delete the payment type?"
-        buttonAction={delete_payment_types}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </CCard>
   );
 };

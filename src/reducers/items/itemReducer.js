@@ -4,6 +4,7 @@ import {
   GET_ITEM_STORES,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
+  DELETE_ITEM_LIST,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -47,6 +48,13 @@ const itemReducer = (state = initialState, action) => {
           return Object.assign({}, item, {
             isDeleted: action.response,
           });
+        }),
+      });
+    }
+    case DELETE_ITEM_LIST: {
+      return Object.assign({}, state, {
+        item_list: state.item_list.filter((item) => {
+          return item.isDeleted !== true;
         }),
       });
     }

@@ -130,15 +130,21 @@ const KitchenPrinter = () => {
                         {kitchenPrinter.kitchen_printers.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                          <CButton
+                          <ConformationAlert
+                            button_text="Delete"
+                            heading="Delete Printer Group"
+                            section={`Are you sure you want to delete printer group (${kitchenPrinter.kitchen_printers
+                              .filter((item) => item.isDeleted === true)
+                              .map((item) => item.name)
+                              .join(",")})`}
+                            buttonAction={delete_printer}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
                             variant="outline"
                             color="danger"
                             className="btn-square pull-right ml-2"
-                            onClick={hideAlert}
-                          >
-                            <CIcon name="cil-trash" />
-                            DELETE
-                          </CButton>
+                            block={false}
+                          />
                         ) : (
                           ""
                         )}
@@ -157,14 +163,6 @@ const KitchenPrinter = () => {
         ) : (
           ""
         )}
-        <ConformationAlert
-          button_text="Delete"
-          heading="Delete Printer Group"
-          section="Are you sure you want to delete printer group"
-          buttonAction={delete_printer}
-          show_alert={showAlert}
-          hideAlert={setShowAlert}
-        />
       </div>
     </React.Fragment>
   );

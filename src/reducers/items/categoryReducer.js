@@ -2,6 +2,7 @@ import {
   GET_CATEGORY_LIST,
   TOGGLE_CATEGORY_DELETE_SELECT,
   TOGGLE_ALL_CATEGORY_DELETE_SELECT,
+  DELETE_CATEGORY,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -33,6 +34,13 @@ const categoryReducer = (state = initialState, action) => {
           return Object.assign({}, item, {
             isDeleted: action.response,
           });
+        }),
+      });
+    }
+    case DELETE_CATEGORY: {
+      return Object.assign({}, state, {
+        category_list: state.category_list.filter((item) => {
+          return item.isDeleted !== true;
         }),
       });
     }

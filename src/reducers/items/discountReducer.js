@@ -1,4 +1,9 @@
-import { GET_DISCOUNT_LIST } from "../../constants/ActionTypes";
+import {
+  GET_DISCOUNT_LIST,
+  TOGGLE_DISCOUNT_DELETE_SELECT,
+  TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
+  DELETE_DISCOUNT,
+} from "../../constants/ActionTypes";
 
 const initialState = {
   discount_list: [],
@@ -9,7 +14,34 @@ const discountReducer = (state = initialState, action) => {
     case GET_DISCOUNT_LIST: {
       return { ...state, discount_list: action.response };
     }
-
+    case TOGGLE_DISCOUNT_DELETE_SELECT: {
+      return Object.assign({}, state, {
+        discount_list: state.discount_list.map((item) => {
+          if (item._id === action.response._id) {
+            return Object.assign({}, item, {
+              isDeleted: !item.isDeleted,
+            });
+          }
+          return item;
+        }),
+      });
+    }
+    case TOGGLE_ALL_DISCOUNT_DELETE_SELECT: {
+      return Object.assign({}, state, {
+        discount_list: state.discount_list.map((item) => {
+          return Object.assign({}, item, {
+            isDeleted: action.response,
+          });
+        }),
+      });
+    }
+    case DELETE_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount_list: state.discount_list.filter((item) => {
+          return item.isDeleted !== true;
+        }),
+      });
+    }
     default:
       return { ...state };
   }

@@ -28,13 +28,13 @@ const DiscountList = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(get_discount_list());
+    dispatch(get_discount_list(selectedStoreId));
     dispatch(get_stores());
   }, []);
 
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
-    // dispatch(get_store_pos_device(e.target.value));
+    dispatch(get_discount_list(e.target.value));
   };
 
   const delete_discounts = () => {

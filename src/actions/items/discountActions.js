@@ -10,12 +10,12 @@ import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
-export const get_discount_list = (data) => {
+export const get_discount_list = (id) => {
   return (dispatch) => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}items/discount`,
+        url: `${BaseUrl}items/discount/${id}`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },

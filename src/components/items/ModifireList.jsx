@@ -12,6 +12,7 @@ import {
 import {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
+  update_modifire_postion,
 } from "../../actions/items/modifiresActions";
 import { connect } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
@@ -65,7 +66,8 @@ class ModifireList extends Component {
             return item.name;
           })
           .join(","),
-        isDeleted: item.isDeleted,
+        isDeleted: item.isDeleted ? item.isDeleted : false,
+        position: item.position,
       }));
       this.setState({
         ...this.state,
@@ -92,11 +94,22 @@ class ModifireList extends Component {
       result.destination.index
     );
     const data = {
-      data: JSON.stringify(items),
+      data: JSON.stringify(
+        items.map((item, index) => {
+          return { id: item.id, position: index, title: item.content };
+        })
+      ),
     };
-    console.log("onDragEnd", data);
+    this.props.update_modifire_postion(data);
+
     this.setState({
-      items,
+      ...this.state,
+      items: this.state.items.map((item, index) => {
+        return {
+          ...item,
+          position: index,
+        };
+      }),
     });
   }
   // Normally you would want to split things out into separate components.
@@ -109,14 +122,15 @@ class ModifireList extends Component {
     });
     this.props.toggle_modifire_all_select(!this.state.checkAll);
   };
-  modifireCheckHandle = (e) => {
+
+  modifireCheckHandle = (id) => {
+    console.log(id);
     const row = this.props.modifiers_list.filter((item) => {
-      return item._id === e.target.value;
+      return item._id === id;
     })[0];
 
     this.props.toggle_modifire_single_select(row);
   };
-
   render() {
     return (
       <React.Fragment>
@@ -184,30 +198,19 @@ class ModifireList extends Component {
                                       "1px solid rgb(118 129 146 / 25%)",
                                   }}
                                 >
-                                  <CCol
-                                    sm="1"
-                                    style={{
-                                      display: "flex",
-                                    }}
-                                  >
-                                    <CFormGroup
-                                      inline
-                                      key={index}
-                                      className="pull-right"
-                                    >
-                                      <CInputCheckbox
-                                        name="modifer_id"
-                                        id={"modifer_id" + item.id}
-                                        value={item.id}
-                                        checked={item.isDeleted}
-                                        style={{
-                                          marginLeft: "5px",
-                                        }}
-                                        onChange={this.modifireCheckHandle}
-                                      />
-                                    </CFormGroup>
-                                  </CCol>
                                   <CCol sm="12">
+                                    <CInputCheckbox
+                                      name="modifer_id"
+                                      id={"modifer_id" + item.id}
+                                      value={item.id}
+                                      checked={item.isDeleted}
+                                      onChange={() =>
+                                        this.modifireCheckHandle(item.id)
+                                      }
+                                      style={{
+                                        marginLeft: "0px",
+                                      }}
+                                    />
                                     <h6
                                       className="d-flex w-100  justify-content-between"
                                       style={{
@@ -260,4 +263,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
+  update_modifire_postion,
 })(ModifireList);

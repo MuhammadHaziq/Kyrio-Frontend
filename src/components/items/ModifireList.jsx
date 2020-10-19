@@ -12,8 +12,10 @@ import {
 import {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
+  update_modifire_postion,
 } from "../../actions/items/modifiresActions";
 import { connect } from "react-redux";
+import { CIcon } from "@coreui/icons-react";
 
 // a little function to help us with reordering the result
 const reorder = (data, startIndex, endIndex) => {
@@ -29,20 +31,17 @@ const grid = 8;
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
-  padding: grid * 2,
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
-  background: isDragging ? "#80808024" : "#80808024",
+  background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver
-    ? "rgb(128 128 128 / 6%)"
-    : "rgb(128 128 128 / 6%)",
+  background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
   padding: grid,
   // width: 250,
 });
@@ -67,7 +66,8 @@ class ModifireList extends Component {
             return item.name;
           })
           .join(","),
-        isDeleted: item.isDeleted,
+        isDeleted: item.isDeleted ? item.isDeleted : false,
+        position: item.position,
       }));
       this.setState({
         ...this.state,
@@ -94,11 +94,22 @@ class ModifireList extends Component {
       result.destination.index
     );
     const data = {
-      data: JSON.stringify(items),
+      data: JSON.stringify(
+        items.map((item, index) => {
+          return { id: item.id, position: index, title: item.content };
+        })
+      ),
     };
-    console.log("onDragEnd", data);
+    this.props.update_modifire_postion(data);
+
     this.setState({
-      items,
+      ...this.state,
+      items: this.state.items.map((item, index) => {
+        return {
+          ...item,
+          position: index,
+        };
+      }),
     });
   }
   // Normally you would want to split things out into separate components.
@@ -111,14 +122,15 @@ class ModifireList extends Component {
     });
     this.props.toggle_modifire_all_select(!this.state.checkAll);
   };
-  modifireCheckHandle = (e) => {
+
+  modifireCheckHandle = (id) => {
+    console.log(id);
     const row = this.props.modifiers_list.filter((item) => {
-      return item._id === e.target.value;
+      return item._id === id;
     })[0];
 
     this.props.toggle_modifire_single_select(row);
   };
-
   render() {
     return (
       <React.Fragment>
@@ -176,44 +188,59 @@ class ModifireList extends Component {
                                 provided.draggableProps.style
                               )}
                             >
-                              <CListGroupItem action key={index}>
-                                <CFormGroup
-                                  inline
+                              <CRow>
+                                <CListGroupItem
+                                  action
                                   key={index}
-                                  className="pull-right"
-                                >
-                                  <CInputCheckbox
-                                    name="modifer_id"
-                                    id={"modifer_id" + item.id}
-                                    value={item.id}
-                                    checked={item.isDeleted}
-                                    style={{
-                                      marginTop: "18px",
-                                      marginLeft: "5px",
-                                    }}
-                                    onChange={this.modifireCheckHandle}
-                                  />
-                                </CFormGroup>
-                                <h6
-                                  className="d-flex w-100  justify-content-between"
                                   style={{
-                                    marginBottom: "0px",
-                                    marginLeft: "29px",
-                                    color: "#20202a",
+                                    border: "none",
+                                    borderBottom:
+                                      "1px solid rgb(118 129 146 / 25%)",
                                   }}
                                 >
-                                  <b>{item.content}</b>
-                                </h6>
-                                <small
-                                  className="mb-1"
-                                  style={{
-                                    marginLeft: "45px",
-                                    color: "#20202ad1",
-                                  }}
-                                >
-                                  {item.options}
-                                </small>
-                              </CListGroupItem>
+                                  <CCol sm="12">
+                                    <CInputCheckbox
+                                      name="modifer_id"
+                                      id={"modifer_id" + item.id}
+                                      value={item.id}
+                                      checked={item.isDeleted}
+                                      onChange={() =>
+                                        this.modifireCheckHandle(item.id)
+                                      }
+                                      style={{
+                                        marginLeft: "0px",
+                                      }}
+                                    />
+                                    <h6
+                                      className="d-flex w-100  justify-content-between"
+                                      style={{
+                                        marginBottom: "0px",
+                                        marginLeft: "29px",
+                                        color: "#20202a",
+                                        marginTop: "-12px",
+                                      }}
+                                    >
+                                      <b>{item.content}</b>
+                                    </h6>
+
+                                    <small
+                                      className="mb-1"
+                                      style={{
+                                        marginLeft: "45px",
+                                        color: "#20202ad1",
+                                      }}
+                                    >
+                                      {item.options}
+                                    </small>
+                                    <CIcon
+                                      style={{
+                                        float: "right",
+                                      }}
+                                      name={"cil-align-center"}
+                                    />
+                                  </CCol>
+                                </CListGroupItem>
+                              </CRow>
                             </div>
                           )}
                         </Draggable>
@@ -236,4 +263,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
+  update_modifire_postion,
 })(ModifireList);

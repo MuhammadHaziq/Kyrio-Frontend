@@ -14,8 +14,12 @@ const ItemsListDatatable = (props) => {
     return row.category ? row.category.name || "" : "";
   };
   const showMargin = (cell, row) => {
-    const margin = (+row.cost / +row.price) * 100;
-    return margin + " %";
+    if (+row.cost === +row.price) {
+      return "0 %";
+    } else {
+      const margin = (+row.cost / +row.price) * 100;
+      return margin + " %";
+    }
   };
   const showPrice = (cell, row) => {
     return row.price.toLocaleString("en-US", {
@@ -80,16 +84,15 @@ const ItemsListDatatable = (props) => {
       <BootstrapTable
         data={props.itemList}
         version="4"
-        striped="striped"
-        hover="hover"
+        hover={true}
         selectRow={selectRowProp}
         options={options}
-        pagination="pagination"
-        search="search"
+        pagination={true}
+        search={true}
       >
         <TableHeaderColumn
           dataField="_id"
-          dataSort="dataSort"
+          dataSort={true}
           hidden={true}
           isKey={true}
         >
@@ -103,26 +106,26 @@ const ItemsListDatatable = (props) => {
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="price"
-          dataSort="dataSort"
+          dataSort={true}
           dataFormat={showPrice}
         >
           Price
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="cost"
-          dataSort="dataSort"
+          dataSort={true}
           dataFormat={showCost}
         >
           Cost
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="margin"
-          dataSort="dataSort"
+          dataSort={true}
           dataFormat={showMargin}
         >
           Margin %
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="stockQty" dataSort="dataSort">
+        <TableHeaderColumn dataField="stockQty" dataSort={true}>
           Stock
         </TableHeaderColumn>
       </BootstrapTable>

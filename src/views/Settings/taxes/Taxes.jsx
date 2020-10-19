@@ -25,12 +25,14 @@ import {
   get_catgeory_item,
   get_tax_category_list,
 } from "../../../actions/settings/taxesActions";
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const Taxes = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadeTaxes, setFadeTaxes] = useState(true);
   const [fadeAddTaxes, setFadeAddTaxes] = useState(false);
   const [fadeUpdateTaxes, setFadeUpdateTaxes] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
@@ -57,21 +59,6 @@ const Taxes = () => {
     }
   }, [dispatch, store.stores_list]);
 
-  // useEffect(() => {
-  //   const storeIds = store.stores_list.map((item) => item._id);
-  //
-  //   if (
-  //     (taxes.tax_dining_list === undefined ||
-  //       taxes.tax_dining_list.length === 0) &&
-  //     storeIds.length > 0
-  //   ) {
-  //     const data = {
-  //       storeId: JSON.stringify(storeIds),
-  //     };
-  //     console.log(data);
-  //     dispatch(get_tax_dining_options(data));
-  //   }
-  // }, [dispatch, taxes.tax_dining_list]);
   useEffect(() => {
     if (taxes.update_redirect !== undefined && taxes.update_redirect === true) {
       setFadeTaxes(false);
@@ -111,6 +98,12 @@ const Taxes = () => {
       });
     dispatch(delete_item_taxes(JSON.stringify(deleteIds)));
   };
+
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -158,15 +151,21 @@ const Taxes = () => {
                         {taxes.item_taxes.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                          <CButton
+                          <ConformationAlert
+                            button_text="Delete"
+                            heading="Delete Tax"
+                            section={`Are you sure you want to delete tax (${taxes.item_taxes
+                              .filter((item) => item.isDeleted === true)
+                              .map((item) => item.title)
+                              .join(",")}) ?`}
+                            buttonAction={deleteTaxes}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
                             variant="outline"
-                            color="danger"
                             className="btn-square pull-right ml-2"
-                            onClick={deleteTaxes}
-                          >
-                            <CIcon name="cil-trash" />
-                            DELETE
-                          </CButton>
+                            color="danger"
+                            block={false}
+                          />
                         ) : (
                           ""
                         )}

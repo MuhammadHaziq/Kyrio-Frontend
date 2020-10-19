@@ -23,8 +23,11 @@ import {
   get_items_stock,
   search_item_list,
   get_items_store,
+  delete_item_list,
 } from "../../actions/items/itemActions";
 import { get_category_list } from "../../actions/items/categoryActions";
+import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
+
 import { useSelector, useDispatch } from "react-redux";
 
 const ItemsList = () => {
@@ -42,6 +45,8 @@ const ItemsList = () => {
   const [sendCall, setSendCall] = useState(false);
   const [pagination, setPagination] = useState(1);
   const [collapse, setCollapse] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+
   useEffect(() => {
     setDefaultStoreId(auth.user.stores[0]._id);
     setStoreId(auth.user.stores[0]._id);
@@ -116,7 +121,12 @@ const ItemsList = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(item_id);
+    dispatch(delete_item_list(JSON.stringify(item_id)));
+    setShowAlert(!showAlert);
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
   };
 
   return (
@@ -261,15 +271,25 @@ const ItemsList = () => {
                         xl="xl"
                         className="mb-3 mb-xl-0"
                       >
-                        <CButton
+                        <ConformationAlert
+                          button_text="Delete"
+                          heading="Delete item"
+                          section={`Are you sure you want to delete the item (${item.item_list
+                            .filter((item) => {
+                              return item.isDeleted === true;
+                            })
+                            .map((item) => {
+                              return item.name;
+                            })
+                            .join(",")}) ?`}
+                          buttonAction={deleteItem}
+                          show_alert={showAlert}
+                          hideAlert={setShowAlert}
                           variant="outline"
                           className="ml-2"
                           color="danger"
-                          onClick={deleteItem}
-                        >
-                          <CIcon name="cil-trash" />
-                          DELETE
-                        </CButton>
+                          block={true}
+                        />
                       </CCol>
                     </React.Fragment>
                   ) : (
@@ -292,3 +312,4 @@ const ItemsList = () => {
 };
 
 export default ItemsList;
+//

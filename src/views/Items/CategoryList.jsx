@@ -7,15 +7,20 @@ import {
   CButton,
   CCardBody,
 } from "@coreui/react";
-import { get_category_list } from "../../actions/items/categoryActions";
+import {
+  get_category_list,
+  delete_categories,
+} from "../../actions/items/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
 import CategoryDatatable from "../../datatables/category/CategoryDatatable";
+import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
+
 const CategoryList = (props) => {
+  const [showAlert, setShowAlert] = useState(false);
+
   const category = useSelector((state) => state.items.categoryReducer);
   const dispatch = useDispatch();
-  console.log("item_list", category);
-  // const [items, setItems] = useState(usersData)
 
   useEffect(() => {
     dispatch(get_category_list());
@@ -27,8 +32,14 @@ const CategoryList = (props) => {
       .map((item) => {
         return item._id;
       });
+    dispatch(delete_categories(JSON.stringify(category_id)));
     console.log(category_id);
   };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <CCard>
       <CCardHeader>Categories Detail</CCardHeader>
@@ -38,15 +49,25 @@ const CategoryList = (props) => {
           <React.Fragment>
             <CRow>
               <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
+                <ConformationAlert
+                  button_text="Delete"
+                  heading="Delete Category"
+                  section={`Are you sure you want to delete the Categories (${category.category_list
+                    .filter((item) => {
+                      return item.isDeleted === true;
+                    })
+                    .map((item) => {
+                      return item.catTitle;
+                    })
+                    .join(",")}) ?`}
+                  buttonAction={deleteCategory}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
                   variant="outline"
                   className="ml-2"
                   color="danger"
-                  onClick={deleteCategory}
-                >
-                  <CIcon name="cil-trash" />
-                  DELETE
-                </CButton>
+                  block={false}
+                />
               </CCol>
             </CRow>
           </React.Fragment>

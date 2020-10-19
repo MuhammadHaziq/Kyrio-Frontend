@@ -22,11 +22,14 @@ import {
 } from "../../../actions/settings/posDeviceActions";
 import AddPosDevice from "../../../components/settings/posDevice/AddPosDevice";
 import UpdatePosDevice from "../../../components/settings/posDevice/UpdatePosDevice";
+import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+
 const PosDevice = () => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fadePosDevice, setFadePosDevice] = useState(true);
   const [fadeAddPosDevice, setFadeAddPosDevice] = useState(false);
   const [fadeUpdatePosDevice, setFadeUpdatePosDevice] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [timeout] = useState(300);
   const [selectedStoreId, setSelectedStoreId] = useState("");
   const dispatch = useDispatch();
@@ -78,6 +81,11 @@ const PosDevice = () => {
       });
     dispatch(delete_pos_devices(JSON.stringify(data)));
   };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -128,15 +136,22 @@ const PosDevice = () => {
                         {posDevice.pos_device_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                          <CButton
+                          <ConformationAlert
+                            button_text="Ok"
+                            heading="Delete POS"
+                            section={`Are you sure you want to delete POS  (${posDevice.pos_device_list
+                              .filter((item) => item.isDeleted === true)
+                              .map((item) => item.title)
+                              .join(",")}) ?
+                              Loyverse POS app will be deactivated on the device assigned to this POS.`}
+                            buttonAction={deletePosDevices}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
                             variant="outline"
                             className="ml-2"
                             color="danger"
-                            onClick={deletePosDevices}
-                          >
-                            <CIcon name="cil-trash" />
-                            DELETE
-                          </CButton>
+                            block={false}
+                          />
                         ) : (
                           ""
                         )}

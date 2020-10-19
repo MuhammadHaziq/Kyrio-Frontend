@@ -2,45 +2,31 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_category_single_select,
-  toggle_category_all_select,
-} from "../../actions/items/categoryActions";
-import { useDispatch } from "react-redux";
+  toggle_discount_single_select,
+  toggle_discount_all_select,
+} from "../../actions/items/discountActions";
+import { useSelector, useDispatch } from "react-redux";
 
-const CategoryDatatable = (props) => {
+const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
-  const categoryTitle = (cell, row) => {
-    return (
-      <React.Fragment>
-        <svg height="40" width="35">
-          <circle cx="15" cy="25" r="15" fill={row.catColor} />
-          Sorry, your browser does not support inline SVG.
-        </svg>
-        {cell}
-        <span>
-          <small
-            style={{
-              display: "grid",
-              marginLeft: "60px",
-              marginTop: "-15px",
-            }}
-          >
-            {row.total_items} {row.total_items > 1 ? "Items" : "Item"}
-          </small>
-        </span>
-      </React.Fragment>
-    );
-  };
 
+  const showValue = (cell, row) => {
+    return row.type.toUpperCase() === "amount".toUpperCase()
+      ? row.value.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })
+      : row.value.toFixed(2) + " %";
+  };
   const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_category_single_select(row));
+    dispatch(toggle_discount_single_select(row));
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      dispatch(toggle_category_all_select(true));
+      dispatch(toggle_discount_all_select(true));
     } else {
-      dispatch(toggle_category_all_select(false));
+      dispatch(toggle_discount_all_select(false));
     }
   };
 
@@ -66,7 +52,7 @@ const CategoryDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.categories.length,
+        value: props.discount.length,
       },
     ],
     sizePerPage: 5,
@@ -78,13 +64,13 @@ const CategoryDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.categories}
+        data={props.discount}
         version="4"
-        hover
+        hover={true}
         selectRow={selectRowProp}
         options={options}
-        pagination
-        search
+        pagination={true}
+        search={true}
       >
         <TableHeaderColumn
           dataField="_id"
@@ -94,16 +80,18 @@ const CategoryDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="catTitle"
-          dataSort={true}
-          dataFormat={categoryTitle}
-        >
+        <TableHeaderColumn dataField="title" dataSort={true}>
           Name
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="value" dataFormat={showValue}>
+          Value
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="restricted" dataSort={true}>
+          Restricted access
         </TableHeaderColumn>
       </BootstrapTable>
     </React.Fragment>
   );
 };
 
-export default CategoryDatatable;
+export default ItemsListDatatable;

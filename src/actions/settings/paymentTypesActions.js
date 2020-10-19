@@ -197,6 +197,7 @@ export const get_payments_type = (data) => {
     }
   };
 };
+
 export const toggle_payments_single_select = (data) => {
   return (dispatch) => {
     dispatch({
@@ -205,6 +206,7 @@ export const toggle_payments_single_select = (data) => {
     });
   };
 };
+
 export const toggle_payments_all_select = (status) => {
   return (dispatch) => {
     dispatch({

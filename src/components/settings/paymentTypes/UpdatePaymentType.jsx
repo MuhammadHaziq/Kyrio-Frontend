@@ -19,13 +19,18 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import { update_payment_type } from "../../../actions/settings/paymentTypesActions.js";
+import {
+  update_payment_type,
+  delete_payments_type,
+} from "../../../actions/settings/paymentTypesActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 
 const UpdatePaymentType = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({ name: "" });
+  const [showAlert, setShowAlert] = useState(false);
   const [errors, setErrors] = useState({
     name: false,
     selectedPaymentType: false,
@@ -72,6 +77,7 @@ const UpdatePaymentType = (props) => {
       );
     }
   }, [props.update_data]);
+
   useEffect(() => {
     if (redirect_payment !== undefined && redirect_payment === true) {
       props.goBack();
@@ -100,10 +106,10 @@ const UpdatePaymentType = (props) => {
         storeId: props.update_data.storeId,
         id: props.update_data._id,
       };
-      console.log(data);
       dispatch(update_payment_type(data));
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFields({
@@ -111,6 +117,7 @@ const UpdatePaymentType = (props) => {
       [name]: value,
     });
   };
+
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     setErrors({
@@ -118,6 +125,7 @@ const UpdatePaymentType = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+
   const handleOnBlurSelect = (e) => {
     const { name, value } = e.target;
     setErrors({
@@ -150,6 +158,15 @@ const UpdatePaymentType = (props) => {
 
     setPaymentType(paymentData);
     setSelectedPaymentId(e.target.value);
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
+  const delete_payment_types = () => {
+    const id = JSON.stringify([props.update_data._id]);
+    dispatch(delete_payments_type(id));
   };
   return (
     <CCard>
@@ -214,15 +231,18 @@ const UpdatePaymentType = (props) => {
             </CFormGroup>
             <CRow>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
-                  className="btn-pill pull-right"
+                <ConformationAlert
+                  button_text="Confirm"
+                  heading="Delete payment type"
+                  section="Are you sure you want to delete the payment type?"
+                  buttonAction={delete_payment_types}
+                  show_alert={showAlert}
+                  hideAlert={setShowAlert}
+                  className="btn-pill pull-left"
                   variant="outline"
-                  color="default"
-                  onClick={goBack}
-                >
-                  BACK
-                </CButton>
+                  color="danger"
+                  block={true}
+                />
               </CCol>
               <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                 <CButton

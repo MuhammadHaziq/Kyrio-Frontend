@@ -61,19 +61,7 @@ const AddStore = (props) => {
         ...errors,
         store_name: validator.isEmpty(fields.store_name),
       });
-    }
-    // else if (fields.store_address === "") {
-    //   setErrors({
-    //     ...errors,
-    //     store_address: validator.isEmpty(fields.store_address),
-    //   });
-    // } else if (fields.store_phone === "") {
-    //   setErrors({
-    //     ...errors,
-    //     store_phone: validator.isEmpty(fields.store_phone),
-    //   });
-    // }
-    else {
+    } else {
       const data = {
         title: fields.store_name,
         address: fields.store_address,

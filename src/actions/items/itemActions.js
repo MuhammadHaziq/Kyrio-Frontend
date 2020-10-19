@@ -4,6 +4,7 @@ import {
   GET_ITEM_STORES,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
+  DELETE_ITEM_LIST,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -104,6 +105,7 @@ export const get_items_stock = () => {
     }
   };
 };
+
 export const search_item_list = (data) => {
   return (dispatch) => {
     try {
@@ -150,6 +152,7 @@ export const search_item_list = (data) => {
     }
   };
 };
+
 export const get_items_store = () => {
   return (dispatch) => {
     try {
@@ -211,5 +214,62 @@ export const toggle_item_all_select = (status) => {
       type: TOGGLE_ALL_ITEM_DELETE_SELECT,
       response: status,
     });
+  };
+};
+
+export const delete_item_list = (id) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "delete",
+        url: `${BaseUrl}items/${id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: DELETE_ITEM_LIST, response: JSON.parse(id) });
+          let msg = {
+            open: true,
+            message: "Item Deleted Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };

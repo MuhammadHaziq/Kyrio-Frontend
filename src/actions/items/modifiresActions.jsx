@@ -57,6 +57,63 @@ export const get_modifires_list = (storeId) => {
   };
 };
 
+export const update_modifire_postion = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}items/modifier/update_position`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          let msg = {
+            open: true,
+            message:
+              response.data.message || `Modifier Position Updated Successfully`,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 export const delete_modifire = (ids) => {
   return (dispatch) => {
     try {

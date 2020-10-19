@@ -1,5 +1,8 @@
 import {
   GET_DISCOUNT_LIST,
+  TOGGLE_DISCOUNT_DELETE_SELECT,
+  TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
+  DELETE_DISCOUNT,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -7,12 +10,12 @@ import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
-export const get_discount_list = (data) => {
+export const get_discount_list = (id) => {
   return (dispatch) => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}items/discount`,
+        url: `${BaseUrl}items/discount/${id}`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -43,6 +46,80 @@ export const get_discount_list = (data) => {
         message:
           typeof error.response != "undefined"
             ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const toggle_discount_single_select = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_DISCOUNT_DELETE_SELECT,
+      response: data,
+    });
+  };
+};
+
+export const toggle_discount_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
+      response: status,
+    });
+  };
+};
+
+export const delete_discount = (id) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "delete",
+        url: `${BaseUrl}items/discount/${id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: DELETE_DISCOUNT, response: JSON.parse(id) });
+          let msg = {
+            open: true,
+            message:
+              JSON.parse(id).length > 1
+                ? "Discounts Deleted Successfully"
+                : "Discount Deleted Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error.response.data,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

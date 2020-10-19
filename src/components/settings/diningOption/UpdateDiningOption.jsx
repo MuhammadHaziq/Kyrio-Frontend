@@ -39,6 +39,7 @@ const UpdateDiningOption = (props) => {
     dining_name: false,
     checkAll_error: false,
   });
+  const [propStoreId, setPropSroreId] = useState(props.select_store_id);
   const [storeId, setStoreId] = useState([]);
   const dispatch = useDispatch();
 
@@ -111,11 +112,13 @@ const UpdateDiningOption = (props) => {
         store: JSON.stringify(storeData),
         isSelected: true,
         id: props.update_data._id,
+        propStoreId: propStoreId,
       };
       console.log(data);
       dispatch(update_dining_option(data));
     }
   };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFields({
@@ -123,6 +126,7 @@ const UpdateDiningOption = (props) => {
       [name]: value,
     });
   };
+
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     setErrors({
@@ -130,6 +134,7 @@ const UpdateDiningOption = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+
   const storeHandleChange = (e) => {
     let selectedStore = [];
     if (e.target.value === "0") {
@@ -168,8 +173,25 @@ const UpdateDiningOption = (props) => {
   };
 
   const delete_dining = () => {
-    const id = props.update_data._id;
-    dispatch(delete_dining_option(id));
+    const storeIds = new Set(
+      storeId
+        .filter((item) => item.isSelected === false)
+        .map((item) => {
+          return item._id;
+        })
+    );
+    console.log(storeIds);
+    const data = {
+      id: props.update_data._id,
+      checkAll: fields.checkAll,
+      stores: JSON.stringify(
+        props.update_data.stores.filter((item) => {
+          return storeIds.has(item.storeId);
+        })
+      ),
+    };
+    console.log("delete", data);
+    dispatch(delete_dining_option(data));
   };
   const hideAlert = () => {
     setShowAlert(!showAlert);
@@ -303,15 +325,18 @@ const UpdateDiningOption = (props) => {
       </CCollapse>
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-          <CButton
-            block
+          <ConformationAlert
+            button_text="Delete"
+            heading="Delete Dining Option"
+            section={`Are you sure you want to delete dining option (${fields.dining_name})`}
+            buttonAction={delete_dining}
+            show_alert={showAlert}
+            hideAlert={setShowAlert}
             variant="outline"
             className="btn-pill pull-right"
             color="danger"
-            onClick={hideAlert}
-          >
-            <CIcon name="cil-trash" /> DELETE
-          </CButton>
+            block={true}
+          />
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <CButton
@@ -337,14 +362,6 @@ const UpdateDiningOption = (props) => {
           </CButton>
         </CCol>
       </CRow>
-      <ConformationAlert
-        button_text="Delete"
-        heading="Delete Dining Option"
-        section={`Are you sure you want to delete dining option (${fields.dining_name})`}
-        buttonAction={delete_dining}
-        show_alert={showAlert}
-        hideAlert={setShowAlert}
-      />
     </React.Fragment>
   );
 };

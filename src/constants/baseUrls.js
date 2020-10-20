@@ -7,8 +7,4 @@ export const imageBaseUrl =
   ":" +
   "3000" +
   "/";
-export const BaseUrl = LocalUrl;
-<<<<<<< HEAD
-  
-=======
->>>>>>> 0f8b0f1f95cae27b92e4d2a366cb8feb86d079bc
+export const BaseUrl = LiveUrl;

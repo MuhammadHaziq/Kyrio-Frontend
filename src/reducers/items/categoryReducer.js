@@ -1,5 +1,6 @@
 import {
   GET_CATEGORY_LIST,
+  ADD_NEW_CATEGORY,
   TOGGLE_CATEGORY_DELETE_SELECT,
   TOGGLE_ALL_CATEGORY_DELETE_SELECT,
   DELETE_CATEGORY,
@@ -7,6 +8,7 @@ import {
 
 const initialState = {
   category_list: [],
+  redirect_categoryList: false,
 };
 const categoryReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -16,6 +18,14 @@ const categoryReducer = (state = initialState, action) => {
         category_list: action.response,
       });
     }
+
+    case ADD_NEW_CATEGORY: {
+      return Object.assign({}, state, {
+        category_list: [...state.category_list, action.response],
+        redirect_categoryList: true,
+      });
+    }
+
     case TOGGLE_CATEGORY_DELETE_SELECT: {
       return Object.assign({}, state, {
         category_list: state.category_list.map((item) => {

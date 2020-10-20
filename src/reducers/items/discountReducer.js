@@ -1,5 +1,6 @@
 import {
   GET_DISCOUNT_LIST,
+  ADD_NEW_DISCOUNT,
   TOGGLE_DISCOUNT_DELETE_SELECT,
   TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
   DELETE_DISCOUNT,
@@ -7,6 +8,7 @@ import {
 
 const initialState = {
   discount_list: [],
+  redirect_discountList: false,
 };
 const discountReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -14,6 +16,14 @@ const discountReducer = (state = initialState, action) => {
     case GET_DISCOUNT_LIST: {
       return { ...state, discount_list: action.response };
     }
+
+    case ADD_NEW_DISCOUNT: {
+      return Object.assign({}, state, {
+        discount_list: [...state.discount_list, action.response],
+        redirect_discountList: true,
+      });
+    }
+
     case TOGGLE_DISCOUNT_DELETE_SELECT: {
       return Object.assign({}, state, {
         discount_list: state.discount_list.map((item) => {

@@ -1,5 +1,6 @@
 import {
   GET_CATEGORY_LIST,
+  ADD_NEW_CATEGORY,
   TOGGLE_CATEGORY_DELETE_SELECT,
   TOGGLE_ALL_CATEGORY_DELETE_SELECT,
   DELETE_CATEGORY,
@@ -55,6 +56,55 @@ export const get_category_list = (data) => {
     }
   };
 };
+
+
+export const add_new_category = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "post",
+        url: `${BaseUrl}items/categories`,
+        data:data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: ADD_NEW_CATEGORY, response: response.data });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error.response.data,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 
 export const toggle_category_single_select = (data) => {
   return (dispatch) => {

@@ -1,5 +1,6 @@
 import {
   GET_DISCOUNT_LIST,
+  ADD_NEW_DISCOUNT,
   TOGGLE_DISCOUNT_DELETE_SELECT,
   TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
   DELETE_DISCOUNT,
@@ -23,6 +24,54 @@ export const get_discount_list = (id) => {
         .then((response) => {
           console.log(response);
           dispatch({ type: GET_DISCOUNT_LIST, response: response.data });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status == 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error.response.data,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const add_new_disocunt = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "post",
+        url: `${BaseUrl}items/discount/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: ADD_NEW_DISCOUNT, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);

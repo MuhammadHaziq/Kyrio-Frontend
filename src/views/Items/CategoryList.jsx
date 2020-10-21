@@ -11,12 +11,14 @@ import {
 import {
   get_category_list,
   delete_categories,
+  redirect_back_category,
 } from "../../actions/items/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
 import CategoryDatatable from "../../datatables/category/CategoryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCategory from "../../components/items/category/AddCategory";
+import UpdateCategory from "../../components/items/category/UpdateCategory";
 const CategoryList = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [fadeCategory, setFadeCategory] = useState(true);
@@ -29,6 +31,17 @@ const CategoryList = (props) => {
   useEffect(() => {
     dispatch(get_category_list());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      category.redirect_update !== undefined &&
+      category.redirect_update === true
+    ) {
+      setFadeCategory(false);
+      setFadeAddCategory(false);
+      setUpdateCategory(true);
+    }
+  }, [category.redirect_update]);
 
   const deleteCategory = () => {
     const category_id = category.category_list
@@ -48,19 +61,29 @@ const CategoryList = (props) => {
     setFadeCategory(false);
     setFadeAddCategory(true);
     setUpdateCategory(false);
-    // dispatch(redirect_back_store(false));
+    dispatch(redirect_back_category(false));
   };
 
   const goBack = () => {
     setFadeCategory(true);
     setFadeAddCategory(false);
     setUpdateCategory(false);
-    // dispatch(redirect_back_store(true));
+    dispatch(redirect_back_category(true));
   };
 
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdateStore ? (
+          <CFade timeout={timeout} in={fadeUpdateStore}>
+            <UpdateCategory
+              goBack={goBack}
+              update_item_category={category.update_item_category}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddCategory ? (
           <CFade timeout={timeout} in={fadeAddCategory}>
             <AddCategory goBack={goBack} />

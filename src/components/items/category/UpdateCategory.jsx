@@ -26,8 +26,13 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
-import { add_new_category } from "../../../actions/items/categoryActions";
-const AddCategory = (props) => {
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
+import {
+  update_item_category,
+  delete_categories,
+} from "../../../actions/items/categoryActions";
+
+const UpdateCategory = (props) => {
   const [fields, setFields] = useState({
     category_name: "",
     color: "rgb(224, 224, 224)",
@@ -35,6 +40,7 @@ const AddCategory = (props) => {
   const [errors, setErrors] = useState({
     category_name: false,
   });
+  const [showAlert, setShowAlert] = useState(false);
 
   const category = useSelector((state) => state.items.categoryReducer);
   const dispatch = useDispatch();
@@ -47,11 +53,23 @@ const AddCategory = (props) => {
       props.goBack();
   }, [category.redirect_categoryList]);
 
+  useEffect(() => {
+    if (
+      props.update_item_category !== undefined &&
+      Object.keys(props.update_item_category).length > 0
+    ) {
+      setFields({
+        category_name: props.update_item_category.catTitle || "",
+        color: props.update_item_category.catColor || "",
+      });
+    }
+  }, [props.update_item_category]);
+
   const goBack = () => {
     props.goBack();
   };
 
-  const submitCategory = () => {
+  const updateCategory = () => {
     if (fields.category_name === "") {
       setErrors({
         ...errors,
@@ -61,10 +79,11 @@ const AddCategory = (props) => {
     }
 
     const data = {
+      id: props.update_item_category._id,
       catTitle: fields.category_name,
       catColor: fields.color,
     };
-    dispatch(add_new_category(data));
+    dispatch(update_item_category(data));
     console.log(data);
   };
 
@@ -100,6 +119,16 @@ const AddCategory = (props) => {
     { id: 6, color: "rgb(33, 150, 243)" },
     { id: 7, color: "rgb(156, 39, 176)" },
   ];
+
+  const delete_category = () => {
+    const data = [props.update_item_category._id];
+    console.log(data);
+    dispatch(delete_categories(JSON.stringify(data)));
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
 
   return (
     <React.Fragment>
@@ -166,22 +195,25 @@ const AddCategory = (props) => {
         <CCardFooter>
           <CRow>
             <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-              <CButton
-                block
+              <ConformationAlert
+                button_text="Delete"
+                heading="Please confirm your action"
+                section="Are you sure you want to delete the selected category?"
+                buttonAction={delete_category}
+                show_alert={showAlert}
+                hideAlert={setShowAlert}
                 variant="outline"
                 className="btn-pill pull-right"
-                color="secondary"
-                onClick={goBack}
-              >
-                BACK
-              </CButton>
+                color="danger"
+                block={true}
+              />
             </CCol>
             <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
               <CButton
                 block
                 variant="outline"
                 className="btn-pill pull-right"
-                color="danger"
+                color="default"
                 onClick={goBack}
               >
                 CANCEL
@@ -194,9 +226,9 @@ const AddCategory = (props) => {
                 variant="outline"
                 className="btn-pill pull-right"
                 color="success"
-                onClick={submitCategory}
+                onClick={updateCategory}
               >
-                SAVE
+                UPDATE
               </CButton>
             </CCol>
           </CRow>
@@ -206,4 +238,4 @@ const AddCategory = (props) => {
   );
 };
 
-export default AddCategory;
+export default UpdateCategory;

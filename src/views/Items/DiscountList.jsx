@@ -15,17 +15,19 @@ import usersData from "../users/UsersData.js";
 import {
   get_discount_list,
   delete_discount,
+  redirect_back_discount,
 } from "../../actions/items/discountActions";
 import DiscountDatatable from "../../datatables/discount/DiscountDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
 import AddDiscount from "../../components/items/disocunt/AddDiscount.jsx";
+import UpdateDiscount from "../../components/items/disocunt/UpdateDiscount.jsx";
 const DiscountList = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState("0");
   const [fadeDiscount, setFadeDiscount] = useState(true);
-  const [fadeUpdateStore, setUpdateDiscount] = useState(false);
+  const [fadeUpdateDiscount, setUpdateDiscount] = useState(false);
   const [fadeAddDiscount, setFadeAddDiscount] = useState(false);
   const [timeout] = useState(300);
   const discount = useSelector((state) => state.items.discountReducer);
@@ -36,6 +38,17 @@ const DiscountList = (props) => {
     dispatch(get_discount_list(selectedStoreId));
     dispatch(get_stores());
   }, []);
+
+  useEffect(() => {
+    if (
+      discount.redirect_update !== undefined &&
+      discount.redirect_update === true
+    ) {
+      setFadeDiscount(false);
+      setFadeAddDiscount(false);
+      setUpdateDiscount(true);
+    }
+  }, [discount.redirect_update]);
 
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
@@ -59,19 +72,30 @@ const DiscountList = (props) => {
     setFadeDiscount(false);
     setFadeAddDiscount(true);
     setUpdateDiscount(false);
-    // dispatch(redirect_back_store(false));
+    dispatch(redirect_back_discount(false));
   };
 
   const goBack = () => {
     setFadeDiscount(true);
     setFadeAddDiscount(false);
     setUpdateDiscount(false);
-    // dispatch(redirect_back_store(true));
+    dispatch(redirect_back_discount(true));
   };
 
   return (
     <React.Fragment>
       <div className="animated fadeIn">
+        {fadeUpdateDiscount ? (
+          <CFade timeout={timeout} in={fadeUpdateDiscount}>
+            <UpdateDiscount
+              goBack={goBack}
+              store={store.stores_list}
+              update_item_discount={discount.update_item_discount}
+            />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeAddDiscount ? (
           <CFade timeout={timeout} in={fadeAddDiscount}>
             <AddDiscount goBack={goBack} store={store.stores_list} />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   CButton,
@@ -26,13 +25,18 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
-import { add_new_disocunt } from "../../../actions/items/discountActions";
+import {
+  update_item_discount,
+  delete_discount,
+} from "../../../actions/items/discountActions";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 
-const AddDiscount = (props) => {
+const UpdateDiscount = (props) => {
   const discount = useSelector((state) => state.items.discountReducer);
 
   const [collapse, setCollapse] = useState([true, true]);
   const [restricted_access, setRestrictedAccess] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [fields, setFields] = useState({
     discount_name: "",
     discount_value: "",
@@ -47,17 +51,6 @@ const AddDiscount = (props) => {
   });
   const [storeId, setStoreId] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (props.store !== undefined) {
-      const stores = props.store.slice().map((item) => {
-        return {
-          ...item,
-          isSelected: true,
-        };
-      });
-      setStoreId(stores);
-    }
-  }, [props.store]);
 
   useEffect(() => {
     if (
@@ -66,6 +59,38 @@ const AddDiscount = (props) => {
     )
       props.goBack();
   }, [discount.redirect_discountList]);
+
+  useEffect(() => {
+    if (props.store !== undefined) {
+      let stores = props.store;
+      if (props.update_item_discount !== undefined) {
+        (props.update_item_discount.stores || []).map((ite) => {
+          return (stores = stores.slice().map((item) => {
+            if (item._id === ite.id) {
+              return {
+                ...item,
+                isSelected: true,
+              };
+            }
+            return item;
+          }));
+        });
+        setFields({
+          ...fields,
+          discount_name: props.update_item_discount.title,
+          discount_value: props.update_item_discount.value,
+          disocunt_type: props.update_item_discount.type,
+          checkAll:
+            stores.filter((item) => item.isSelected === true).length ===
+              props.store.length && props.store.length > 0
+              ? true
+              : false,
+        });
+        setStoreId(stores);
+        setRestrictedAccess(props.update_item_discount.restricted);
+      }
+    }
+  }, [props, props.update_item_discount]);
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -80,7 +105,7 @@ const AddDiscount = (props) => {
     props.goBack();
   };
 
-  const submitDiscount = () => {
+  const updateDiscount = () => {
     if (storeId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Store");
     } else if (fields.discount_name === "") {
@@ -99,6 +124,7 @@ const AddDiscount = (props) => {
       });
 
       const data = {
+        id: props.update_item_discount._id,
         title: fields.discount_name,
         value: fields.discount_value,
         type: fields.disocunt_type,
@@ -106,7 +132,7 @@ const AddDiscount = (props) => {
         stores: JSON.stringify(storeData),
         // store: JSON.stringify(storeId),
       };
-      dispatch(add_new_disocunt(data));
+      dispatch(update_item_discount(data));
       console.log(data);
     }
   };
@@ -162,6 +188,17 @@ const AddDiscount = (props) => {
 
     setStoreId(selectedStore);
   };
+
+  const delete_item_discount = () => {
+    const data = [props.update_item_discount._id];
+    console.log(data);
+    dispatch(delete_discount(JSON.stringify(data)));
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
+  };
+
   return (
     <React.Fragment>
       <CCard>
@@ -205,7 +242,7 @@ const AddDiscount = (props) => {
                     name="disocunt_type"
                     onChange={handleOnChange}
                     value={"Percentage"}
-                    checked
+                    checked={fields.disocunt_type === "Percentage"}
                   />
                   <CLabel htmlFor="disocunt_type">Percentage</CLabel>
                 </CInputGroup>
@@ -217,6 +254,7 @@ const AddDiscount = (props) => {
                     name="disocunt_type"
                     onChange={handleOnChange}
                     value={"Amount"}
+                    checked={fields.disocunt_type === "Amount"}
                   />
                   <CLabel htmlFor="disocunt_type">Amount</CLabel>
                 </CInputGroup>
@@ -359,22 +397,25 @@ const AddDiscount = (props) => {
       </CCollapse>
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-          <CButton
-            block
+          <ConformationAlert
+            button_text="Delete"
+            heading="Delete discount"
+            section="Are you sure you want to delete discount?"
+            buttonAction={delete_item_discount}
+            show_alert={showAlert}
+            hideAlert={setShowAlert}
             variant="outline"
             className="btn-pill pull-right"
-            color="secondary"
-            onClick={goBack}
-          >
-            BACK
-          </CButton>
+            color="danger"
+            block={true}
+          />
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <CButton
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="danger"
+            color="default"
             onClick={goBack}
           >
             CANCEL
@@ -387,9 +428,9 @@ const AddDiscount = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            onClick={submitDiscount}
+            onClick={updateDiscount}
           >
-            SAVE
+            UPDATE
           </CButton>
         </CCol>
       </CRow>
@@ -397,4 +438,4 @@ const AddDiscount = (props) => {
   );
 };
 
-export default AddDiscount;
+export default UpdateDiscount;

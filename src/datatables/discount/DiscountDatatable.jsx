@@ -4,6 +4,7 @@ import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_discount_single_select,
   toggle_discount_all_select,
+  select_row_data_update,
 } from "../../actions/items/discountActions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -58,7 +59,7 @@ const ItemsListDatatable = (props) => {
     sizePerPage: 5,
     onRowClick: function (row) {
       console.log(row);
-      // dispatch(select_row_data_update(row));
+      dispatch(select_row_data_update(row));
     },
   };
   return (

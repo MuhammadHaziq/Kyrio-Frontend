@@ -1,6 +1,9 @@
 import {
   GET_DISCOUNT_LIST,
   ADD_NEW_DISCOUNT,
+  SELECT_ROW_ITEMS_DISCOUNT,
+  REDIRECT_BACK_DISCOUNT,
+  UPDATE_ITEM_DISCOUNT,
   TOGGLE_DISCOUNT_DELETE_SELECT,
   TOGGLE_ALL_DISCOUNT_DELETE_SELECT,
   DELETE_DISCOUNT,
@@ -10,6 +13,15 @@ import {
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
+
+export const redirect_back_discount = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_DISCOUNT,
+      response: status,
+    });
+  };
+};
 
 export const get_discount_list = (id) => {
   return (dispatch) => {
@@ -95,6 +107,72 @@ export const add_new_disocunt = (data) => {
         message:
           typeof error.response != "undefined"
             ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const select_row_data_update = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_ROW_ITEMS_DISCOUNT,
+      response: data,
+    });
+  };
+};
+
+export const update_item_discount = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}items/discount/${data.id}`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: UPDATE_ITEM_DISCOUNT,
+            response: response.data.data,
+          });
+          let msg = {
+            open: true,
+            message: response.data.message,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error.response.data,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

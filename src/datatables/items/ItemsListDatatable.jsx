@@ -22,16 +22,20 @@ const ItemsListDatatable = (props) => {
     }
   };
   const showPrice = (cell, row) => {
-    return row.price.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+    return row.price !== null
+      ? row.price.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })
+      : "$ 0.00";
   };
   const showCost = (cell, row) => {
-    return row.cost.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-    });
+    return row.cost !== null
+      ? row.cost.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })
+      : "$ 0.00";
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_item_single_select(row));

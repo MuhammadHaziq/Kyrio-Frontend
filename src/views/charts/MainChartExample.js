@@ -5,6 +5,8 @@ import { getStyle, hexToRgba } from '@coreui/utils/src'
 const brandSuccess = getStyle('success') || '#4dbd74'
 const brandInfo = getStyle('info') || '#20a8d8'
 const brandDanger = getStyle('danger') || '#f86c6b'
+const brandWarning = getStyle('warning') || '#e1a82d'
+const brandPrimary = getStyle('primary') || '#4638c2'
 
 const MainChartExample = attributes => {
   const random = (min, max)=>{
@@ -37,11 +39,42 @@ const MainChartExample = attributes => {
         pointHoverBackgroundColor: brandDanger,
         borderWidth: 2,
         data: attributes.sales.grossSales.data2
+      },
+      {
+        label: 'Discounts',
+        backgroundColor: hexToRgba(brandWarning, 10),
+        borderColor: brandWarning,
+        pointHoverBackgroundColor: brandWarning,
+        borderWidth: 2,
+        data: attributes.sales.grossSales.data3
+      },
+      {
+        label: 'Net Sales',
+        backgroundColor: hexToRgba(brandInfo, 10),
+        borderColor: brandInfo,
+        pointHoverBackgroundColor: brandInfo,
+        borderWidth: 2,
+        data: attributes.sales.grossSales.data4
+      },
+      {
+        label: 'Gross profit',
+        backgroundColor: hexToRgba(brandPrimary, 10),
+        borderColor: brandPrimary,
+        pointHoverBackgroundColor: brandPrimary,
+        borderWidth: 2,
+        data: attributes.sales.grossSales.data5
       }
     ]
   })()
 
   const defaultOptions = (()=>{
+    let data = [];
+    data.push(...attributes.sales.grossSales.data)
+    data.push(...attributes.sales.grossSales.data2)
+    data.push(...attributes.sales.grossSales.data3)
+    data.push(...attributes.sales.grossSales.data4)
+    data.push(...attributes.sales.grossSales.data5)
+    console.log(data)
     return {
         maintainAspectRatio: false,
         legend: {
@@ -57,8 +90,8 @@ const MainChartExample = attributes => {
             ticks: {
               beginAtZero: true,
               maxTicksLimit: 10,
-              stepSize: Math.ceil(Math.max(...attributes.sales.grossSales.data) / 10),
-              max: Math.max(...attributes.sales.grossSales.data) + 100
+              stepSize: Math.ceil(Math.max(...data) / 10),
+              max: Math.max(...data) + 100
             },
             gridLines: {
               display: true

@@ -23,12 +23,20 @@ const MainChartExample = attributes => {
     }
     return [
       {
-        label: 'My First dataset',
-        backgroundColor: hexToRgba(brandInfo, 10),
-        borderColor: brandInfo,
-        pointHoverBackgroundColor: brandInfo,
+        label: 'Gross sales',
+        backgroundColor: hexToRgba(brandSuccess, 10),
+        borderColor: brandSuccess,
+        pointHoverBackgroundColor: brandSuccess,
         borderWidth: 2,
-        data: data1
+        data: attributes.sales.grossSales.data
+      },
+      {
+        label: 'Refunds',
+        backgroundColor: hexToRgba(brandDanger, 10),
+        borderColor: brandDanger,
+        pointHoverBackgroundColor: brandDanger,
+        borderWidth: 2,
+        data: attributes.sales.grossSales.data2
       }
     ]
   })()
@@ -48,9 +56,9 @@ const MainChartExample = attributes => {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              maxTicksLimit: 5,
-              stepSize: Math.ceil(250 / 5),
-              max: 250
+              maxTicksLimit: 10,
+              stepSize: Math.ceil(Math.max(...attributes.sales.grossSales.data) / 10),
+              max: Math.max(...attributes.sales.grossSales.data) + 100
             },
             gridLines: {
               display: true
@@ -75,7 +83,7 @@ const MainChartExample = attributes => {
       {...attributes}
       datasets={defaultDatasets}
       options={defaultOptions}
-      labels={['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']}
+      labels={attributes.sales.grossSales.labels}
     />
   )
 }

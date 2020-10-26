@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CButton,
   CButtonGroup,
@@ -11,10 +11,59 @@ import {
   CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-
+import dateformat from "dateformat";
 import MainChartExample from '../charts/MainChartExample.js'
 
 const Dashboard = () => {
+
+  const [month, setMonth] = useState(dateformat(new Date(),"m"));
+  const [year, setYear] = useState(dateformat(new Date(),"yyyy"));
+
+  const getDaysInMonth = (month, year) => (new Array(31)).fill('').map((v,i)=>new Date(year,month-1,i+1)).filter(v=>v.getMonth()===month-1).map(itm=>dateformat(itm,"mmm dd"))
+  
+  const [Days, setDays] = useState(getDaysInMonth(month,year));
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("");
+
+  // Sales by Day full month
+  const[sales,setSales] = useState({
+    grossSales: {
+      data: [1,2,3,4,5,62,21,142,43,1,123,123,123,14,213,3,421,123,124,123,123,412,2312,1412,132,24,3435,23,12433,123,53],
+      data2: [1,344,3,6757,5,62,21,142,43,1,123,123,23,14,4545,3,131,643,124,123,12351,843,786,1412,132,24,511,23,9867,123,42],
+      labels: Days
+    }
+  });
+
+  useEffect(()=>{
+    if(sales.grossSales){
+      setLoading(true);
+    }
+  },[sales.grossSales]);
+  const changeFilter = (v) => {
+    if(v === "Hours"){
+      setFilter("Hours");
+      
+    } else if(v === "Days"){
+      setFilter("Days");
+      setLoading(false);
+      var today = new Date();
+      let last30days = []
+      for(let i = 0; i < 30; i++){
+        let date = dateformat(new Date(new Date().setDate(today.getDate() - i)),"mmm dd")
+        last30days.push(date)
+      }
+      setDays(last30days);
+      setSales({
+        grossSales: {
+          data: [1,2,3,4,5,62,21,142,43,1,123,123,123,14,213,3,421,123,124,123,123,412,2312,1412,132,24,3435,23,12433,123,53],
+          data2: [1,344,3,6757,5,62,21,142,43,1,123,123,23,14,4545,3,131,643,124,123,12351,843,786,1412,132,24,511,23,9867,123,42],
+          labels: Days
+        }
+      })
+      setLoading(true);
+      
+    }
+  }
   return (
     <>
       <CCard>
@@ -35,7 +84,8 @@ const Dashboard = () => {
                       color="outline-secondary"
                       key={value}
                       className="mx-0"
-                      active={value === 'Months'}
+                      onClick={()=>changeFilter(value)}
+                      active={value === filter}
                     >
                       {value}
                     </CButton>
@@ -44,7 +94,7 @@ const Dashboard = () => {
               </CButtonGroup>
             </CCol>
           </CRow>
-          <MainChartExample style={{height: '300px', marginTop: '40px'}}/>
+          {loading ? <MainChartExample sales={sales} style={{height: '300px', marginTop: '40px'}}/> : "Loading..."}
         </CCardBody>
         <CCardFooter>
           <CRow className="text-center">
@@ -64,7 +114,7 @@ const Dashboard = () => {
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
-                color="info"
+                color="danger"
                 value={40}
               />
             </CCol>
@@ -84,7 +134,7 @@ const Dashboard = () => {
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
-                color="danger"
+                color="info"
                 value={40}
               />
             </CCol>

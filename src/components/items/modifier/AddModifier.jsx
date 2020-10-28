@@ -26,6 +26,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { add_new_category } from "../../../actions/items/categoryActions";
 const AddModifier = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
@@ -33,10 +34,19 @@ const AddModifier = (props) => {
     modifier_name: "",
     checkAll: true,
   });
+  const [modifierFields, setModifierFields] = useState([
+    { id: "0", optionName: "test", price: 0.0, position: 0 },
+  ]);
+  const [modifierFieldsError, setModifierFieldsError] = useState([
+    {
+      optionName: false,
+    },
+  ]);
   const [errors, setErrors] = useState({
     modifier_name: false,
   });
   const [storeId, setStoreId] = useState([]);
+  const [items, setItems] = useState([]);
 
   const category = useSelector((state) => state.items.categoryReducer);
   const dispatch = useDispatch();
@@ -140,6 +150,134 @@ const AddModifier = (props) => {
     setStoreId(selectedStore);
   };
 
+  // a little function to help us with reordering the result
+  const reorder = (data, startIndex, endIndex) => {
+    const result = data;
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+
+  const grid = 8;
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    margin: `0 0 ${grid}px 0`,
+
+    // change background colour if dragging
+    background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
+
+    // styles we need to apply on draggables
+    ...draggableStyle,
+  });
+
+  const getListStyle = (isDraggingOver) => ({
+    background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
+    padding: grid,
+    // width: 250,
+  });
+
+  const onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items = reorder(
+      modifierFields,
+      result.source.index,
+      result.destination.index
+    );
+    const data = {
+      data: JSON.stringify(
+        items.map((item, index) => {
+          return { id: item.id, position: index, title: item.content };
+        })
+      ),
+    };
+
+    setModifierFields(
+      items.map((item, index) => {
+        return {
+          ...item,
+          position: index,
+        };
+      })
+    );
+  };
+
+  const addOptions = () => {
+    const validateModiferFields = (modifierFields || []).filter((item) => {
+      return item.optionName.trim() == "";
+    });
+    if (validator.isEmpty(fields.modifier_name)) {
+      setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
+    } else if (validateModiferFields.length > 0) {
+      const modifierFieldsIndex =
+        modifierFields ||
+        [].map((item, index) => {
+          if (item.optionName.trim() == "") {
+            const data = modifierFieldsError.map((ite, indx) => {
+              if (index === indx) {
+                return {
+                  ...ite,
+                  optionName: validator.isEmpty(item.optionName),
+                };
+              }
+              return ite;
+            });
+            setModifierFieldsError(data);
+          }
+        });
+    } else {
+      setModifierFields([
+        ...modifierFields,
+        {
+          id: modifierFields.length.toString(),
+          optionName: "",
+          price: 0.0,
+          position: modifierFields.length,
+        },
+      ]);
+      setModifierFieldsError([...modifierFieldsError, { optionName: false }]);
+    }
+  };
+
+  const handleOnChangeModifierField = (idx) => (e) => {
+    const { name, value } = e.target;
+    const data = modifierFields.map((item, index) => {
+      if (index === idx) {
+        return {
+          ...item,
+          [name]: value,
+        };
+      }
+      return item;
+    });
+    setModifierFields(data);
+  };
+
+  const modifierFieldBlur = (idx) => (e) => {
+    const data = modifierFieldsError.map((item, index) => {
+      if (index === idx) {
+        return {
+          ...item,
+          optionName: validator.isEmpty(modifierFields[idx].optionName),
+        };
+      }
+      return item;
+    });
+    setModifierFieldsError(data);
+  };
+
+  const deleteModifier = (idx) => {
+    const newState = [...modifierFields];
+    newState.splice(idx, 1);
+    setModifierFields(newState);
+  };
+
   return (
     <React.Fragment>
       <CCard>
@@ -170,6 +308,146 @@ const AddModifier = (props) => {
                 </CInvalidFeedback>
               </CInputGroup>
             </CFormGroup>
+          </CCol>
+          <CCol sm="12">
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                  >
+                    <CRow>
+                      <CCol sm="12">
+                        <CListGroup>
+                          {modifierFields.map((item, index) => (
+                            <Draggable
+                              key={item.id}
+                              draggableId={item.id}
+                              index={index}
+                            >
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={getItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                  )}
+                                >
+                                  <CRow>
+                                    <CListGroupItem
+                                      action
+                                      key={index}
+                                      style={{
+                                        border: "none",
+                                        borderBottom:
+                                          "1px solid rgb(118 129 146 / 25%)",
+                                      }}
+                                    >
+                                      <CRow>
+                                        <CCol sm="4">
+                                          <CFormGroup>
+                                            <CInputGroup>
+                                              <CInput
+                                                id="optionName"
+                                                name="optionName"
+                                                placeholder="Option Name"
+                                                value={item.optionName}
+                                                onChange={handleOnChangeModifierField(
+                                                  index
+                                                )}
+                                                invalid={
+                                                  modifierFieldsError[index]
+                                                    .optionName
+                                                }
+                                                onBlur={modifierFieldBlur(
+                                                  index
+                                                )}
+                                              />
+                                              <CInvalidFeedback>
+                                                {modifierFieldsError[index]
+                                                  .optionName === true
+                                                  ? "Please Enter Option Name"
+                                                  : ""}
+                                              </CInvalidFeedback>
+                                            </CInputGroup>
+                                          </CFormGroup>
+                                        </CCol>
+                                        <CCol sm="4">
+                                          <CFormGroup>
+                                            <CInputGroup>
+                                              <CInput
+                                                type="number"
+                                                id="price"
+                                                name="price"
+                                                placeholder="Price"
+                                                value={item.price}
+                                                onChange={handleOnChangeModifierField(
+                                                  index
+                                                )}
+                                              />
+                                              {/*  <CInvalidFeedback>
+
+                                                {errors.modifier_name === true
+                                                  ? "Please Enter Category Name"
+                                                  : ""}
+
+                                              </CInvalidFeedback>*/}
+                                            </CInputGroup>
+                                          </CFormGroup>
+                                        </CCol>
+                                        <CCol sm="4">
+                                          <CButton
+                                            variant="outline"
+                                            className="pull-right"
+                                            color="danger"
+                                            onClick={() =>
+                                              deleteModifier(index)
+                                            }
+                                            block={false}
+                                          >
+                                            <CIcon name="cil-trash" />
+                                          </CButton>
+                                        </CCol>
+                                      </CRow>
+                                    </CListGroupItem>
+                                  </CRow>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                        </CListGroup>
+                      </CCol>
+                    </CRow>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </CCol>
+          <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
+            <CButton
+              className="btn-square pull right"
+              color="success"
+              onClick={addOptions}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="c-icon c-icon-sm"
+                role="img"
+              >
+                <polygon
+                  fill="var(--ci-primary-color, currentColor)"
+                  points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                  className="ci-primary"
+                ></polygon>
+              </svg>
+              ADD OPTION
+            </CButton>
           </CCol>
         </CCardBody>
         <CCardFooter>
@@ -297,3 +575,95 @@ const AddModifier = (props) => {
 };
 
 export default AddModifier;
+//
+// <DragDropContext onDragEnd={onDragEnd}>
+//   <Droppable droppableId="droppable">
+//     {(provided, snapshot) => (
+//       <div
+//         {...provided.droppableProps}
+//         ref={provided.innerRef}
+//         style={getListStyle(snapshot.isDraggingOver)}
+//       >
+//         <CRow>
+//           <CCol sm="12">
+//             <CListGroup>
+//               {modifierFields.map((item, index) => (
+//                 <Draggable
+//                   key={item.id}
+//                   draggableId={item.id}
+//                   index={index}
+//                 >
+//                   {(provided, snapshot) => (
+//                     <div
+//                       ref={provided.innerRef}
+//                       {...provided.draggableProps}
+//                       {...provided.dragHandleProps}
+//                       style={getItemStyle(
+//                         snapshot.isDragging,
+//                         provided.draggableProps.style
+//                       )}
+//                     >
+//                       <CListGroupItem
+//                         action
+//                         key={index}
+//                         style={{
+//                           border: "none",
+//                           borderBottom:
+//                             "1px solid rgb(118 129 146 / 25%)",
+//                         }}
+//                       >
+//                         <CRow>
+//                           <CCol sm="4">
+//                             <CFormGroup>
+//                               <CInputGroup>
+//                                 <CInput
+//                                   id="optionName"
+//                                   name="optionName"
+//                                   placeholder="Option Name"
+//                                   value={item.optionName}
+//                                   invalid={item.optionName}
+//                                 />
+//                                 <CInvalidFeedback>
+//                                   /*
+//                                   {errors.modifier_name === true
+//                                     ? "Please Enter Category Name"
+//                                     : ""}
+//                                   */
+//                                 </CInvalidFeedback>
+//                               </CInputGroup>
+//                             </CFormGroup>
+//                           </CCol>
+//                           <CCol sm="4">
+//                             <CFormGroup>
+//                               <CInputGroup>
+//                                 <CInput
+//                                   id="price"
+//                                   name="price"
+//                                   placeholder="Price"
+//                                   value={item.price}
+//                                   invalid={item.price}
+//                                 />
+//                                 <CInvalidFeedback>
+//                                   /*
+//                                   {errors.modifier_name === true
+//                                     ? "Please Enter Category Name"
+//                                     : ""}
+//                                   */
+//                                 </CInvalidFeedback>
+//                               </CInputGroup>
+//                             </CFormGroup>
+//                           </CCol>
+//                         </CRow>
+//                       </CListGroupItem>
+//                     </div>
+//                   )}
+//                 </Draggable>
+//               ))}
+//             </CListGroup>
+//           </CCol>
+//         </CRow>
+//         {provided.placeholder}
+//       </div>
+//     )}
+//   </Droppable>
+// </DragDropContext>

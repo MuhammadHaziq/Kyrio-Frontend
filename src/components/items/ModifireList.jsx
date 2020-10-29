@@ -124,12 +124,15 @@ class ModifireList extends Component {
   };
 
   modifireCheckHandle = (id) => {
-    console.log(id);
     const row = this.props.modifiers_list.filter((item) => {
       return item._id === id;
     })[0];
 
     this.props.toggle_modifire_single_select(row);
+  };
+
+  get_row_data = (id) => {
+    console.log(id);
   };
   render() {
     return (
@@ -211,33 +214,37 @@ class ModifireList extends Component {
                                         marginLeft: "0px",
                                       }}
                                     />
-                                    <h6
-                                      className="d-flex w-100  justify-content-between"
-                                      style={{
-                                        marginBottom: "0px",
-                                        marginLeft: "29px",
-                                        color: "#20202a",
-                                        marginTop: "-12px",
-                                      }}
+                                    <div
+                                      onClick={() => this.get_row_data(item.id)}
                                     >
-                                      <b>{item.content}</b>
-                                    </h6>
+                                      <h6
+                                        className="d-flex w-100  justify-content-between"
+                                        style={{
+                                          marginBottom: "0px",
+                                          marginLeft: "29px",
+                                          color: "#20202a",
+                                          marginTop: "-12px",
+                                        }}
+                                      >
+                                        <b>{item.content}</b>
+                                      </h6>
 
-                                    <small
-                                      className="mb-1"
-                                      style={{
-                                        marginLeft: "45px",
-                                        color: "#20202ad1",
-                                      }}
-                                    >
-                                      {item.options}
-                                    </small>
-                                    <CIcon
-                                      style={{
-                                        float: "right",
-                                      }}
-                                      name={"cil-align-center"}
-                                    />
+                                      <small
+                                        className="mb-1"
+                                        style={{
+                                          marginLeft: "45px",
+                                          color: "#20202ad1",
+                                        }}
+                                      >
+                                        {item.options}
+                                      </small>
+                                      <CIcon
+                                        style={{
+                                          float: "right",
+                                        }}
+                                        name={"cil-align-center"}
+                                      />
+                                    </div>
                                   </CCol>
                                 </CListGroupItem>
                               </CRow>

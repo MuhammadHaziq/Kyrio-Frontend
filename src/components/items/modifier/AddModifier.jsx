@@ -27,7 +27,9 @@ import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { add_new_category } from "../../../actions/items/categoryActions";
+import { add_new_modifier } from "../../../actions/items/modifiresActions";
+import NumberFormat from "react-number-format";
+
 const AddModifier = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({
@@ -35,11 +37,11 @@ const AddModifier = (props) => {
     checkAll: true,
   });
   const [modifierFields, setModifierFields] = useState([
-    { id: "0", optionName: "test", price: 0.0, position: 0 },
+    { id: "0", name: "test", price: "$0.0", position: 0 },
   ]);
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
-      optionName: false,
+      name: false,
     },
   ]);
   const [errors, setErrors] = useState({
@@ -48,16 +50,16 @@ const AddModifier = (props) => {
   const [storeId, setStoreId] = useState([]);
   const [items, setItems] = useState([]);
 
-  const category = useSelector((state) => state.items.categoryReducer);
+  const modifier = useSelector((state) => state.items.modifiresReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (
-      category.redirect_categoryList !== undefined &&
-      category.redirect_categoryList === true
+      modifier.redirect_modifier !== undefined &&
+      modifier.redirect_modifier === true
     )
       props.goBack();
-  }, [category.redirect_categoryList]);
+  }, [modifier.redirect_modifier]);
 
   useEffect(() => {
     if (props.store !== undefined) {
@@ -80,7 +82,7 @@ const AddModifier = (props) => {
     setCollapse(state);
   };
 
-  const submitCategory = () => {
+  const submitModifier = () => {
     if (fields.modifier_name === "") {
       setErrors({
         ...errors,
@@ -90,10 +92,28 @@ const AddModifier = (props) => {
     }
 
     const data = {
-      catTitle: fields.modifier_name,
-      catColor: fields.color,
+      title: fields.modifier_name,
+      options: JSON.stringify(
+        modifierFields.map((item) => {
+          return {
+            name: item.name,
+            price: item.price.split("$")[1],
+            position: item.position,
+          };
+        })
+      ),
+      stores: JSON.stringify(
+        storeId
+          .filter((item) => item.isSelected === true)
+          .map((ite) => {
+            return {
+              id: ite._id,
+              name: ite.title,
+            };
+          })
+      ),
     };
-    dispatch(add_new_category(data));
+    dispatch(add_new_modifier(data));
     console.log(data);
   };
 
@@ -210,7 +230,7 @@ const AddModifier = (props) => {
 
   const addOptions = () => {
     const validateModiferFields = (modifierFields || []).filter((item) => {
-      return item.optionName.trim() == "";
+      return item.name.trim() == "";
     });
     if (validator.isEmpty(fields.modifier_name)) {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
@@ -218,12 +238,12 @@ const AddModifier = (props) => {
       const modifierFieldsIndex =
         modifierFields ||
         [].map((item, index) => {
-          if (item.optionName.trim() == "") {
+          if (item.name.trim() == "") {
             const data = modifierFieldsError.map((ite, indx) => {
               if (index === indx) {
                 return {
                   ...ite,
-                  optionName: validator.isEmpty(item.optionName),
+                  name: validator.isEmpty(item.name),
                 };
               }
               return ite;
@@ -236,12 +256,12 @@ const AddModifier = (props) => {
         ...modifierFields,
         {
           id: modifierFields.length.toString(),
-          optionName: "",
-          price: 0.0,
+          name: "",
+          price: "$0.0",
           position: modifierFields.length,
         },
       ]);
-      setModifierFieldsError([...modifierFieldsError, { optionName: false }]);
+      setModifierFieldsError([...modifierFieldsError, { name: false }]);
     }
   };
 
@@ -264,7 +284,7 @@ const AddModifier = (props) => {
       if (index === idx) {
         return {
           ...item,
-          optionName: validator.isEmpty(modifierFields[idx].optionName),
+          name: validator.isEmpty(modifierFields[idx].name),
         };
       }
       return item;
@@ -352,16 +372,16 @@ const AddModifier = (props) => {
                                           <CFormGroup>
                                             <CInputGroup>
                                               <CInput
-                                                id="optionName"
-                                                name="optionName"
+                                                id="name"
+                                                name="name"
                                                 placeholder="Option Name"
-                                                value={item.optionName}
+                                                value={item.name}
                                                 onChange={handleOnChangeModifierField(
                                                   index
                                                 )}
                                                 invalid={
                                                   modifierFieldsError[index]
-                                                    .optionName
+                                                    .name
                                                 }
                                                 onBlur={modifierFieldBlur(
                                                   index
@@ -369,7 +389,7 @@ const AddModifier = (props) => {
                                               />
                                               <CInvalidFeedback>
                                                 {modifierFieldsError[index]
-                                                  .optionName === true
+                                                  .name === true
                                                   ? "Please Enter Option Name"
                                                   : ""}
                                               </CInvalidFeedback>
@@ -379,7 +399,22 @@ const AddModifier = (props) => {
                                         <CCol sm="4">
                                           <CFormGroup>
                                             <CInputGroup>
-                                              <CInput
+                                              <NumberFormat
+                                                id="price"
+                                                name="price"
+                                                placeholder="Price"
+                                                value={item.price}
+                                                thousandSeparator={true}
+                                                decimalScale={2}
+                                                fixedDecimalScale={true}
+                                                className="form-control"
+                                                prefix={"$"}
+                                                onChange={handleOnChangeModifierField(
+                                                  index
+                                                )}
+                                              />
+
+                                              {/*  <CInput
                                                 type="number"
                                                 id="price"
                                                 name="price"
@@ -389,7 +424,7 @@ const AddModifier = (props) => {
                                                   index
                                                 )}
                                               />
-                                              {/*  <CInvalidFeedback>
+                                              <CInvalidFeedback>
 
                                                 {errors.modifier_name === true
                                                   ? "Please Enter Category Name"
@@ -564,7 +599,7 @@ const AddModifier = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            onClick={submitCategory}
+            onClick={submitModifier}
           >
             SAVE
           </CButton>
@@ -575,95 +610,3 @@ const AddModifier = (props) => {
 };
 
 export default AddModifier;
-//
-// <DragDropContext onDragEnd={onDragEnd}>
-//   <Droppable droppableId="droppable">
-//     {(provided, snapshot) => (
-//       <div
-//         {...provided.droppableProps}
-//         ref={provided.innerRef}
-//         style={getListStyle(snapshot.isDraggingOver)}
-//       >
-//         <CRow>
-//           <CCol sm="12">
-//             <CListGroup>
-//               {modifierFields.map((item, index) => (
-//                 <Draggable
-//                   key={item.id}
-//                   draggableId={item.id}
-//                   index={index}
-//                 >
-//                   {(provided, snapshot) => (
-//                     <div
-//                       ref={provided.innerRef}
-//                       {...provided.draggableProps}
-//                       {...provided.dragHandleProps}
-//                       style={getItemStyle(
-//                         snapshot.isDragging,
-//                         provided.draggableProps.style
-//                       )}
-//                     >
-//                       <CListGroupItem
-//                         action
-//                         key={index}
-//                         style={{
-//                           border: "none",
-//                           borderBottom:
-//                             "1px solid rgb(118 129 146 / 25%)",
-//                         }}
-//                       >
-//                         <CRow>
-//                           <CCol sm="4">
-//                             <CFormGroup>
-//                               <CInputGroup>
-//                                 <CInput
-//                                   id="optionName"
-//                                   name="optionName"
-//                                   placeholder="Option Name"
-//                                   value={item.optionName}
-//                                   invalid={item.optionName}
-//                                 />
-//                                 <CInvalidFeedback>
-//                                   /*
-//                                   {errors.modifier_name === true
-//                                     ? "Please Enter Category Name"
-//                                     : ""}
-//                                   */
-//                                 </CInvalidFeedback>
-//                               </CInputGroup>
-//                             </CFormGroup>
-//                           </CCol>
-//                           <CCol sm="4">
-//                             <CFormGroup>
-//                               <CInputGroup>
-//                                 <CInput
-//                                   id="price"
-//                                   name="price"
-//                                   placeholder="Price"
-//                                   value={item.price}
-//                                   invalid={item.price}
-//                                 />
-//                                 <CInvalidFeedback>
-//                                   /*
-//                                   {errors.modifier_name === true
-//                                     ? "Please Enter Category Name"
-//                                     : ""}
-//                                   */
-//                                 </CInvalidFeedback>
-//                               </CInputGroup>
-//                             </CFormGroup>
-//                           </CCol>
-//                         </CRow>
-//                       </CListGroupItem>
-//                     </div>
-//                   )}
-//                 </Draggable>
-//               ))}
-//             </CListGroup>
-//           </CCol>
-//         </CRow>
-//         {provided.placeholder}
-//       </div>
-//     )}
-//   </Droppable>
-// </DragDropContext>

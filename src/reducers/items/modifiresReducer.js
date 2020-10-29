@@ -1,19 +1,37 @@
 import {
   GET_MODIFIRES_LIST,
   DELETE_MODIFIRES,
+  ADD_NEW_MODIFIER,
+  REDIRECT_BACK_MODIFIER,
   TOGGLE_MODIFIRES_DELETE_SELECT,
   TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   modifiers_list: [],
+  redirect_modifier: false,
+  redirect_update: false,
 };
 const modifiresReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_MODIFIER: {
+      return Object.assign({}, state, {
+        redirect_modifier: action.response,
+        redirect_update: false,
+      });
+    }
+
     case GET_MODIFIRES_LIST: {
       return Object.assign({}, state, {
         modifiers_list: action.response,
+      });
+    }
+
+    case ADD_NEW_MODIFIER: {
+      return Object.assign({}, state, {
+        modifiers_list: [...state.modifiers_list, action.response],
+        redirect_modifier: true,
       });
     }
 
@@ -25,6 +43,8 @@ const modifiresReducer = (state = initialState, action) => {
       return {
         ...state,
         modifiers_list,
+        redirect_update: false,
+        redirect_modifier: true,
       };
     }
     case TOGGLE_MODIFIRES_DELETE_SELECT: {

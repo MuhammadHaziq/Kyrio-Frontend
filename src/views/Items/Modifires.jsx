@@ -16,6 +16,7 @@ import { get_stores } from "../../actions/settings/storeActions";
 import {
   get_modifires_list,
   delete_modifire,
+  redirect_back_modifier,
 } from "../../actions/items/modifiresActions";
 import ModifireList from "../../components/items/modifier/ModifireList";
 import AddModifier from "../../components/items/modifier/AddModifier";
@@ -51,14 +52,14 @@ const Modifires = (props) => {
     setFadeModifier(false);
     setFadeAddModifier(true);
     setUpdateModifier(false);
-    // dispatch(redirect_back_modifier(false));
+    dispatch(redirect_back_modifier(false));
   };
 
   const goBack = () => {
     setFadeModifier(true);
     setFadeAddModifier(false);
     setUpdateModifier(false);
-    // dispatch(redirect_back_modifier(true));
+    dispatch(redirect_back_modifier(true));
   };
 
   const deleteItem = () => {

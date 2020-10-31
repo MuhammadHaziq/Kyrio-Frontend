@@ -266,6 +266,13 @@ export const update_modifier = (data) => {
       })
         .then((response) => {
           dispatch({ type: UPDATE_MODIFER, response: response.data.data });
+          let msg = {
+            open: true,
+            message: response.data.message,
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);

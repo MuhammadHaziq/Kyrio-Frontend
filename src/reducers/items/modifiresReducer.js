@@ -5,12 +5,15 @@ import {
   REDIRECT_BACK_MODIFIER,
   TOGGLE_MODIFIRES_DELETE_SELECT,
   TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
+  UPDATE_MODIFIER_ROW_DATA,
+  UPDATE_MODIFER,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   modifiers_list: [],
   redirect_modifier: false,
-  redirect_update: false,
+  redirect_update_modifier: false,
+  modifier_row_data: {},
 };
 const modifiresReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -18,7 +21,7 @@ const modifiresReducer = (state = initialState, action) => {
     case REDIRECT_BACK_MODIFIER: {
       return Object.assign({}, state, {
         redirect_modifier: action.response,
-        redirect_update: false,
+        redirect_update_modifier: false,
       });
     }
 
@@ -43,7 +46,7 @@ const modifiresReducer = (state = initialState, action) => {
       return {
         ...state,
         modifiers_list,
-        redirect_update: false,
+        redirect_update_modifier: false,
         redirect_modifier: true,
       };
     }
@@ -66,6 +69,27 @@ const modifiresReducer = (state = initialState, action) => {
             isDeleted: action.response,
           });
         }),
+      });
+    }
+    case UPDATE_MODIFIER_ROW_DATA: {
+      return Object.assign({}, state, {
+        modifier_row_data: state.modifiers_list.filter(
+          (item) => item._id === action.response
+        )[0],
+        redirect_update_modifier: true,
+        redirect_modifier: false,
+      });
+    }
+    case UPDATE_MODIFER: {
+      return Object.assign({}, state, {
+        modifiers_list: state.modifiers_list.slice().map((item) => {
+          if (item._id === action.response._id) {
+            return action.response;
+          }
+          return item;
+        }),
+        redirect_update_modifier: false,
+        redirect_modifier: true,
       });
     }
     default:

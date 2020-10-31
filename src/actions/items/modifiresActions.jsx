@@ -5,8 +5,10 @@ import {
   REDIRECT_BACK_MODIFIER,
   TOGGLE_MODIFIRES_DELETE_SELECT,
   TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
+  UPDATE_MODIFIER_ROW_DATA,
   MESSAGE,
   ERROR_MESSAGE,
+  UPDATE_MODIFER,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -240,5 +242,60 @@ export const toggle_modifire_all_select = (status) => {
       type: TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
       response: status,
     });
+  };
+};
+
+export const update_row_data = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_MODIFIER_ROW_DATA,
+      response: id,
+    });
+  };
+};
+export const update_modifier = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "patch",
+        url: `${BaseUrl}items/modifier/${data.id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+        data: data,
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_MODIFER, response: response.data.data });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error.response.data,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };

@@ -20,6 +20,7 @@ import {
 } from "../../actions/items/modifiresActions";
 import ModifireList from "../../components/items/modifier/ModifireList";
 import AddModifier from "../../components/items/modifier/AddModifier";
+import UpdateModifier from "../../components/items/modifier/UpdateModifier";
 const Modifires = (props) => {
   const dispatch = useDispatch();
 
@@ -38,7 +39,16 @@ const Modifires = (props) => {
       dispatch(get_modifires_list(auth.user.stores[0]._id));
     }
   }, [auth, dispatch]);
-
+  useEffect(() => {
+    if (
+      modifire.redirect_update_modifier !== undefined &&
+      modifire.redirect_update_modifier === true
+    ) {
+      setFadeModifier(false);
+      setFadeAddModifier(false);
+      setUpdateModifier(true);
+    }
+  }, [modifire.redirect_update_modifier]);
   useEffect(() => {
     dispatch(get_stores());
   }, [dispatch]);
@@ -76,7 +86,13 @@ const Modifires = (props) => {
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeUpdateModifier ? (
-          <CFade timeout={timeout} in={fadeUpdateModifier}></CFade>
+          <CFade timeout={timeout} in={fadeUpdateModifier}>
+            <UpdateModifier
+              goBack={goBack}
+              store={store.stores_list}
+              modifier_row_data={modifire.modifier_row_data}
+            />
+          </CFade>
         ) : (
           ""
         )}

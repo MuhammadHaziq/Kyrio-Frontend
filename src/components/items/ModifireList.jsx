@@ -131,9 +131,6 @@ class ModifireList extends Component {
     this.props.toggle_modifire_single_select(row);
   };
 
-  get_row_data = (id) => {
-    console.log(id);
-  };
   render() {
     return (
       <React.Fragment>
@@ -214,9 +211,7 @@ class ModifireList extends Component {
                                         marginLeft: "0px",
                                       }}
                                     />
-                                    <div
-                                      onClick={() => this.get_row_data(item.id)}
-                                    >
+
                                       <h6
                                         className="d-flex w-100  justify-content-between"
                                         style={{
@@ -244,7 +239,6 @@ class ModifireList extends Component {
                                         }}
                                         name={"cil-align-center"}
                                       />
-                                    </div>
                                   </CCol>
                                 </CListGroupItem>
                               </CRow>

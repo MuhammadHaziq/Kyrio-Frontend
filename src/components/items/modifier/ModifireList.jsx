@@ -13,6 +13,7 @@ import {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
   update_modifire_postion,
+  update_row_data,
 } from "../../../actions/items/modifiresActions";
 import { connect } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
@@ -139,6 +140,10 @@ class ModifireList extends Component {
     this.props.toggle_modifire_all_select(!this.state.checkAll);
   };
 
+  get_row_data = (id) => {
+    console.log(id);
+    this.props.update_row_data(id);
+  };
   modifireCheckHandle = (id) => {
     console.log(id);
     const row = this.props.modifiers_list.filter((item) => {
@@ -228,33 +233,37 @@ class ModifireList extends Component {
                                         marginLeft: "0px",
                                       }}
                                     />
-                                    <h6
-                                      className="d-flex w-100  justify-content-between"
-                                      style={{
-                                        marginBottom: "0px",
-                                        marginLeft: "29px",
-                                        color: "#20202a",
-                                        marginTop: "-12px",
-                                      }}
+                                    <div
+                                      onClick={() => this.get_row_data(item.id)}
                                     >
-                                      <b>{item.content}</b>
-                                    </h6>
+                                      <h6
+                                        className="d-flex w-100  justify-content-between"
+                                        style={{
+                                          marginBottom: "0px",
+                                          marginLeft: "29px",
+                                          color: "#20202a",
+                                          marginTop: "-12px",
+                                        }}
+                                      >
+                                        <b>{item.content}</b>
+                                      </h6>
 
-                                    <small
-                                      className="mb-1"
-                                      style={{
-                                        marginLeft: "45px",
-                                        color: "#20202ad1",
-                                      }}
-                                    >
-                                      {item.options}
-                                    </small>
-                                    <CIcon
-                                      style={{
-                                        float: "right",
-                                      }}
-                                      name={"cil-align-center"}
-                                    />
+                                      <small
+                                        className="mb-1"
+                                        style={{
+                                          marginLeft: "45px",
+                                          color: "#20202ad1",
+                                        }}
+                                      >
+                                        {item.options}
+                                      </small>
+                                      <CIcon
+                                        style={{
+                                          float: "right",
+                                        }}
+                                        name={"cil-align-center"}
+                                      />
+                                    </div>
                                   </CCol>
                                 </CListGroupItem>
                               </CRow>
@@ -283,4 +292,5 @@ export default connect(mapStateToProps, {
   toggle_modifire_all_select,
   toggle_modifire_single_select,
   update_modifire_postion,
+  update_row_data,
 })(ModifireList);

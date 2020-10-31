@@ -92,7 +92,6 @@ const ItemsListDatatable = (props) => {
         selectRow={selectRowProp}
         options={options}
         pagination={true}
-        search={true}
       >
         <TableHeaderColumn
           dataField="_id"

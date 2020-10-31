@@ -151,11 +151,54 @@ const ItemsList = () => {
             <CCollapse show={collapse}>
               <CCardBody>
                 <CRow>
+                  <CCol xs="12" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                    <CButton color="success" className="btn-square pull right">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="c-icon c-icon-sm"
+                        role="img"
+                      >
+                        <polygon
+                          fill="var(--ci-primary-color, currentColor)"
+                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                          className="ci-primary"
+                        ></polygon>
+                      </svg>
+                      ADD ITEM
+                    </CButton>
+                    {item.item_list.filter((item) => item.isDeleted === true)
+                      .length > 0 ? (
+                      <React.Fragment>
+                        <ConformationAlert
+                          button_text="Delete"
+                          heading="Delete item"
+                          section={`Are you sure you want to delete the item (${item.item_list
+                            .filter((item) => {
+                              return item.isDeleted === true;
+                            })
+                            .map((item) => {
+                              return item.name;
+                            })
+                            .join(",")}) ?`}
+                          buttonAction={deleteItem}
+                          show_alert={showAlert}
+                          hideAlert={setShowAlert}
+                          variant="outline"
+                          className="ml-2 btn-square"
+                          color="danger"
+                          block={false}
+                        />
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )}
+                  </CCol>
                   {showSearch == false ? (
                     <React.Fragment>
                       {item.store_list.length > 1 ? (
                         <React.Fragment>
-                          <CCol xs="6" sm="2">
+                          <CCol xs="12" sm="2" md="2" xl="xl">
                             <CFormGroup>
                               <CSelect
                                 custom
@@ -180,7 +223,7 @@ const ItemsList = () => {
                       ) : (
                         ""
                       )}
-                      <CCol xs="6" sm="2">
+                      <CCol xs="12" sm="2" md="2" xl="xl">
                         <CFormGroup>
                           <CSelect
                             custom
@@ -202,7 +245,7 @@ const ItemsList = () => {
                         </CFormGroup>
                       </CCol>
 
-                      <CCol xs="6" sm="2">
+                      <CCol xs="12" sm="2" md="2" xl="xl">
                         <CFormGroup>
                           <CSelect
                             custom
@@ -236,7 +279,7 @@ const ItemsList = () => {
                     </React.Fragment>
                   ) : (
                     <React.Fragment>
-                      <CCol xs="12" sm="12">
+                      <CCol xs="12" sm="12" md="8">
                         <CForm onSubmit={searchFilterOnSubmit} method="post">
                           <CFormGroup>
                             <div className="controls">
@@ -260,40 +303,6 @@ const ItemsList = () => {
                         </CForm>
                       </CCol>
                     </React.Fragment>
-                  )}
-                  {item.item_list.filter((item) => item.isDeleted === true)
-                    .length > 0 ? (
-                    <React.Fragment>
-                      <CCol
-                        xs="6"
-                        sm="2"
-                        md="2"
-                        xl="xl"
-                        className="mb-3 mb-xl-0"
-                      >
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete item"
-                          section={`Are you sure you want to delete the item (${item.item_list
-                            .filter((item) => {
-                              return item.isDeleted === true;
-                            })
-                            .map((item) => {
-                              return item.name;
-                            })
-                            .join(",")}) ?`}
-                          buttonAction={deleteItem}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2"
-                          color="danger"
-                          block={true}
-                        />
-                      </CCol>
-                    </React.Fragment>
-                  ) : (
-                    ""
                   )}
                 </CRow>
               </CCardBody>

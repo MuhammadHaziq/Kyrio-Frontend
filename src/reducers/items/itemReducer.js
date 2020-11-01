@@ -5,6 +5,9 @@ import {
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
   DELETE_ITEM_LIST,
+  TOGGLE_SELECT_ALL_ITEM_STORES,
+  TOGGLE_SELECT_SINGLE_ITEM_STORES,
+  SET_ITEM_STORE_PRICE,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -27,9 +30,49 @@ const itemReducer = (state = initialState, action) => {
     }
     case GET_ITEM_STORES: {
       return Object.assign({}, state, {
-        store_list: action.response,
+        store_list: (action.response || []).map((item) => {
+          return { ...item, isSelected: true, price: "" };
+        }),
       });
     }
+    case TOGGLE_SELECT_ALL_ITEM_STORES: {
+      return Object.assign({}, state, {
+        store_list: state.store_list.slice().map((item) => {
+          return {
+            ...item,
+            isSelected: action.response,
+          };
+        }),
+      });
+    }
+    case TOGGLE_SELECT_SINGLE_ITEM_STORES: {
+      return Object.assign({}, state, {
+        store_list: state.store_list.slice().map((item) => {
+          if (item._id === action.response) {
+            return {
+              ...item,
+              isSelected: !item.isSelected,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+
+    case SET_ITEM_STORE_PRICE: {
+      return Object.assign({}, state, {
+        store_list: state.store_list.slice().map((item) => {
+          if (item._id === action.id) {
+            return {
+              ...item,
+              price: action.price,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+
     case TOGGLE_ITEM_DELETE_SELECT: {
       return Object.assign({}, state, {
         item_list: state.item_list.map((item) => {
@@ -58,6 +101,7 @@ const itemReducer = (state = initialState, action) => {
         }),
       });
     }
+
     default:
       return { ...state };
   }

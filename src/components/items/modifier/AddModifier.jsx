@@ -413,24 +413,6 @@ const AddModifier = (props) => {
                                                   index
                                                 )}
                                               />
-
-                                              {/*  <CInput
-                                                type="number"
-                                                id="price"
-                                                name="price"
-                                                placeholder="Price"
-                                                value={item.price}
-                                                onChange={handleOnChangeModifierField(
-                                                  index
-                                                )}
-                                              />
-                                              <CInvalidFeedback>
-
-                                                {errors.modifier_name === true
-                                                  ? "Please Enter Category Name"
-                                                  : ""}
-
-                                              </CInvalidFeedback>*/}
                                             </CInputGroup>
                                           </CFormGroup>
                                         </CCol>

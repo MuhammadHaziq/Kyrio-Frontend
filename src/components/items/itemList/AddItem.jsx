@@ -1,0 +1,632 @@
+import React, { useState, useEffect } from "react";
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCollapse,
+  CCol,
+  CFormGroup,
+  CInput,
+  CLabel,
+  CRow,
+  CInputGroup,
+  CInputGroupPrepend,
+  CInputGroupText,
+  CLink,
+  CInvalidFeedback,
+  CCardFooter,
+  CInputRadio,
+  CListGroup,
+  CListGroupItem,
+  CSwitch,
+  CImg,
+  CSelect,
+} from "@coreui/react";
+import { CIcon } from "@coreui/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import validator from "validator";
+import StoresDatatable from "./StoresDatatable";
+// import { add_new_category } from "../../../actions/items/categoryActions";
+import AddItemVariant from "./AddItemVariant";
+import NumberFormat from "react-number-format";
+
+const AddItem = (props) => {
+  const [fields, setFields] = useState({
+    item_name: "",
+    categoryId: "0",
+    sold_by: "Each",
+    price: "",
+    cost: "$0.00",
+    represent_type: "Color_and_shape",
+    color: "rgb(224, 224, 224)",
+  });
+  const [isHovered, setIsHovered] = useState(false);
+  const [receiptImage, setReceiptImage] = useState(null);
+  const [inventorySwitch, setInventorySwitch] = useState([false, false]);
+  const [modifierSwitch, setModifierSwitch] = useState([false, false]);
+  const [receiptFile, setrReceiptFile] = useState("");
+  const [variantModal, setVariantModal] = useState(false);
+
+  const [errors, setErrors] = useState({
+    item_name: false,
+  });
+
+  const category = useSelector((state) => state.items.categoryReducer);
+  const item = useSelector((state) => state.items.itemReducer);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (
+      item.redirect_itemList !== undefined &&
+      item.redirect_itemList === true
+    ) {
+      props.goBack();
+    }
+  }, [item.redirect_itemList]);
+
+  const goBack = () => {
+    props.goBack();
+  };
+
+  const submitItem = () => {
+    if (fields.item_name === "") {
+      setErrors({
+        ...errors,
+        item_name: validator.isEmpty(fields.item_name),
+      });
+      return false;
+    }
+
+    const data = {
+      catTitle: fields.item_name,
+      catColor: fields.color,
+    };
+    // dispatch(add_new_category(data));
+    console.log(data);
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setFields({
+      ...fields,
+      [name]: value,
+    });
+  };
+
+  const handleOnBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
+    });
+  };
+  const changeColor = (e) => {
+    setFields({
+      ...fields,
+      color: e,
+    });
+  };
+
+  const colors = [
+    { id: 0, color: "rgb(224, 224, 224)" },
+    { id: 1, color: "rgb(244, 67, 54)" },
+    { id: 2, color: "rgb(233, 30, 99)" },
+    { id: 3, color: "rgb(255, 152, 0)" },
+    { id: 4, color: "rgb(205, 220, 57)" },
+    { id: 5, color: "rgb(76, 175, 80)" },
+    { id: 6, color: "rgb(33, 150, 243)" },
+    { id: 7, color: "rgb(156, 39, 176)" },
+  ];
+  const handleClick = (event) => {
+    // hiddenFileInput.current.click();
+    document.getElementById("upload-button-receipt").click();
+  };
+
+  const uploadReceiptImage = (e) => {
+    setrReceiptFile(e.target.files[0]);
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+      setReceiptImage(reader.result);
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+
+    // setReceiptImage(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleChangeInventory = (index) => (e) => {
+    setInventorySwitch(!inventorySwitch[index]);
+  };
+  const handleChangeModifier = (index) => (e) => {
+    setModifierSwitch(!modifierSwitch[index]);
+  };
+
+  const toggleVariantModal = () => {
+    setVariantModal(!variantModal);
+  };
+
+  const addVariant = () => {
+    console.log("sasa");
+  };
+
+  return (
+    <React.Fragment>
+      <CCard>
+        <CCardBody>
+          <CRow>
+            <CCol md="6">
+              <CFormGroup>
+                <CLabel htmlFor="item_name">Item Name</CLabel>
+                <CInputGroup>
+                  <CInput
+                    id="item_name"
+                    name="item_name"
+                    placeholder="Category Name"
+                    onChange={handleOnChange}
+                    value={fields.item_name}
+                    invalid={errors.item_name}
+                    onBlur={handleOnBlur}
+                  />
+                  <CInvalidFeedback>
+                    {errors.item_name === true ? "Please Enter Item Name" : ""}
+                  </CInvalidFeedback>
+                </CInputGroup>
+              </CFormGroup>
+            </CCol>
+            <CCol md="6">
+              <CFormGroup>
+                <CLabel htmlFor="categoryId">Category</CLabel>
+                <CSelect
+                  custom
+                  size="md"
+                  name="categoryId"
+                  id="categoryId"
+                  value={fields.categoryId}
+                  onChange={handleOnChange}
+                >
+                  <option value="0">No Category</option>
+                  {(category.category_list || []).map((item) => {
+                    return <option value={item._id}>{item.catTitle}</option>;
+                  })}
+                </CSelect>
+              </CFormGroup>
+            </CCol>
+          </CRow>
+          <CCol md="12">
+            <CRow>
+              <CCol sm="1">
+                <CLabel>Sold by</CLabel>
+              </CCol>
+              <CCol sm="2">
+                <CInputGroup variant="custom-radio" inline>
+                  <CInputRadio
+                    id="sold_by"
+                    name="sold_by"
+                    onChange={handleOnChange}
+                    value={"Each"}
+                    checked
+                  />
+                  <CLabel htmlFor="sold_by">Each</CLabel>
+                </CInputGroup>
+              </CCol>
+              <CCol sm="2">
+                <CInputGroup variant="custom-radio" inline>
+                  <CInputRadio
+                    id="sold_by"
+                    name="sold_by"
+                    onChange={handleOnChange}
+                    value={"Weight/Volume"}
+                  />
+                  <CLabel htmlFor="sold_by">Weight/Volume</CLabel>
+                </CInputGroup>
+              </CCol>
+            </CRow>
+          </CCol>
+          <CRow>
+            <CCol sm="6">
+              <CFormGroup>
+                <CLabel htmlFor="price">Price</CLabel>
+                <CInputGroup>
+                  <NumberFormat
+                    id="price"
+                    name="price"
+                    placeholder="Price"
+                    value={fields.price}
+                    thousandSeparator={true}
+                    className="form-control"
+                  />
+                </CInputGroup>
+              </CFormGroup>
+            </CCol>
+            <CCol sm="6">
+              <CFormGroup>
+                <CLabel htmlFor="cost">Cost</CLabel>
+                <CInputGroup>
+                  <NumberFormat
+                    id="cost"
+                    name="cost"
+                    placeholder="Cost"
+                    value={fields.cost}
+                    thousandSeparator={true}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    className="form-control"
+                    prefix={"$"}
+                  />
+                </CInputGroup>
+              </CFormGroup>
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol md="6">
+              <CFormGroup>
+                <CLabel htmlFor="sku">SKU</CLabel>
+                <CInputGroup>
+                  <CInput
+                    id="sku"
+                    name="sku"
+                    placeholder="SKU"
+                    onChange={handleOnChange}
+                    value={fields.sku}
+                    invalid={errors.sku}
+                    onBlur={handleOnBlur}
+                  />
+                  {/*  <CInvalidFeedback>
+                    {errors.sku === true ? "Please Enter Sku" : ""}
+                  </CInvalidFeedback>*/}
+                </CInputGroup>
+              </CFormGroup>
+            </CCol>
+            <CCol md="6">
+              <CFormGroup>
+                <CLabel htmlFor="item_barcode">Barcode</CLabel>
+                <CInputGroup>
+                  <CInput
+                    id="item_barcode"
+                    name="item_barcode"
+                    placeholder="Barcode"
+                    onChange={handleOnChange}
+                    value={fields.item_barcode}
+                    invalid={errors.item_barcode}
+                    onBlur={handleOnBlur}
+                  />
+                  {/*  <CInvalidFeedback>
+                    {errors.item_barcode === true ? "Please Enter Barcode" : ""}
+                  </CInvalidFeedback>*/}
+                </CInputGroup>
+              </CFormGroup>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
+      {/**  Variants  */}
+      <CCard>
+        <CCardHeader>
+          <h4>
+            <strong>Variants</strong>
+          </h4>
+        </CCardHeader>
+
+        <CCardBody>
+          <CCol xs="12" sm="12" md="12">
+            <p>
+              Use variants if an item has different sizes, colors or other
+              options
+            </p>
+            <CButton
+              className="btn-square pull right"
+              color="success"
+              onClick={toggleVariantModal}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                className="c-icon c-icon-sm"
+                role="img"
+              >
+                <polygon
+                  fill="var(--ci-primary-color, currentColor)"
+                  points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                  className="ci-primary"
+                ></polygon>
+              </svg>
+              ADD OPTION
+            </CButton>
+          </CCol>
+          <CRow>
+            <CCol sm="12" md="12" lg="12">
+              {/*  <CModal show={variantModal} onClose={toggleVariantModal}>
+                <CModalHeader closeButton>Create options</CModalHeader>
+                <CModalBody>*/}
+              <AddItemVariant
+                variantModal={variantModal}
+                toggleVariantModal={toggleVariantModal}
+              />
+              {/*</CModalBody>
+                <CModalFooter>
+                  <CButton color="primary">Save</CButton>
+                  <CButton color="secondary" onClick={toggleVariantModal}>
+                    Cancel
+                  </CButton>
+                </CModalFooter>
+              </CModal>*/}
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
+      {/**  Inventory  */}
+      <CCard>
+        <CCardHeader>
+          <h4>
+            <strong>Inventory</strong>
+          </h4>
+        </CCardHeader>
+
+        <CCardBody>
+          <CCol xs="12" sm="12" md="12">
+            <CListGroup>
+              <CListGroupItem
+                key={0}
+                className="justify-content-between"
+                style={{
+                  border: "none",
+                }}
+              >
+                <h6>
+                  Composite item
+                  <CSwitch
+                    className={"mx-1 float-right"}
+                    shape="pill"
+                    color={"success"}
+                    checked={inventorySwitch[0]}
+                    onChange={handleChangeInventory(0)}
+                  />
+                </h6>
+              </CListGroupItem>
+              <CListGroupItem
+                key={1}
+                className="justify-content-between"
+                style={{
+                  border: "none",
+                }}
+              >
+                <h6>
+                  Track stock
+                  <CSwitch
+                    className={"mx-1 float-right"}
+                    shape="pill"
+                    color={"success"}
+                    checked={inventorySwitch[1]}
+                    onChange={handleChangeInventory(1)}
+                  />
+                </h6>
+              </CListGroupItem>
+            </CListGroup>
+          </CCol>
+        </CCardBody>
+      </CCard>
+      {/**  Modifiers  */}
+      <CCard>
+        <CCardHeader>
+          <h4>
+            <strong>Modifier</strong>
+          </h4>
+        </CCardHeader>
+
+        <CCardBody>
+          <CCol xs="12" sm="12" md="12">
+            <CListGroup>
+              <CListGroupItem
+                key={0}
+                className="justify-content-between"
+                style={{
+                  border: "none",
+                  borderBottom: "1px solid #00000024",
+                }}
+              >
+                <h6>
+                  Modifire
+                  <CSwitch
+                    className={"mx-1 float-right"}
+                    shape="pill"
+                    color={"success"}
+                    checked={modifierSwitch[0]}
+                    onChange={handleChangeModifier(0)}
+                  />
+                </h6>
+                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
+              </CListGroupItem>
+              <CListGroupItem
+                key={1}
+                className="justify-content-between"
+                style={{
+                  border: "none",
+                }}
+              >
+                <h6>
+                  dsd
+                  <CSwitch
+                    className={"mx-1 float-right"}
+                    shape="pill"
+                    color={"success"}
+                    checked={modifierSwitch[1]}
+                    onChange={handleChangeModifier(1)}
+                  />
+                </h6>
+                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
+              </CListGroupItem>
+            </CListGroup>
+          </CCol>
+        </CCardBody>
+      </CCard>
+      {/**  Stores  */}
+      <CCard>
+        <CCardHeader>
+          <h4>
+            <strong>Stores</strong>
+          </h4>
+        </CCardHeader>
+
+        <CCardBody>
+          <CCol xs="12" sm="12" md="12">
+            <StoresDatatable stores={props.store} />
+          </CCol>
+        </CCardBody>
+      </CCard>
+      {/**  Representation On POS  */}
+      <CCard>
+        <CCardHeader>
+          <h4>
+            <strong>Representation on POS</strong>
+          </h4>
+        </CCardHeader>
+
+        <CCardBody>
+          <CCol xs="12" sm="12" md="12">
+            <CRow>
+              <CCol sm="6" md="6" lg="6">
+                <CInputGroup variant="custom-radio" inline>
+                  <CInputRadio
+                    id="represent_type"
+                    name="represent_type"
+                    onChange={handleOnChange}
+                    value={"Color_and_shape"}
+                    checked
+                  />
+                  <CLabel htmlFor="represent_type">Color and shape</CLabel>
+                </CInputGroup>
+              </CCol>
+              <CCol sm="6" md="6" lg="6">
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  style={{ float: "right", width: "15%" }}
+                >
+                  <CInputRadio
+                    id="represent_type"
+                    name="represent_type"
+                    onChange={handleOnChange}
+                    value={"Image"}
+                  />
+                  <CLabel htmlFor="represent_type">Image</CLabel>
+                </CInputGroup>
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol sm="12">
+                {colors.map((item, index) => (
+                  <CCol
+                    sm="2"
+                    style={{
+                      backgroundColor: `${item.color}`,
+                      width: "50px",
+                      height: "50px",
+                      float: "left",
+                    }}
+                    className="ml-2"
+                    key={index}
+                    onClick={() => changeColor(item.color)}
+                  >
+                    {item.color === fields.color ? (
+                      <CImg
+                        src="web-category-check.png"
+                        alt="image"
+                        style={{
+                          width: "25px",
+                          marginTop: "13px",
+                          marginLeft: "-4px",
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </CCol>
+                ))}
+                <div
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  style={{ float: "right" }}
+                >
+                  <CLabel htmlFor="upload-button-receipt">
+                    {receiptImage !== null ? (
+                      <CImg
+                        src={receiptImage}
+                        alt=""
+                        width="100px"
+                        height="80px"
+                      />
+                    ) : (
+                      <CIcon name="cil-file" height="50px" />
+                    )}
+                  </CLabel>
+                  <CInput
+                    type="file"
+                    id="upload-button-receipt"
+                    onChange={uploadReceiptImage}
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                  {/*ref={hiddenFileInput}}*/}
+                  <CButton
+                    color="success"
+                    className="btn-square ml-2"
+                    outline="true"
+                    size="xs"
+                    onClick={handleClick}
+                    style={{
+                      display: isHovered ? "block" : "none",
+                      fontSize: "xx-small",
+                    }}
+                  >
+                    UPLOAD
+                  </CButton>
+                </div>
+              </CCol>
+            </CRow>
+          </CCol>
+        </CCardBody>
+      </CCard>
+      <CRow>
+        <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+          <CButton
+            block
+            variant="outline"
+            className="btn-pill pull-right"
+            color="secondary"
+            onClick={goBack}
+          >
+            BACK
+          </CButton>
+        </CCol>
+        <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+          <CButton
+            block
+            variant="outline"
+            className="btn-pill pull-right"
+            color="danger"
+            onClick={goBack}
+          >
+            CANCEL
+          </CButton>
+        </CCol>
+        <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
+          <CButton
+            block
+            type="submit"
+            variant="outline"
+            className="btn-pill pull-right"
+            color="success"
+            onClick={submitItem}
+          >
+            SAVE
+          </CButton>
+        </CCol>
+      </CRow>
+    </React.Fragment>
+  );
+};
+
+export default AddItem;

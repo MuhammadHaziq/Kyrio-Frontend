@@ -101,7 +101,7 @@ const ItemsListDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort="dataSort">
+        <TableHeaderColumn dataField="name" dataSort={true}>
           Name
         </TableHeaderColumn>
         <TableHeaderColumn dataField="name" dataFormat={showCategory}>

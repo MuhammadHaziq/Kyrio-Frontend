@@ -43,8 +43,9 @@ const AddCategory = (props) => {
     if (
       category.redirect_categoryList !== undefined &&
       category.redirect_categoryList === true
-    )
+    ) {
       props.goBack();
+    }
   }, [category.redirect_categoryList]);
 
   const goBack = () => {

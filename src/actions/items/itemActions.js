@@ -7,6 +7,9 @@ import {
   DELETE_ITEM_LIST,
   MESSAGE,
   ERROR_MESSAGE,
+  TOGGLE_SELECT_ALL_ITEM_STORES,
+  TOGGLE_SELECT_SINGLE_ITEM_STORES,
+  SET_ITEM_STORE_PRICE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -271,5 +274,32 @@ export const delete_item_list = (id) => {
       };
       dispatch({ type: MESSAGE, data: msg });
     }
+  };
+};
+
+export const toggle_select_all_item_stores = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_SELECT_ALL_ITEM_STORES,
+      response: status,
+    });
+  };
+};
+export const toggle_select_single_item_store = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_SELECT_SINGLE_ITEM_STORES,
+      response: id,
+    });
+  };
+};
+
+export const set_item_store_price = (id, price) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_ITEM_STORE_PRICE,
+      price: price,
+      id: id,
+    });
   };
 };

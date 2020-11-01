@@ -292,7 +292,10 @@ const Receipt = (props) => {
                       outline="true"
                       size="xs"
                       onClick={handleClick}
-                      style={{ display: isHovered ? "block" : "none" }}
+                      style={{
+                        display: isHovered ? "block" : "none",
+                        fontSize: "xx-small",
+                      }}
                     >
                       UPLOAD
                     </CButton>
@@ -332,6 +335,7 @@ const Receipt = (props) => {
                       onClick={handleClickPrintedReceipt}
                       style={{
                         display: printedReceiptHover ? "block" : "none",
+                        fontSize: "xx-small",
                       }}
                     >
                       UPLOAD

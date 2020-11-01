@@ -302,6 +302,10 @@ const AddItemVariant = (props) => {
                                                   ? "form-control is-invalid"
                                                   : "form-control"
                                               }
+                                              invalid={
+                                                variantFieldsError[index]
+                                                  .optionValue
+                                              }
                                             />
                                           </CInputGroup>
                                         </CFormGroup>

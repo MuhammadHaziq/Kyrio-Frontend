@@ -80,8 +80,17 @@ const AddItem = (props) => {
     }
 
     const data = {
-      catTitle: fields.item_name,
-      catColor: fields.color,
+      item_name: fields.item_name,
+      categoryId: fields.categoryId,
+      sold_by: fields.sold_by,
+      price: fields.price,
+      cost: fields.cost,
+      represent_type: fields.represent_type,
+      color: fields.color,
+      stores: item.store_list.filter((item) => {
+        return item.isSelected === true;
+      }),
+      variants: item.item_variants,
     };
     // dispatch(add_new_category(data));
     console.log(data);
@@ -237,6 +246,7 @@ const AddItem = (props) => {
                     placeholder="Price"
                     value={fields.price}
                     thousandSeparator={true}
+                    onChange={handleOnChange}
                     className="form-control"
                   />
                 </CInputGroup>
@@ -252,6 +262,7 @@ const AddItem = (props) => {
                     placeholder="Cost"
                     value={fields.cost}
                     thousandSeparator={true}
+                    onChange={handleOnChange}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     className="form-control"

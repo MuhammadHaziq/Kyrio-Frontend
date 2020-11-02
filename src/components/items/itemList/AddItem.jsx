@@ -87,6 +87,10 @@ const AddItem = (props) => {
       cost: fields.cost,
       represent_type: fields.represent_type,
       color: fields.color,
+      compositeItem: inventorySwitch[0],
+      trackRecord: inventorySwitch[1],
+      modifiers: modifierSwitch[0],
+      dsd: modifierSwitch[1],
       stores: item.store_list.filter((item) => {
         return item.isSelected === true;
       }),

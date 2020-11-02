@@ -207,7 +207,7 @@ const AddItem = (props) => {
                     name="sold_by"
                     onChange={handleOnChange}
                     value={"Each"}
-                    checked
+                    checked={fields.sold_by === "Each"}
                   />
                   <CLabel htmlFor="sold_by">Each</CLabel>
                 </CInputGroup>
@@ -219,6 +219,7 @@ const AddItem = (props) => {
                     name="sold_by"
                     onChange={handleOnChange}
                     value={"Weight/Volume"}
+                    checked={fields.sold_by === "Weight/Volume"}
                   />
                   <CLabel htmlFor="sold_by">Weight/Volume</CLabel>
                 </CInputGroup>
@@ -338,21 +339,11 @@ const AddItem = (props) => {
           </CCol>
           <CRow>
             <CCol sm="12" md="12" lg="12">
-              {/*  <CModal show={variantModal} onClose={toggleVariantModal}>
-                <CModalHeader closeButton>Create options</CModalHeader>
-                <CModalBody>*/}
               <AddItemVariant
                 variantModal={variantModal}
                 toggleVariantModal={toggleVariantModal}
+                variants={item.item_variants}
               />
-              {/*</CModalBody>
-                <CModalFooter>
-                  <CButton color="primary">Save</CButton>
-                  <CButton color="secondary" onClick={toggleVariantModal}>
-                    Cancel
-                  </CButton>
-                </CModalFooter>
-              </CModal>*/}
             </CCol>
           </CRow>
         </CCardBody>
@@ -494,7 +485,7 @@ const AddItem = (props) => {
                     name="represent_type"
                     onChange={handleOnChange}
                     value={"Color_and_shape"}
-                    checked
+                    checked={fields.represent_type === "Color_and_shape"}
                   />
                   <CLabel htmlFor="represent_type">Color and shape</CLabel>
                 </CInputGroup>
@@ -510,6 +501,7 @@ const AddItem = (props) => {
                     name="represent_type"
                     onChange={handleOnChange}
                     value={"Image"}
+                    checked={fields.represent_type === "Image"}
                   />
                   <CLabel htmlFor="represent_type">Image</CLabel>
                 </CInputGroup>

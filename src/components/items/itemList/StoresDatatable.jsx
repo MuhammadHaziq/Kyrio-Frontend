@@ -62,7 +62,7 @@ const CheckAvailablity = (props) => {
       value={storeId}
       checked={isSelected}
       style={{ marginLeft: "15px" }}
-      onChange={() => changeCheckAvailablity(storeId)}
+      onChange={changeCheckAvailablity(storeId)}
     />
   );
 };

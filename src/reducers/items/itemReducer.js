@@ -8,12 +8,14 @@ import {
   TOGGLE_SELECT_ALL_ITEM_STORES,
   TOGGLE_SELECT_SINGLE_ITEM_STORES,
   SET_ITEM_STORE_PRICE,
+  SAVE_ITEM_VARIANTS,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   item_list: [],
   stock_list: [],
   store_list: [],
+  item_variants: [],
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -72,7 +74,11 @@ const itemReducer = (state = initialState, action) => {
         }),
       });
     }
-
+    case SAVE_ITEM_VARIANTS: {
+      return Object.assign({}, state, {
+        item_variants: action.response,
+      });
+    }
     case TOGGLE_ITEM_DELETE_SELECT: {
       return Object.assign({}, state, {
         item_list: state.item_list.map((item) => {

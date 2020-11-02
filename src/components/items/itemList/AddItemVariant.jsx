@@ -32,20 +32,40 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ReactTags from "react-tag-autocomplete";
+import { save_item_variants } from "../../../actions/items/itemActions";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
 const AddItemVariant = (props) => {
   const reactTags = useRef();
+  const dispatch = useDispatch();
+
+  const item = useSelector((state) => state.items.itemReducer);
+
   const [variantFields, setVariantFields] = useState([
     { id: "0", optionName: "", optionValue: [], position: 0 },
   ]);
+
   const [variantFieldsError, setVariantFieldsError] = useState([
     {
       optionName: false,
       optionValue: false,
     },
   ]);
+
+  useEffect(() => {
+    if (props.variants !== undefined && props.variants.length > 0) {
+      setVariantFields(props.variants);
+      let errors = [];
+      props.variants.map((item) => {
+        return errors.push({
+          optionName: false,
+          optionValue: false,
+        });
+      });
+      setVariantFieldsError(errors);
+    }
+  }, [props]);
   // a little function to help us with reordering the result
   const reorder = (data, startIndex, endIndex) => {
     const result = data;
@@ -86,19 +106,29 @@ const AddItemVariant = (props) => {
       result.source.index,
       result.destination.index
     );
-    const data = {
-      data: JSON.stringify(
+    // const data = {
+    //   data: JSON.stringify(
+    //     items.map((item, index) => {
+    //       return {
+    //         id: item.id,
+    //         position: index,
+    //         optionName: item.optionName,
+    //         optionValue: item.optionValue,
+    //       };
+    //     })
+    //   ),
+    // };
+    // console.log("data", data)
+    dispatch(
+      save_item_variants(
         items.map((item, index) => {
           return {
-            id: item.id,
+            ...item,
             position: index,
-            optionName: item.optionName,
-            optionValue: item.optionValue,
           };
         })
-      ),
-    };
-    console.log("data", data);
+      )
+    );
     setVariantFields(
       items.map((item, index) => {
         return {
@@ -179,15 +209,19 @@ const AddItemVariant = (props) => {
 
   const closeModal = () => {
     setVariantFields([
-      { id: "0", optionName: "", optionVlaue: "", position: 0 },
+      { id: "0", optionName: "", optionValue: [], position: 0 },
     ]);
     setVariantFieldsError([
       {
         optionName: false,
-        optionVlaue: false,
+        optionValue: false,
       },
     ]);
     props.toggleVariantModal();
+  };
+
+  const save_variants = () => {
+    dispatch(save_item_variants(variantFields));
   };
 
   const onDelete = (i) => {
@@ -199,8 +233,6 @@ const AddItemVariant = (props) => {
   };
 
   const addNewTag = (idx) => (tag) => {
-    console.log(idx);
-    console.log(tag);
     const data = variantFields.map((item, index) => {
       if (index === idx) {
         return {
@@ -367,7 +399,9 @@ const AddItemVariant = (props) => {
           <CButton color="secondary" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton color="primary">Save</CButton>
+          <CButton color="primary" onClick={save_variants}>
+            Save
+          </CButton>
         </CModalFooter>
       </CModal>
     </React.Fragment>

@@ -10,6 +10,7 @@ import {
   TOGGLE_SELECT_ALL_ITEM_STORES,
   TOGGLE_SELECT_SINGLE_ITEM_STORES,
   SET_ITEM_STORE_PRICE,
+  SAVE_ITEM_VARIANTS,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -300,6 +301,15 @@ export const set_item_store_price = (id, price) => {
       type: SET_ITEM_STORE_PRICE,
       price: price,
       id: id,
+    });
+  };
+};
+
+export const save_item_variants = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SAVE_ITEM_VARIANTS,
+      response: data,
     });
   };
 };

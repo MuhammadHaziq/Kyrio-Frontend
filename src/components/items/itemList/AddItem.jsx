@@ -29,6 +29,7 @@ import validator from "validator";
 import StoresDatatable from "./StoresDatatable";
 // import { add_new_category } from "../../../actions/items/categoryActions";
 import AddItemVariant from "./AddItemVariant";
+import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
 
 const AddItem = (props) => {
@@ -328,12 +329,20 @@ const AddItem = (props) => {
 
         <CCardBody>
           <CCol xs="12" sm="12" md="12">
-            <p>
-              Use variants if an item has different sizes, colors or other
-              options
-            </p>
+            {item.item_variants.length > 0 ? (
+              <p>
+                Options:{" "}
+                {item.item_variants.map((item) => item.optionName).join("/")}
+              </p>
+            ) : (
+              <p>
+                Use variants if an item has different sizes, colors or other
+                options
+              </p>
+            )}
+
             <CButton
-              className="btn-square pull right"
+              className="btn-square pull right mb-2"
               color="success"
               onClick={toggleVariantModal}
             >
@@ -349,7 +358,7 @@ const AddItem = (props) => {
                   className="ci-primary"
                 ></polygon>
               </svg>
-              ADD OPTION
+              {item.item_variants.length > 0 ? "EDIT VARIANT" : "ADD VARIANT"}
             </CButton>
           </CCol>
           <CRow>
@@ -361,6 +370,16 @@ const AddItem = (props) => {
               />
             </CCol>
           </CRow>
+
+          {item.item_variants.length > 0 ? (
+            <CRow>
+              <CCol sm="12" md="12" lg="12">
+                <VariantDatatable item_variants={item.item_variants} />
+              </CCol>
+            </CRow>
+          ) : (
+            ""
+          )}
         </CCardBody>
       </CCard>
       {/**  Inventory  */}

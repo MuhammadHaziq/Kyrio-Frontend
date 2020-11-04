@@ -43,7 +43,16 @@ const AddItemVariant = (props) => {
   const item = useSelector((state) => state.items.itemReducer);
 
   const [variantFields, setVariantFields] = useState([
-    { id: "0", optionName: "", optionValue: [], position: 0 },
+    {
+      id: "0",
+      optionName: "",
+      optionValue: [],
+      position: 0,
+      price: "",
+      cost: 0.0,
+      sku: "",
+      barcode: "",
+    },
   ]);
 
   const [variantFieldsError, setVariantFieldsError] = useState([
@@ -169,6 +178,10 @@ const AddItemVariant = (props) => {
           id: variantFields.length.toString(),
           optionName: "",
           optionValue: [],
+          price: "",
+          cost: 0.0,
+          sku: "",
+          barcode: "",
           position: variantFields.length,
         },
       ]);
@@ -222,14 +235,17 @@ const AddItemVariant = (props) => {
 
   const save_variants = () => {
     dispatch(save_item_variants(variantFields));
+    props.toggleVariantModal();
   };
 
   const onDelete = (i) => {
     console.log(i);
 
-    // const tags = this.state.tags.slice(0);
-    // tags.splice(i, 1);
+    let variants = this.state.variantFields.slice(0);
+    variants.splice(i, 1);
     // this.setState({ tags });
+    setVariantFields(variants);
+    dispatch(save_item_variants(variants));
   };
 
   const addNewTag = (idx) => (tag) => {

@@ -82,7 +82,17 @@ const AddItem = (props) => {
 
     const data = {
       item_name: fields.item_name,
-      categoryId: fields.categoryId,
+      category:
+        fields.categoryId !== "0"
+          ? {
+              id: fields.categoryId,
+              name: category.category_list
+                .filter((item) => item._id)
+                .map((item) => {
+                  return item.catTitle;
+                })[0],
+            }
+          : { id: "0", name: "No Category" },
       sold_by: fields.sold_by,
       price: fields.price,
       cost: fields.cost,
@@ -92,10 +102,17 @@ const AddItem = (props) => {
       trackRecord: inventorySwitch[1],
       modifiers: modifierSwitch[0],
       dsd: modifierSwitch[1],
-      stores: item.store_list.filter((item) => {
-        return item.isSelected === true;
-      }),
-      variants: item.item_variants,
+      stores: item.store_list
+        .filter((item) => item.isSelected === true)
+        .map((item) => {
+          return {
+            id: item._id,
+            title: item.title,
+          };
+        }),
+      variants: item.variants,
+      repoOnPos: fields.represent_type,
+      itemColor: fields.color,
     };
     // dispatch(add_new_category(data));
     console.log(data);
@@ -151,13 +168,14 @@ const AddItem = (props) => {
     // setReceiptImage(URL.createObjectURL(e.target.files[0]));
   };
 
-  const handleChangeInventory = (index) => (e) => {
-    setInventorySwitch(!inventorySwitch[index]);
+  const handleChangeInventory = (idx) => (e) => {
+    const state = inventorySwitch.map((x, index) => (idx === index ? !x : x));
+    setInventorySwitch(state);
   };
-  const handleChangeModifier = (index) => (e) => {
-    setModifierSwitch(!modifierSwitch[index]);
+  const handleChangeModifier = (idx) => (e) => {
+    const state = modifierSwitch.map((x, index) => (idx === index ? !x : x));
+    setModifierSwitch(state);
   };
-
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
@@ -374,7 +392,10 @@ const AddItem = (props) => {
           {item.item_variants.length > 0 ? (
             <CRow>
               <CCol sm="12" md="12" lg="12">
-                <VariantDatatable item_variants={item.item_variants} />
+                <VariantDatatable
+                  item_variants={item.item_variants}
+                  variants={item.variants}
+                />
               </CCol>
             </CRow>
           ) : (

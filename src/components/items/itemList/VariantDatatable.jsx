@@ -12,6 +12,7 @@ import {
   toggle_select_all_item_stores,
   toggle_select_single_item_store,
   set_item_store_price,
+  update_variants_table_values,
 } from "../../../actions/items/itemActions";
 import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
@@ -29,7 +30,12 @@ const Price = (props) => {
     setVariantPrice(e.target.value);
   };
   const handleOnBlur = (e) => {
-    // dispatch(set_item_store_price(props.item._id, variantPrice));
+    const data = {
+      index: props.index,
+      value: variantPrice,
+      name: "Price",
+    };
+    // dispatch(update_variants_table_values(props.item._id, variantPrice));
   };
   return (
     <NumberFormat
@@ -61,7 +67,12 @@ const Cost = (props) => {
     setVariantCost(e.target.value);
   };
   const handleOnBlur = (e) => {
-    // dispatch(set_item_store_price(props.item._id, variantCost));
+    const data = {
+      index: props.index,
+      value: variantCost,
+      name: "Cost",
+    };
+    dispatch(update_variants_table_values(data));
   };
   return (
     <NumberFormat
@@ -93,7 +104,12 @@ const Barcode = (props) => {
     setVariantBarcode(e.target.value);
   };
   const handleOnBlur = (e) => {
-    // dispatch(set_item_store_price(props.item._id, variantBarcode));
+    const data = {
+      index: props.index,
+      value: variantBarcode,
+      name: "Barcode",
+    };
+    dispatch(update_variants_table_values(data));
   };
   return (
     <CInput
@@ -121,7 +137,12 @@ const Sku = (props) => {
     setVariantSKU(e.target.value);
   };
   const handleOnBlur = (e) => {
-    // dispatch(set_item_store_price(props.item._id, variantSKU));
+    const data = {
+      index: props.index,
+      value: variantSKU,
+      name: "SKU",
+    };
+    dispatch(update_variants_table_values(data));
   };
   return (
     <CInput
@@ -137,13 +158,6 @@ const Sku = (props) => {
 const VariantDatatable = (props) => {
   const dispatch = useDispatch();
   console.log(props);
-  console.log(
-    (props.item_variants || []).map((item) => {
-      item.optionValue.map((options) => {
-        return console.log(options);
-      });
-    })
-  );
   return (
     <React.Fragment>
       <CRow>
@@ -156,25 +170,24 @@ const VariantDatatable = (props) => {
             <th>Barcode</th>
           </thead>
           <tbody>
-            {(props.item_variants || []).map((item) => {
-              return item.optionValue.map((options) => (
-                <tr>
-                  <td>{options}</td>
-                  <td>
-                    <Price item={item} />
-                  </td>
-                  <td>
-                    <Cost item={item} />
-                  </td>
-                  <td>
-                    <Sku item={item} />
-                  </td>
-                  <td>
-                    <Barcode item={item} />
-                  </td>
-                </tr>
-              ));
-            })}
+            {props.variants.map((item, index) => (
+              <tr>
+                <td>{item.title}</td>
+                <td>
+                  <Price item={item} index={index} />
+                </td>
+                <td>
+                  <Cost item={item} index={index} />
+                </td>
+                <td>
+                  <Sku item={item} index={index} />
+                </td>
+                <td>
+                  <Barcode item={item} index={index} />
+                </td>
+              </tr>
+            ))}
+            ;
           </tbody>
         </table>
       </CRow>
@@ -183,3 +196,22 @@ const VariantDatatable = (props) => {
 };
 
 export default VariantDatatable;
+// {(props.item_variants || []).map((item) => {
+//   return item.optionValue.map((options, index) => (
+//     <tr>
+//       <td>{options}</td>
+//       <td>
+//         <Price item={item} index={index} />
+//       </td>
+//       <td>
+//         <Cost item={item} index={index} />
+//       </td>
+//       <td>
+//         <Sku item={item} index={index} />
+//       </td>
+//       <td>
+//         <Barcode item={item} index={index} />
+//       </td>
+//     </tr>
+//   ));
+// })}

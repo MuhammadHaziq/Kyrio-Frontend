@@ -11,6 +11,10 @@ import {
   TOGGLE_SELECT_SINGLE_ITEM_STORES,
   SET_ITEM_STORE_PRICE,
   SAVE_ITEM_VARIANTS,
+  UPDATE_VARIANT_PRICE,
+  UPDATE_VARIANT_COST,
+  UPDATE_VARIANT_SKU,
+  UPDATE_VARIANT_BARCODE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -311,5 +315,35 @@ export const save_item_variants = (data) => {
       type: SAVE_ITEM_VARIANTS,
       response: data,
     });
+  };
+};
+
+export const update_variants_table_values = (data) => {
+  return (dispatch) => {
+    if (data.name === "Price") {
+      dispatch({
+        type: UPDATE_VARIANT_PRICE,
+        value: data.value,
+        index: data.index,
+      });
+    } else if (data.name === "Cost") {
+      dispatch({
+        type: UPDATE_VARIANT_COST,
+        value: data.value,
+        index: data.index,
+      });
+    } else if (data.name === "SKU") {
+      dispatch({
+        type: UPDATE_VARIANT_SKU,
+        value: data.value,
+        index: data.index,
+      });
+    } else if (data.name === "Barcode") {
+      dispatch({
+        type: UPDATE_VARIANT_BARCODE,
+        value: data.value,
+        index: data.index,
+      });
+    }
   };
 };

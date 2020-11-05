@@ -9,6 +9,10 @@ import {
   TOGGLE_SELECT_SINGLE_ITEM_STORES,
   SET_ITEM_STORE_PRICE,
   SAVE_ITEM_VARIANTS,
+  UPDATE_VARIANT_PRICE,
+  UPDATE_VARIANT_COST,
+  UPDATE_VARIANT_SKU,
+  UPDATE_VARIANT_BARCODE,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -16,6 +20,7 @@ const initialState = {
   stock_list: [],
   store_list: [],
   item_variants: [],
+  variants: [],
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -75,8 +80,75 @@ const itemReducer = (state = initialState, action) => {
       });
     }
     case SAVE_ITEM_VARIANTS: {
+      let variants = [];
+      action.response.map((item) => {
+        item.optionValue.map((ite) => {
+          return variants.push({
+            title: ite,
+            price: item.price,
+            cost: item.cost,
+            sku: item.sku,
+            barcode: item.barcode,
+            optionName: item.optionName,
+          });
+        });
+      });
       return Object.assign({}, state, {
         item_variants: action.response,
+        variants: variants,
+      });
+    }
+
+    case UPDATE_VARIANT_PRICE: {
+      return Object.assign({}, state, {
+        variants: state.variants.slice().map((item, index) => {
+          if (index === action.index) {
+            return {
+              ...item,
+              prcie: action.value,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+    case UPDATE_VARIANT_COST: {
+      return Object.assign({}, state, {
+        variants: state.variants.slice().map((item, index) => {
+          if (index === action.index) {
+            return {
+              ...item,
+              cost: action.value,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+    case UPDATE_VARIANT_SKU: {
+      return Object.assign({}, state, {
+        variants: state.variants.slice().map((item, index) => {
+          if (index === action.index) {
+            return {
+              ...item,
+              sku: action.value,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+    case UPDATE_VARIANT_BARCODE: {
+      return Object.assign({}, state, {
+        variants: state.variants.slice().map((item, index) => {
+          if (index === action.index) {
+            return {
+              ...item,
+              barcode: action.value,
+            };
+          }
+          return item;
+        }),
       });
     }
     case TOGGLE_ITEM_DELETE_SELECT: {

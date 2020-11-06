@@ -1,7 +1,9 @@
 import {
+  REDIRECT_BACK_ITEMS,
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
   DELETE_ITEM_LIST,
@@ -20,6 +22,14 @@ import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
+export const redirect_back_items = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_ITEMS,
+      response: status,
+    });
+  };
+};
 export const get_items_list = (data) => {
   return (dispatch) => {
     // const data = { page: 1, limit: 100, storeId: "adfaa0fs0dfa9dsf" };
@@ -91,7 +101,10 @@ export const get_items_stock = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -166,13 +179,70 @@ export const get_items_store = () => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}stores`,
+        url: `${BaseUrl}items/get_item_stores`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          dispatch({ type: GET_ITEM_STORES, response: response.data });
+          dispatch({ type: GET_ITEM_STORES, response: response.data.stores });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const save_item = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "post",
+        url: `${BaseUrl}items/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: ITEM_SAVE,
+            response: response.data,
+          });
+          let msg = {
+            open: true,
+            message: "Item Saved Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);

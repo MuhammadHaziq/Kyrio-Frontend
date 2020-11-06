@@ -31,7 +31,7 @@ import StoresDatatable from "./StoresDatatable";
 import AddItemVariant from "./AddItemVariant";
 import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
-
+import { save_item } from "../../../actions/items/itemActions";
 const AddItem = (props) => {
   const [fields, setFields] = useState({
     item_name: "",
@@ -43,7 +43,7 @@ const AddItem = (props) => {
     color: "rgb(224, 224, 224)",
   });
   const [isHovered, setIsHovered] = useState(false);
-  const [receiptImage, setReceiptImage] = useState(null);
+  const [itemImage, setItemImage] = useState(null);
   const [inventorySwitch, setInventorySwitch] = useState([false, false]);
   const [modifierSwitch, setModifierSwitch] = useState([false, false]);
   const [receiptFile, setrReceiptFile] = useState("");
@@ -79,42 +79,81 @@ const AddItem = (props) => {
       });
       return false;
     }
-
+    let modifiers = [];
+    item.store_list
+      .filter((item) => item.isSelected === true)
+      .map((item) => {
+        (item.modifiers || []).map((modi) => {
+          modifiers.push({
+            id: modi._id,
+            title: modi.title,
+          });
+        });
+      });
+    let taxes = [];
+    item.store_list
+      .filter((item) => item.isSelected === true)
+      .map((item) => {
+        (item.taxes || []).map((tax) => {
+          taxes.push({
+            id: tax._id,
+            title: tax.title,
+            type: tax.tax_type.title,
+            value: tax.tax_rate,
+          });
+        });
+      });
+    const ReturnNumber = (params) => {
+      let num = params;
+      num = num.replace("$", "");
+      num = num.replace(",", "");
+      return num;
+    };
     const data = {
-      item_name: fields.item_name,
+      name: fields.item_name,
+      availableForSale: false,
       category:
         fields.categoryId !== "0"
-          ? {
+          ? JSON.stringify({
               id: fields.categoryId,
               name: category.category_list
                 .filter((item) => item._id)
                 .map((item) => {
                   return item.catTitle;
                 })[0],
-            }
-          : { id: "0", name: "No Category" },
-      sold_by: fields.sold_by,
-      price: fields.price,
-      cost: fields.cost,
+            })
+          : JSON.stringify({ id: "0", name: "No Category" }),
+      soldByType: fields.sold_by,
+      price: ReturnNumber(fields.price),
+      cost: ReturnNumber(fields.cost),
       represent_type: fields.represent_type,
       color: fields.color,
       compositeItem: inventorySwitch[0],
       trackRecord: inventorySwitch[1],
-      modifiers: modifierSwitch[0],
+      modifierSwitch: modifierSwitch[0],
       dsd: modifierSwitch[1],
-      stores: item.store_list
-        .filter((item) => item.isSelected === true)
-        .map((item) => {
-          return {
-            id: item._id,
-            title: item.title,
-          };
-        }),
-      variants: item.variants,
+      modifiers:
+        modifierSwitch[0] === true
+          ? JSON.stringify(modifiers)
+          : JSON.stringify([]),
+      taxes: JSON.stringify(taxes),
+      stores: JSON.stringify(
+        item.store_list
+          .filter((item) => item.isSelected === true)
+          .map((item) => {
+            return {
+              id: item.id,
+              title: item.title,
+            };
+          })
+      ),
+      variants: JSON.stringify(item.variants),
       repoOnPos: fields.represent_type,
       itemColor: fields.color,
+      image: itemImage,
+      stockQty: 200,
     };
-    // dispatch(add_new_category(data));
+    dispatch(save_item(data));
     console.log(data);
   };
 
@@ -160,12 +199,12 @@ const AddItem = (props) => {
     let reader = new FileReader();
 
     reader.onloadend = () => {
-      setReceiptImage(reader.result);
+      setItemImage(reader.result);
     };
 
     reader.readAsDataURL(e.target.files[0]);
 
-    // setReceiptImage(URL.createObjectURL(e.target.files[0]));
+    // setItemImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleChangeInventory = (idx) => (e) => {
@@ -572,6 +611,9 @@ const AddItem = (props) => {
                       width: "50px",
                       height: "50px",
                       float: "left",
+                      pointerEvents:
+                        fields.represent_type === "Image" ? "none" : "",
+                      opacity: fields.represent_type === "Image" ? 0.4 : "",
                     }}
                     className="ml-2"
                     key={index}
@@ -595,12 +637,18 @@ const AddItem = (props) => {
                 <div
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
-                  style={{ float: "right" }}
+                  style={{
+                    float: "right",
+                    pointerEvents:
+                      fields.represent_type === "Color_and_shape" ? "none" : "",
+                    opacity:
+                      fields.represent_type === "Color_and_shape" ? 0.4 : "",
+                  }}
                 >
                   <CLabel htmlFor="upload-button-receipt">
-                    {receiptImage !== null ? (
+                    {itemImage !== null ? (
                       <CImg
-                        src={receiptImage}
+                        src={itemImage}
                         alt=""
                         width="100px"
                         height="80px"

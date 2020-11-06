@@ -47,7 +47,10 @@ export const get_modifires_list = (storeId) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -101,7 +104,10 @@ export const add_new_modifier = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -204,7 +210,10 @@ export const delete_modifire = (ids) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+                object:
+                  typeof error.response != "undefined"
+                    ? error.response.data || {}
+                    : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -284,7 +293,10 @@ export const update_modifier = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+                object:
+                  typeof error.response != "undefined"
+                    ? error.response.data || {}
+                    : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

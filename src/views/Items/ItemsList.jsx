@@ -25,6 +25,7 @@ import {
   search_item_list,
   get_items_store,
   delete_item_list,
+  redirect_back_items,
 } from "../../actions/items/itemActions";
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
@@ -150,14 +151,14 @@ const ItemsList = () => {
     setFadeItem(false);
     setFadeAddItem(true);
     setUpdateItem(false);
-    // dispatch(redirect_back_discount(false));
+    dispatch(redirect_back_items(false));
   };
 
   const goBack = () => {
     setFadeItem(true);
     setFadeAddItem(false);
     setUpdateItem(false);
-    // dispatch(redirect_back_discount(true));
+    dispatch(redirect_back_items(true));
   };
 
   return (

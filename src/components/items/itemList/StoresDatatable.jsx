@@ -22,7 +22,7 @@ const Price = (props) => {
     setStorePrice(e.target.value);
   };
   const handleOnBlur = (e) => {
-    dispatch(set_item_store_price(props.item._id, storePrice));
+    dispatch(set_item_store_price(props.item.id, storePrice));
   };
   return (
     <NumberFormat
@@ -42,12 +42,12 @@ const Price = (props) => {
 
 const CheckAvailablity = (props) => {
   const dispatch = useDispatch();
-  const [storeId, setStoreId] = useState(props.item._id);
+  const [storeId, setStoreId] = useState(props.item.id);
   const [isSelected, setIsSelected] = useState(props.item.isSelected);
   useEffect(() => {
     if (props.item !== null && props.item !== undefined) {
       setIsSelected(props.item.isSelected);
-      setStoreId(props.item._id);
+      setStoreId(props.item.id);
     }
   }, [props.item]);
 

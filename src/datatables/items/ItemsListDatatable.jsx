@@ -18,7 +18,7 @@ const ItemsListDatatable = (props) => {
       return "0 %";
     } else {
       const margin = (+row.cost / +row.price) * 100;
-      return margin + " %";
+      return margin.toFixed(2) + " %";
     }
   };
   const showPrice = (cell, row) => {

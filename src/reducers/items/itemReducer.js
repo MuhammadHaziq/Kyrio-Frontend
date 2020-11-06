@@ -1,7 +1,9 @@
 import {
+  REDIRECT_BACK_ITEMS,
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
   DELETE_ITEM_LIST,
@@ -21,10 +23,19 @@ const initialState = {
   store_list: [],
   item_variants: [],
   variants: [],
+  redirect_itemList: false,
+  redirect_update: false,
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case REDIRECT_BACK_ITEMS: {
+      return Object.assign({}, state, {
+        redirect_itemList: action.response,
+        redirect_update: false,
+      });
+    }
+
     case GET_ITEM_LIST: {
       return Object.assign({}, state, {
         item_list: action.response,
@@ -40,6 +51,12 @@ const itemReducer = (state = initialState, action) => {
         store_list: (action.response || []).map((item) => {
           return { ...item, isSelected: true, price: "" };
         }),
+      });
+    }
+    case ITEM_SAVE: {
+      return Object.assign({}, state, {
+        item_list: [action.response, ...state.item_list],
+        redirect_itemList: true,
       });
     }
     case TOGGLE_SELECT_ALL_ITEM_STORES: {

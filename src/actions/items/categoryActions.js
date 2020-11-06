@@ -46,7 +46,10 @@ export const get_category_list = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -100,7 +103,10 @@ export const add_new_category = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -166,7 +172,10 @@ export const update_item_category = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -240,7 +249,10 @@ export const delete_categories = (id) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

@@ -47,7 +47,10 @@ export const get_discount_list = (id) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -95,7 +98,10 @@ export const add_new_disocunt = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -161,7 +167,10 @@ export const update_item_discount = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -235,7 +244,10 @@ export const delete_discount = (id) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

@@ -4,7 +4,7 @@ import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_select_all_item_stores,
   toggle_select_single_item_store,
-  set_item_store_price,
+  set_item_store_values,
 } from "../../../actions/items/itemActions";
 import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
@@ -22,7 +22,7 @@ const Price = (props) => {
     setStorePrice(e.target.value);
   };
   const handleOnBlur = (e) => {
-    dispatch(set_item_store_price(props.item.id, storePrice));
+    dispatch(set_item_store_values("Price", props.item.id, storePrice));
   };
   return (
     <NumberFormat
@@ -40,6 +40,62 @@ const Price = (props) => {
   );
 };
 
+const InStock = (props) => {
+  const dispatch = useDispatch();
+
+  const [storeStock, setStoreStock] = useState(props.item.inStock);
+  useEffect(() => {
+    if (props.item.inStock !== null && props.item.inStock !== undefined) {
+      setStoreStock(props.item.inStock);
+    }
+  }, [props.item]);
+
+  const handleOnChange = (e) => {
+    setStoreStock(e.target.value);
+  };
+  const handleOnBlur = (e) => {
+    dispatch(set_item_store_values("InStock", props.item.id, storeStock));
+  };
+  return (
+    <NumberFormat
+      id="InStock"
+      name="InStock"
+      placeholder="In Srock"
+      value={storeStock}
+      className="form-control"
+      onChange={handleOnChange}
+      onBlur={handleOnBlur}
+    />
+  );
+};
+const LowStock = (props) => {
+  const dispatch = useDispatch();
+
+  const [storeLowStock, setStoreLowStock] = useState(props.item.lowStock);
+  useEffect(() => {
+    if (props.item.lowStock !== null && props.item.lowStock !== undefined) {
+      setStoreLowStock(props.item.lowStock);
+    }
+  }, [props.item]);
+
+  const handleOnChange = (e) => {
+    setStoreLowStock(e.target.value);
+  };
+  const handleOnBlur = (e) => {
+    dispatch(set_item_store_values("LowStock", props.item.id, storeLowStock));
+  };
+  return (
+    <NumberFormat
+      id="LowStock"
+      name="LowStock"
+      placeholder="Low Stock"
+      value={storeLowStock}
+      className="form-control"
+      onChange={handleOnChange}
+      onBlur={handleOnBlur}
+    />
+  );
+};
 const CheckAvailablity = (props) => {
   const dispatch = useDispatch();
   const [storeId, setStoreId] = useState(props.item.id);
@@ -70,8 +126,16 @@ const StoresDatatable = (props) => {
   const [fields, setFields] = useState({
     checkAll: true,
   });
+  const [stockStatus, setStockStatus] = useState(props.stock);
+
   const dispatch = useDispatch();
   console.log(props);
+  console.log(props.stock);
+  useEffect(() => {
+    if (props.stock !== undefined) {
+      setStockStatus(props.stock);
+    }
+  }, [props.stock]);
   const hanldeOnChangeCheck = (e) => {
     setFields({
       ...fields,
@@ -104,6 +168,14 @@ const StoresDatatable = (props) => {
             <th>Available</th>
             <th>Store</th>
             <th>Price</th>
+            {props.stock === true ? (
+              <React.Fragment>
+                <th>In Stock</th>
+                <th>Low Stock</th>
+              </React.Fragment>
+            ) : (
+              ""
+            )}
           </thead>
           <tbody>
             {(props.stores || []).map((item) => (
@@ -115,6 +187,18 @@ const StoresDatatable = (props) => {
                 <td>
                   <Price item={item} />
                 </td>
+                {props.stock === true ? (
+                  <React.Fragment>
+                    <td>
+                      <InStock item={item} />
+                    </td>{" "}
+                    <td>
+                      <LowStock item={item} />
+                    </td>
+                  </React.Fragment>
+                ) : (
+                  ""
+                )}
               </tr>
             ))}
           </tbody>

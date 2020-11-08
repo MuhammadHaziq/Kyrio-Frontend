@@ -32,7 +32,10 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ReactTags from "react-tag-autocomplete";
-import { save_item_variants } from "../../../actions/items/itemActions";
+import {
+  save_item_variants,
+  delete_item_varient_option,
+} from "../../../actions/items/itemActions";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
@@ -244,15 +247,15 @@ const AddItemVariant = (props) => {
     props.toggleVariantModal();
   };
 
-  const onDelete = (i) => {
-    console.log(i);
-
-    let variants = this.state.variantFields.slice(0);
-    variants.splice(i, 1);
-    // this.setState({ tags });
-    setVariantFields(variants);
-    dispatch(save_item_variants(variants));
-  };
+  // const onDelete = (i) => {
+  //   console.log(i);
+  //
+  //   let variants = this.state.variantFields.slice(0);
+  //   variants.splice(i, 1);
+  //   // this.setState({ tags });
+  //   setVariantFields(variants);
+  //   dispatch(save_item_variants(variants));
+  // };
 
   const addNewTag = (idx) => (tag) => {
     console.log(tag);
@@ -279,6 +282,13 @@ const AddItemVariant = (props) => {
   const KeyCodes = {
     comma: 188,
     enter: 13,
+  };
+  const delete_option = (idx) => {
+    console.log(idx);
+    let variants = variantFields.slice(0);
+    variants.splice(idx, 1);
+    setVariantFields(variants);
+    dispatch(delete_item_varient_option(idx));
   };
   console.log(variantFieldsError);
   console.log(variantFields);
@@ -387,6 +397,7 @@ const AddItemVariant = (props) => {
                                           className="pull-right"
                                           color="danger"
                                           block={false}
+                                          onClick={() => delete_option(index)}
                                         >
                                           <CIcon name="cil-trash" />
                                         </CButton>

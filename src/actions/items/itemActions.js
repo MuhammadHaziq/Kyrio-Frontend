@@ -19,6 +19,9 @@ import {
   UPDATE_VARIANT_BARCODE,
   DELETE_ITEM_VARIANTS_OPTION,
   DELETE_ITEM_VARIANTS,
+  TOGGLE_ITEM_STOCK,
+  SET_ITEM_STORE_IN_STOCK,
+  SET_ITEM_STORE_LOW_STOCK,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -371,12 +374,35 @@ export const toggle_select_single_item_store = (id) => {
   };
 };
 
-export const set_item_store_price = (id, price) => {
+export const set_item_store_values = (name, id, value) => {
+  return (dispatch) => {
+    if (name === "Price") {
+      dispatch({
+        type: SET_ITEM_STORE_PRICE,
+        value: value,
+        id: id,
+      });
+    } else if (name === "InStock") {
+      dispatch({
+        type: SET_ITEM_STORE_IN_STOCK,
+        value: value,
+        id: id,
+      });
+    } else if (name === "LowStock") {
+      dispatch({
+        type: SET_ITEM_STORE_LOW_STOCK,
+        value: value,
+        id: id,
+      });
+    }
+  };
+};
+
+export const toggle_item_stock = (status) => {
   return (dispatch) => {
     dispatch({
-      type: SET_ITEM_STORE_PRICE,
-      price: price,
-      id: id,
+      type: TOGGLE_ITEM_STOCK,
+      response: status,
     });
   };
 };

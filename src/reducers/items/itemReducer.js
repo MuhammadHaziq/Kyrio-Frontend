@@ -17,6 +17,9 @@ import {
   UPDATE_VARIANT_BARCODE,
   DELETE_ITEM_VARIANTS_OPTION,
   DELETE_ITEM_VARIANTS,
+  TOGGLE_ITEM_STOCK,
+  SET_ITEM_STORE_IN_STOCK,
+  SET_ITEM_STORE_LOW_STOCK,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -27,6 +30,7 @@ const initialState = {
   variants: [],
   redirect_itemList: false,
   redirect_update: false,
+  item_stock_toggle: false,
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -85,13 +89,44 @@ const itemReducer = (state = initialState, action) => {
       });
     }
 
+    case TOGGLE_ITEM_STOCK: {
+      return Object.assign({}, state, {
+        item_stock_toggle: action.response,
+      });
+    }
     case SET_ITEM_STORE_PRICE: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
-          if (item._id === action.id) {
+          if (item.id === action.id) {
             return {
               ...item,
-              price: action.price,
+              price: action.value,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+    case SET_ITEM_STORE_IN_STOCK: {
+      return Object.assign({}, state, {
+        store_list: state.store_list.slice().map((item) => {
+          if (item.id === action.id) {
+            return {
+              ...item,
+              inStock: action.value,
+            };
+          }
+          return item;
+        }),
+      });
+    }
+    case SET_ITEM_STORE_LOW_STOCK: {
+      return Object.assign({}, state, {
+        store_list: state.store_list.slice().map((item) => {
+          if (item.id === action.id) {
+            return {
+              ...item,
+              lowStock: action.value,
             };
           }
           return item;
@@ -128,12 +163,15 @@ const itemReducer = (state = initialState, action) => {
     case DELETE_ITEM_VARIANTS: {
       return Object.assign({}, state, {
         item_variants: state.item_variants.slice().map((item, index) => {
-          if (item._id === action.id) {
+          if (item._id === action.response.id) {
             return {
               ...item,
-              optionValue: item.optionValue.filter((ite, indx) => {
-                return indx !== action.variantIndex;
-              }),
+              optionNames: item.optionNames.filter(
+                (item, index) => index !== action.response.vairantIndex
+              ),
+              optionValue: item.optionValue.filter(
+                (ite, indx) => indx !== action.response.variantIndex
+              ),
             };
           }
           return item;
@@ -147,6 +185,7 @@ const itemReducer = (state = initialState, action) => {
           if (item._id === action.optionId) {
             return {
               ...item,
+
               optionValue: item.optionValue.map((ite, index) => {
                 if (index === action.index) {
                   return {

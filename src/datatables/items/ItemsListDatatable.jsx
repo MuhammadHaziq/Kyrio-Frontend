@@ -37,6 +37,18 @@ const ItemsListDatatable = (props) => {
         })
       : "$ 0.00";
   };
+
+  const showStock = (cell, row) => {
+    let stocks = row.stores.map((item) => {
+      return +item.inStock || 0;
+    });
+    console.log(stocks);
+    stocks = stocks.reduce((a, b) => {
+      return b + a;
+    });
+
+    return stocks;
+  };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_item_single_select(row));
     console.log(row);
@@ -128,7 +140,11 @@ const ItemsListDatatable = (props) => {
         >
           Margin %
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="stockQty" dataSort={true}>
+        <TableHeaderColumn
+          dataField="stock"
+          dataSort={true}
+          dataFormat={showStock}
+        >
           Stock
         </TableHeaderColumn>
       </BootstrapTable>

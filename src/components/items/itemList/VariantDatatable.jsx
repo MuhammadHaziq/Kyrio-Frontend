@@ -6,6 +6,7 @@ import {
   CFormGroup,
   CLabel,
   CInput,
+  CButton,
 } from "@coreui/react";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
@@ -13,7 +14,9 @@ import {
   toggle_select_single_item_store,
   set_item_store_price,
   update_variants_table_values,
+  delete_item_varient,
 } from "../../../actions/items/itemActions";
+import { CIcon } from "@coreui/icons-react";
 import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
 const Price = (props) => {
@@ -165,6 +168,11 @@ const Sku = (props) => {
 const VariantDatatable = (props) => {
   const dispatch = useDispatch();
   console.log(props);
+  const delete_variant_values = (id, index) => {
+    console.log(id, index);
+    dispatch(delete_item_varient({ id: id, variantIndex: index }));
+  };
+
   return (
     <React.Fragment>
       <CRow>
@@ -175,6 +183,7 @@ const VariantDatatable = (props) => {
             <th>Cost</th>
             <th>SKU</th>
             <th>Barcode</th>
+            <th>Action</th>
           </thead>
           <tbody>
             {(props.item_variants || []).map((item) => {
@@ -192,6 +201,17 @@ const VariantDatatable = (props) => {
                   </td>
                   <td>
                     <Barcode item={options} index={index} optionId={item._id} />
+                  </td>
+                  <td>
+                    <CButton
+                      variant="outline"
+                      className="pull-right"
+                      color="danger"
+                      block={false}
+                      onClick={() => delete_variant_values(item._id, index)}
+                    >
+                      <CIcon name="cil-trash" />
+                    </CButton>
                   </td>
                 </tr>
               ));

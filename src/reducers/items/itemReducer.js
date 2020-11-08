@@ -15,6 +15,8 @@ import {
   UPDATE_VARIANT_COST,
   UPDATE_VARIANT_SKU,
   UPDATE_VARIANT_BARCODE,
+  DELETE_ITEM_VARIANTS_OPTION,
+  DELETE_ITEM_VARIANTS,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -98,31 +100,62 @@ const itemReducer = (state = initialState, action) => {
     }
     case SAVE_ITEM_VARIANTS: {
       let variants = [];
-      action.response.map((item) => {
-        item.optionValue.map((ite) => {
-          return variants.push({
-            title: ite,
-            price: item.price,
-            cost: item.cost,
-            sku: item.sku,
-            barcode: item.barcode,
-            optionName: item.optionName,
-          });
-        });
-      });
+
+      // action.response.map((item) => {
+      //   item.optionValue.map((ite) => {
+      //     return variants.push({
+      //       title: ite,
+      //       price: item.price,
+      //       cost: item.cost,
+      //       sku: item.sku,
+      //       barcode: item.barcode,
+      //       optionName: item.optionName,
+      //     });
+      //   });
+      // });
       return Object.assign({}, state, {
         item_variants: action.response,
-        variants: variants,
+      });
+    }
+
+    case DELETE_ITEM_VARIANTS_OPTION: {
+      return Object.assign({}, state, {
+        item_variants: state.item_variants.filter(
+          (item, index) => index !== action.idx
+        ),
+      });
+    }
+    case DELETE_ITEM_VARIANTS: {
+      return Object.assign({}, state, {
+        item_variants: state.item_variants.slice().map((item, index) => {
+          if (item._id === action.id) {
+            return {
+              ...item,
+              optionValue: item.optionValue.filter((ite, indx) => {
+                return indx !== action.variantIndex;
+              }),
+            };
+          }
+          return item;
+        }),
       });
     }
 
     case UPDATE_VARIANT_PRICE: {
       return Object.assign({}, state, {
-        variants: state.variants.slice().map((item, index) => {
-          if (index === action.index) {
+        item_variants: state.item_variants.slice().map((item, index) => {
+          if (item._id === action.optionId) {
             return {
               ...item,
-              prcie: action.value,
+              optionValue: item.optionValue.map((ite, index) => {
+                if (index === action.index) {
+                  return {
+                    ...ite,
+                    price: action.value,
+                  };
+                }
+                return ite;
+              }),
             };
           }
           return item;
@@ -131,24 +164,51 @@ const itemReducer = (state = initialState, action) => {
     }
     case UPDATE_VARIANT_COST: {
       return Object.assign({}, state, {
-        variants: state.variants.slice().map((item, index) => {
-          if (index === action.index) {
+        item_variants: state.item_variants.slice().map((item, index) => {
+          if (item._id === action.optionId) {
             return {
               ...item,
-              cost: action.value,
+              optionValue: item.optionValue.map((ite, index) => {
+                if (index === action.index) {
+                  return {
+                    ...ite,
+                    cost: action.value,
+                  };
+                }
+                return ite;
+              }),
             };
           }
           return item;
         }),
       });
+      // return Object.assign({}, state, {
+      //   variants: state.variants.slice().map((item, index) => {
+      //     if (index === action.index) {
+      //       return {
+      //         ...item,
+      //         cost: action.value,
+      //       };
+      //     }
+      //     return item;
+      //   }),
+      // });
     }
     case UPDATE_VARIANT_SKU: {
       return Object.assign({}, state, {
-        variants: state.variants.slice().map((item, index) => {
-          if (index === action.index) {
+        item_variants: state.item_variants.slice().map((item, index) => {
+          if (item._id === action.optionId) {
             return {
               ...item,
-              sku: action.value,
+              optionValue: item.optionValue.map((ite, index) => {
+                if (index === action.index) {
+                  return {
+                    ...ite,
+                    sku: action.value,
+                  };
+                }
+                return ite;
+              }),
             };
           }
           return item;
@@ -157,11 +217,19 @@ const itemReducer = (state = initialState, action) => {
     }
     case UPDATE_VARIANT_BARCODE: {
       return Object.assign({}, state, {
-        variants: state.variants.slice().map((item, index) => {
-          if (index === action.index) {
+        item_variants: state.item_variants.slice().map((item, index) => {
+          if (item._id === action.optionId) {
             return {
               ...item,
-              barcode: action.value,
+              optionValue: item.optionValue.map((ite, index) => {
+                if (index === action.index) {
+                  return {
+                    ...ite,
+                    barcode: action.value,
+                  };
+                }
+                return ite;
+              }),
             };
           }
           return item;

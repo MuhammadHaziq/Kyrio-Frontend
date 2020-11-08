@@ -33,9 +33,10 @@ const Price = (props) => {
     const data = {
       index: props.index,
       value: variantPrice,
+      optionId: props.optionId,
       name: "Price",
     };
-    // dispatch(update_variants_table_values(props.item._id, variantPrice));
+    dispatch(update_variants_table_values(data));
   };
   return (
     <NumberFormat
@@ -70,8 +71,10 @@ const Cost = (props) => {
     const data = {
       index: props.index,
       value: variantCost,
+      optionId: props.optionId,
       name: "Cost",
     };
+    console.log(data);
     dispatch(update_variants_table_values(data));
   };
   return (
@@ -107,8 +110,10 @@ const Barcode = (props) => {
     const data = {
       index: props.index,
       value: variantBarcode,
+      optionId: props.optionId,
       name: "Barcode",
     };
+    console.log(data);
     dispatch(update_variants_table_values(data));
   };
   return (
@@ -128,8 +133,8 @@ const Sku = (props) => {
 
   const [variantSKU, setVariantSKU] = useState(props.item.SKU);
   useEffect(() => {
-    if (props.item.SKU !== null && props.item.SKU !== undefined) {
-      setVariantSKU(props.item.SKU);
+    if (props.item.sku !== null && props.item.sku !== undefined) {
+      setVariantSKU(props.item.sku);
     }
   }, [props.item]);
 
@@ -140,8 +145,10 @@ const Sku = (props) => {
     const data = {
       index: props.index,
       value: variantSKU,
+      optionId: props.optionId,
       name: "SKU",
     };
+    console.log(data);
     dispatch(update_variants_table_values(data));
   };
   return (
@@ -170,24 +177,25 @@ const VariantDatatable = (props) => {
             <th>Barcode</th>
           </thead>
           <tbody>
-            {props.variants.map((item, index) => (
-              <tr>
-                <td>{item.title}</td>
-                <td>
-                  <Price item={item} index={index} />
-                </td>
-                <td>
-                  <Cost item={item} index={index} />
-                </td>
-                <td>
-                  <Sku item={item} index={index} />
-                </td>
-                <td>
-                  <Barcode item={item} index={index} />
-                </td>
-              </tr>
-            ))}
-            ;
+            {(props.item_variants || []).map((item) => {
+              return item.optionValue.map((options, index) => (
+                <tr>
+                  <td>{options.variantName}</td>
+                  <td>
+                    <Price item={options} index={index} optionId={item._id} />
+                  </td>
+                  <td>
+                    <Cost item={options} index={index} optionId={item._id} />
+                  </td>
+                  <td>
+                    <Sku item={options} index={index} optionId={item._id} />
+                  </td>
+                  <td>
+                    <Barcode item={options} index={index} optionId={item._id} />
+                  </td>
+                </tr>
+              ));
+            })}
           </tbody>
         </table>
       </CRow>
@@ -196,22 +204,21 @@ const VariantDatatable = (props) => {
 };
 
 export default VariantDatatable;
-// {(props.item_variants || []).map((item) => {
-//   return item.optionValue.map((options, index) => (
-//     <tr>
-//       <td>{options}</td>
-//       <td>
-//         <Price item={item} index={index} />
-//       </td>
-//       <td>
-//         <Cost item={item} index={index} />
-//       </td>
-//       <td>
-//         <Sku item={item} index={index} />
-//       </td>
-//       <td>
-//         <Barcode item={item} index={index} />
-//       </td>
-//     </tr>
-//   ));
-// })}
+// {props.item_variants.optionValue.map((item, index) => (
+//   <tr>
+//     <td>{item.variantName}</td>
+//     <td>
+//       <Price item={item} index={index} />
+//     </td>
+//     <td>
+//       <Cost item={item} index={index} />
+//     </td>
+//     <td>
+//       <Sku item={item} index={index} />
+//     </td>
+//     <td>
+//       <Barcode item={item} index={index} />
+//     </td>
+//   </tr>
+// ))}
+// ;

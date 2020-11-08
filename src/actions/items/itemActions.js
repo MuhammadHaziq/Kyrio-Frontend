@@ -17,6 +17,8 @@ import {
   UPDATE_VARIANT_COST,
   UPDATE_VARIANT_SKU,
   UPDATE_VARIANT_BARCODE,
+  DELETE_ITEM_VARIANTS_OPTION,
+  DELETE_ITEM_VARIANTS,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -395,25 +397,47 @@ export const update_variants_table_values = (data) => {
         type: UPDATE_VARIANT_PRICE,
         value: data.value,
         index: data.index,
+        optionId: data.optionId,
       });
     } else if (data.name === "Cost") {
       dispatch({
         type: UPDATE_VARIANT_COST,
         value: data.value,
         index: data.index,
+        optionId: data.optionId,
       });
     } else if (data.name === "SKU") {
       dispatch({
         type: UPDATE_VARIANT_SKU,
         value: data.value,
         index: data.index,
+        optionId: data.optionId,
       });
     } else if (data.name === "Barcode") {
       dispatch({
         type: UPDATE_VARIANT_BARCODE,
         value: data.value,
         index: data.index,
+        optionId: data.optionId,
       });
     }
+  };
+};
+
+export const delete_item_varient_option = (idx) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_ITEM_VARIANTS_OPTION,
+      idx: idx,
+    });
+  };
+};
+
+export const delete_item_varient = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_ITEM_VARIANTS,
+      response: data,
+    });
   };
 };

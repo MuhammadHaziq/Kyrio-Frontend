@@ -44,14 +44,13 @@ const AddItemVariant = (props) => {
 
   const [variantFields, setVariantFields] = useState([
     {
-      id: "0",
+      _id: "0",
       optionName: "",
-      optionValue: [],
+      variantNames: [],
+      optionValue: [
+        { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+      ],
       position: 0,
-      price: "",
-      cost: 0.0,
-      sku: "",
-      barcode: "",
     },
   ]);
 
@@ -175,13 +174,12 @@ const AddItemVariant = (props) => {
       setVariantFields([
         ...variantFields,
         {
-          id: variantFields.length.toString(),
+          _id: variantFields.length.toString(),
           optionName: "",
-          optionValue: [],
-          price: "",
-          cost: 0.0,
-          sku: "",
-          barcode: "",
+          variantNames: [],
+          optionValue: [
+            { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+          ],
           position: variantFields.length,
         },
       ]);
@@ -222,7 +220,15 @@ const AddItemVariant = (props) => {
 
   const closeModal = () => {
     setVariantFields([
-      { id: "0", optionName: "", optionValue: [], position: 0 },
+      {
+        _id: "0",
+        optionName: "",
+        variantNames: [],
+        optionValue: [
+          { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+        ],
+        position: 0,
+      },
     ]);
     setVariantFieldsError([
       {
@@ -249,11 +255,21 @@ const AddItemVariant = (props) => {
   };
 
   const addNewTag = (idx) => (tag) => {
+    console.log(tag);
     const data = variantFields.map((item, index) => {
       if (index === idx) {
         return {
           ...item,
-          optionValue: tag,
+          variantNames: tag,
+          optionValue: tag.map((ite) => {
+            return {
+              price: "",
+              cost: 0.0,
+              sku: "",
+              barcode: "",
+              variantName: ite,
+            };
+          }),
         };
       }
       return item;
@@ -265,6 +281,7 @@ const AddItemVariant = (props) => {
     enter: 13,
   };
   console.log(variantFieldsError);
+  console.log(variantFields);
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
   return (
     <React.Fragment>
@@ -288,8 +305,8 @@ const AddItemVariant = (props) => {
                       <CListGroup>
                         {variantFields.map((item, index) => (
                           <Draggable
-                            key={item.id}
-                            draggableId={item.id}
+                            key={item._id}
+                            draggableId={item._id}
                             index={index}
                           >
                             {(provided, snapshot) => (
@@ -341,7 +358,7 @@ const AddItemVariant = (props) => {
                                         <CFormGroup>
                                           <CInputGroup>
                                             <ReactTagInput
-                                              tags={item.optionValue}
+                                              tags={item.variantNames}
                                               onChange={addNewTag(index)}
                                               onBlur={variantFieldBlur(index)}
                                               className={
@@ -424,24 +441,3 @@ const AddItemVariant = (props) => {
   );
 };
 export default AddItemVariant;
-//
-// <CInput
-//   id="optionValue"
-//   name="optionValue"
-//   placeholder="Option Name"
-//   value={item.name}
-//   onChange={handleOnChangeVariantField(
-//     index
-//   )}
-//   invalid={
-//     variantFieldsError[index]
-//       .optionValue
-//   }
-//   onBlur={variantFieldBlur(index)}
-// />
-// <CInvalidFeedback>
-//   {variantFieldsError[index]
-//     .optionValue === true
-//     ? "Please Enter Option Value"
-//     : ""}
-// </CInvalidFeedback>

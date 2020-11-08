@@ -22,6 +22,9 @@ import {
   TOGGLE_ITEM_STOCK,
   SET_ITEM_STORE_IN_STOCK,
   SET_ITEM_STORE_LOW_STOCK,
+  UPDATE_ITEM_ROW_DATA,
+  REMOVE_ROW_DATA,
+  UPDATE_ITEM_RECORD,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -282,6 +285,64 @@ export const save_item = (data) => {
   };
 };
 
+export const update_item_record = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}items/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: UPDATE_ITEM_RECORD,
+            response: response.data,
+            id: data.item_id,
+          });
+          let msg = {
+            open: true,
+            message: "Item Update Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 export const toggle_item_single_select = (data) => {
   return (dispatch) => {
     dispatch({
@@ -464,6 +525,22 @@ export const delete_item_varient = (data) => {
     dispatch({
       type: DELETE_ITEM_VARIANTS,
       response: data,
+    });
+  };
+};
+export const update_row_data = (row) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_ITEM_ROW_DATA,
+      response: row,
+    });
+  };
+};
+export const remove_row_data = (row) => {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_ROW_DATA,
+      response: {},
     });
   };
 };

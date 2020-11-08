@@ -30,6 +30,7 @@ import {
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddItem from "../../components/items/itemList/AddItem";
+import UpdateItem from "../../components/items/itemList/UpdateItem";
 import { useSelector, useDispatch } from "react-redux";
 
 const ItemsList = () => {
@@ -43,8 +44,8 @@ const ItemsList = () => {
   const [storeId, setStoreId] = useState();
   const [defaultStoreId, setDefaultStoreId] = useState();
   const [showSearch, setShowSearch] = useState(false);
-  const [selectStock, setSelectStock] = useState(0);
-  const [selectCategory, setSelectCategory] = useState(0);
+  const [selectStock, setSelectStock] = useState("0");
+  const [selectCategory, setSelectCategory] = useState("-1");
   const [sendCall, setSendCall] = useState(false);
   const [pagination, setPagination] = useState(1);
   const [collapse, setCollapse] = useState(true);
@@ -65,16 +66,13 @@ const ItemsList = () => {
     dispatch(get_items_store());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (
-  //     item.redirect_update !== undefined &&
-  //     item.redirect_update === true
-  //   ) {
-  //     setFadeItem(false);
-  //     setFadeAddItem(false);
-  //     setUpdateItem(true);
-  //   }
-  // }, [item.redirect_update]);
+  useEffect(() => {
+    if (item.redirect_update !== undefined && item.redirect_update === true) {
+      setFadeItem(false);
+      setFadeAddItem(false);
+      setUpdateItem(true);
+    }
+  }, [item.redirect_update]);
 
   useEffect(() => {
     const data = {
@@ -165,7 +163,13 @@ const ItemsList = () => {
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeUpdateItem ? (
-          <CFade timeout={timeout} in={fadeUpdateItem}></CFade>
+          <CFade timeout={timeout} in={fadeUpdateItem}>
+            <UpdateItem
+              goBack={goBack}
+              store={item.store_list}
+              item_row_data={item.item_row_data}
+            />
+          </CFade>
         ) : (
           ""
         )}
@@ -271,10 +275,7 @@ const ItemsList = () => {
                                       <option value="0">All Store</option>
                                       {item.store_list.map((item) => {
                                         return (
-                                          <option
-                                            value={item._id}
-                                            key={item._id}
-                                          >
+                                          <option value={item.id} key={item.id}>
                                             {item.title}
                                           </option>
                                         );
@@ -296,7 +297,8 @@ const ItemsList = () => {
                                   value={selectCategory}
                                   onChange={categoryHandleChange}
                                 >
-                                  <option value="0">All Category</option>
+                                  <option value="-1">All Category</option>
+                                  <option value="0">No Category</option>
                                   {category.category_list.map((item) => {
                                     return (
                                       <option value={item._id} key={item._id}>

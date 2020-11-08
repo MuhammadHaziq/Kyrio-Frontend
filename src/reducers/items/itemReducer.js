@@ -20,6 +20,9 @@ import {
   TOGGLE_ITEM_STOCK,
   SET_ITEM_STORE_IN_STOCK,
   SET_ITEM_STORE_LOW_STOCK,
+  UPDATE_ITEM_ROW_DATA,
+  REMOVE_ROW_DATA,
+  UPDATE_ITEM_RECORD,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -31,6 +34,7 @@ const initialState = {
   redirect_itemList: false,
   redirect_update: false,
   item_stock_toggle: false,
+  item_row_data: {},
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -63,6 +67,20 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         item_list: [action.response, ...state.item_list],
         redirect_itemList: true,
+      });
+    }
+
+    case UPDATE_ITEM_RECORD: {
+      return Object.assign({}, state, {
+        item_list: state.item_list.slice().map((item) => {
+          if (item._id === action.id) {
+            return action.response;
+          }
+          return item;
+        }),
+        item_variants: [],
+        redirect_itemList: true,
+        redirect_update: false,
       });
     }
     case TOGGLE_SELECT_ALL_ITEM_STORES: {
@@ -134,20 +152,6 @@ const itemReducer = (state = initialState, action) => {
       });
     }
     case SAVE_ITEM_VARIANTS: {
-      let variants = [];
-
-      // action.response.map((item) => {
-      //   item.optionValue.map((ite) => {
-      //     return variants.push({
-      //       title: ite,
-      //       price: item.price,
-      //       cost: item.cost,
-      //       sku: item.sku,
-      //       barcode: item.barcode,
-      //       optionName: item.optionName,
-      //     });
-      //   });
-      // });
       return Object.assign({}, state, {
         item_variants: action.response,
       });
@@ -301,9 +305,34 @@ const itemReducer = (state = initialState, action) => {
         item_list: state.item_list.filter((item) => {
           return item.isDeleted !== true;
         }),
+        item_row_data: {},
+        item_variants: [],
+        redirect_itemList: true,
+        redirect_update: false,
       });
     }
 
+    case UPDATE_ITEM_ROW_DATA: {
+      return Object.assign({}, state, {
+        item_row_data: action.response,
+        item_variants:
+          action.response.varients !== null &&
+          action.response.varients !== undefined
+            ? action.response.varients
+            : [],
+        redirect_itemList: false,
+        redirect_update: true,
+      });
+    }
+
+    case REMOVE_ROW_DATA: {
+      return Object.assign({}, state, {
+        item_row_data: {},
+        item_variants: [],
+        redirect_itemList: true,
+        redirect_update: false,
+      });
+    }
     default:
       return { ...state };
   }

@@ -27,13 +27,15 @@ import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import StoresDatatable from "./StoresDatatable";
-// import { add_new_category } from "../../../actions/items/categoryActions";
+import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import AddItemVariant from "./AddItemVariant";
 import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
 import {
-  save_item,
+  update_item_record,
   toggle_item_stock,
+  delete_item_list,
+  remove_row_data,
 } from "../../../actions/items/itemActions";
 const AddItem = (props) => {
   const [fields, setFields] = useState({
@@ -52,6 +54,7 @@ const AddItem = (props) => {
   const [modifierSwitch, setModifierSwitch] = useState([false, false]);
   const [receiptFile, setrReceiptFile] = useState("");
   const [variantModal, setVariantModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const [errors, setErrors] = useState({
     item_name: false,
@@ -71,11 +74,37 @@ const AddItem = (props) => {
     }
   }, [item.redirect_itemList]);
 
+  useEffect(() => {
+    if (props.item_row_data !== undefined && props.item_row_data !== null) {
+      console.log(props.item_row_data);
+      setFields({
+        ...fields,
+        item_name: props.item_row_data.name,
+        categoryId: props.item_row_data.category.id,
+        sold_by: props.item_row_data.soldByType,
+        price: props.item_row_data.price,
+        cost: "$" + props.item_row_data.cost,
+        represent_type: props.item_row_data.repoOnPos,
+        color: props.item_row_data.color,
+        availableForSale: props.item_row_data.availableForSale,
+      });
+      setInventorySwitch([
+        props.item_row_data.compositeItem,
+        props.item_row_data.trackStock,
+      ]);
+      setModifierSwitch([
+        props.item_row_data.modifiersStatus,
+        props.item_row_data.dsd,
+      ]);
+    }
+  }, [props.item_row_data]);
+
   const goBack = () => {
     props.goBack();
+    dispatch(remove_row_data());
   };
 
-  const submitItem = () => {
+  const updateItem = () => {
     if (fields.item_name === "") {
       setErrors({
         ...errors,
@@ -108,6 +137,7 @@ const AddItem = (props) => {
         });
       });
     const ReturnNumber = (params) => {
+      console.log("params", params);
       let num = params;
       num = Number.isInteger(num) ? num : num.replace("$", "");
       num = Number.isInteger(num) ? num : num.replace(",", "");
@@ -115,8 +145,9 @@ const AddItem = (props) => {
     };
     console.log(itemImage);
     const data = {
+      item_id: props.item_row_data._id,
       name: fields.item_name,
-      availableForSale: fields.availableForSale,
+      availableForSale: false,
       category:
         fields.categoryId !== "0"
           ? JSON.stringify({
@@ -144,21 +175,14 @@ const AddItem = (props) => {
       stores: JSON.stringify(
         item.store_list.filter((item) => item.isSelected === true)
       ),
-      varients: JSON.stringify(
-        item.item_variants.map((item) => {
-          return {
-            optionName: item.optionName,
-            optionValue: item.optionValue,
-          };
-        })
-      ),
+      variants: JSON.stringify(item.item_variants),
       repoOnPos: fields.represent_type,
       itemColor:
         fields.represent_type === "Color_and_shape" ? fields.color : "",
       image: itemImage,
       stockQty: 200,
     };
-    dispatch(save_item(data));
+    dispatch(update_item_record(data));
     console.log(data);
   };
 
@@ -227,8 +251,14 @@ const AddItem = (props) => {
     setVariantModal(!variantModal);
   };
 
-  const addVariant = () => {
-    console.log("sasa");
+  const delete_category = () => {
+    const data = [props.item_row_data._id];
+    console.log(data);
+    dispatch(delete_item_list(JSON.stringify(data)));
+  };
+
+  const hideAlert = () => {
+    setShowAlert(!showAlert);
   };
 
   return (
@@ -694,15 +724,18 @@ const AddItem = (props) => {
       </CCard>
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-          <CButton
-            block
+          <ConformationAlert
+            button_text="Delete"
+            heading="Please confirm your action"
+            section="Are you sure you want to delete the selected Item?"
+            buttonAction={delete_category}
+            show_alert={showAlert}
+            hideAlert={setShowAlert}
             variant="outline"
             className="btn-pill pull-right"
-            color="secondary"
-            onClick={goBack}
-          >
-            BACK
-          </CButton>
+            color="danger"
+            block={true}
+          />
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <CButton
@@ -722,9 +755,9 @@ const AddItem = (props) => {
             variant="outline"
             className="btn-pill pull-right"
             color="success"
-            onClick={submitItem}
+            onClick={updateItem}
           >
-            SAVE
+            Update
           </CButton>
         </CCol>
       </CRow>
@@ -733,47 +766,3 @@ const AddItem = (props) => {
 };
 
 export default AddItem;
-// const data = {
-//   name: fields.item_name,
-//   availableForSale: false,
-//   category:
-//     fields.categoryId !== "0"
-//       ? JSON.stringify({
-//           id: fields.categoryId,
-//           name: category.category_list
-//             .filter((item) => item._id)
-//             .map((item) => {
-//               return item.catTitle;
-//             })[0],
-//         })
-//       : JSON.stringify({ id: "0", name: "No Category" }),
-//   soldByType: fields.sold_by,
-//   price: ReturnNumber(fields.price),
-//   cost: ReturnNumber(fields.cost),
-//   represent_type: fields.represent_type,
-//   color: fields.color,
-//   compositeItem: inventorySwitch[0],
-//   trackRecord: inventorySwitch[1],
-//   modifierSwitch: modifierSwitch[0],
-//   dsd: modifierSwitch[1],
-//   modifiers:
-//     modifierSwitch[0] === true
-//       ? JSON.stringify(modifiers)
-//       : JSON.stringify([]),
-//   taxes: JSON.stringify(taxes),
-//   stores: JSON.stringify(
-//     item.store_list
-//       .filter((item) => item.isSelected === true)
-//       .map((item) => {
-//         return {
-//           id: item.id,
-//           title: item.title,
-//         };
-//       })
-//   ),
-//   variants: JSON.stringify(item.variants),
-//   repoOnPos: fields.represent_type,
-//   itemColor: fields.color,
-//   image: itemImage,
-//   stockQty: 200,
-// };

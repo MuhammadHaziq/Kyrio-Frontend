@@ -1,7 +1,9 @@
 import {
+  REDIRECT_BACK_ITEMS,
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
   DELETE_ITEM_LIST,
@@ -11,11 +13,31 @@ import {
   TOGGLE_SELECT_SINGLE_ITEM_STORES,
   SET_ITEM_STORE_PRICE,
   SAVE_ITEM_VARIANTS,
+  UPDATE_VARIANT_PRICE,
+  UPDATE_VARIANT_COST,
+  UPDATE_VARIANT_SKU,
+  UPDATE_VARIANT_BARCODE,
+  DELETE_ITEM_VARIANTS_OPTION,
+  DELETE_ITEM_VARIANTS,
+  TOGGLE_ITEM_STOCK,
+  SET_ITEM_STORE_IN_STOCK,
+  SET_ITEM_STORE_LOW_STOCK,
+  UPDATE_ITEM_ROW_DATA,
+  REMOVE_ROW_DATA,
+  UPDATE_ITEM_RECORD,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
 
+export const redirect_back_items = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: REDIRECT_BACK_ITEMS,
+      response: status,
+    });
+  };
+};
 export const get_items_list = (data) => {
   return (dispatch) => {
     // const data = { page: 1, limit: 100, storeId: "adfaa0fs0dfa9dsf" };
@@ -87,7 +109,10 @@ export const get_items_stock = () => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-            object: error.response.data,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -162,13 +187,128 @@ export const get_items_store = () => {
     try {
       axios({
         method: "get",
-        url: `${BaseUrl}stores`,
+        url: `${BaseUrl}items/get_item_stores`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          dispatch({ type: GET_ITEM_STORES, response: response.data });
+          dispatch({ type: GET_ITEM_STORES, response: response.data.stores });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const save_item = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "post",
+        url: `${BaseUrl}items/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: ITEM_SAVE,
+            response: response.data,
+          });
+          let msg = {
+            open: true,
+            message: "Item Saved Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_item_record = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}items/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: UPDATE_ITEM_RECORD,
+            response: response.data,
+            id: data.item_id,
+          });
+          let msg = {
+            open: true,
+            message: "Item Update Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -295,12 +435,35 @@ export const toggle_select_single_item_store = (id) => {
   };
 };
 
-export const set_item_store_price = (id, price) => {
+export const set_item_store_values = (name, id, value) => {
+  return (dispatch) => {
+    if (name === "Price") {
+      dispatch({
+        type: SET_ITEM_STORE_PRICE,
+        value: value,
+        id: id,
+      });
+    } else if (name === "InStock") {
+      dispatch({
+        type: SET_ITEM_STORE_IN_STOCK,
+        value: value,
+        id: id,
+      });
+    } else if (name === "LowStock") {
+      dispatch({
+        type: SET_ITEM_STORE_LOW_STOCK,
+        value: value,
+        id: id,
+      });
+    }
+  };
+};
+
+export const toggle_item_stock = (status) => {
   return (dispatch) => {
     dispatch({
-      type: SET_ITEM_STORE_PRICE,
-      price: price,
-      id: id,
+      type: TOGGLE_ITEM_STOCK,
+      response: status,
     });
   };
 };
@@ -310,6 +473,74 @@ export const save_item_variants = (data) => {
     dispatch({
       type: SAVE_ITEM_VARIANTS,
       response: data,
+    });
+  };
+};
+
+export const update_variants_table_values = (data) => {
+  return (dispatch) => {
+    if (data.name === "Price") {
+      dispatch({
+        type: UPDATE_VARIANT_PRICE,
+        value: data.value,
+        index: data.index,
+        optionId: data.optionId,
+      });
+    } else if (data.name === "Cost") {
+      dispatch({
+        type: UPDATE_VARIANT_COST,
+        value: data.value,
+        index: data.index,
+        optionId: data.optionId,
+      });
+    } else if (data.name === "SKU") {
+      dispatch({
+        type: UPDATE_VARIANT_SKU,
+        value: data.value,
+        index: data.index,
+        optionId: data.optionId,
+      });
+    } else if (data.name === "Barcode") {
+      dispatch({
+        type: UPDATE_VARIANT_BARCODE,
+        value: data.value,
+        index: data.index,
+        optionId: data.optionId,
+      });
+    }
+  };
+};
+
+export const delete_item_varient_option = (idx) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_ITEM_VARIANTS_OPTION,
+      idx: idx,
+    });
+  };
+};
+
+export const delete_item_varient = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_ITEM_VARIANTS,
+      response: data,
+    });
+  };
+};
+export const update_row_data = (row) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_ITEM_ROW_DATA,
+      response: row,
+    });
+  };
+};
+export const remove_row_data = (row) => {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_ROW_DATA,
+      response: {},
     });
   };
 };

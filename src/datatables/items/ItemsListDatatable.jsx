@@ -4,6 +4,7 @@ import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_item_single_select,
   toggle_item_all_select,
+  update_row_data,
 } from "../../actions/items/itemActions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,7 +19,7 @@ const ItemsListDatatable = (props) => {
       return "0 %";
     } else {
       const margin = (+row.cost / +row.price) * 100;
-      return margin + " %";
+      return margin.toFixed(2) + " %";
     }
   };
   const showPrice = (cell, row) => {
@@ -36,6 +37,18 @@ const ItemsListDatatable = (props) => {
           currency: "USD",
         })
       : "$ 0.00";
+  };
+
+  const showStock = (cell, row) => {
+    let stocks = row.stores.map((item) => {
+      return +item.inStock || 0;
+    });
+    console.log(stocks);
+    stocks = stocks.reduce((a, b) => {
+      return b + a;
+    });
+
+    return stocks;
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_item_single_select(row));
@@ -80,7 +93,7 @@ const ItemsListDatatable = (props) => {
     sizePerPage: 5,
     onRowClick: function (row) {
       console.log(row);
-      // dispatch(select_row_data_update(row));
+      dispatch(update_row_data(row));
     },
   };
   return (
@@ -128,7 +141,11 @@ const ItemsListDatatable = (props) => {
         >
           Margin %
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="stockQty" dataSort={true}>
+        <TableHeaderColumn
+          dataField="stock"
+          dataSort={true}
+          dataFormat={showStock}
+        >
           Stock
         </TableHeaderColumn>
       </BootstrapTable>

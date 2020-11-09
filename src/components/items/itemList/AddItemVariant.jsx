@@ -32,7 +32,10 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ReactTags from "react-tag-autocomplete";
-import { save_item_variants } from "../../../actions/items/itemActions";
+import {
+  save_item_variants,
+  delete_item_varient_option,
+} from "../../../actions/items/itemActions";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
@@ -43,7 +46,15 @@ const AddItemVariant = (props) => {
   const item = useSelector((state) => state.items.itemReducer);
 
   const [variantFields, setVariantFields] = useState([
-    { id: "0", optionName: "", optionValue: [], position: 0 },
+    {
+      _id: "0",
+      optionName: "",
+      variantNames: [],
+      optionValue: [
+        { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+      ],
+      position: 0,
+    },
   ]);
 
   const [variantFieldsError, setVariantFieldsError] = useState([
@@ -166,9 +177,12 @@ const AddItemVariant = (props) => {
       setVariantFields([
         ...variantFields,
         {
-          id: variantFields.length.toString(),
+          _id: variantFields.length.toString(),
           optionName: "",
-          optionValue: [],
+          variantNames: [],
+          optionValue: [
+            { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+          ],
           position: variantFields.length,
         },
       ]);
@@ -209,7 +223,15 @@ const AddItemVariant = (props) => {
 
   const closeModal = () => {
     setVariantFields([
-      { id: "0", optionName: "", optionValue: [], position: 0 },
+      {
+        _id: "0",
+        optionName: "",
+        variantNames: [],
+        optionValue: [
+          { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+        ],
+        position: 0,
+      },
     ]);
     setVariantFieldsError([
       {
@@ -222,22 +244,35 @@ const AddItemVariant = (props) => {
 
   const save_variants = () => {
     dispatch(save_item_variants(variantFields));
+    props.toggleVariantModal();
   };
 
-  const onDelete = (i) => {
-    console.log(i);
-
-    // const tags = this.state.tags.slice(0);
-    // tags.splice(i, 1);
-    // this.setState({ tags });
-  };
+  // const onDelete = (i) => {
+  //   console.log(i);
+  //
+  //   let variants = this.state.variantFields.slice(0);
+  //   variants.splice(i, 1);
+  //   // this.setState({ tags });
+  //   setVariantFields(variants);
+  //   dispatch(save_item_variants(variants));
+  // };
 
   const addNewTag = (idx) => (tag) => {
+    console.log(tag);
     const data = variantFields.map((item, index) => {
       if (index === idx) {
         return {
           ...item,
-          optionValue: tag,
+          variantNames: tag,
+          optionValue: tag.map((ite) => {
+            return {
+              price: "",
+              cost: 0.0,
+              sku: "",
+              barcode: "",
+              variantName: ite,
+            };
+          }),
         };
       }
       return item;
@@ -248,7 +283,15 @@ const AddItemVariant = (props) => {
     comma: 188,
     enter: 13,
   };
+  const delete_option = (idx) => {
+    console.log(idx);
+    let variants = variantFields.slice(0);
+    variants.splice(idx, 1);
+    setVariantFields(variants);
+    dispatch(delete_item_varient_option(idx));
+  };
   console.log(variantFieldsError);
+  console.log(variantFields);
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
   return (
     <React.Fragment>
@@ -272,8 +315,8 @@ const AddItemVariant = (props) => {
                       <CListGroup>
                         {variantFields.map((item, index) => (
                           <Draggable
-                            key={item.id}
-                            draggableId={item.id}
+                            key={item._id}
+                            draggableId={item._id}
                             index={index}
                           >
                             {(provided, snapshot) => (
@@ -325,7 +368,7 @@ const AddItemVariant = (props) => {
                                         <CFormGroup>
                                           <CInputGroup>
                                             <ReactTagInput
-                                              tags={item.optionValue}
+                                              tags={item.variantNames}
                                               onChange={addNewTag(index)}
                                               onBlur={variantFieldBlur(index)}
                                               className={
@@ -354,6 +397,7 @@ const AddItemVariant = (props) => {
                                           className="pull-right"
                                           color="danger"
                                           block={false}
+                                          onClick={() => delete_option(index)}
                                         >
                                           <CIcon name="cil-trash" />
                                         </CButton>
@@ -408,24 +452,3 @@ const AddItemVariant = (props) => {
   );
 };
 export default AddItemVariant;
-//
-// <CInput
-//   id="optionValue"
-//   name="optionValue"
-//   placeholder="Option Name"
-//   value={item.name}
-//   onChange={handleOnChangeVariantField(
-//     index
-//   )}
-//   invalid={
-//     variantFieldsError[index]
-//       .optionValue
-//   }
-//   onBlur={variantFieldBlur(index)}
-// />
-// <CInvalidFeedback>
-//   {variantFieldsError[index]
-//     .optionValue === true
-//     ? "Please Enter Option Value"
-//     : ""}
-// </CInvalidFeedback>

@@ -44,6 +44,7 @@ const AddItemVariant = (props) => {
   const dispatch = useDispatch();
 
   const item = useSelector((state) => state.items.itemReducer);
+  const settings = useSelector((state) => state.settings);
 
   const [variantFields, setVariantFields] = useState([
     {
@@ -94,14 +95,28 @@ const AddItemVariant = (props) => {
     margin: `0 0 ${grid}px 0`,
 
     // change background colour if dragging
-    background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
+    background:
+      settings.darkMode === true
+        ? isDragging
+          ? "rgb(19 18 18 / 42%)"
+          : "rgb(19 18 18 / 42%)"
+        : isDragging
+        ? "rgb(255 255 255)"
+        : "rgb(255 255 255)",
 
     // styles we need to apply on draggables
     ...draggableStyle,
   });
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
+    background:
+      settings.darkMode === true
+        ? isDraggingOver
+          ? "rgb(76 73 73)"
+          : "rgb(76 73 73)"
+        : isDraggingOver
+        ? "rgb(255 255 255)"
+        : "rgb(255 255 255)",
     padding: grid,
     // width: 250,
   });

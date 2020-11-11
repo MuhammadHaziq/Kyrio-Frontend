@@ -1,0 +1,165 @@
+import React from "react";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import {
+  toggle_item_single_select,
+  toggle_item_all_select,
+  update_row_data,
+} from "../../actions/items/itemActions";
+import { useSelector, useDispatch } from "react-redux";
+
+const CustomerDatatable = (props) => {
+  const dispatch = useDispatch();
+
+  const showName = (cell, row) => {
+    return (
+      <React.Fragment>
+        <h4>{row.name || "-"}</h4>
+        <span>
+          <p>{row.note || ""}</p>
+        </span>
+      </React.Fragment>
+    );
+  };
+  const showContacts = (cell, row) => {
+    return (
+      <React.Fragment>
+        <p>{row.email}</p>
+        <span>
+          <p>{row.phone}</p>
+        </span>
+      </React.Fragment>
+    );
+  };
+
+  const firstVisit = (cell, row) => {
+    return row.firstVisitData || "-";
+  };
+  const lastVisit = (cell, row) => {
+    return row.lastVisitData || "-";
+  };
+  const totalVisit = (cell, row) => {
+    return row.totalVisit || "0";
+  };
+  const totalSpent = (cell, row) => {
+    return row.totalSpent || "0.00";
+  };
+  const pointBalance = (cell, row) => {
+    return row.pointBalance || "0.00";
+  };
+
+  const onRowSelect = (row, isSelected, e) => {
+    // dispatch(toggle_item_single_select(row));
+    console.log(row);
+  };
+
+  const onSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      // dispatch(toggle_item_all_select(true));
+      console.log(true);
+    } else {
+      // dispatch(toggle_item_all_select(false));
+      console.log(false);
+    }
+  };
+
+  const selectRowProp = {
+    mode: "checkbox",
+    onSelect: onRowSelect,
+    onSelectAll: onSelectAll,
+  };
+  /**
+   *
+   *  Datatable functions End
+   *
+   ***/
+  const options = {
+    sizePerPageList: [
+      {
+        text: "5",
+        value: 5,
+      },
+      {
+        text: "10",
+        value: 10,
+      },
+      {
+        text: "All",
+        value: props.customers.length,
+      },
+    ],
+    sizePerPage: 5,
+    onRowClick: function (row) {
+      console.log(row);
+      // dispatch(update_row_data(row));
+    },
+  };
+  return (
+    <React.Fragment>
+      <BootstrapTable
+        data={props.customers}
+        version="4"
+        hover={true}
+        selectRow={selectRowProp}
+        options={options}
+        pagination={true}
+      >
+        <TableHeaderColumn
+          dataField="_id"
+          dataSort={true}
+          hidden={true}
+          isKey={true}
+        >
+          Id
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="name" dataFormat={showName}>
+          Customer
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="price"
+          dataSort={true}
+          dataFormat={showContacts}
+        >
+          Conatcts
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="cost"
+          dataSort={true}
+          dataFormat={firstVisit}
+        >
+          First visit
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="margin"
+          dataSort={true}
+          dataFormat={lastVisit}
+        >
+          Last visit
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="stock"
+          dataSort={true}
+          dataFormat={totalVisit}
+        >
+          Total Visits
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="stock"
+          dataSort={true}
+          dataFormat={totalSpent}
+        >
+          Total Spent
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="stock"
+          dataSort={true}
+          dataFormat={pointBalance}
+        >
+          Points Balance
+        </TableHeaderColumn>
+      </BootstrapTable>
+    </React.Fragment>
+  );
+};
+
+export default CustomerDatatable;

@@ -35,18 +35,32 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
-  background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
+  background:
+    that.props.settings.darkMode === true
+      ? isDragging
+        ? "rgb(19 18 18 / 42%)"
+        : "rgb(19 18 18 / 42%)"
+      : isDragging
+      ? "rgb(255 255 255)"
+      : "rgb(255 255 255)",
 
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
+  background:
+    that.props.settings.darkMode === true
+      ? isDraggingOver
+        ? "rgb(76 73 73)"
+        : "rgb(76 73 73)"
+      : isDraggingOver
+      ? "rgb(255 255 255)"
+      : "rgb(255 255 255)",
   padding: grid,
   // width: 250,
 });
-
+var that;
 class ModifireList extends Component {
   constructor(props) {
     super(props);
@@ -71,6 +85,7 @@ class ModifireList extends Component {
           : false,
     };
     this.onDragEnd = this.onDragEnd.bind(this);
+    that = this;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -174,7 +189,10 @@ class ModifireList extends Component {
             <h4
               style={{
                 fontWeight: "500",
-                color: "rgba(0,0,0,0.54)",
+                color:
+                  this.props.settings.darkMode === true
+                    ? "rgb(236 236 245 / 82%)"
+                    : "rgba(0,0,0,0.54)",
                 marginLeft: "50px",
               }}
             >
@@ -241,7 +259,11 @@ class ModifireList extends Component {
                                         style={{
                                           marginBottom: "0px",
                                           marginLeft: "29px",
-                                          color: "#20202a",
+                                          color:
+                                            this.props.settings.darkMode ===
+                                            true
+                                              ? "rgb(236 236 245 / 82%)"
+                                              : "#20202a",
                                           marginTop: "-12px",
                                         }}
                                       >
@@ -252,7 +274,11 @@ class ModifireList extends Component {
                                         className="mb-1"
                                         style={{
                                           marginLeft: "45px",
-                                          color: "#20202ad1",
+                                          color:
+                                            this.props.settings.darkMode ===
+                                            true
+                                              ? "rgb(236 236 245 / 82%)"
+                                              : "#20202ad1",
                                         }}
                                       >
                                         {item.options}
@@ -286,6 +312,7 @@ class ModifireList extends Component {
 const mapStateToProps = (state) => {
   return {
     modifiers_list: state.items.modifiresReducer.modifiers_list,
+    settings: state.settings,
   };
 };
 export default connect(mapStateToProps, {

@@ -8,3 +8,7 @@ export const imageBaseUrl =
   "3000" +
   "/";
 export const BaseUrl = LocalUrl;
+
+// 03130001200
+// Zuhaib 
+// Fraud Investigation Allied Bank

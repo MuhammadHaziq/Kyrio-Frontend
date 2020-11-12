@@ -2,10 +2,10 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_item_single_select,
-  toggle_item_all_select,
+  toggle_customer_single_select,
+  toggle_customer_all_select,
   update_row_data,
-} from "../../actions/items/itemActions";
+} from "../../actions/customer/customerActions";
 import { useSelector, useDispatch } from "react-redux";
 
 const CustomerDatatable = (props) => {
@@ -14,7 +14,7 @@ const CustomerDatatable = (props) => {
   const showName = (cell, row) => {
     return (
       <React.Fragment>
-        <h4>{row.name || "-"}</h4>
+        <b style={{ fontSize: "smaller" }}>{row.name || "-"}</b>
         <span>
           <p>{row.note || ""}</p>
         </span>
@@ -24,7 +24,7 @@ const CustomerDatatable = (props) => {
   const showContacts = (cell, row) => {
     return (
       <React.Fragment>
-        <p>{row.email}</p>
+        {row.email}
         <span>
           <p>{row.phone}</p>
         </span>
@@ -49,17 +49,14 @@ const CustomerDatatable = (props) => {
   };
 
   const onRowSelect = (row, isSelected, e) => {
-    // dispatch(toggle_item_single_select(row));
-    console.log(row);
+    dispatch(toggle_customer_single_select(row));
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      // dispatch(toggle_item_all_select(true));
-      console.log(true);
+      dispatch(toggle_customer_all_select(true));
     } else {
-      // dispatch(toggle_item_all_select(false));
-      console.log(false);
+      dispatch(toggle_customer_all_select(false));
     }
   };
 
@@ -91,7 +88,7 @@ const CustomerDatatable = (props) => {
     sizePerPage: 5,
     onRowClick: function (row) {
       console.log(row);
-      // dispatch(update_row_data(row));
+      dispatch(update_row_data(row));
     },
   };
   return (
@@ -112,46 +109,47 @@ const CustomerDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataFormat={showName}>
+        <TableHeaderColumn dataField="name" dataFormat={showName} width="20%">
           Customer
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="price"
+          dataField="email"
           dataSort={true}
           dataFormat={showContacts}
+          width="20%"
         >
           Conatcts
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="cost"
+          dataField="firstVisit"
           dataSort={true}
           dataFormat={firstVisit}
         >
           First visit
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="margin"
+          dataField="lastVisit"
           dataSort={true}
           dataFormat={lastVisit}
         >
           Last visit
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="stock"
+          dataField="totalVisit"
           dataSort={true}
           dataFormat={totalVisit}
         >
           Total Visits
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="stock"
+          dataField="totalSpent"
           dataSort={true}
           dataFormat={totalSpent}
         >
           Total Spent
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="stock"
+          dataField="pointsBalance"
           dataSort={true}
           dataFormat={pointBalance}
         >

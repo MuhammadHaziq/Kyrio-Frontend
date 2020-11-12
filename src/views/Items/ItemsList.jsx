@@ -158,6 +158,18 @@ const ItemsList = () => {
     setUpdateItem(false);
     dispatch(redirect_back_items(true));
   };
+  const closeSearch = () => {
+    setShowSearch(!showSearch);
+    setSearch("");
+    const data = {
+      storeId: storeId,
+      stockFilter: selectStock,
+      categoryFilter: selectCategory,
+      search: "",
+    };
+
+    dispatch(search_item_list(data));
+  };
 
   return (
     <React.Fragment>
@@ -360,11 +372,7 @@ const ItemsList = () => {
                                         placeholder="Search"
                                         onChange={handleOnChange}
                                       />
-                                      <CInputGroupPrepend
-                                        onClick={() =>
-                                          setShowSearch(!showSearch)
-                                        }
-                                      >
+                                      <CInputGroupPrepend onClick={closeSearch}>
                                         <CInputGroupText>X</CInputGroupText>
                                       </CInputGroupPrepend>
                                     </CInputGroup>

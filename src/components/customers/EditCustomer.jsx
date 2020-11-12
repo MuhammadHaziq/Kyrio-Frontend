@@ -35,7 +35,7 @@ import {
   CountryRegionData,
 } from "react-country-region-selector";
 import { add_new_customer } from "../../actions/customer/customerActions";
-const AddCustomer = (props) => {
+const EditCustomer = (props) => {
   const [fields, setFields] = useState({
     name: "",
     email: "",
@@ -73,6 +73,26 @@ const AddCustomer = (props) => {
       props.goBack();
     }
   }, [customer.redirect_customer]);
+
+  useEffect(() => {
+    if (
+      customer.customer_row_data !== undefined &&
+      customer.customer_row_data !== null
+    ) {
+      setFields({
+        name: customer.customer_row_data.name || "",
+        email: customer.customer_row_data.email || "",
+        phone: customer.customer_row_data.phone || "",
+        address: customer.customer_row_data.address || "",
+        city: customer.customer_row_data.city || "",
+        region: customer.customer_row_data.region || "",
+        postal_code: customer.customer_row_data.postal_code || "",
+        country: customer.customer_row_data.country || "",
+        customerCode: customer.customer_row_data.customer_code || "",
+        note: customer.customer_row_data.note || "",
+      });
+    }
+  }, [customer.customer_row_data]);
 
   const goBack = () => {
     props.goBack();
@@ -140,7 +160,8 @@ const AddCustomer = (props) => {
         customer_code: fields.customerCode,
         note: fields.note,
       };
-      dispatch(add_new_customer(data));
+      console.log(data)
+      // dispatch(add_new_customer(data));
     }
   };
   const selectCountry = (val) => {
@@ -507,4 +528,4 @@ const AddCustomer = (props) => {
   );
 };
 
-export default AddCustomer;
+export default EditCustomer;

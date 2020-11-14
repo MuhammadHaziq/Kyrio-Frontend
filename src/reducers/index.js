@@ -14,6 +14,7 @@ import paymentTypesReducer from "./settings/paymentTypesReducer";
 import loyaltyReducer from "./settings/loyaltyReducer";
 import featuresReducer from "./settings/featuresReducer";
 import receiptReducer from "./settings/receiptReducer";
+import customerReducer from "./customer/customerReducer";
 import openTicketReducer from "./settings/openTicketReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
@@ -42,12 +43,16 @@ const settingReducers = combineReducers({
   posDeviceReducer,
   receiptReducer,
 });
+const customerReducers = combineReducers({
+  customerReducer,
+});
 const rootReducer = combineReducers({
   settings: settingsReducer,
   auth: authReducer,
   msg: messageReducer,
   items,
   settingReducers,
+  customerReducers,
 });
 
 export default persistReducer(persistConfig, rootReducer);

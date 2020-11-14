@@ -113,7 +113,6 @@ const AddItem = (props) => {
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
-    console.log(itemImage);
     const data = {
       name: fields.item_name,
       availableForSale: fields.availableForSale,
@@ -225,10 +224,6 @@ const AddItem = (props) => {
   };
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
-  };
-
-  const addVariant = () => {
-    console.log("sasa");
   };
 
   return (

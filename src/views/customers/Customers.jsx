@@ -21,7 +21,7 @@ import { CIcon } from "@coreui/icons-react";
 import CustomerDatatable from "../../datatables/customers/CustomerDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCustomer from "../../components/customers/AddCustomer.jsx";
-import EditCustomer from "../../components/customers/EditCustomer.jsx";
+import ViewCustomer from "../../components/customers/ViewCustomer.jsx";
 import {
   redirect_back_customer,
   get_customers,
@@ -39,20 +39,20 @@ const Customers = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [fadeCustomer, setFadeCustomer] = useState(true);
-  const [fadeUpdateCustomer, setUpdateCustomer] = useState(false);
+  const [fadeCustomerView, setCustomerView] = useState(false);
   const [fadeAddCustomer, setFadeAddCustomer] = useState(false);
   const [timeout] = useState(300);
 
   useEffect(() => {
     if (
-      customer.redirect_update !== undefined &&
-      customer.redirect_update === true
+      customer.customer_view !== undefined &&
+      customer.customer_view === true
     ) {
       setFadeCustomer(false);
       setFadeAddCustomer(false);
-      setUpdateCustomer(true);
+      setCustomerView(true);
     }
-  }, [customer.redirect_update]);
+  }, [customer.customer_view]);
 
   useEffect(() => {
     dispatch(get_customers());
@@ -79,14 +79,14 @@ const Customers = () => {
   const addCustomer = () => {
     setFadeCustomer(false);
     setFadeAddCustomer(true);
-    setUpdateCustomer(false);
+    setCustomerView(false);
     dispatch(redirect_back_customer(false));
   };
 
   const goBack = () => {
     setFadeCustomer(true);
     setFadeAddCustomer(false);
-    setUpdateCustomer(false);
+    setCustomerView(false);
     dispatch(redirect_back_customer(true));
   };
 
@@ -107,9 +107,9 @@ const Customers = () => {
   return (
     <React.Fragment>
       <div className="animated fadeIn">
-        {fadeUpdateCustomer ? (
-          <CFade timeout={timeout} in={fadeUpdateCustomer}>
-            <EditCustomer goBack={goBack} />
+        {fadeCustomerView ? (
+          <CFade timeout={timeout} in={fadeCustomerView}>
+            <ViewCustomer goBack={goBack} />
           </CFade>
         ) : (
           ""

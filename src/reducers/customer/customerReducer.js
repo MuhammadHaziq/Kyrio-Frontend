@@ -6,12 +6,16 @@ import {
   TOGGLE_CUSTOMER_ALL_SELECT,
   DELETE_CUSTOMERS,
   ROW_DATA_CUSTOMER,
+  UPDATE_POINTS_BALANCE,
+  UPDATE_CUSTOMER,
+  EDIT_PROFILE_VIEW,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   customer_detail: [],
   redirect_customer: false,
   redirect_update: false,
+  customer_view: false,
   customer_row_data: {},
 };
 const customerReducer = (state = initialState, action) => {
@@ -21,6 +25,14 @@ const customerReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         redirect_customer: action.response,
         redirect_update: false,
+        customer_view: false,
+      });
+    }
+
+    case EDIT_PROFILE_VIEW: {
+      return Object.assign({}, state, {
+        redirect_update: action.status,
+        customer_view: action.customer_view,
       });
     }
 
@@ -67,14 +79,47 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         customer_detail,
         redirect_update: false,
+        customer_view: false,
         redirect_customer: true,
       };
     }
     case ROW_DATA_CUSTOMER: {
       return Object.assign({}, state, {
         customer_row_data: action.response,
-        redirect_update: true,
+        redirect_update: false,
+        customer_view: true,
         redirect_customer: false,
+      });
+    }
+
+    case UPDATE_POINTS_BALANCE: {
+      return Object.assign({}, state, {
+        customer_detail: state.customer_detail.slice().map((item) => {
+          if (item._id === action.response._id) {
+            return {
+              ...item,
+              points_balance: action.response.points_balance,
+            };
+          }
+          return item;
+        }),
+        customer_row_data: {
+          ...state.customer_row_data,
+          points_balance: action.response.points_balance,
+        },
+      });
+    }
+    case UPDATE_CUSTOMER: {
+      return Object.assign({}, state, {
+        customer_detail: state.customer_detail.slice().map((item) => {
+          if ((item._id, action.response._id)) {
+            return action.response;
+          }
+          return item;
+        }),
+        customer_row_data: action.response,
+        redirect_update: false,
+        customer_view: true,
       });
     }
 

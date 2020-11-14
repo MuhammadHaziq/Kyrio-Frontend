@@ -34,7 +34,10 @@ import {
   RegionDropdown,
   CountryRegionData,
 } from "react-country-region-selector";
-import { add_new_customer } from "../../actions/customer/customerActions";
+import {
+  update_customer,
+  edit_profile_view,
+} from "../../actions/customer/customerActions";
 const EditCustomer = (props) => {
   const [fields, setFields] = useState({
     name: "",
@@ -67,12 +70,12 @@ const EditCustomer = (props) => {
   );
   useEffect(() => {
     if (
-      customer.redirect_customer !== undefined &&
-      customer.redirect_customer === true
+      customer.customer_view !== undefined &&
+      customer.customer_view === true
     ) {
-      props.goBack();
+      dispatch(edit_profile_view(false, true));
     }
-  }, [customer.redirect_customer]);
+  }, [customer.customer_view]);
 
   useEffect(() => {
     if (
@@ -95,7 +98,8 @@ const EditCustomer = (props) => {
   }, [customer.customer_row_data]);
 
   const goBack = () => {
-    props.goBack();
+    // props.goBack();
+    dispatch(edit_profile_view(false, true));
   };
 
   const submitCustomer = () => {
@@ -159,9 +163,10 @@ const EditCustomer = (props) => {
         country: fields.country,
         customer_code: fields.customerCode,
         note: fields.note,
+        id: customer.customer_row_data._id,
       };
-      console.log(data)
-      // dispatch(add_new_customer(data));
+      console.log(data);
+      dispatch(update_customer(data));
     }
   };
   const selectCountry = (val) => {

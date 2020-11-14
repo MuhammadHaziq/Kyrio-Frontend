@@ -6,6 +6,9 @@ import {
   TOGGLE_CUSTOMER_ALL_SELECT,
   DELETE_CUSTOMERS,
   ROW_DATA_CUSTOMER,
+  UPDATE_POINTS_BALANCE,
+  UPDATE_CUSTOMER,
+  EDIT_PROFILE_VIEW,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -256,5 +259,128 @@ export const delete_customer = (ids) => {
 export const update_row_data = (row) => {
   return (dispatch) => {
     dispatch({ type: ROW_DATA_CUSTOMER, response: row });
+  };
+};
+export const edit_profile_view = (status, customer_view) => {
+  return (dispatch) => {
+    dispatch({
+      type: EDIT_PROFILE_VIEW,
+      status: status,
+      customer_view: customer_view,
+    });
+  };
+};
+
+export const update_points_balance = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}customers/point_balance`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_POINTS_BALANCE, response: data });
+          let msg = {
+            open: true,
+            message: "Update Points Balance Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
+export const update_customer = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}customers/`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: UPDATE_CUSTOMER, response: response.data });
+          let msg = {
+            open: true,
+            message: "Update Points Balance Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };

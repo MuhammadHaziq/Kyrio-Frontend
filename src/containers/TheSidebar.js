@@ -71,7 +71,6 @@ const TheSidebar = () => {
       }
     }
   }, [user]);
-  console.log(navigation);
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
   ) : (

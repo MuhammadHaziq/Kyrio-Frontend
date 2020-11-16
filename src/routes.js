@@ -7,6 +7,7 @@ const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
 const DiscountList = React.lazy(() => import("./views/Items/DiscountList"));
 const Modifires = React.lazy(() => import("./views/Items/Modifires"));
 const Customers = React.lazy(() => import("./views/customers/Customers"));
+const EmployeeList = React.lazy(() => import("./views/employee/EmployeeList"));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -17,6 +18,7 @@ const routes = [
   { path: "/discounts", name: "Discount-list", component: DiscountList },
   { path: "/modifiers", name: "Modifire-list", component: Modifires },
   { path: "/customers", name: "Customer", component: Customers },
+  { path: "/employees", name: "Employee List", component: EmployeeList },
 ];
 
 export default routes;

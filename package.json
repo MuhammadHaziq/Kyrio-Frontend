@@ -37,6 +37,7 @@
     "codemirror": "^5.54.0",
     "core-js": "^3.6.5",
     "dateformat": "^3.0.3",
+    "daterangepicker": "^3.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "formik": "^2.1.4",

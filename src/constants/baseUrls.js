@@ -1,5 +1,5 @@
 const LocalUrl = "http://localhost:3000/kyrio/v1/";
-const LiveUrl = "http://159.122.228.20:3000/kyrio/v1/";
+const LiveUrl = "http://158.176.135.6:3000/kyrio/v1/";
 export const imageBaseUrl =
   window.location.protocol +
   "//" +
@@ -7,8 +7,4 @@ export const imageBaseUrl =
   ":" +
   "3000" +
   "/";
-export const BaseUrl = LocalUrl;
-
-// 03130001200
-// Zuhaib 
-// Fraud Investigation Allied Bank
+export const BaseUrl = LiveUrl;

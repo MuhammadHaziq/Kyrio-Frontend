@@ -36,7 +36,6 @@ export const get_employee_list = () => {
           dispatch({ type: GET_EMPLOYEE_LIST, response: response.data });
         })
         .catch((error) => {
-          console.log("err", error.response);
           let msg = {
             open: true,
             message:
@@ -54,7 +53,6 @@ export const get_employee_list = () => {
           dispatch({ type: MESSAGE, data: msg });
         });
     } catch (error) {
-      console.log("err catch", error);
       let msg = {
         open: true,
         message:

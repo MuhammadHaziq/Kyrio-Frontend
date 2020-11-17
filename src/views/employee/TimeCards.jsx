@@ -24,7 +24,7 @@ import {
   CLabel,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
-import EmployeeListDatatable from "../../datatables/employee/EmployeeListDatatable.jsx";
+import TimeCardDatatable from "../../datatables/employee/TimeCardDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddEmployee from "../../components/employee/employeeList/AddEmployee.jsx";
 import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
@@ -36,7 +36,8 @@ import {
 } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
-
+import moment from "moment";
+import dateFormat from "dateformat";
 const TimeCards = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -407,7 +408,9 @@ const TimeCards = () => {
                       </CCol>
                     </CRow>
                   </CCardHeader>
-                  <CCardBody>Datatable</CCardBody>
+                  <CCardBody>
+                    <TimeCardDatatable timeCard_detail={[]} />
+                  </CCardBody>
                 </CCard>
               </CCol>
             </CRow>

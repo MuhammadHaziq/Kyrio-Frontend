@@ -7,9 +7,4 @@ export const imageBaseUrl =
   ":" +
   "3000" +
   "/";
-  const date = new Date();
-  const dateAsString = date.toString();
-  const timezone = dateAsString.match(/\(([^\)]+)\)$/)[1];
-  
-  console.log(timezone);
-export const BaseUrl = LocalUrl;
+export const BaseUrl = LiveUrl;

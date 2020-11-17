@@ -24,8 +24,9 @@ import AddEmployee from "../../components/employee/employeeList/AddEmployee.jsx"
 import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
 import {
   redirect_back_employee,
-  get_employee,
+  get_employee_list,
   get_employee_search,
+  get_store_employee_list,
   delete_employee,
 } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
@@ -48,6 +49,7 @@ const EmployeeList = () => {
 
   useEffect(() => {
     dispatch(get_stores());
+    dispatch(get_employee_list());
   }, [dispatch]);
   useEffect(() => {
     if (
@@ -60,18 +62,13 @@ const EmployeeList = () => {
     }
   }, [employee.redirect_update]);
 
-  // useEffect(() => {
-  //   dispatch(get_employee());
-  // }, []);
-
   const handleOnChange = (e) => {
     setSearch(e.target.value);
   };
 
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
-    console.log(e.target.value);
-    // dispatch(get_store_pos_device(e.target.value));
+    dispatch(get_store_employee_list(e.target.value));
   };
 
   const deleteEmployee = () => {
@@ -107,15 +104,16 @@ const EmployeeList = () => {
     e.preventDefault();
     const data = {
       search: search,
+      storeId: selectedStoreId,
     };
     console.log(data);
-    // dispatch(get_employee_search(data));
+    dispatch(get_employee_search(data));
   };
 
   const closeSearch = () => {
     setShowSearch(!showSearch);
     setSearch("");
-    // dispatch(get_customers());
+    dispatch(get_store_employee_list(selectedStoreId));
   };
 
   return (
@@ -170,7 +168,7 @@ const EmployeeList = () => {
                               className="ci-primary"
                             ></polygon>
                           </svg>
-                          ADD CUSTOMER
+                          ADD EMPLOYEE
                         </CButton>
 
                         {employee.employee_list.filter(

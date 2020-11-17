@@ -15,7 +15,7 @@ const EmployeeListDatatable = (props) => {
     return row.phone || "-";
   };
   const Role = (cell, row) => {
-    return row.roles !== undefined ? row.roles["title"] || "-" : "-";
+    return row.role !== undefined ? row.role["name"] || "-" : "-";
   };
 
   const onRowSelect = (row, isSelected, e) => {

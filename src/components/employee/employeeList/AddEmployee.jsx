@@ -108,9 +108,9 @@ const AddEmployee = (props) => {
   }, [employee.redirect_employee]);
 
   let Roles = [
-    { _id: "1", title: "Administrator" },
-    { _id: "2", title: "Manager" },
-    { _id: "3", title: "Cashier" },
+    { _id: "1", name: "Administrator" },
+    { _id: "2", name: "Manager" },
+    { _id: "3", name: "Cashier" },
   ];
 
   const goBack = () => {
@@ -221,32 +221,35 @@ const AddEmployee = (props) => {
         email: fields.email,
         phone: fields.phone,
         // role: fields.role,
-        stores: storeId
-          .filter((item) => item.isSelected === true)
-          .map((item) => {
-            return {
-              id: item._id,
-              name: item.title,
-            };
-          }),
-        roles: Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item;
-        })[0],
+        stores: JSON.stringify(
+          storeId
+            .filter((item) => item.isSelected === true)
+            .map((item) => {
+              return {
+                id: item._id,
+                name: item.title,
+              };
+            })
+        ),
+        roles: JSON.stringify(
+          Roles.filter((item) => item._id === fields.role).map((item) => {
+            return item;
+          })[0]
+        ),
       };
       if (
         Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.title;
+          return item.name;
         })[0] === "Administrator"
       ) {
         data.sendMail = fields.sendMail;
       } else if (
         Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.title;
+          return item.name;
         })[0] !== "Administrator"
       ) {
         data.posPin = fields.posPin;
       }
-      console.log(data);
       dispatch(add_new_employee(data));
     }
   };
@@ -373,7 +376,7 @@ const AddEmployee = (props) => {
                       {Roles.map((item, index) => {
                         return (
                           <option value={item._id} key={index}>
-                            {item.title}
+                            {item.name}
                           </option>
                         );
                       })}

@@ -88,9 +88,9 @@ const EditEmployee = (props) => {
   );
 
   let Roles = [
-    { _id: "1", title: "Administrator" },
-    { _id: "2", title: "Manager" },
-    { _id: "3", title: "Cashier" },
+    { _id: "1", name: "Administrator" },
+    { _id: "2", name: "Manager" },
+    { _id: "3", name: "Cashier" },
   ];
   useEffect(() => {
     if (props.employee_row_data !== undefined) {
@@ -124,17 +124,17 @@ const EditEmployee = (props) => {
         email: props.employee_row_data.email,
         phone: props.employee_row_data.phone,
         role:
-          props.employee_row_data.roles !== undefined
-            ? props.employee_row_data.roles["_id"]
+          props.employee_row_data.role !== undefined
+            ? props.employee_row_data.role["_id"]
             : "0",
         sendMail:
-          props.employee_row_data.roles !== undefined &&
-          props.employee_row_data.roles["title"] === "Administrator"
+          props.employee_row_data.role !== undefined &&
+          props.employee_row_data.role["name"] === "Administrator"
             ? props.employee_row_data.sendMail
             : true,
         posPin:
-          props.employee_row_data.roles !== undefined &&
-          props.employee_row_data.roles["title"] !== "Administrator"
+          props.employee_row_data.role !== undefined &&
+          props.employee_row_data.role["name"] !== "Administrator"
             ? props.employee_row_data.posPin
             : "0000",
       });
@@ -227,7 +227,7 @@ const EditEmployee = (props) => {
     setCollapse(state);
   };
 
-  const saveEmployee = () => {
+  const updateEmployee = () => {
     if (fields.name === "") {
       setErrors({
         ...errors,
@@ -249,7 +249,7 @@ const EditEmployee = (props) => {
     } else if (fields.role === "0") {
       setErrors({
         ...errors,
-        address: true,
+        role: true,
       });
       return false;
     } else {
@@ -258,32 +258,35 @@ const EditEmployee = (props) => {
         email: fields.email,
         phone: fields.phone,
         // role: fields.role,
-        stores: storeId
-          .filter((item) => item.isSelected === true)
-          .map((item) => {
-            return {
-              id: item._id,
-              name: item.title,
-            };
-          }),
-        roles: Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item;
-        })[0],
+        stores: JSON.stringify(
+          storeId
+            .filter((item) => item.isSelected === true)
+            .map((item) => {
+              return {
+                id: item._id,
+                name: item.title,
+              };
+            })
+        ),
+        roles: JSON.stringify(
+          Roles.filter((item) => item._id === fields.role).map((item) => {
+            return item;
+          })[0]
+        ),
       };
       if (
         Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.title;
+          return item.name;
         })[0] === "Administrator"
       ) {
         data.sendMail = fields.sendMail;
       } else if (
         Roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.title;
+          return item.name;
         })[0] !== "Administrator"
       ) {
         data.posPin = fields.posPin;
       }
-      console.log(data);
       dispatch(update_employee(data));
     }
   };
@@ -410,7 +413,7 @@ const EditEmployee = (props) => {
                       {Roles.map((item, index) => {
                         return (
                           <option value={item._id} key={index}>
-                            {item.title}
+                            {item.name}
                           </option>
                         );
                       })}
@@ -596,9 +599,9 @@ const EditEmployee = (props) => {
                   variant="outline"
                   className="btn-pill pull-right"
                   color="success"
-                  onClick={saveEmployee}
+                  onClick={updateEmployee}
                 >
-                  SAVE
+                  UPDATE
                 </CButton>
               </CCol>
             </CRow>

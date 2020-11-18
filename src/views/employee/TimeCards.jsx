@@ -26,7 +26,7 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import TimeCardDatatable from "../../datatables/employee/TimeCardDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
-import AddEmployee from "../../components/employee/employeeList/AddEmployee.jsx";
+import AddEmployeeTime from "../../components/employee/timeCard/AddEmployeeTime.jsx";
 import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
 import {
   redirect_back_employee,
@@ -226,15 +226,15 @@ const TimeCards = () => {
             />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeAddTimeCard ? (
           <CFade timeout={timeout} in={fadeAddTimeCard}>
-            <AddEmployee store={store.stores_list} goBack={goBack} />
+            <AddEmployeeTime store={store.stores_list} goBack={goBack} />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeTimeCard ? (
           <React.Fragment>
             <CRow className="mb-3">
@@ -246,7 +246,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Stores"
                       : storeId.filter((item) => item.isSelected === true)
-                          .length + " Stores"}
+                        .length + " Stores"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => storeHandleChange("0")}>
@@ -280,7 +280,7 @@ const TimeCards = () => {
                             id={"storeId" + item._id}
                             value={item._id}
                             checked={item.isSelected}
-                            // onChange={storeHandleChange}
+                          // onChange={storeHandleChange}
                           />
                           <CLabel
                             variant="custom-checkbox"
@@ -302,7 +302,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Employees"
                       : employeeId.filter((item) => item.isSelected === true)
-                          .length + " Employee"}
+                        .length + " Employee"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => employeeHandleChange("0")}>
@@ -388,36 +388,36 @@ const TimeCards = () => {
                         {employee.employee_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                          <React.Fragment>
-                            <ConformationAlert
-                              button_text="Delete"
-                              heading="Delete Employee"
-                              section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
-                              buttonAction={deleteEmployee}
-                              show_alert={showAlert}
-                              hideAlert={setShowAlert}
-                              variant="outline"
-                              className="ml-2 btn-square"
-                              color="danger"
-                              block={false}
-                            />
-                          </React.Fragment>
-                        ) : (
-                          ""
-                        )}
+                            <React.Fragment>
+                              <ConformationAlert
+                                button_text="Delete"
+                                heading="Delete Employee"
+                                section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
+                                buttonAction={deleteEmployee}
+                                show_alert={showAlert}
+                                hideAlert={setShowAlert}
+                                variant="outline"
+                                className="ml-2 btn-square"
+                                color="danger"
+                                block={false}
+                              />
+                            </React.Fragment>
+                          ) : (
+                            ""
+                          )}
                       </CCol>
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
-                    <TimeCardDatatable timeCard_detail={[]} />
+                    <TimeCardDatatable timeCard_detail={[]} store={store.stores_list} />
                   </CCardBody>
                 </CCard>
               </CCol>
             </CRow>
           </React.Fragment>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     </React.Fragment>
   );

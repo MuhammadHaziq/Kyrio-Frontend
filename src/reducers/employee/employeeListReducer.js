@@ -81,14 +81,15 @@ const employeeListReducer = (state = initialState, action) => {
 
     case UPDATE_EMPLOYEE: {
       return Object.assign({}, state, {
-        employee_list: state.employee_list.slice().map((item) => {
-          if ((item._id, action.response._id)) {
+        employee_list: state.employee_list.map((item) => {
+          if ((item._id === action.response._id)) {
             return action.response;
           }
           return item;
         }),
-        employee_row_data: action.response,
+        employee_row_data: {},
         redirect_update: false,
+        redirect_employee: true,
       });
     }
 

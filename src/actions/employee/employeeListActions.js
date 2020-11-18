@@ -319,6 +319,7 @@ export const update_employee = (data) => {
         },
       })
         .then((response) => {
+          console.log(response.data)
           dispatch({ type: UPDATE_EMPLOYEE, response: response.data });
           let msg = {
             open: true,

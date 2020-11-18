@@ -38,6 +38,9 @@ import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
+import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
+import "bootstrap-daterangepicker/daterangepicker.css";
+
 const TimeCards = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -51,6 +54,21 @@ const TimeCards = () => {
   const [timeout] = useState(300);
   const [storeId, setStoreId] = useState([]);
   const [employeeId, setEmployeeId] = useState([]);
+  const [dateRange, setDateRange] = useState({
+    startDate: moment(),
+    endDate: moment(),
+    ranges: {
+      Today: [moment(), moment()],
+      Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
+      "Last 7 Days": [moment().subtract(6, "days"), moment()],
+      "Last 30 Days": [moment().subtract(29, "days"), moment()],
+      "This Month": [moment().startOf("month"), moment().endOf("month")],
+      "Last Month": [
+        moment().subtract(1, "month").startOf("month"),
+        moment().subtract(1, "month").endOf("month"),
+      ],
+    },
+  });
   const [fields, setFields] = useState({
     checkAll: true,
     checkAllEmployee: true,
@@ -124,8 +142,6 @@ const TimeCards = () => {
 
   const storeHandleChange = (e) => {
     let selectedStore = [];
-    // console.log(e.target.value);
-    console.log(e);
     if (e === "0") {
       setFields({
         ...fields,
@@ -212,7 +228,20 @@ const TimeCards = () => {
     setTimeCardUpdate(false);
     // dispatch(redirect_back_employee(true));
   };
-  console.log(storeId);
+
+  let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
+  let end = dateFormat(dateRange.endDate, "yyyy-mm-dd");
+  let label = start + " - " + end;
+  if (start === end) {
+    label = start;
+  }
+
+  const handleEvent = (event, picker) => {
+    setDateRange({
+      startDate: picker.startDate,
+      endDate: picker.endDate,
+    });
+  };
 
   return (
     <React.Fragment>
@@ -226,18 +255,30 @@ const TimeCards = () => {
             />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeAddTimeCard ? (
           <CFade timeout={timeout} in={fadeAddTimeCard}>
             <AddEmployeeTime store={store.stores_list} goBack={goBack} />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeTimeCard ? (
           <React.Fragment>
             <CRow className="mb-3">
+              <CCol sm="12" md="2" lg="2">
+                <DatetimeRangePicker
+                  startDate={dateRange.startDate}
+                  endDate={dateRange.endDate}
+                  ranges={dateRange.ranges}
+                  onEvent={handleEvent}
+                >
+                  <CButton style={{ backgroundColor: "white", width: "100%" }}>
+                    <span>{label}</span>
+                  </CButton>
+                </DatetimeRangePicker>
+              </CCol>
               <CCol sm="12" md="2" lg="2" xs="12">
                 <CDropdown style={{ backgroundColor: "white" }}>
                   <CDropdownToggle caret color="default  btn-block">
@@ -246,7 +287,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Stores"
                       : storeId.filter((item) => item.isSelected === true)
-                        .length + " Stores"}
+                          .length + " Stores"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => storeHandleChange("0")}>
@@ -280,7 +321,7 @@ const TimeCards = () => {
                             id={"storeId" + item._id}
                             value={item._id}
                             checked={item.isSelected}
-                          // onChange={storeHandleChange}
+                            // onChange={storeHandleChange}
                           />
                           <CLabel
                             variant="custom-checkbox"
@@ -302,7 +343,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Employees"
                       : employeeId.filter((item) => item.isSelected === true)
-                        .length + " Employee"}
+                          .length + " Employee"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => employeeHandleChange("0")}>
@@ -388,36 +429,39 @@ const TimeCards = () => {
                         {employee.employee_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                            <React.Fragment>
-                              <ConformationAlert
-                                button_text="Delete"
-                                heading="Delete Employee"
-                                section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
-                                buttonAction={deleteEmployee}
-                                show_alert={showAlert}
-                                hideAlert={setShowAlert}
-                                variant="outline"
-                                className="ml-2 btn-square"
-                                color="danger"
-                                block={false}
-                              />
-                            </React.Fragment>
-                          ) : (
-                            ""
-                          )}
+                          <React.Fragment>
+                            <ConformationAlert
+                              button_text="Delete"
+                              heading="Delete Employee"
+                              section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
+                              buttonAction={deleteEmployee}
+                              show_alert={showAlert}
+                              hideAlert={setShowAlert}
+                              variant="outline"
+                              className="ml-2 btn-square"
+                              color="danger"
+                              block={false}
+                            />
+                          </React.Fragment>
+                        ) : (
+                          ""
+                        )}
                       </CCol>
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
-                    <TimeCardDatatable timeCard_detail={[]} store={store.stores_list} />
+                    <TimeCardDatatable
+                      timeCard_detail={[]}
+                      store={store.stores_list}
+                    />
                   </CCardBody>
                 </CCard>
               </CCol>
             </CRow>
           </React.Fragment>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     </React.Fragment>
   );

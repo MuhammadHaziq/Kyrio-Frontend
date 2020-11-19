@@ -20,6 +20,7 @@ import {
   CCollapse,
   CSelect,
   CFormText,
+  CInputGroupAppend
 } from "@coreui/react";
 // import {
 //   MdPerson,
@@ -35,19 +36,16 @@ import {
 //   MdShoppingBasket,
 //   MdAccountCircle,
 // } from "react-icons/md";
-import { MdAccountCircle, MdPermContactCalendar } from "react-icons/md";
+import { MdPermContactCalendar } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { CIcon } from "@coreui/icons-react";
-import NumberFormat from "react-number-format";
 import { add_new_employee } from "../../../actions/employee/employeeListActions";
 import validator from "validator";
+import $ from "jquery";
 import moment from "moment";
 import dateFormat from "dateformat";
 import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-time-picker";
-
 const AddEmployeeTime = (props) => {
   const [fields, setFields] = useState({
     clockInDate: "",
@@ -90,6 +88,9 @@ const AddEmployeeTime = (props) => {
   // }, [employee.redirect_employee]);
 
   useEffect(() => {
+    $('.react-time-picker__wrapper').css('display', 'contents')
+  }, [])
+  useEffect(() => {
     if (props.store !== undefined && props.store.length > 0) {
       setStores(props.store);
     }
@@ -119,7 +120,6 @@ const AddEmployeeTime = (props) => {
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     if (
       e.target.name === "storeId" ||
       e.target.value === "" ||
@@ -245,7 +245,6 @@ const AddEmployeeTime = (props) => {
     }
   };
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
-  var startLabel = start;
 
   const handleEventStart = (event, picker) => {
     setDateRange({
@@ -261,7 +260,6 @@ const AddEmployeeTime = (props) => {
   };
 
   const onStartTimeChange = (event) => {
-    console.log(event);
     setTimeRange({
       ...timeRange,
       startTime: event,
@@ -274,20 +272,35 @@ const AddEmployeeTime = (props) => {
       endTime: event,
     });
   };
-  let totalHour = 0;
-  if (parseFloat(timeRange.startTime) > parseFloat(timeRange.endTime)) {
-    totalHour = parseFloat(timeRange.startTime) - parseFloat(timeRange.endTime);
-  } else {
-    totalHour = parseFloat(timeRange.endTime) - parseFloat(timeRange.startTime);
-  }
-  var admission = moment(dateRange.startDate, "yyyy-mm-dd");
-  var discharge = moment(dateRange.endDate, "yyyy-mm-dd");
-  discharge.diff(admission, "days");
-  console.log(discharge);
-  // var a = moment([2007, 0, 29]);
-  // var b = moment([2007, 0, 28]);
-  // a.diff(b, "days"); // 1
+  /**'
+   *  Time Management
+   * 
+   */
+  const timeDiff = moment.duration((moment(dateRange.endDate).diff(moment(dateRange.startDate)))).asDays()
 
+  const getNatural = (num) => {
+    return parseFloat(num.toString().split(".")[0]) * 24;
+  }
+  let totalHour = 0;
+  const startHours = timeRange.startTime !== null && timeRange.startTime !== undefined ? timeRange.startTime.split(":")[0] : 0
+  const startMins = timeRange.startTime !== null && timeRange.startTime !== undefined ? timeRange.startTime.split(":")[1] : 0
+  const endHours = timeRange.endTime !== null && timeRange.endTime !== undefined ? timeRange.endTime.split(":")[0] : 0
+  const endMins = timeRange.endTime !== null && timeRange.endTime !== undefined ? timeRange.endTime.split(":")[1] : 0
+  if (parseFloat(startHours) > parseFloat(endHours)) {
+    let diffStartHour = 0
+    let diffEndMin = 0
+    diffStartHour = parseFloat(startHours) - parseFloat(endHours)
+    diffEndMin = parseFloat(startMins) - parseFloat(endMins)
+    totalHour = diffStartHour + getNatural(timeDiff)
+    totalHour = totalHour + ":" + Math.abs(diffEndMin)
+  } else {
+    let diffEndHour = 0
+    let diffEndMin = 0
+    diffEndHour = parseFloat(endHours) - parseFloat(startHours)
+    diffEndMin = parseFloat(startMins) - parseFloat(endMins)
+    totalHour = diffEndHour + getNatural(timeDiff)
+    totalHour = totalHour + ":" + Math.abs(diffEndMin)
+  }
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -299,11 +312,6 @@ const AddEmployeeTime = (props) => {
                   <CFormGroup>
                     <CLabel>Employee</CLabel>
                     <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <MdAccountCircle />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
                       <CSelect
                         className={
                           errors.employeeId === true
@@ -341,11 +349,6 @@ const AddEmployeeTime = (props) => {
                   <CFormGroup>
                     <CLabel> Store </CLabel>
                     <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <MdAccountCircle />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
                       <CSelect
                         className={
                           errors.storeId === true
@@ -390,17 +393,17 @@ const AddEmployeeTime = (props) => {
                   >
                     <CFormGroup>
                       <CInputGroup className="mb-3">
-                        <CInputGroupPrepend>
-                          <CInputGroupText>
-                            <MdPermContactCalendar />
-                          </CInputGroupText>
-                        </CInputGroupPrepend>
                         <CInput
                           id="startDate"
                           name="startDate"
                           placeholder="Start Date"
                           value={dateFormat(dateRange.startDate, "yyyy-mm-dd")}
                         />
+                        <CInputGroupAppend>
+                          <CInputGroupText >
+                            <MdPermContactCalendar />
+                          </CInputGroupText>
+                        </CInputGroupAppend>
                       </CInputGroup>
                     </CFormGroup>
                   </DatetimeRangePicker>
@@ -414,17 +417,17 @@ const AddEmployeeTime = (props) => {
                   >
                     <CFormGroup>
                       <CInputGroup className="mb-3">
-                        <CInputGroupPrepend>
-                          <CInputGroupText>
-                            <MdPermContactCalendar />
-                          </CInputGroupText>
-                        </CInputGroupPrepend>
                         <CInput
                           id="endDate"
                           name="endDate"
                           placeholder="End Date"
                           value={dateFormat(dateRange.endDate, "yyyy-mm-dd")}
                         />
+                        <CInputGroupAppend>
+                          <CInputGroupText >
+                            <MdPermContactCalendar />
+                          </CInputGroupText>
+                        </CInputGroupAppend>
                       </CInputGroup>
                     </CFormGroup>
                   </DatetimeRangePicker>
@@ -435,18 +438,19 @@ const AddEmployeeTime = (props) => {
                   <CFormGroup>
                     <CLabel>Clock in time</CLabel>
                     <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <MdPermContactCalendar />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-
                       <TimePicker
                         name="startTime"
                         onChange={onStartTimeChange}
                         value={timeRange.startTime}
                         disableClock={true}
+                        className='form-control'
+                        style={{ padding: '0px' }}
                       />
+                      <CInputGroupAppend>
+                        <CInputGroupText >
+                          <MdPermContactCalendar />
+                        </CInputGroupText>
+                      </CInputGroupAppend>
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
@@ -454,17 +458,19 @@ const AddEmployeeTime = (props) => {
                   <CFormGroup>
                     <CLabel>Clock out time</CLabel>
                     <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <MdPermContactCalendar />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
                       <TimePicker
                         name="endTime"
                         onChange={onEndTimeChange}
                         value={timeRange.endTime}
                         disableClock={true}
+                        className='form-control'
+                        style={{ padding: '0px' }}
                       />
+                      <CInputGroupAppend>
+                        <CInputGroupText >
+                          <MdPermContactCalendar />
+                        </CInputGroupText>
+                      </CInputGroupAppend>
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
@@ -473,7 +479,7 @@ const AddEmployeeTime = (props) => {
                 <CCol sm="12">
                   <p>
                     <b>Total hours:</b>
-                    {totalHour}
+                    {totalHour === '0:0' ? 0 : totalHour}
                   </p>
                 </CCol>
               </CRow>

@@ -109,7 +109,7 @@ export default [
       {
         _tag: "CSidebarNavItem",
         name: "Access rights",
-        to: "/employees",
+        to: "/employees/user_roles",
       },
       {
         _tag: "CSidebarNavItem",
@@ -119,7 +119,7 @@ export default [
       {
         _tag: "CSidebarNavItem",
         name: "Total hours worked",
-        to: "/employees",
+        to: "/employees/total-hour-worked",
       },
     ],
   },

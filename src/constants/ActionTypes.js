@@ -81,8 +81,16 @@ export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
 export const ROW_DATA_EMPLOYEE_LIST = "ROW_DATA_EMPLOYEE_LIST";
 export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
 /**
-  End Employee Lis
-Start Customers
+  End Employee List
+Start User Access
+ */
+export const REDIRECT_BACK_USER_ROLES = "REDIRECT_BACK_USER_ROLES";
+export const GET_USER_ROLES = "GET_USER_ROLES";
+export const ADD_NEW_USER_ROLE = "ADD_NEW_USER_ROLE";
+/**
+ * End User Access
+ * Start Customer
+ *
  */
 export const GET_CUSTOMERS = "GET_CUSTOMERS";
 export const ADD_NEW_CUSTOMER = "ADD_NEW_CUSTOMER";

@@ -9,6 +9,10 @@ const Modifires = React.lazy(() => import("./views/Items/Modifires"));
 const Customers = React.lazy(() => import("./views/customers/Customers"));
 const EmployeeList = React.lazy(() => import("./views/employee/EmployeeList"));
 const TimeCards = React.lazy(() => import("./views/employee/TimeCards"));
+const UserAccess = React.lazy(() => import("./views/employee/UserAccess"));
+const TotalHoursWorked = React.lazy(() =>
+  import("./views/employee/TotalHoursWorked")
+);
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -26,10 +30,22 @@ const routes = [
     component: EmployeeList,
   },
   {
+    path: "/employees/user_roles",
+    name: "User Roles",
+    exact: true,
+    component: UserAccess,
+  },
+  {
     path: "/employees/timecard",
     name: "Employee Time Card",
     exact: true,
     component: TimeCards,
+  },
+  {
+    path: "/employees/total-hour-worked",
+    name: "Employee Total Hours Worked",
+    exact: true,
+    component: TotalHoursWorked,
   },
 ];
 

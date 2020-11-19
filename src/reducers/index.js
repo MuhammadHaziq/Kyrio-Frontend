@@ -16,6 +16,7 @@ import featuresReducer from "./settings/featuresReducer";
 import receiptReducer from "./settings/receiptReducer";
 import customerReducer from "./customer/customerReducer";
 import employeeListReducer from "./employee/employeeListReducer";
+import userRolesReducer from "./employee/userRolesReducer";
 import openTicketReducer from "./settings/openTicketReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
@@ -49,6 +50,7 @@ const customerReducers = combineReducers({
 });
 const employeeReducers = combineReducers({
   employeeListReducer,
+  userRolesReducer,
 });
 const rootReducer = combineReducers({
   settings: settingsReducer,

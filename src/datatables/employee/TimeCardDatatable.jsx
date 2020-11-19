@@ -50,7 +50,7 @@ const TimeCardDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.timeCard_detail.length,
+        value: props.timeCard_list.length,
       },
     ],
     sizePerPage: 5,
@@ -62,7 +62,7 @@ const TimeCardDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.timeCard_detail}
+        data={props.timeCard_list}
         version="4"
         hover={true}
         selectRow={selectRowProp}

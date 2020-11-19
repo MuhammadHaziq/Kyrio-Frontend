@@ -22,20 +22,6 @@ import {
   CFormText,
   CInputGroupAppend
 } from "@coreui/react";
-// import {
-//   MdPerson,
-//   MdLock,
-//   MdBusiness,
-//   MdFlag,
-//   MdKeyboardArrowLeft,
-//   MdMailOutline,
-//   MdLocationOn,
-//   MdNote,
-//   MdPermContactCalendar,
-//   MdStar,
-//   MdShoppingBasket,
-//   MdAccountCircle,
-// } from "react-icons/md";
 import { MdPermContactCalendar } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { add_new_employee } from "../../../actions/employee/employeeListActions";
@@ -46,6 +32,7 @@ import dateFormat from "dateformat";
 import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-time-picker";
+import TimeCardDetailDatatable from '../../../datatables/employee/timeCardDetail/TimeCardDetailDatatable'
 const AddEmployeeTime = (props) => {
   const [fields, setFields] = useState({
     clockInDate: "",
@@ -485,6 +472,29 @@ const AddEmployeeTime = (props) => {
               </CRow>
             </CCardBody>
           </CCard>
+          {/** 
+ * 
+ *  Time Card Detail
+ * 
+*/}
+          <CCard>
+            <CCardHeader>
+              <h2>History</h2>
+            </CCardHeader>
+            <CCardBody>
+              <CRow>
+                <CCol sm="12" xs='12'>
+                  <TimeCardDetailDatatable timeCard_detail={[]} />
+                </CCol>
+              </CRow>
+            </CCardBody>
+
+          </CCard>
+          {/** 
+ * 
+ *  End Time Card Detail
+ * 
+*/}
           <CRow>
             <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
               <CButton

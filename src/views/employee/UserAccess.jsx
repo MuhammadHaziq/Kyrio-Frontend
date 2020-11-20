@@ -3,19 +3,11 @@ import {
   CRow,
   CCol,
   CCard,
-  CFormGroup,
   CCardHeader,
   CCardBody,
   CFade,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-  CInputCheckbox,
-  CLabel,
   CButton,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import UserRolesDatatable from "../../datatables/employee/UserRolesDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddEmployeeTime from "../../components/employee/timeCard/AddEmployeeTime.jsx";
@@ -26,10 +18,6 @@ import {
   delete_employee,
 } from "../../actions/employee/userRolesActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import dateFormat from "dateformat";
-import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
-import "bootstrap-daterangepicker/daterangepicker.css";
 
 const TimeCards = () => {
   const dispatch = useDispatch();
@@ -97,15 +85,15 @@ const TimeCards = () => {
             />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeAddUserRoles ? (
           <CFade timeout={timeout} in={fadeAddUserRoles}>
             <AddEmployeeTime goBack={goBack} />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeUserRoles ? (
           <React.Fragment>
             <CCol xs="12" sm="12">
@@ -142,23 +130,23 @@ const TimeCards = () => {
                       {userRoles.user_roles.filter(
                         (item) => item.isDeleted === true
                       ).length > 0 ? (
-                        <React.Fragment>
-                          <ConformationAlert
-                            button_text="Delete"
-                            heading="Delete User Role"
-                            section={`Are you sure you want to delete the User Role?`}
-                            buttonAction={deleteUserRole}
-                            show_alert={showAlert}
-                            hideAlert={setShowAlert}
-                            variant="outline"
-                            className="ml-2 btn-square"
-                            color="danger"
-                            block={false}
-                          />
-                        </React.Fragment>
-                      ) : (
-                        ""
-                      )}
+                          <React.Fragment>
+                            <ConformationAlert
+                              button_text="Delete"
+                              heading="Delete User Role"
+                              section={`Are you sure you want to delete the User Role?`}
+                              buttonAction={deleteUserRole}
+                              show_alert={showAlert}
+                              hideAlert={setShowAlert}
+                              variant="outline"
+                              className="ml-2 btn-square"
+                              color="danger"
+                              block={false}
+                            />
+                          </React.Fragment>
+                        ) : (
+                          ""
+                        )}
                     </CCol>
                   </CRow>
                 </CCardHeader>
@@ -169,8 +157,8 @@ const TimeCards = () => {
             </CCol>
           </React.Fragment>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     </React.Fragment>
   );

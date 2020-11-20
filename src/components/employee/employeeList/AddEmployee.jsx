@@ -50,6 +50,8 @@ const AddEmployee = (props) => {
     checkAll: true,
     sendMail: true,
     posPin: "0000",
+    allowBackOffice: '',
+    pos: ''
   });
   const [errors, setErrors] = useState({
     name: false,
@@ -99,10 +101,14 @@ const AddEmployee = (props) => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
+      const allowBackOffice = (props.user_roles || []).filter(item => item._id === e.target.value).map(item => { return item.allowBackoffice.enable })[0]
+      const pos = (props.user_roles || []).filter(item => item._id === e.target.value).map(item => { return item.allowPOS.enable })[0]
       setFields({
         ...fields,
         posPin: "0000",
         [name]: value,
+        allowBackOffice: allowBackOffice,
+        pos: pos
       });
     } else {
       setFields({
@@ -194,6 +200,14 @@ const AddEmployee = (props) => {
         role: true,
       });
       return false;
+    } else if (props.user_roles.filter((item) => item._id === fields.role).map((item) => {
+      return item.allowPOS.enable;
+    })[0] === true && fields.posPin === '0000') {
+      setErrors({
+        ...errors,
+        posPin: true,
+      });
+      return false;
     } else {
       const data = {
         name: fields.name,
@@ -211,24 +225,32 @@ const AddEmployee = (props) => {
             })
         ),
         roles: JSON.stringify(
-          Roles.filter((item) => item.id === fields.role).map((item) => {
-            return item;
+          props.user_roles.filter((item) => item._id === fields.role).map((item) => {
+            return {
+              id: item._id,
+              name: item.roleName
+            };
           })[0]
         ),
       };
       if (
-        Roles.filter((item) => item.id === fields.role).map((item) => {
-          return item.name;
-        })[0] === "Administrator"
+        props.user_roles.filter((item) => item._id === fields.role).map((item) => {
+          return item.allowBackoffice.enable;
+        })[0] === true
       ) {
         data.sendMail = fields.sendMail;
-      } else if (
-        Roles.filter((item) => item.id === fields.role).map((item) => {
-          return item.name;
-        })[0] !== "Administrator"
+      }
+      if (
+        props.user_roles.filter((item) => item._id === fields.role).map((item) => {
+          return item.allowPOS.enable;
+        })[0] === true
       ) {
         data.posPin = fields.posPin;
       }
+      console.log(data)
+      console.log(props.user_roles.filter((item) => item._id === fields.role).map((item) => {
+        return item.allowPOS.enable;
+      })[0] === true)
       dispatch(add_new_employee(data));
     }
   };
@@ -352,10 +374,10 @@ const AddEmployee = (props) => {
                     invalid={errors.role}
                   >
                     <option value="0">Select Role</option>
-                    {Roles.map((item, index) => {
+                    {(props.user_roles || []).map((item, index) => {
                       return (
-                        <option value={item.id} key={index}>
-                          {item.name}
+                        <option value={item._id} key={index}>
+                          {item.roleName}
                         </option>
                       );
                     })}
@@ -365,7 +387,48 @@ const AddEmployee = (props) => {
                     {errors.role === true ? "Please Enter Employee Role" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
-                {fields.role === "1" ? (
+                {fields.allowBackOffice === true && fields.pos === true ? (
+                  <React.Fragment>
+                    <CFormGroup variant="custom-checkbox" inline key={0}>
+                      <CInputCheckbox
+                        custom
+                        name="sendMail"
+                        id={"sendMail"}
+                        value={fields.sendMail}
+                        checked={fields.sendMail}
+                        onChange={handleOnChange}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"sendMail"}>
+                        Invite to the back office
+                        </CLabel>
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="posPin">POS PIN</CLabel>
+                      <CInputGroup>
+                        <NumberFormat
+                          id="posPin"
+                          name="posPin"
+                          value={fields.posPin}
+                          format="# # # #"
+                          mask="_"
+                          onChange={handleOnChange}
+                          onBlur={handleOnBlur}
+                          invalid={errors.posPin}
+                          className={
+                            errors.posPin === true
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                        />
+                        <CInvalidFeedback>
+                          {errors.posPin === true
+                            ? "Please Enter POS  Pin"
+                            : ""}
+                        </CInvalidFeedback>
+                      </CInputGroup>
+                    </CFormGroup>
+                  </React.Fragment>
+                ) : fields.allowBackOffice === true ? (
                   <React.Fragment>
                     <CFormGroup variant="custom-checkbox" inline key={0}>
                       <CInputCheckbox
@@ -381,30 +444,35 @@ const AddEmployee = (props) => {
                         </CLabel>
                     </CFormGroup>
                   </React.Fragment>
-                ) : fields.role !== "0" && fields.role !== "" ? (
-                  <CFormGroup>
-                    <CLabel htmlFor="posPin">POS PIN</CLabel>
-                    <CInputGroup>
-                      <NumberFormat
-                        id="posPin"
-                        name="posPin"
-                        value={fields.posPin}
-                        format="# # # #"
-                        mask="_"
-                        onChange={handleOnChange}
-                        onBlur={handleOnBlur}
-                        className="form-control"
-                      />
-                      <CInvalidFeedback>
-                        {errors.posPin === true
-                          ? "Please Enter POS  Pin"
-                          : ""}
-                      </CInvalidFeedback>
-                    </CInputGroup>
-                  </CFormGroup>
-                ) : (
-                      ""
-                    )}
+                ) : fields.pos === true ? (
+                  <React.Fragment>
+                    <CFormGroup>
+                      <CLabel htmlFor="posPin">POS PIN</CLabel>
+                      <CInputGroup>
+                        <NumberFormat
+                          id="posPin"
+                          name="posPin"
+                          value={fields.posPin}
+                          format="# # # #"
+                          mask="_"
+                          onChange={handleOnChange}
+                          onBlur={handleOnBlur}
+                          invalid={errors.posPin}
+                          className={
+                            errors.posPin === true
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                        />
+                        <CInvalidFeedback>
+                          {errors.posPin === true
+                            ? "Please Enter POS  Pin"
+                            : ""}
+                        </CInvalidFeedback>
+                      </CInputGroup>
+                    </CFormGroup>
+                  </React.Fragment>
+                ) : ''}
               </CFormGroup>
             </CCardBody>
             {collapse[0] ? (

@@ -35,18 +35,10 @@ import TimePicker from "react-time-picker";
 import TimeCardDetailDatatable from "../../../datatables/employee/timeCardDetail/TimeCardDetailDatatable";
 const AddEmployeeTime = (props) => {
   const [fields, setFields] = useState({
-    clockInDate: "",
-    clockOutDate: "",
-    clockInTime: "",
-    clockOutTime: "",
     employeeId: "0",
     storeId: "0",
   });
   const [errors, setErrors] = useState({
-    clockInDate: false,
-    clockOutDate: false,
-    clockInTime: false,
-    clockOutTime: false,
     employeeId: false,
     storeId: false,
   });
@@ -54,9 +46,17 @@ const AddEmployeeTime = (props) => {
     startDate: moment(),
     endDate: moment(),
   });
+  const [dateErrors, setDateErrors] = useState({
+    startDate: false,
+    endDate: false,
+  });
   const [timeRange, setTimeRange] = useState({
     startTime: "00:00",
     endTime: "00:00",
+  });
+  const [timeErrors, setTimeErrors] = useState({
+    startTime: false,
+    endTime: false,
   });
   const [stores, setStores] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -107,34 +107,37 @@ const AddEmployeeTime = (props) => {
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     if (
-      e.target.name === "storeId" ||
-      e.target.value === "" ||
-      e.target.value === "0" ||
-      e.target.value === undefined ||
-      e.target.value === null
+      e.target.name === "storeId" &&
+      (e.target.value === "" ||
+        e.target.value === "0" ||
+        e.target.value === undefined ||
+        e.target.value === null)
     ) {
       setErrors({
         ...errors,
         role: true,
       });
-    } else if (
-      e.target.name === "employeeId" ||
-      e.target.value === "" ||
-      e.target.value === "0" ||
-      e.target.value === undefined ||
-      e.target.value === null
+      return true;
+    }
+    if (
+      e.target.name === "employeeId" &&
+      (e.target.value === "" ||
+        e.target.value === "0" ||
+        e.target.value === undefined ||
+        e.target.value === null)
     ) {
       setErrors({
         ...errors,
         employeeId: true,
       });
-    } else {
-      setErrors({
-        ...errors,
-        [name]: validator.isEmpty(value),
-      });
+      return true;
     }
+    setErrors({
+      ...errors,
+      [name]: validator.isEmpty(value),
+    });
   };
 
   const saveTimeCard = () => {
@@ -161,43 +164,43 @@ const AddEmployeeTime = (props) => {
       });
       return false;
     } else if (
-      fields.clockInDate === "" ||
-      fields.clockInDate === undefined ||
-      fields.clockInDate === null
+      dateRange.startDate === "" ||
+      dateRange.startDate === undefined ||
+      dateRange.startDate === null
     ) {
-      setErrors({
-        ...errors,
-        clockInDate: validator.isEmpty(fields.clockInDate),
+      setDateErrors({
+        ...dateErrors,
+        startDate: true,
       });
       return false;
     } else if (
-      fields.clockOutDate === "" ||
-      fields.clockOutDate === undefined ||
-      fields.clockOutDate === null
+      dateRange.endDate === "" ||
+      dateRange.endDate === undefined ||
+      dateRange.endDate === null
     ) {
-      setErrors({
-        ...errors,
-        clockOutDate: validator.isEmpty(fields.clockOutDate),
+      setDateErrors({
+        ...dateErrors,
+        endDate: true,
       });
       return false;
     } else if (
-      fields.clockInTime === "" ||
-      fields.clockInTime === undefined ||
-      fields.clockInTime === null
+      timeRange.startTime === "" ||
+      timeRange.startTime === undefined ||
+      timeRange.startTime === null
     ) {
-      setErrors({
-        ...errors,
-        clockInTime: validator.isEmpty(fields.clockInTime),
+      setTimeErrors({
+        ...timeErrors,
+        startTime: true,
       });
       return false;
     } else if (
-      fields.clockOutTime === "" ||
-      fields.clockOutTime === undefined ||
-      fields.clockOutTime === null
+      timeRange.endTime === "" ||
+      timeRange.endTime === undefined ||
+      timeRange.endTime === null
     ) {
-      setErrors({
-        ...errors,
-        clockOutTime: validator.isEmpty(fields.clockOutTime),
+      setTimeErrors({
+        ...timeErrors,
+        endTime: true,
       });
       return false;
     } else {
@@ -210,7 +213,7 @@ const AddEmployeeTime = (props) => {
                 id: item._id,
                 name: item.title,
               };
-            })
+            })[0]
         ),
         employee: JSON.stringify(
           (employees || [])
@@ -220,12 +223,12 @@ const AddEmployeeTime = (props) => {
                 id: item._id,
                 name: item.name,
               };
-            })
+            })[0]
         ),
-        clockInDate: fields.clockInDate,
-        clockOutDate: fields.clockOutDate,
-        clockInTime: fields.clockInTime,
-        clockOutTime: fields.clockOutTime,
+        clockInDate: dateFormat(dateRange.startDate, "yyyy-mm-dd"),
+        clockOutDate: dateFormat(dateRange.endDate, "yyyy-mm-dd"),
+        clockInTime: timeRange.startTime,
+        clockOutTime: timeRange.endTime,
       };
       console.log(data);
       // dispatch(add_new_employee(data));

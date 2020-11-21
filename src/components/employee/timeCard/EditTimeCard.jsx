@@ -24,7 +24,7 @@ import {
 } from "@coreui/react";
 import { MdPermContactCalendar } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { add_new_timeCard } from "../../../actions/employee/timeCardActions";
+import { update_timeCard } from "../../../actions/employee/timeCardActions";
 import validator from "validator";
 import $ from "jquery";
 import moment from "moment";
@@ -33,7 +33,7 @@ import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-time-picker";
 import TimeCardDetailDatatable from "../../../datatables/employee/timeCardDetail/TimeCardDetailDatatable";
-const AddEmployeeTime = (props) => {
+const EditTimeCard = (props) => {
   const [fields, setFields] = useState({
     employeeId: "0",
     storeId: "0",
@@ -82,6 +82,7 @@ const AddEmployeeTime = (props) => {
   }, []);
   useEffect(() => {
     if (props.store !== undefined && props.store.length > 0) {
+      console.log(props.store);
       setStores(props.store);
     }
   }, [props.store]);
@@ -91,9 +92,59 @@ const AddEmployeeTime = (props) => {
       employee.employee_list !== undefined &&
       employee.employee_list.length > 0
     ) {
+      console.log(employee.employee_list);
       setEmployees(employee.employee_list);
     }
   }, [employee.employee_list]);
+
+  useEffect(() => {
+    console.log(props.time_card_row_data);
+
+    if (
+      props.time_card_row_data !== undefined &&
+      props.store !== undefined &&
+      employee.employee_list !== undefined
+    ) {
+      console.log(props.time_card_row_data);
+      setFields({
+        ...fields,
+        employeeId:
+          props.time_card_row_data.employee !== undefined
+            ? props.time_card_row_data.employee.id
+            : "1",
+        storeId:
+          props.time_card_row_data.store !== undefined
+            ? props.time_card_row_data.store.id
+            : "0",
+      });
+      setDateRange({
+        ...dateRange,
+        startDate:
+          props.time_card_row_data.timeDetail !== undefined &&
+          props.time_card_row_data.timeDetail.length !== 0
+            ? props.time_card_row_data.timeDetail[0].clockInDate
+            : moment(),
+        endDate:
+          props.time_card_row_data.timeDetail !== undefined &&
+          props.time_card_row_data.timeDetail.length !== 0
+            ? props.time_card_row_data.timeDetail[0].clockOutDate
+            : moment(),
+      });
+      setTimeRange({
+        ...timeRange,
+        startTime:
+          props.time_card_row_data.timeDetail !== undefined &&
+          props.time_card_row_data.timeDetail.length !== 0
+            ? props.time_card_row_data.timeDetail[0].clockInTime
+            : "00:00",
+        endTime:
+          props.time_card_row_data.timeDetail !== undefined &&
+          props.time_card_row_data.timeDetail.length !== 0
+            ? props.time_card_row_data.timeDetail[0].clockOutTime
+            : "00:00",
+      });
+    }
+  }, [props.time_card_row_data || employee.employee_list || props.store]);
 
   const goBack = () => {
     props.goBack();
@@ -232,8 +283,9 @@ const AddEmployeeTime = (props) => {
         clockOutDate: dateFormat(dateRange.endDate, "yyyy-mm-dd"),
         clockInTime: timeRange.startTime,
         clockOutTime: timeRange.endTime,
+        id: props.time_card_row_data._id,
       };
-      dispatch(add_new_timeCard(data));
+      dispatch(update_timeCard(data));
     }
   };
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
@@ -307,6 +359,7 @@ const AddEmployeeTime = (props) => {
     totalHour = diffEndHour + getNatural(timeDiff);
     totalHour = totalHour + ":" + Math.abs(diffEndMin);
   }
+  console.log(fields);
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -332,6 +385,7 @@ const AddEmployeeTime = (props) => {
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
                         invalid={errors.employeeId}
+                        disabled
                       >
                         <option value="0">Select Employee</option>
                         {employees.map((item, index) => {
@@ -369,6 +423,7 @@ const AddEmployeeTime = (props) => {
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
                         invalid={errors.storeId}
+                        disabled
                       >
                         <option value="0">Select Store</option>
                         {stores.map((item, index) => {
@@ -503,7 +558,9 @@ const AddEmployeeTime = (props) => {
             <CCardBody>
               <CRow>
                 <CCol sm="12" xs="12">
-                  <TimeCardDetailDatatable timeCard_detail={[]} />
+                  <TimeCardDetailDatatable
+                    timeCard_detail={props.time_card_row_data.timeDetail || []}
+                  />
                 </CCol>
               </CRow>
             </CCardBody>
@@ -555,4 +612,4 @@ const AddEmployeeTime = (props) => {
   );
 };
 
-export default AddEmployeeTime;
+export default EditTimeCard;

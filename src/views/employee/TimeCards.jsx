@@ -13,15 +13,13 @@ import {
   CDropdownItem,
   CInputCheckbox,
   CLabel,
-  CButton
+  CButton,
 } from "@coreui/react";
 import TimeCardDatatable from "../../datatables/employee/TimeCardDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddEmployeeTime from "../../components/employee/timeCard/AddEmployeeTime.jsx";
-import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
-import {
-  get_employee_list
-} from "../../actions/employee/employeeListActions";
+import EditTimeCard from "../../components/employee/timeCard/EditTimeCard.jsx";
+import { get_employee_list } from "../../actions/employee/employeeListActions";
 import {
   redirect_back_timeCard,
   get_timeCards,
@@ -77,8 +75,7 @@ const TimeCards = () => {
     if (employee.employee_list.length === 0) {
       dispatch(get_employee_list());
     }
-    dispatch(get_timeCards())
-
+    dispatch(get_timeCards());
   }, [dispatch]);
 
   useEffect(() => {
@@ -110,14 +107,14 @@ const TimeCards = () => {
 
   useEffect(() => {
     if (
-      employee.redirect_update !== undefined &&
-      employee.redirect_update === true
+      timeCard.redirect_update !== undefined &&
+      timeCard.redirect_update === true
     ) {
       setFadeTimeCard(false);
       setFadeAddTimeCard(false);
       setTimeCardUpdate(true);
     }
-  }, [employee.redirect_update]);
+  }, [timeCard.redirect_update]);
 
   const deleteTimeCard = () => {
     const timeCard_id = timeCard.timeCard_list
@@ -125,7 +122,7 @@ const TimeCards = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(timeCard_id)
+    console.log(timeCard_id);
     // dispatch(delete_timeCard(JSON.stringify(employee_id)));
     setShowAlert(!showAlert);
   };
@@ -238,22 +235,22 @@ const TimeCards = () => {
       <div className="animated fadeIn">
         {fadeTimeCardUpdate ? (
           <CFade timeout={timeout} in={fadeTimeCardUpdate}>
-            <EditEmployee
+            <EditTimeCard
               store={store.stores_list}
               goBack={goBack}
-              employee_row_data={employee.employee_row_data}
+              time_card_row_data={timeCard.timeCard_row_data}
             />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeAddTimeCard ? (
           <CFade timeout={timeout} in={fadeAddTimeCard}>
             <AddEmployeeTime store={store.stores_list} goBack={goBack} />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeTimeCard ? (
           <React.Fragment>
             <CRow className="mb-3">
@@ -277,7 +274,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Stores"
                       : storeId.filter((item) => item.isSelected === true)
-                        .length + " Stores"}
+                          .length + " Stores"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => storeHandleChange("0")}>
@@ -311,7 +308,7 @@ const TimeCards = () => {
                             id={"storeId" + item._id}
                             value={item._id}
                             checked={item.isSelected}
-                          // onChange={storeHandleChange}
+                            // onChange={storeHandleChange}
                           />
                           <CLabel
                             variant="custom-checkbox"
@@ -333,7 +330,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Employees"
                       : employeeId.filter((item) => item.isSelected === true)
-                        .length + " Employee"}
+                          .length + " Employee"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => employeeHandleChange("0")}>
@@ -419,23 +416,23 @@ const TimeCards = () => {
                         {timeCard.timeCard_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                            <React.Fragment>
-                              <ConformationAlert
-                                button_text="Delete"
-                                heading="Delete Time Card"
-                                section={`Are you sure you want to delete the Time Card?`}
-                                buttonAction={deleteTimeCard}
-                                show_alert={showAlert}
-                                hideAlert={setShowAlert}
-                                variant="outline"
-                                className="ml-2 btn-square"
-                                color="danger"
-                                block={false}
-                              />
-                            </React.Fragment>
-                          ) : (
-                            ""
-                          )}
+                          <React.Fragment>
+                            <ConformationAlert
+                              button_text="Delete"
+                              heading="Delete Time Card"
+                              section={`Are you sure you want to delete the Time Card?`}
+                              buttonAction={deleteTimeCard}
+                              show_alert={showAlert}
+                              hideAlert={setShowAlert}
+                              variant="outline"
+                              className="ml-2 btn-square"
+                              color="danger"
+                              block={false}
+                            />
+                          </React.Fragment>
+                        ) : (
+                          ""
+                        )}
                       </CCol>
                     </CRow>
                   </CCardHeader>
@@ -450,8 +447,8 @@ const TimeCards = () => {
             </CRow>
           </React.Fragment>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     </React.Fragment>
   );

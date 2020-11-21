@@ -9,7 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
-
 const TimeCardDatatable = (props) => {
   const dispatch = useDispatch();
 
@@ -20,35 +19,59 @@ const TimeCardDatatable = (props) => {
     return row.employee !== undefined ? row.employee.name : "";
   };
   const clockIn = (cell, row) => {
-    const timeConst = row.timeDetail[0].clockInTime > 12 ? "PM" : "AM"
-    return row.timeDetail !== undefined && row.timeDetail.length > 0 ? dateFormat(row.timeDetail[0].clockInDate, "mmmm d, yyyy") + ' ' + row.timeDetail[0].clockInTime + " " + timeConst : ''
-  }
+    const timeConst = row.timeDetail[0].clockInTime > 12 ? "PM" : "AM";
+    return row.timeDetail !== undefined && row.timeDetail.length > 0
+      ? dateFormat(row.timeDetail[0].clockInDate, "mmmm d, yyyy") +
+          " " +
+          row.timeDetail[0].clockInTime +
+          " " +
+          timeConst
+      : "";
+  };
   const clockOut = (cell, row) => {
-    const timeConst = row.timeDetail[0].clockOutTime > 12 ? "PM" : "AM"
-    return row.timeDetail !== undefined && row.timeDetail.length > 0 ? dateFormat(row.timeDetail[0].clockOutDate, "mmmm d, yyyy") + ' ' + row.timeDetail[0].clockOutTime + " " + timeConst : ''
-  }
+    const timeConst = row.timeDetail[0].clockOutTime > 12 ? "PM" : "AM";
+    return row.timeDetail !== undefined && row.timeDetail.length > 0
+      ? dateFormat(row.timeDetail[0].clockOutDate, "mmmm d, yyyy") +
+          " " +
+          row.timeDetail[0].clockOutTime +
+          " " +
+          timeConst
+      : "";
+  };
 
   const totalHour = (cell, row) => {
-    let totalHour = 0
+    let totalHour = 0;
     const timeDiff = moment
-      .duration(moment(row.timeDetail[0].clockOutDate).diff(moment(row.timeDetail[0].clockInDate)))
+      .duration(
+        moment(row.timeDetail[0].clockOutDate).diff(
+          moment(row.timeDetail[0].clockInDate)
+        )
+      )
       .asDays();
 
     const getNatural = (num) => {
       return parseFloat(num.toString().split(".")[0]) * 24;
     };
-    let startHours = row.timeDetail[0].clockInTime !== null && row.timeDetail[0].clockInTime !== undefined
-      ? row.timeDetail[0].clockInTime.split(":")[0]
-      : 0;
-    let startMins = row.timeDetail[0].clockInTime !== null && row.timeDetail[0].clockInTime !== undefined
-      ? row.timeDetail[0].clockInTime.split(":")[1]
-      : 0;
-    let endHours = row.timeDetail[0].clockOutTime !== null && row.timeDetail[0].clockOutTime !== undefined
-      ? row.timeDetail[0].clockOutTime.split(":")[0]
-      : 0;
-    let endMins = row.timeDetail[0].clockOutTime !== null && row.timeDetail[0].clockOutTime !== undefined
-      ? row.timeDetail[0].clockOutTime.split(":")[0]
-      : 0;
+    let startHours =
+      row.timeDetail[0].clockInTime !== null &&
+      row.timeDetail[0].clockInTime !== undefined
+        ? row.timeDetail[0].clockInTime.split(":")[0]
+        : 0;
+    let startMins =
+      row.timeDetail[0].clockInTime !== null &&
+      row.timeDetail[0].clockInTime !== undefined
+        ? row.timeDetail[0].clockInTime.split(":")[1]
+        : 0;
+    let endHours =
+      row.timeDetail[0].clockOutTime !== null &&
+      row.timeDetail[0].clockOutTime !== undefined
+        ? row.timeDetail[0].clockOutTime.split(":")[0]
+        : 0;
+    let endMins =
+      row.timeDetail[0].clockOutTime !== null &&
+      row.timeDetail[0].clockOutTime !== undefined
+        ? row.timeDetail[0].clockOutTime.split(":")[0]
+        : 0;
 
     if (parseFloat(startHours) > parseFloat(endHours)) {
       let diffStartHour = 0;
@@ -65,8 +88,7 @@ const TimeCardDatatable = (props) => {
       totalHour = diffEndHour + getNatural(timeDiff);
       return totalHour + ":" + Math.abs(diffEndMin);
     }
-
-  }
+  };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_timeCard_single_select(row));
     console.log(row);
@@ -77,7 +99,6 @@ const TimeCardDatatable = (props) => {
       dispatch(toggle_timeCard_all_select(true));
     } else {
       dispatch(toggle_timeCard_all_select(false));
-
     }
   };
 
@@ -109,7 +130,7 @@ const TimeCardDatatable = (props) => {
     sizePerPage: 5,
     onRowClick: function (row) {
       console.log(row);
-      // dispatch(update_row_data(row));
+      dispatch(update_row_data(row));
     },
   };
   return (
@@ -130,13 +151,28 @@ const TimeCardDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="clockIn" width="20%" dataFormat={clockIn}>
+        <TableHeaderColumn
+          dataField="clockIn"
+          width="20%"
+          dataFormat={clockIn}
+          columnClassName="td-column"
+        >
           Clock in
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="clockOut" dataSort={true} width="20%" dataFormat={clockOut}>
+        <TableHeaderColumn
+          dataField="clockOut"
+          dataSort={true}
+          width="20%"
+          dataFormat={clockOut}
+          columnClassName="td-column"
+        >
           Clock out
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="employee" dataSort={true} dataFormat={EmployeeName}>
+        <TableHeaderColumn
+          dataField="employee"
+          dataSort={true}
+          dataFormat={EmployeeName}
+        >
           Employee
         </TableHeaderColumn>
         <TableHeaderColumn
@@ -146,7 +182,11 @@ const TimeCardDatatable = (props) => {
         >
           Store
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalHour" dataSort={true} dataFormat={totalHour}>
+        <TableHeaderColumn
+          dataField="totalHour"
+          dataSort={true}
+          dataFormat={totalHour}
+        >
           Total Hour
         </TableHeaderColumn>
       </BootstrapTable>

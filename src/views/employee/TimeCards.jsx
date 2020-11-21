@@ -15,17 +15,18 @@ import {
   CLabel,
   CButton
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import TimeCardDatatable from "../../datatables/employee/TimeCardDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddEmployeeTime from "../../components/employee/timeCard/AddEmployeeTime.jsx";
 import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
 import {
-  redirect_back_employee,
-  get_employee_list,
-  get_employee_search,
-  delete_employee,
+  get_employee_list
 } from "../../actions/employee/employeeListActions";
+import {
+  redirect_back_timeCard,
+  get_timeCards,
+  delete_timeCard,
+} from "../../actions/employee/timeCardActions";
 import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -38,6 +39,9 @@ const TimeCards = () => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
+  );
+  const timeCard = useSelector(
+    (state) => state.employeeReducers.timeCardReducer
   );
   const [showAlert, setShowAlert] = useState(false);
   const [fadeTimeCard, setFadeTimeCard] = useState(true);
@@ -73,6 +77,8 @@ const TimeCards = () => {
     if (employee.employee_list.length === 0) {
       dispatch(get_employee_list());
     }
+    dispatch(get_timeCards())
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -113,22 +119,14 @@ const TimeCards = () => {
     }
   }, [employee.redirect_update]);
 
-  // useEffect(() => {
-  //   dispatch(get_employee());
-  // }, []);
-
-  const deleteEmployee = () => {
-    console.log("employee");
-    // const employee_id = employee.employee_list
-    //   .filter((item) => item.isDeleted === true)
-    //   .map((item) => {
-    //     return item._id;
-    //   });
-    // dispatch(delete_employee(JSON.stringify(employee_id)));
-    // setShowAlert(!showAlert);
-  };
-
-  const hideAlert = () => {
+  const deleteTimeCard = () => {
+    const timeCard_id = timeCard.timeCard_list
+      .filter((item) => item.isDeleted === true)
+      .map((item) => {
+        return item._id;
+      });
+    console.log(timeCard_id)
+    // dispatch(delete_timeCard(JSON.stringify(employee_id)));
     setShowAlert(!showAlert);
   };
 
@@ -211,14 +209,14 @@ const TimeCards = () => {
     setFadeTimeCard(false);
     setFadeAddTimeCard(true);
     setTimeCardUpdate(false);
-    // dispatch(redirect_back_employee(false));
+    dispatch(redirect_back_timeCard(false));
   };
 
   const goBack = () => {
     setFadeTimeCard(true);
     setFadeAddTimeCard(false);
     setTimeCardUpdate(false);
-    // dispatch(redirect_back_employee(true));
+    dispatch(redirect_back_timeCard(true));
   };
 
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
@@ -418,15 +416,15 @@ const TimeCards = () => {
                           ADD TIMECARD
                         </CButton>
 
-                        {employee.employee_list.filter(
+                        {timeCard.timeCard_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
                             <React.Fragment>
                               <ConformationAlert
                                 button_text="Delete"
-                                heading="Delete Employee"
-                                section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
-                                buttonAction={deleteEmployee}
+                                heading="Delete Time Card"
+                                section={`Are you sure you want to delete the Time Card?`}
+                                buttonAction={deleteTimeCard}
                                 show_alert={showAlert}
                                 hideAlert={setShowAlert}
                                 variant="outline"
@@ -443,7 +441,7 @@ const TimeCards = () => {
                   </CCardHeader>
                   <CCardBody>
                     <TimeCardDatatable
-                      timeCard_list={[]}
+                      timeCard_list={timeCard.timeCard_list}
                       store={store.stores_list}
                     />
                   </CCardBody>

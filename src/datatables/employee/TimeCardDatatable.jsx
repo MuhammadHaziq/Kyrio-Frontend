@@ -2,11 +2,13 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_employee_single_select,
-  toggle_employee_all_select,
+  toggle_timeCard_single_select,
+  toggle_timeCard_all_select,
   update_row_data,
-} from "../../actions/employee/employeeListActions";
+} from "../../actions/employee/timeCardActions";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import dateFormat from "dateformat";
 
 const TimeCardDatatable = (props) => {
   const dispatch = useDispatch();
@@ -14,17 +16,68 @@ const TimeCardDatatable = (props) => {
   const StoreName = (cell, row) => {
     return row.store !== undefined ? row.store.name : "";
   };
+  const EmployeeName = (cell, row) => {
+    return row.employee !== undefined ? row.employee.name : "";
+  };
+  const clockIn = (cell, row) => {
+    const timeConst = row.timeDetail[0].clockInTime > 12 ? "PM" : "AM"
+    return row.timeDetail !== undefined && row.timeDetail.length > 0 ? dateFormat(row.timeDetail[0].clockInDate, "mmmm d, yyyy") + ' ' + row.timeDetail[0].clockInTime + " " + timeConst : ''
+  }
+  const clockOut = (cell, row) => {
+    const timeConst = row.timeDetail[0].clockOutTime > 12 ? "PM" : "AM"
+    return row.timeDetail !== undefined && row.timeDetail.length > 0 ? dateFormat(row.timeDetail[0].clockOutDate, "mmmm d, yyyy") + ' ' + row.timeDetail[0].clockOutTime + " " + timeConst : ''
+  }
 
+  const totalHour = (cell, row) => {
+    let totalHour = 0
+    const timeDiff = moment
+      .duration(moment(row.timeDetail[0].clockOutDate).diff(moment(row.timeDetail[0].clockInDate)))
+      .asDays();
+
+    const getNatural = (num) => {
+      return parseFloat(num.toString().split(".")[0]) * 24;
+    };
+    let startHours = row.timeDetail[0].clockInTime !== null && row.timeDetail[0].clockInTime !== undefined
+      ? row.timeDetail[0].clockInTime.split(":")[0]
+      : 0;
+    let startMins = row.timeDetail[0].clockInTime !== null && row.timeDetail[0].clockInTime !== undefined
+      ? row.timeDetail[0].clockInTime.split(":")[1]
+      : 0;
+    let endHours = row.timeDetail[0].clockOutTime !== null && row.timeDetail[0].clockOutTime !== undefined
+      ? row.timeDetail[0].clockOutTime.split(":")[0]
+      : 0;
+    let endMins = row.timeDetail[0].clockOutTime !== null && row.timeDetail[0].clockOutTime !== undefined
+      ? row.timeDetail[0].clockOutTime.split(":")[0]
+      : 0;
+
+    if (parseFloat(startHours) > parseFloat(endHours)) {
+      let diffStartHour = 0;
+      let diffEndMin = 0;
+      diffStartHour = parseFloat(startHours) - parseFloat(endHours);
+      diffEndMin = parseFloat(startMins) - parseFloat(endMins);
+      totalHour = diffStartHour + getNatural(timeDiff);
+      return totalHour + ":" + Math.abs(diffEndMin);
+    } else {
+      let diffEndHour = 0;
+      let diffEndMin = 0;
+      diffEndHour = parseFloat(endHours) - parseFloat(startHours);
+      diffEndMin = parseFloat(startMins) - parseFloat(endMins);
+      totalHour = diffEndHour + getNatural(timeDiff);
+      return totalHour + ":" + Math.abs(diffEndMin);
+    }
+
+  }
   const onRowSelect = (row, isSelected, e) => {
-    // dispatch(toggle_employee_single_select(row));
+    dispatch(toggle_timeCard_single_select(row));
     console.log(row);
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      // dispatch(toggle_employee_all_select(true));
+      dispatch(toggle_timeCard_all_select(true));
     } else {
-      // dispatch(toggle_employee_all_select(false));
+      dispatch(toggle_timeCard_all_select(false));
+
     }
   };
 
@@ -77,13 +130,13 @@ const TimeCardDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="clockIn" width="20%">
+        <TableHeaderColumn dataField="clockIn" width="20%" dataFormat={clockIn}>
           Clock in
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="clockOut" dataSort={true} width="20%">
+        <TableHeaderColumn dataField="clockOut" dataSort={true} width="20%" dataFormat={clockOut}>
           Clock out
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="employee" dataSort={true}>
+        <TableHeaderColumn dataField="employee" dataSort={true} dataFormat={EmployeeName}>
           Employee
         </TableHeaderColumn>
         <TableHeaderColumn
@@ -93,7 +146,7 @@ const TimeCardDatatable = (props) => {
         >
           Store
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalHour" dataSort={true}>
+        <TableHeaderColumn dataField="totalHour" dataSort={true} dataFormat={totalHour}>
           Total Hour
         </TableHeaderColumn>
       </BootstrapTable>

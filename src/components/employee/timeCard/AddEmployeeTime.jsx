@@ -24,7 +24,7 @@ import {
 } from "@coreui/react";
 import { MdPermContactCalendar } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { add_new_employee } from "../../../actions/employee/employeeListActions";
+import { add_new_timeCard } from "../../../actions/employee/timeCardActions";
 import validator from "validator";
 import $ from "jquery";
 import moment from "moment";
@@ -64,15 +64,18 @@ const AddEmployeeTime = (props) => {
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
+  const timeCard = useSelector(
+    (state) => state.employeeReducers.timeCardReducer
+  );
 
-  // useEffect(() => {
-  //     if (
-  //         employee.redirect_employee !== undefined &&
-  //         employee.redirect_employee === true
-  //     ) {
-  //         props.goBack();
-  //     }
-  // }, [employee.redirect_employee]);
+  useEffect(() => {
+    if (
+      timeCard.redirect_timeCard !== undefined &&
+      timeCard.redirect_timeCard === true
+    ) {
+      props.goBack();
+    }
+  }, [timeCard.redirect_timeCard]);
 
   useEffect(() => {
     $(".react-time-picker__wrapper").css("display", "contents");
@@ -230,8 +233,7 @@ const AddEmployeeTime = (props) => {
         clockInTime: timeRange.startTime,
         clockOutTime: timeRange.endTime,
       };
-      console.log(data);
-      // dispatch(add_new_employee(data));
+      dispatch(add_new_timeCard(data));
     }
   };
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");

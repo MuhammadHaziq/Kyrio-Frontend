@@ -153,7 +153,6 @@ const AddItem = (props) => {
       stockQty: 200,
     };
     dispatch(save_item(data));
-    console.log(data);
   };
 
   const handleOnChange = (e) => {
@@ -324,7 +323,6 @@ const AddItem = (props) => {
                     thousandSeparator={true}
                     onChange={handleOnChange}
                     decimalScale={2}
-                    fixedDecimalScale={true}
                     className="form-control"
                     prefix={"$"}
                   />

@@ -352,7 +352,6 @@ const AddItem = (props) => {
                     thousandSeparator={true}
                     onChange={handleOnChange}
                     decimalScale={2}
-                    fixedDecimalScale={true}
                     className="form-control"
                     prefix={"$"}
                   />

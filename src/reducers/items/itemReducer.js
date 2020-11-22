@@ -66,6 +66,7 @@ const itemReducer = (state = initialState, action) => {
     case ITEM_SAVE: {
       return Object.assign({}, state, {
         item_list: [action.response, ...state.item_list],
+        item_variants: [],
         redirect_itemList: true,
       });
     }

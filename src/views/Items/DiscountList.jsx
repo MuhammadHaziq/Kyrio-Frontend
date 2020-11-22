@@ -3,7 +3,6 @@ import {
   CCard,
   CCardHeader,
   CCardBody,
-  CBadge,
   CRow,
   CCol,
   CButton,
@@ -11,7 +10,6 @@ import {
   CSelect,
   CFade,
 } from "@coreui/react";
-import usersData from "../users/UsersData.js";
 import {
   get_discount_list,
   delete_discount,

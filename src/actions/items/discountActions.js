@@ -34,7 +34,6 @@ export const get_discount_list = (id) => {
         },
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: GET_DISCOUNT_LIST, response: response.data });
         })
         .catch((error) => {
@@ -43,7 +42,7 @@ export const get_discount_list = (id) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -94,7 +93,7 @@ export const add_new_disocunt = (data) => {
             open: true,
             message:
               typeof error.response != "undefined"
-                ? error.response.status == 404
+                ? error.response.status === 404
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
@@ -112,7 +111,7 @@ export const add_new_disocunt = (data) => {
         open: true,
         message:
           typeof error.response != "undefined"
-            ? error.response.status == 404
+            ? error.response.status === 404
               ? error.response.statusText
               : error.response.data.message
             : ERROR_MESSAGE,

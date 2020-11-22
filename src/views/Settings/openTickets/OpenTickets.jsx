@@ -60,9 +60,9 @@ const OpenTickets = () => {
     }
   }, [store_tickets]);
 
-useEffect(()=> {
-    dispatch(get_store_open_ticket('0'));
-},[])
+  useEffect(() => {
+    dispatch(get_store_open_ticket("0"));
+  }, [dispatch]);
   const storeHandleChange = (e) => {
     const storeObject = store.stores_list.filter((item) => {
       return item._id === e.target.value;
@@ -87,6 +87,7 @@ useEffect(()=> {
       .map((item) => {
         return item._id;
       });
+    console.log(data);
     // dispatch(delete_pos_devices(JSON.stringify(data)));
   };
   const getItemStyle = (isDragging, draggableStyle) => ({

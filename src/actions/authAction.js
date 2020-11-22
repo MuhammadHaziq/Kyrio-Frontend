@@ -1,9 +1,4 @@
-import {
-  LOGIN,
-  MESSAGE,
-  GET_SETTING_FEATURES,
-  ERROR_MESSAGE,
-} from "../constants/ActionTypes";
+import { LOGIN, MESSAGE, ERROR_MESSAGE } from "../constants/ActionTypes";
 import axios from "axios";
 import { BaseUrl } from "../constants/baseUrls";
 // import jwt from "jsonwebtoken";
@@ -17,7 +12,8 @@ export const login = (data) => {
         method: "post",
         url: `${BaseUrl}users/signin`,
         data: data,
-      }).then((response) => {
+      })
+        .then((response) => {
           dispatch({ type: LOGIN, response: response.data });
           // dispatch({
           //   type: GET_SETTING_FEATURES,

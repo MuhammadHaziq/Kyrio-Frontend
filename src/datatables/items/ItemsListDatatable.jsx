@@ -6,7 +6,7 @@ import {
   toggle_item_all_select,
   update_row_data,
 } from "../../actions/items/itemActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
@@ -43,7 +43,6 @@ const ItemsListDatatable = (props) => {
     let stocks = row.stores.map((item) => {
       return +item.inStock || 0;
     });
-    console.log(stocks);
     stocks = stocks.reduce((a, b) => {
       return b + a;
     });
@@ -52,16 +51,13 @@ const ItemsListDatatable = (props) => {
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_item_single_select(row));
-    console.log(row);
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
       dispatch(toggle_item_all_select(true));
-      console.log(true);
     } else {
       dispatch(toggle_item_all_select(false));
-      console.log(false);
     }
   };
 
@@ -92,7 +88,6 @@ const ItemsListDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(update_row_data(row));
     },
   };

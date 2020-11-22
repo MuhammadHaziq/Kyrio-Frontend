@@ -3,8 +3,6 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
@@ -13,15 +11,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CLink,
   CInvalidFeedback,
-  CCardFooter,
-  CInputRadio,
-  CListGroup,
-  CListGroupItem,
-  CSwitch,
-  CImg,
-  CSelect,
   CFormText,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
@@ -29,11 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { MdFlag } from "react-icons/md";
-import {
-  CountryDropdown,
-  RegionDropdown,
-  CountryRegionData,
-} from "react-country-region-selector";
+import { CountryDropdown } from "react-country-region-selector";
 import { add_new_customer } from "../../actions/customer/customerActions";
 const AddCustomer = (props) => {
   const [fields, setFields] = useState({

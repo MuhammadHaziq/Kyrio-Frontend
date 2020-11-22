@@ -5,7 +5,6 @@ import {
   UPDATE_DINING_OPTION,
   MESSAGE,
   ERROR_MESSAGE,
-  GET_DINING_TAX,
   REDIRECT_BACK_DINING,
   DELETE_DINING_OPTION,
 } from "../../constants/ActionTypes";

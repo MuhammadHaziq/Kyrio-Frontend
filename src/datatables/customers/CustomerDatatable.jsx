@@ -6,7 +6,7 @@ import {
   toggle_customer_all_select,
   update_row_data,
 } from "../../actions/customer/customerActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const CustomerDatatable = (props) => {
   const dispatch = useDispatch();
@@ -87,7 +87,6 @@ const CustomerDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(update_row_data(row));
     },
   };

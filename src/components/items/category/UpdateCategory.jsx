@@ -4,26 +4,16 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CLink,
-  CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
-  CListGroup,
-  CListGroupItem,
-  CSwitch,
   CImg,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import ConformationAlert from "../../conformationAlert/ConformationAlert";
@@ -55,15 +45,15 @@ const UpdateCategory = (props) => {
 
   useEffect(() => {
     if (
-      props.update_item_category !== undefined &&
-      Object.keys(props.update_item_category).length > 0
+      category.update_item_category !== undefined &&
+      Object.keys(category.update_item_category).length > 0
     ) {
       setFields({
-        category_name: props.update_item_category.catTitle || "",
-        color: props.update_item_category.catColor || "",
+        category_name: category.update_item_category.catTitle || "",
+        color: category.update_item_category.catColor || "",
       });
     }
-  }, [props.update_item_category]);
+  }, [category.update_item_category]);
 
   const goBack = () => {
     props.goBack();
@@ -84,7 +74,6 @@ const UpdateCategory = (props) => {
       catColor: fields.color,
     };
     dispatch(update_item_category(data));
-    console.log(data);
   };
 
   const handleOnChange = (e) => {
@@ -122,12 +111,7 @@ const UpdateCategory = (props) => {
 
   const delete_category = () => {
     const data = [props.update_item_category._id];
-    console.log(data);
     dispatch(delete_categories(JSON.stringify(data)));
-  };
-
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
   };
 
   return (

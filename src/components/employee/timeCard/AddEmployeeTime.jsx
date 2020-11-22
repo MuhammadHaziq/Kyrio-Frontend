@@ -110,7 +110,6 @@ const AddEmployeeTime = (props) => {
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     if (
       e.target.name === "storeId" &&
       (e.target.value === "" ||
@@ -278,7 +277,9 @@ const AddEmployeeTime = (props) => {
   let totalHour = 0;
   const startHours =
     timeRange.startTime !== null && timeRange.startTime !== undefined
-      ? timeRange.startTime.split(":")[0]
+      ? timeRange.startTime.split(":")[0] == 12
+        ? 24
+        : timeRange.startTime.split(":")[0]
       : 0;
   const startMins =
     timeRange.startTime !== null && timeRange.startTime !== undefined
@@ -286,7 +287,9 @@ const AddEmployeeTime = (props) => {
       : 0;
   const endHours =
     timeRange.endTime !== null && timeRange.endTime !== undefined
-      ? timeRange.endTime.split(":")[0]
+      ? timeRange.endTime.split(":")[0] == 12
+        ? 24
+        : timeRange.endTime.split(":")[0]
       : 0;
   const endMins =
     timeRange.endTime !== null && timeRange.endTime !== undefined

@@ -3,21 +3,17 @@ import {
   CRow,
   CCol,
   CCard,
-  CSelect,
   CForm,
   CFormGroup,
   CCardHeader,
   CCardBody,
-  CCollapse,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
   CInput,
-  CLink,
   CButton,
   CFade,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import CustomerDatatable from "../../datatables/customers/CustomerDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCustomer from "../../components/customers/AddCustomer.jsx";
@@ -56,7 +52,7 @@ const Customers = () => {
 
   useEffect(() => {
     dispatch(get_customers());
-  }, []);
+  }, [dispatch]);
 
   const handleOnChange = (e) => {
     setSearch(e.target.value);
@@ -71,11 +67,6 @@ const Customers = () => {
     dispatch(delete_customer(JSON.stringify(customer_id)));
     setShowAlert(!showAlert);
   };
-
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
-
   const addCustomer = () => {
     setFadeCustomer(false);
     setFadeAddCustomer(true);

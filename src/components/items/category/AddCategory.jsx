@@ -4,26 +4,16 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CLink,
-  CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
-  CListGroup,
-  CListGroupItem,
-  CSwitch,
   CImg,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_category } from "../../../actions/items/categoryActions";
@@ -66,7 +56,6 @@ const AddCategory = (props) => {
       catColor: fields.color,
     };
     dispatch(add_new_category(data));
-    console.log(data);
   };
 
   const handleOnChange = (e) => {

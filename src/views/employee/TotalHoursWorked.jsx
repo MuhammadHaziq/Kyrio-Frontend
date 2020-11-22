@@ -6,7 +6,6 @@ import {
   CFormGroup,
   CCardHeader,
   CCardBody,
-  CFade,
   CDropdown,
   CDropdownToggle,
   CDropdownMenu,
@@ -15,9 +14,9 @@ import {
   CLabel,
   CButton,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import { get_employee_list } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
+import { get_timeCards } from "../../actions/employee/timeCardActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
@@ -29,6 +28,9 @@ const TotalHoursWorked = () => {
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
+  );
+  const timeCard = useSelector(
+    (state) => state.employeeReducers.timeCardReducer
   );
   const [storeId, setStoreId] = useState([]);
   const [employeeId, setEmployeeId] = useState([]);
@@ -56,9 +58,14 @@ const TotalHoursWorked = () => {
     if (store.stores_list.length === 0) {
       dispatch(get_stores());
     }
+  }, [dispatch, store.stores_list.length === 0]);
+  useEffect(() => {
     if (employee.employee_list.length === 0) {
       dispatch(get_employee_list());
     }
+  }, [dispatch, employee.employee_list.length === 0]);
+  useEffect(() => {
+    dispatch(get_timeCards());
   }, [dispatch]);
 
   useEffect(() => {
@@ -87,10 +94,6 @@ const TotalHoursWorked = () => {
       setEmployeeId(employees);
     }
   }, [employee.employee_list]);
-
-  // useEffect(() => {
-  //   dispatch(get_employee());
-  // }, []);
 
   const storeHandleChange = (e) => {
     let selectedStore = [];
@@ -316,7 +319,7 @@ const TotalHoursWorked = () => {
             </CCardHeader>
             <CCardBody>
               <TotalHoursWorkedDatatable
-                timeCard_list={[]}
+                timeCard_list={timeCard.timeCard_list}
                 store={store.stores_list}
               />
             </CCardBody>

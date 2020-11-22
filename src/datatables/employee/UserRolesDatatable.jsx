@@ -1,16 +1,8 @@
 import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  toggle_employee_single_select,
-  toggle_employee_all_select,
-  update_row_data,
-} from "../../actions/employee/employeeListActions";
-import { useSelector, useDispatch } from "react-redux";
 
 const UserRolesDatatable = (props) => {
-  const dispatch = useDispatch();
-
   const AccessModules = (cell, row) => {
     const backOffice = row.allowBackoffice.enable === true ? "Back office" : "";
     const pos = row.allowPOS.enable === true ? "POS" : "";

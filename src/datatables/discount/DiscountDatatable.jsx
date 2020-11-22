@@ -6,7 +6,7 @@ import {
   toggle_discount_all_select,
   select_row_data_update,
 } from "../../actions/items/discountActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
@@ -58,7 +58,6 @@ const ItemsListDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(select_row_data_update(row));
     },
   };

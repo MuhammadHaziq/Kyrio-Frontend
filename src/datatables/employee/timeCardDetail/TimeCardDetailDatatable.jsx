@@ -1,33 +1,44 @@
 import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  toggle_employee_single_select,
-  toggle_employee_all_select,
-  update_row_data,
-} from "../../../actions/employee/employeeListActions";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
+
 import dateFormat from "dateformat";
 
 const TimeCardDetailDatatable = (props) => {
-  const dispatch = useDispatch();
   const clockIn = (cell, row) => {
-    const timeConst = row.clockInTime > 12 ? "PM" : "AM";
-    return row.clockInDate !== undefined
+    const timeConst =
+      row !== undefined
+        ? Number(row.clockInTime.split(":")[0]) >= 12
+          ? "PM"
+          : "AM"
+        : "-";
+    let time24 = row !== undefined ? Number(row.clockInTime.split(":")[0]) : 0;
+    let time12 = time24 % 12 || 12;
+    time12 = time12 + ":" + row.clockInTime.split(":")[1];
+
+    return row !== undefined
       ? dateFormat(row.clockInDate, "mmmm d, yyyy") +
           " " +
-          row.clockInTime +
+          time12 +
           " " +
           timeConst
       : "";
   };
+
   const clockOut = (cell, row) => {
-    const timeConst = row.clockOutTime > 12 ? "PM" : "AM";
-    return row.clockOutDate !== undefined
+    const timeConst =
+      row !== undefined
+        ? Number(row.clockOutTime.split(":")[0]) >= 12
+          ? "PM"
+          : "AM"
+        : "-";
+    let time24 = row !== undefined ? Number(row.clockOutTime.split(":")[0]) : 0;
+    let time12 = time24 % 12 || 12;
+    time12 = time12 + ":" + row.clockOutTime.split(":")[1];
+    return row !== undefined
       ? dateFormat(row.clockOutDate, "mmmm d, yyyy") +
           " " +
-          row.clockOutTime +
+          time12 +
           " " +
           timeConst
       : "";

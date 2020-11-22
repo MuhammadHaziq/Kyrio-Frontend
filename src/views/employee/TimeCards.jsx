@@ -72,9 +72,13 @@ const TimeCards = () => {
     if (store.stores_list.length === 0) {
       dispatch(get_stores());
     }
+  }, [dispatch, store.stores_list.length === 0]);
+  useEffect(() => {
     if (employee.employee_list.length === 0) {
       dispatch(get_employee_list());
     }
+  }, [dispatch, employee.employee_list.length === 0]);
+  useEffect(() => {
     dispatch(get_timeCards());
   }, [dispatch]);
 
@@ -122,8 +126,7 @@ const TimeCards = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(timeCard_id);
-    // dispatch(delete_timeCard(JSON.stringify(employee_id)));
+    dispatch(delete_timeCard(JSON.stringify(timeCard_id)));
     setShowAlert(!showAlert);
   };
 
@@ -260,6 +263,7 @@ const TimeCards = () => {
                   endDate={dateRange.endDate}
                   ranges={dateRange.ranges}
                   onEvent={handleEvent}
+                  autoApply={true}
                 >
                   <CButton style={{ backgroundColor: "white", width: "100%" }}>
                     <span>{label}</span>
@@ -294,7 +298,7 @@ const TimeCards = () => {
                     </CDropdownItem>
                     {(storeId || []).map((item, index) => (
                       <CDropdownItem
-                        index={item._id}
+                        key={index}
                         onClick={() => storeHandleChange(item._id)}
                       >
                         <CFormGroup
@@ -308,7 +312,6 @@ const TimeCards = () => {
                             id={"storeId" + item._id}
                             value={item._id}
                             checked={item.isSelected}
-                            // onChange={storeHandleChange}
                           />
                           <CLabel
                             variant="custom-checkbox"
@@ -353,7 +356,7 @@ const TimeCards = () => {
                     </CDropdownItem>
                     {(employeeId || []).map((item, index) => (
                       <CDropdownItem
-                        index={item._id}
+                        key={index}
                         onClick={() => employeeHandleChange(item._id)}
                       >
                         <CFormGroup

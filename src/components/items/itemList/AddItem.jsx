@@ -4,18 +4,13 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CLink,
   CInvalidFeedback,
-  CCardFooter,
   CInputRadio,
   CListGroup,
   CListGroupItem,
@@ -88,7 +83,7 @@ const AddItem = (props) => {
       .filter((item) => item.isSelected === true)
       .map((item) => {
         (item.modifiers || []).map((modi) => {
-          modifiers.push({
+          return modifiers.push({
             id: modi._id,
             title: modi.title,
           });
@@ -99,7 +94,7 @@ const AddItem = (props) => {
       .filter((item) => item.isSelected === true)
       .map((item) => {
         (item.taxes || []).map((tax) => {
-          taxes.push({
+          return taxes.push({
             id: tax._id,
             title: tax.title,
             type: tax.tax_type.title,

@@ -141,10 +141,6 @@ const ItemsList = () => {
     setShowAlert(!showAlert);
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
-
   const addItem = () => {
     setFadeItem(false);
     setFadeAddItem(true);
@@ -270,7 +266,7 @@ const ItemsList = () => {
                             ""
                           )}
                         </CCol>
-                        {showSearch == false ? (
+                        {showSearch === false ? (
                           <React.Fragment>
                             {item.store_list.length > 1 ? (
                               <React.Fragment>

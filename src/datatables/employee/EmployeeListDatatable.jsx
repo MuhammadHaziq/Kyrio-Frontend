@@ -6,7 +6,7 @@ import {
   toggle_employee_all_select,
   update_row_data,
 } from "../../actions/employee/employeeListActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const EmployeeListDatatable = (props) => {
   const dispatch = useDispatch();
@@ -20,7 +20,6 @@ const EmployeeListDatatable = (props) => {
 
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_employee_single_select(row));
-    console.log(row);
   };
 
   const onSelectAll = (isSelected, rows) => {
@@ -58,7 +57,6 @@ const EmployeeListDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(update_row_data(row));
     },
   };

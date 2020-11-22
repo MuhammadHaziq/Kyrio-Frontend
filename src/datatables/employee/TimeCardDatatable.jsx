@@ -6,7 +6,7 @@ import {
   toggle_timeCard_all_select,
   update_row_data,
 } from "../../actions/employee/timeCardActions";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
 const TimeCardDatatable = (props) => {
@@ -18,22 +18,47 @@ const TimeCardDatatable = (props) => {
   const EmployeeName = (cell, row) => {
     return row.employee !== undefined ? row.employee.name : "";
   };
+
   const clockIn = (cell, row) => {
-    const timeConst = row.timeDetail[0].clockInTime > 12 ? "PM" : "AM";
+    const timeConst =
+      row.timeDetail !== undefined && row.timeDetail.length > 0
+        ? Number(row.timeDetail[0].clockInTime.split(":")[0]) >= 12
+          ? "PM"
+          : "AM"
+        : "-";
+    let time24 =
+      row.timeDetail !== undefined && row.timeDetail.length > 0
+        ? Number(row.timeDetail[0].clockInTime.split(":")[0])
+        : 0;
+    let time12 = time24 % 12 || 12;
+    time12 = time12 + ":" + row.timeDetail[0].clockInTime.split(":")[1];
+
     return row.timeDetail !== undefined && row.timeDetail.length > 0
       ? dateFormat(row.timeDetail[0].clockInDate, "mmmm d, yyyy") +
           " " +
-          row.timeDetail[0].clockInTime +
+          time12 +
           " " +
           timeConst
       : "";
   };
+
   const clockOut = (cell, row) => {
-    const timeConst = row.timeDetail[0].clockOutTime > 12 ? "PM" : "AM";
+    const timeConst =
+      row.timeDetail !== undefined && row.timeDetail.length > 0
+        ? Number(row.timeDetail[0].clockOutTime.split(":")[0]) >= 12
+          ? "PM"
+          : "AM"
+        : "-";
+    let time24 =
+      row.timeDetail !== undefined && row.timeDetail.length > 0
+        ? Number(row.timeDetail[0].clockOutTime.split(":")[0])
+        : 0;
+    let time12 = time24 % 12 || 12;
+    time12 = time12 + ":" + row.timeDetail[0].clockOutTime.split(":")[1];
     return row.timeDetail !== undefined && row.timeDetail.length > 0
       ? dateFormat(row.timeDetail[0].clockOutDate, "mmmm d, yyyy") +
           " " +
-          row.timeDetail[0].clockOutTime +
+          time12 +
           " " +
           timeConst
       : "";
@@ -55,7 +80,9 @@ const TimeCardDatatable = (props) => {
     let startHours =
       row.timeDetail[0].clockInTime !== null &&
       row.timeDetail[0].clockInTime !== undefined
-        ? row.timeDetail[0].clockInTime.split(":")[0]
+        ? row.timeDetail[0].clockInTime.split(":")[0] === "12"
+          ? 24
+          : row.timeDetail[0].clockInTime.split(":")[0]
         : 0;
     let startMins =
       row.timeDetail[0].clockInTime !== null &&
@@ -65,7 +92,9 @@ const TimeCardDatatable = (props) => {
     let endHours =
       row.timeDetail[0].clockOutTime !== null &&
       row.timeDetail[0].clockOutTime !== undefined
-        ? row.timeDetail[0].clockOutTime.split(":")[0]
+        ? row.timeDetail[0].clockOutTime.split(":")[0] === "12"
+          ? 24
+          : row.timeDetail[0].clockOutTime.split(":")[0]
         : 0;
     let endMins =
       row.timeDetail[0].clockOutTime !== null &&
@@ -91,7 +120,6 @@ const TimeCardDatatable = (props) => {
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_timeCard_single_select(row));
-    console.log(row);
   };
 
   const onSelectAll = (isSelected, rows) => {
@@ -129,7 +157,6 @@ const TimeCardDatatable = (props) => {
     ],
     sizePerPage: 5,
     onRowClick: function (row) {
-      console.log(row);
       dispatch(update_row_data(row));
     },
   };

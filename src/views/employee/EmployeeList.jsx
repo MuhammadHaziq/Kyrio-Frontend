@@ -29,9 +29,7 @@ import {
   get_store_employee_list,
   delete_employee,
 } from "../../actions/employee/employeeListActions";
-import {
-  get_user_access_list
-} from "../../actions/employee/userRolesActions";
+import { get_user_access_list } from "../../actions/employee/userRolesActions";
 import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -56,7 +54,7 @@ const EmployeeList = () => {
   useEffect(() => {
     dispatch(get_stores());
     dispatch(get_employee_list());
-    dispatch(get_user_access_list())
+    dispatch(get_user_access_list());
   }, [dispatch]);
   useEffect(() => {
     if (
@@ -79,7 +77,6 @@ const EmployeeList = () => {
   };
 
   const deleteEmployee = () => {
-    console.log("employee");
     const employee_id = employee.employee_list
       .filter((item) => item.isDeleted === true)
       .map((item) => {
@@ -113,7 +110,6 @@ const EmployeeList = () => {
       search: search,
       storeId: selectedStoreId,
     };
-    console.log(data);
     dispatch(get_employee_search(data));
   };
 
@@ -136,15 +132,19 @@ const EmployeeList = () => {
             />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeAddEmployee ? (
           <CFade timeout={timeout} in={fadeAddEmployee}>
-            <AddEmployee store={store.stores_list} goBack={goBack} user_roles={userRoles.user_roles} />
+            <AddEmployee
+              store={store.stores_list}
+              goBack={goBack}
+              user_roles={userRoles.user_roles}
+            />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeEmployee ? (
           <React.Fragment>
             <CRow>
@@ -182,23 +182,23 @@ const EmployeeList = () => {
                         {employee.employee_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                            <React.Fragment>
-                              <ConformationAlert
-                                button_text="Delete"
-                                heading="Delete Employee"
-                                section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
-                                buttonAction={deleteEmployee}
-                                show_alert={showAlert}
-                                hideAlert={setShowAlert}
-                                variant="outline"
-                                className="ml-2 btn-square"
-                                color="danger"
-                                block={false}
-                              />
-                            </React.Fragment>
-                          ) : (
-                            ""
-                          )}
+                          <React.Fragment>
+                            <ConformationAlert
+                              button_text="Delete"
+                              heading="Delete Employee"
+                              section={`Are you sure you want to delete the Employee? Upon deleting, his or her data will no longer be displayed in Employee List.`}
+                              buttonAction={deleteEmployee}
+                              show_alert={showAlert}
+                              hideAlert={setShowAlert}
+                              variant="outline"
+                              className="ml-2 btn-square"
+                              color="danger"
+                              block={false}
+                            />
+                          </React.Fragment>
+                        ) : (
+                          ""
+                        )}
                       </CCol>
 
                       {showSearch == false ? (
@@ -241,39 +241,38 @@ const EmployeeList = () => {
                           </CCol>
                         </React.Fragment>
                       ) : (
-                          <CCol xs="12" sm="8" md="8" xl="xl">
-                            <React.Fragment>
-                              <CForm
-                                onSubmit={searchFilterOnSubmit}
-                                method="post"
-                              >
-                                <CFormGroup>
-                                  <div className="controls">
-                                    <CInputGroup className="input-prepend">
-                                      <CInput
-                                        id="prependedInput"
-                                        size="50"
-                                        type="text"
-                                        name="search"
-                                        placeholder="Search"
-                                        onChange={handleOnChange}
-                                      />
-                                      <CInputGroupPrepend onClick={closeSearch}>
-                                        <CInputGroupText>X</CInputGroupText>
-                                      </CInputGroupPrepend>
-                                    </CInputGroup>
-                                  </div>
-                                </CFormGroup>
-                              </CForm>
-                            </React.Fragment>
-                          </CCol>
-                        )}
+                        <CCol xs="12" sm="8" md="8" xl="xl">
+                          <React.Fragment>
+                            <CForm
+                              onSubmit={searchFilterOnSubmit}
+                              method="post"
+                            >
+                              <CFormGroup>
+                                <div className="controls">
+                                  <CInputGroup className="input-prepend">
+                                    <CInput
+                                      id="prependedInput"
+                                      size="50"
+                                      type="text"
+                                      name="search"
+                                      placeholder="Search"
+                                      onChange={handleOnChange}
+                                    />
+                                    <CInputGroupPrepend onClick={closeSearch}>
+                                      <CInputGroupText>X</CInputGroupText>
+                                    </CInputGroupPrepend>
+                                  </CInputGroup>
+                                </div>
+                              </CFormGroup>
+                            </CForm>
+                          </React.Fragment>
+                        </CCol>
+                      )}
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
                     <EmployeeListDatatable
                       employee_list={employee.employee_list}
-
                     />
                   </CCardBody>
                 </CCard>
@@ -281,8 +280,8 @@ const EmployeeList = () => {
             </CRow>
           </React.Fragment>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     </React.Fragment>
   );

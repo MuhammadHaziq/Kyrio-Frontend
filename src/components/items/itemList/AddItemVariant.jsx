@@ -1,27 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
-  CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CLink,
-  CInputCheckbox,
   CInvalidFeedback,
-  CCardFooter,
-  CInputRadio,
   CListGroup,
   CListGroupItem,
-  CSwitch,
-  CImg,
   CModal,
   CModalHeader,
   CModalBody,
@@ -31,7 +18,6 @@ import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import ReactTags from "react-tag-autocomplete";
 import {
   save_item_variants,
   delete_item_varient_option,
@@ -43,7 +29,7 @@ const AddItemVariant = (props) => {
   const reactTags = useRef();
   const dispatch = useDispatch();
 
-  const item = useSelector((state) => state.items.itemReducer);
+  // const item = useSelector((state) => state.items.itemReducer);
   const settings = useSelector((state) => state.settings);
 
   const [variantFields, setVariantFields] = useState([
@@ -173,8 +159,8 @@ const AddItemVariant = (props) => {
       return item.optionValue.length === 0;
     });
     if (validateVariantFields.length > 0 || validateVariantValue.length > 0) {
-      const variantFieldsIndex = (variantFields || []).map((item, index) => {
-        if (item.optionName.trim() == "") {
+      (variantFields || []).map((item, index) => {
+        if (item.optionName.trim() === "") {
           const data = variantFieldsError.map((ite, indx) => {
             if (index === indx) {
               return {
@@ -273,7 +259,6 @@ const AddItemVariant = (props) => {
   // };
 
   const addNewTag = (idx) => (tag) => {
-    console.log(tag);
     const data = variantFields.map((item, index) => {
       if (index === idx) {
         return {
@@ -299,14 +284,11 @@ const AddItemVariant = (props) => {
     enter: 13,
   };
   const delete_option = (idx) => {
-    console.log(idx);
     let variants = variantFields.slice(0);
     variants.splice(idx, 1);
     setVariantFields(variants);
     dispatch(delete_item_varient_option(idx));
   };
-  console.log(variantFieldsError);
-  console.log(variantFields);
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
   return (
     <React.Fragment>

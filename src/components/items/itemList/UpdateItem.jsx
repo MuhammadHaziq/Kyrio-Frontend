@@ -4,18 +4,13 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCollapse,
   CCol,
   CFormGroup,
   CInput,
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CLink,
   CInvalidFeedback,
-  CCardFooter,
   CInputRadio,
   CListGroup,
   CListGroupItem,
@@ -116,7 +111,7 @@ const AddItem = (props) => {
     item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        (item.modifiers || []).map((modi) => {
+        return (item.modifiers || []).map((modi) => {
           modifiers.push({
             id: modi._id,
             title: modi.title,
@@ -127,7 +122,7 @@ const AddItem = (props) => {
     item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        (item.taxes || []).map((tax) => {
+        return (item.taxes || []).map((tax) => {
           taxes.push({
             id: tax._id,
             title: tax.title,
@@ -137,13 +132,11 @@ const AddItem = (props) => {
         });
       });
     const ReturnNumber = (params) => {
-      console.log("params", params);
       let num = params;
       num = Number.isInteger(num) ? num : num.replace("$", "");
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
-    console.log(itemImage);
     const data = {
       item_id: props.item_row_data._id,
       name: fields.item_name,
@@ -253,12 +246,7 @@ const AddItem = (props) => {
 
   const delete_category = () => {
     const data = [props.item_row_data._id];
-    console.log(data);
     dispatch(delete_item_list(JSON.stringify(data)));
-  };
-
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
   };
 
   return (

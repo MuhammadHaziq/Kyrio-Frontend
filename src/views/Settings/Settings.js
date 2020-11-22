@@ -4,21 +4,15 @@ import {
   CCardBody,
   CCol,
   CListGroup,
-  CListGroupItem,
   CRow,
   CCreateElement,
   CSidebar,
-  CSidebarBrand,
   CSidebarNav,
   CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
-  CSidebarNavDropdown,
   CSidebarNavItem,
-  CToggler,
 } from "@coreui/react";
 import { Redirect } from "react-router-dom";
-import { MdSettings, MdStore } from "react-icons/md";
+import { MdSettings } from "react-icons/md";
 import General from "./General/General";
 import BillingSubscription from "./BillingSubscriptions/BillingSubscription.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,18 +26,11 @@ import OpenTickets from "./openTickets/OpenTickets.jsx";
 import Loyalty from "./loyalty/Loyalty.jsx";
 import Taxes from "./taxes/Taxes.jsx";
 import Receipt from "./receipt/Receipt.js";
-import settingRoutes from "./settingRoutes";
 import { get_stores } from "../../actions/settings/storeActions";
-import {
-  HashRouter,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-} from "react-router-dom";
+import { HashRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 
 const Settings = () => {
-  let { path, url } = useRouteMatch();
+  let { url } = useRouteMatch();
   const settings = useSelector((state) => state.auth.user.roleData.settings);
   const [show, setShow] = useState(true);
   const [settingBar, setSettingBar] = useState([]);
@@ -86,7 +73,6 @@ const Settings = () => {
                     colorScheme="light"
                     size="lg"
                     fixed={false}
-                    show={show}
                     onShowChange={() => setShow(!show)}
                     style={{ width: "100%" }}
                   >

@@ -1,37 +1,12 @@
 import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  toggle_employee_single_select,
-  toggle_employee_all_select,
-  update_row_data,
-} from "../../actions/employee/employeeListActions";
-import { useSelector, useDispatch } from "react-redux";
-
 const TotalHoursWorkedDatatable = (props) => {
-  const dispatch = useDispatch();
-
   const StoreName = (cell, row) => {
     return row.store !== undefined ? row.store.name : "";
   };
-
-  const onRowSelect = (row, isSelected, e) => {
-    // dispatch(toggle_employee_single_select(row));
-    console.log(row);
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      // dispatch(toggle_employee_all_select(true));
-    } else {
-      // dispatch(toggle_employee_all_select(false));
-    }
-  };
-
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
+  const EmployeeName = (cell, row) => {
+    return row.employee !== undefined ? row.employee.name : "";
   };
   /**
    *
@@ -54,10 +29,6 @@ const TotalHoursWorkedDatatable = (props) => {
       },
     ],
     sizePerPage: 5,
-    onRowClick: function (row) {
-      console.log(row);
-      // dispatch(update_row_data(row));
-    },
   };
   return (
     <React.Fragment>
@@ -65,7 +36,6 @@ const TotalHoursWorkedDatatable = (props) => {
         data={props.timeCard_list}
         version="4"
         hover={true}
-        selectRow={selectRowProp}
         options={options}
         pagination={true}
       >
@@ -77,7 +47,11 @@ const TotalHoursWorkedDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="employee" dataSort={true}>
+        <TableHeaderColumn
+          dataField="employee"
+          dataSort={true}
+          dataFormat={EmployeeName}
+        >
           Employee
         </TableHeaderColumn>
         <TableHeaderColumn

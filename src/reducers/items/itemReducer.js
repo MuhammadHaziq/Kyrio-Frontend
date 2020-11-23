@@ -67,6 +67,14 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         item_list: [action.response, ...state.item_list],
         item_variants: [],
+        store_list: state.store_list.slice().map((item) => {
+          return {
+            ...item,
+            price: "",
+            inStock: "",
+            lowStock: "",
+          };
+        }),
         redirect_itemList: true,
       });
     }
@@ -80,6 +88,14 @@ const itemReducer = (state = initialState, action) => {
           return item;
         }),
         item_variants: [],
+        store_list: state.store_list.slice().map((item) => {
+          return {
+            ...item,
+            price: "",
+            inStock: "",
+            lowStock: "",
+          };
+        }),
         redirect_itemList: true,
         redirect_update: false,
       });
@@ -97,7 +113,7 @@ const itemReducer = (state = initialState, action) => {
     case TOGGLE_SELECT_SINGLE_ITEM_STORES: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
-          if (item._id === action.response) {
+          if (item.id === action.response) {
             return {
               ...item,
               isSelected: !item.isSelected,
@@ -114,17 +130,28 @@ const itemReducer = (state = initialState, action) => {
       });
     }
     case SET_ITEM_STORE_PRICE: {
-      return Object.assign({}, state, {
-        store_list: state.store_list.slice().map((item) => {
-          if (item.id === action.id) {
+      if (action.id === "") {
+        return Object.assign({}, state, {
+          store_list: state.store_list.slice().map((item) => {
             return {
               ...item,
               price: action.value,
             };
-          }
-          return item;
-        }),
-      });
+          }),
+        });
+      } else {
+        return Object.assign({}, state, {
+          store_list: state.store_list.slice().map((item) => {
+            if (item.id === action.id) {
+              return {
+                ...item,
+                price: action.value,
+              };
+            }
+            return item;
+          }),
+        });
+      }
     }
     case SET_ITEM_STORE_IN_STOCK: {
       return Object.assign({}, state, {
@@ -330,6 +357,14 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         item_row_data: {},
         item_variants: [],
+        store_list: state.store_list.slice().map((item) => {
+          return {
+            ...item,
+            price: "",
+            inStock: "",
+            lowStock: "",
+          };
+        }),
         redirect_itemList: true,
         redirect_update: false,
       });

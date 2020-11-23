@@ -26,6 +26,7 @@ import {
   get_items_store,
   delete_item_list,
   redirect_back_items,
+  remove_row_data,
 } from "../../actions/items/itemActions";
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
@@ -153,6 +154,10 @@ const ItemsList = () => {
     setFadeAddItem(false);
     setUpdateItem(false);
     dispatch(redirect_back_items(true));
+    if (search !== "") {
+      closeSearch();
+    }
+    dispatch(remove_row_data());
   };
   const closeSearch = () => {
     setShowSearch(!showSearch);

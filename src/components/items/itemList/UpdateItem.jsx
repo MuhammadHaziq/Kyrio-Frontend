@@ -96,7 +96,7 @@ const AddItem = (props) => {
 
   const goBack = () => {
     props.goBack();
-    dispatch(remove_row_data());
+    // dispatch(remove_row_data());
   };
 
   const updateItem = () => {
@@ -261,7 +261,7 @@ const AddItem = (props) => {
                   <CInput
                     id="item_name"
                     name="item_name"
-                    placeholder="Category Name"
+                    placeholder="Item Name"
                     onChange={handleOnChange}
                     value={fields.item_name}
                     invalid={errors.item_name}
@@ -582,7 +582,11 @@ const AddItem = (props) => {
 
         <CCardBody>
           <CCol xs="12" sm="12" md="12">
-            <StoresDatatable stores={props.store} stock={inventorySwitch[1]} />
+            <StoresDatatable
+              stores={props.store}
+              stock={inventorySwitch[1]}
+              row_stores={props.item_row_data.stores}
+            />
           </CCol>
         </CCardBody>
       </CCard>

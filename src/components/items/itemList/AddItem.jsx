@@ -29,6 +29,7 @@ import NumberFormat from "react-number-format";
 import {
   save_item,
   toggle_item_stock,
+  set_item_store_values,
 } from "../../../actions/items/itemActions";
 const AddItem = (props) => {
   const [fields, setFields] = useState({
@@ -47,7 +48,6 @@ const AddItem = (props) => {
   const [modifierSwitch, setModifierSwitch] = useState([false, false]);
   const [receiptFile, setrReceiptFile] = useState("");
   const [variantModal, setVariantModal] = useState(false);
-
   const [errors, setErrors] = useState({
     item_name: false,
   });
@@ -157,10 +157,18 @@ const AddItem = (props) => {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFields({
-      ...fields,
-      [name]: value,
-    });
+    if (e.target.name === "price") {
+      dispatch(set_item_store_values("Price", "", value));
+      setFields({
+        ...fields,
+        [name]: value,
+      });
+    } else {
+      setFields({
+        ...fields,
+        [name]: value,
+      });
+    }
   };
 
   const handleOnBlur = (e) => {
@@ -232,7 +240,7 @@ const AddItem = (props) => {
                   <CInput
                     id="item_name"
                     name="item_name"
-                    placeholder="Category Name"
+                    placeholder="Item Name"
                     onChange={handleOnChange}
                     value={fields.item_name}
                     invalid={errors.item_name}

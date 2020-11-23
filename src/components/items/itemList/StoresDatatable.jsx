@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
 const Price = (props) => {
   const dispatch = useDispatch();
-
+  console.log("Price", props);
   const [storePrice, setStorePrice] = useState(props.item.price);
   useEffect(() => {
     if (props.item.price !== null && props.item.price !== undefined) {
@@ -125,17 +125,17 @@ const CheckAvailablity = (props) => {
 const StoresDatatable = (props) => {
   const [fields, setFields] = useState({
     checkAll: true,
+    item_stores: [],
   });
   const [stockStatus, setStockStatus] = useState(props.stock);
 
   const dispatch = useDispatch();
-  console.log(props);
-  console.log(props.stock);
   useEffect(() => {
     if (props.stock !== undefined) {
       setStockStatus(props.stock);
     }
   }, [props.stock]);
+
   const hanldeOnChangeCheck = (e) => {
     setFields({
       ...fields,

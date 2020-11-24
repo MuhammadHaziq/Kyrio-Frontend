@@ -127,6 +127,7 @@ const StoresDatatable = (props) => {
     checkAll: true,
     item_stores: [],
   });
+
   const [stockStatus, setStockStatus] = useState(props.stock);
 
   const dispatch = useDispatch();

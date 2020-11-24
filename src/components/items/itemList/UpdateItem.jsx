@@ -75,7 +75,11 @@ const AddItem = (props) => {
       setFields({
         ...fields,
         item_name: props.item_row_data.name,
-        categoryId: props.item_row_data.category.id,
+        categoryId:
+          props.item_row_data.category !== undefined &&
+          props.item_row_data.category !== null
+            ? props.item_row_data.category.id
+            : "0",
         sold_by: props.item_row_data.soldByType,
         price: props.item_row_data.price,
         cost: "$" + props.item_row_data.cost,
@@ -176,7 +180,6 @@ const AddItem = (props) => {
       stockQty: 200,
     };
     dispatch(update_item_record(data));
-    console.log(data);
   };
 
   const handleOnChange = (e) => {
@@ -519,59 +522,69 @@ const AddItem = (props) => {
         </CCardBody>
       </CCard>
       {/**  Modifiers  */}
-      <CCard>
-        <CCardHeader>
-          <h4>
-            <strong>Modifier</strong>
-          </h4>
-        </CCardHeader>
+      {item.total_modifiers > 0 ? (
+        <>
+          <CCard>
+            <CCardHeader>
+              <h4>
+                <strong>Modifier</strong>
+              </h4>
+            </CCardHeader>
 
-        <CCardBody>
-          <CCol xs="12" sm="12" md="12">
-            <CListGroup>
-              <CListGroupItem
-                key={0}
-                className="justify-content-between"
-                style={{
-                  border: "none",
-                  borderBottom: "1px solid #00000024",
-                }}
-              >
-                <h6>
-                  Modifire
-                  <CSwitch
-                    className={"mx-1 float-right"}
-                    shape="pill"
-                    color={"success"}
-                    checked={modifierSwitch[0]}
-                    onChange={handleChangeModifier(0)}
-                  />
-                </h6>
-                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
-              </CListGroupItem>
-              <CListGroupItem
-                key={1}
-                className="justify-content-between"
-                style={{
-                  border: "none",
-                }}
-              >
-                <h6>
-                  dsd
-                  <CSwitch
-                    className={"mx-1 float-right"}
-                    shape="pill"
-                    color={"success"}
-                    checked={modifierSwitch[1]}
-                    onChange={handleChangeModifier(1)}
-                  />
-                </h6>
-                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
-              </CListGroupItem>
-            </CListGroup>
-          </CCol>
-        </CCardBody>
-      </CCard>
+            <CCardBody>
+              <CCol xs="12" sm="12" md="12">
+                <CListGroup>
+                  <CListGroupItem
+                    key={0}
+                    className="justify-content-between"
+                    style={{
+                      border: "none",
+                      borderBottom: "1px solid #00000024",
+                    }}
+                  >
+                    <h6>
+                      Modifire
+                      <CSwitch
+                        className={"mx-1 float-right"}
+                        shape="pill"
+                        color={"success"}
+                        checked={modifierSwitch[0]}
+                        onChange={handleChangeModifier(0)}
+                      />
+                    </h6>
+                    <p style={{ lineHeight: "normal" }}>
+                      Available in all stores
+                    </p>
+                  </CListGroupItem>
+                  <CListGroupItem
+                    key={1}
+                    className="justify-content-between"
+                    style={{
+                      border: "none",
+                    }}
+                  >
+                    <h6>
+                      dsd
+                      <CSwitch
+                        className={"mx-1 float-right"}
+                        shape="pill"
+                        color={"success"}
+                        checked={modifierSwitch[1]}
+                        onChange={handleChangeModifier(1)}
+                      />
+                    </h6>
+                    <p style={{ lineHeight: "normal" }}>
+                      Available in all stores
+                    </p>
+                  </CListGroupItem>
+                </CListGroup>
+              </CCol>
+            </CCardBody>
+          </CCard>
+        </>
+      ) : (
+        ""
+      )}
       {/**  Stores  */}
       <CCard>
         <CCardHeader>
@@ -585,7 +598,7 @@ const AddItem = (props) => {
             <StoresDatatable
               stores={props.store}
               stock={inventorySwitch[1]}
-              row_stores={props.item_row_data.stores}
+              // stores={props.item_row_data.stores}
             />
           </CCol>
         </CCardBody>

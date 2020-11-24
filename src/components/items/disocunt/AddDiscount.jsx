@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   CButton,
@@ -326,10 +325,13 @@ const AddDiscount = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                    Available in all stores
+                    {/*
                     {storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
                       : "Select All"}
+                    */}
                   </CLabel>
                 </CFormGroup>
               </CCol>

@@ -35,6 +35,9 @@ const initialState = {
   redirect_update: false,
   item_stock_toggle: false,
   item_row_data: {},
+  orignal_store_list: [],
+  total_modifiers: 0,
+  orignal_total_modifiers: 0,
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -57,10 +60,24 @@ const itemReducer = (state = initialState, action) => {
       });
     }
     case GET_ITEM_STORES: {
+      let modifiers = 0;
       return Object.assign({}, state, {
         store_list: (action.response || []).map((item) => {
           return { ...item, isSelected: true, price: "" };
         }),
+        orignal_store_list: (action.response || []).map((item) => {
+          return { ...item, isSelected: true, price: "" };
+        }),
+        total_modifiers: (action.response || [])
+          .map((item) => {
+            return (modifiers = modifiers + (item.modifiers || []).length);
+          })
+          .reduce((a, b) => b + a),
+        orignal_total_modifiers: (action.response || [])
+          .map((item) => {
+            return (modifiers = modifiers + (item.modifiers || []).length);
+          })
+          .reduce((a, b) => b + a),
       });
     }
     case ITEM_SAVE: {
@@ -253,17 +270,6 @@ const itemReducer = (state = initialState, action) => {
           return item;
         }),
       });
-      // return Object.assign({}, state, {
-      //   variants: state.variants.slice().map((item, index) => {
-      //     if (index === action.index) {
-      //       return {
-      //         ...item,
-      //         cost: action.value,
-      //       };
-      //     }
-      //     return item;
-      //   }),
-      // });
     }
     case UPDATE_VARIANT_SKU: {
       return Object.assign({}, state, {
@@ -329,18 +335,47 @@ const itemReducer = (state = initialState, action) => {
       });
     }
     case DELETE_ITEM_LIST: {
-      return Object.assign({}, state, {
-        item_list: state.item_list.filter((item) => {
-          return item.isDeleted !== true;
-        }),
+      let item_list = state.item_list;
+      for (const id of action.response) {
+        item_list = item_list.filter((item) => item._id !== id);
+      }
+      return {
+        ...state,
+        item_list,
         item_row_data: {},
         item_variants: [],
         redirect_itemList: true,
         redirect_update: false,
-      });
+      };
+      // return Object.assign({}, state, {
+      //   item_list: state.item_list.filter((item) => {
+      //     return item.isDeleted !== true;
+      //   }),
+      //   item_row_data: {},
+      //   item_variants: [],
+      //   redirect_itemList: true,
+      //   redirect_update: false,
+      // });
     }
 
     case UPDATE_ITEM_ROW_DATA: {
+      let filterStore = [];
+      const storeList = state.store_list.slice().map((item) => {
+        filterStore = action.response.stores.filter(
+          (ite) => ite.id === item.id
+        )[0];
+        if (
+          filterStore !== undefined &&
+          filterStore !== null &&
+          Object.keys(filterStore).length > 0
+        ) {
+          if (item.id === filterStore.id) {
+            return { ...filterStore, isSelected: true };
+          }
+          return { ...item, isSelected: false };
+        }
+        return { ...item, isSelected: false };
+      });
       return Object.assign({}, state, {
         item_row_data: action.response,
         item_variants:
@@ -348,6 +383,7 @@ const itemReducer = (state = initialState, action) => {
           action.response.varients !== undefined
             ? action.response.varients
             : [],
+        store_list: storeList,
         redirect_itemList: false,
         redirect_update: true,
       });
@@ -357,14 +393,8 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         item_row_data: {},
         item_variants: [],
-        store_list: state.store_list.slice().map((item) => {
-          return {
-            ...item,
-            price: "",
-            inStock: "",
-            lowStock: "",
-          };
-        }),
+        store_list: state.orignal_store_list,
+        total_modifiers: state.orignal_total_modifiers,
         redirect_itemList: true,
         redirect_update: false,
       });

@@ -142,7 +142,12 @@ const AddItem = (props) => {
         item.item_variants.map((item) => {
           return {
             optionName: item.optionName,
-            optionValue: item.optionValue,
+            optionValue: (item.optionValue || []).map((ite) => {
+              return {
+                ...ite,
+                price: ReturnNumber(ite.price),
+              };
+            }),
           };
         })
       ),
@@ -227,7 +232,6 @@ const AddItem = (props) => {
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
-
   return (
     <React.Fragment>
       <CCard>
@@ -498,59 +502,70 @@ const AddItem = (props) => {
         </CCardBody>
       </CCard>
       {/**  Modifiers  */}
-      <CCard>
-        <CCardHeader>
-          <h4>
-            <strong>Modifier</strong>
-          </h4>
-        </CCardHeader>
+      {item.total_modifiers > 0 ? (
+        <>
+          <CCard>
+            <CCardHeader>
+              <h4>
+                <strong>Modifier</strong>
+              </h4>
+            </CCardHeader>
 
-        <CCardBody>
-          <CCol xs="12" sm="12" md="12">
-            <CListGroup>
-              <CListGroupItem
-                key={0}
-                className="justify-content-between"
-                style={{
-                  border: "none",
-                  borderBottom: "1px solid #00000024",
-                }}
-              >
-                <h6>
-                  Modifire
-                  <CSwitch
-                    className={"mx-1 float-right"}
-                    shape="pill"
-                    color={"success"}
-                    checked={modifierSwitch[0]}
-                    onChange={handleChangeModifier(0)}
-                  />
-                </h6>
-                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
-              </CListGroupItem>
-              <CListGroupItem
-                key={1}
-                className="justify-content-between"
-                style={{
-                  border: "none",
-                }}
-              >
-                <h6>
-                  dsd
-                  <CSwitch
-                    className={"mx-1 float-right"}
-                    shape="pill"
-                    color={"success"}
-                    checked={modifierSwitch[1]}
-                    onChange={handleChangeModifier(1)}
-                  />
-                </h6>
-                <p style={{ lineHeight: "normal" }}>Available in all stores</p>
-              </CListGroupItem>
-            </CListGroup>
-          </CCol>
-        </CCardBody>
-      </CCard>
+            <CCardBody>
+              <CCol xs="12" sm="12" md="12">
+                <CListGroup>
+                  <CListGroupItem
+                    key={0}
+                    className="justify-content-between"
+                    style={{
+                      border: "none",
+                      borderBottom: "1px solid #00000024",
+                    }}
+                  >
+                    <h6>
+                      Modifire
+                      <CSwitch
+                        className={"mx-1 float-right"}
+                        shape="pill"
+                        color={"success"}
+                        checked={modifierSwitch[0]}
+                        onChange={handleChangeModifier(0)}
+                      />
+                    </h6>
+                    <p style={{ lineHeight: "normal" }}>
+                      Available in all stores
+                    </p>
+                  </CListGroupItem>
+                  <CListGroupItem
+                    key={1}
+                    className="justify-content-between"
+                    style={{
+                      border: "none",
+                    }}
+                  >
+                    <h6>
+                      dsd
+                      <CSwitch
+                        className={"mx-1 float-right"}
+                        shape="pill"
+                        color={"success"}
+                        checked={modifierSwitch[1]}
+                        onChange={handleChangeModifier(1)}
+                      />
+                    </h6>
+                    <p style={{ lineHeight: "normal" }}>
+                      Available in all stores
+                    </p>
+                  </CListGroupItem>
+                </CListGroup>
+              </CCol>
+            </CCardBody>
+          </CCard>
+        </>
+      ) : (
+        ""
+      )}
+
       {/**  Stores  */}
       <CCard>
         <CCardHeader>

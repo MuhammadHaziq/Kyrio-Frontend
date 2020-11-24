@@ -19,6 +19,9 @@ const ItemsListDatatable = (props) => {
         })
       : row.value.toFixed(2) + " %";
   };
+  const showRestricted = (cell, row) => {
+    return row.restricted === true ? "Yes" : "No";
+  };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_discount_single_select(row));
   };
@@ -86,7 +89,11 @@ const ItemsListDatatable = (props) => {
         <TableHeaderColumn dataField="value" dataFormat={showValue}>
           Value
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="restricted" dataSort={true}>
+        <TableHeaderColumn
+          dataField="restricted"
+          dataSort={true}
+          dataFormat={showRestricted}
+        >
           Restricted access
         </TableHeaderColumn>
       </BootstrapTable>

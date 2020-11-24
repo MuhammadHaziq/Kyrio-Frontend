@@ -124,6 +124,7 @@ const Barcode = (props) => {
       id="variantBarcode"
       type="number"
       name="variantBarcode"
+      value={variantBarcode}
       placeholder="Barcode"
       onChange={handleOnChange}
       onBlur={handleOnBlur}
@@ -159,6 +160,7 @@ const Sku = (props) => {
       id="variantSKU"
       name="variantSKU"
       placeholder="SKU"
+      value={variantSKU}
       onChange={handleOnChange}
       onBlur={handleOnBlur}
     />

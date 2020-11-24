@@ -54,17 +54,17 @@ const TotalHoursWorked = () => {
     checkAllEmployee: true,
   });
 
+  // useEffect(() => {
+  //   if (store.stores_list.length === 0) {
+  //   }
+  // }, [dispatch, store.stores_list.length === 0]);
+  // useEffect(() => {
+  //   if (employee.employee_list.length === 0) {
+  //   }
+  // }, [dispatch, employee.employee_list.length === 0]);
   useEffect(() => {
-    if (store.stores_list.length === 0) {
-      dispatch(get_stores());
-    }
-  }, [dispatch, store.stores_list.length === 0]);
-  useEffect(() => {
-    if (employee.employee_list.length === 0) {
-      dispatch(get_employee_list());
-    }
-  }, [dispatch, employee.employee_list.length === 0]);
-  useEffect(() => {
+    dispatch(get_employee_list());
+    dispatch(get_stores());
     dispatch(get_timeCards());
   }, [dispatch]);
 

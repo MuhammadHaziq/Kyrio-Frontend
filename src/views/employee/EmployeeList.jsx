@@ -39,6 +39,7 @@ const EmployeeList = () => {
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
+  const auth = useSelector((state) => state.auth);
   const userRoles = useSelector(
     (state) => state.employeeReducers.userRolesReducer
   );

@@ -50,8 +50,8 @@ const AddEmployee = (props) => {
     checkAll: true,
     sendMail: true,
     posPin: "0000",
-    allowBackOffice: '',
-    pos: ''
+    allowBackOffice: "",
+    pos: "",
   });
   const [errors, setErrors] = useState({
     name: false,
@@ -101,14 +101,22 @@ const AddEmployee = (props) => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
-      const allowBackOffice = (props.user_roles || []).filter(item => item._id === e.target.value).map(item => { return item.allowBackoffice.enable })[0]
-      const pos = (props.user_roles || []).filter(item => item._id === e.target.value).map(item => { return item.allowPOS.enable })[0]
+      const allowBackOffice = (props.user_roles || [])
+        .filter((item) => item._id === e.target.value)
+        .map((item) => {
+          return item.allowBackoffice.enable;
+        })[0];
+      const pos = (props.user_roles || [])
+        .filter((item) => item._id === e.target.value)
+        .map((item) => {
+          return item.allowPOS.enable;
+        })[0];
       setFields({
         ...fields,
         posPin: "0000",
         [name]: value,
         allowBackOffice: allowBackOffice,
-        pos: pos
+        pos: pos,
       });
     } else {
       setFields({
@@ -188,21 +196,20 @@ const AddEmployee = (props) => {
         email: validator.isEmpty(fields.email),
       });
       return false;
-    } else if (fields.phone === "") {
-      setErrors({
-        ...errors,
-        phone: validator.isEmpty(fields.phone),
-      });
-      return false;
     } else if (fields.role === "0") {
       setErrors({
         ...errors,
         role: true,
       });
       return false;
-    } else if (props.user_roles.filter((item) => item._id === fields.role).map((item) => {
-      return item.allowPOS.enable;
-    })[0] === true && fields.posPin === '0000') {
+    } else if (
+      props.user_roles
+        .filter((item) => item._id === fields.role)
+        .map((item) => {
+          return item.allowPOS.enable;
+        })[0] === true &&
+      fields.posPin === "0000"
+    ) {
       setErrors({
         ...errors,
         posPin: true,
@@ -225,39 +232,41 @@ const AddEmployee = (props) => {
             })
         ),
         roles: JSON.stringify(
-          props.user_roles.filter((item) => item._id === fields.role).map((item) => {
-            return {
-              id: item._id,
-              name: item.roleName
-            };
-          })[0]
+          props.user_roles
+            .filter((item) => item._id === fields.role)
+            .map((item) => {
+              return {
+                id: item._id,
+                name: item.roleName,
+              };
+            })[0]
         ),
       };
       if (
-        props.user_roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.allowBackoffice.enable;
-        })[0] === true
+        props.user_roles
+          .filter((item) => item._id === fields.role)
+          .map((item) => {
+            return item.allowBackoffice.enable;
+          })[0] === true
       ) {
         data.sendMail = fields.sendMail;
       }
       if (
-        props.user_roles.filter((item) => item._id === fields.role).map((item) => {
-          return item.allowPOS.enable;
-        })[0] === true
+        props.user_roles
+          .filter((item) => item._id === fields.role)
+          .map((item) => {
+            return item.allowPOS.enable;
+          })[0] === true
       ) {
         data.posPin = fields.posPin;
       }
-      console.log(data)
-      console.log(props.user_roles.filter((item) => item._id === fields.role).map((item) => {
-        return item.allowPOS.enable;
-      })[0] === true)
+      console.log(data);
       dispatch(add_new_employee(data));
     }
   };
 
   return (
     <React.Fragment>
-
       <CRow className="justify-content-left">
         <CCol md="9" lg="9" xl="6">
           <CCard>
@@ -301,9 +310,7 @@ const AddEmployee = (props) => {
                     invalid={errors.email}
                   />
                   <CInvalidFeedback>
-                    {errors.email === true
-                      ? "Please Enter Employee Email"
-                      : ""}
+                    {errors.email === true ? "Please Enter Employee Email" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
               </CFormGroup>
@@ -340,13 +347,9 @@ const AddEmployee = (props) => {
                     name="phone"
                     value={fields.phone}
                     onChange={handleOnChange}
-                    onBlur={handleOnBlur}
-                    invalid={errors.phone}
                   />
                   <CInvalidFeedback>
-                    {errors.phone === true
-                      ? "Please Enter Employee Phone"
-                      : ""}
+                    {errors.phone === true ? "Please Enter Employee Phone" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
                 <CFormText color="muted">ex. (999) 999-9999</CFormText>
@@ -400,7 +403,7 @@ const AddEmployee = (props) => {
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"sendMail"}>
                         Invite to the back office
-                        </CLabel>
+                      </CLabel>
                     </CFormGroup>
                     <CFormGroup>
                       <CLabel htmlFor="posPin">POS PIN</CLabel>
@@ -441,7 +444,7 @@ const AddEmployee = (props) => {
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"sendMail"}>
                         Invite to the back office
-                        </CLabel>
+                      </CLabel>
                     </CFormGroup>
                   </React.Fragment>
                 ) : fields.pos === true ? (
@@ -472,23 +475,23 @@ const AddEmployee = (props) => {
                       </CInputGroup>
                     </CFormGroup>
                   </React.Fragment>
-                ) : ''}
+                ) : (
+                  ""
+                )}
               </CFormGroup>
             </CCardBody>
             {collapse[0] ? (
               <CCardFooter>
                 <h4>
                   Stores
-                    <div className="card-footer-actions float-right">
+                  <div className="card-footer-actions float-right">
                     <CLink
                       className="card-footer-action"
                       onClick={() => toggle(0)}
                     >
                       <CIcon
                         name={
-                          collapse[0]
-                            ? "cil-chevron-bottom"
-                            : "cil-chevron-top"
+                          collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
                         }
                       />
                     </CLink>
@@ -504,8 +507,8 @@ const AddEmployee = (props) => {
                 </span>
               </CCardFooter>
             ) : (
-                ""
-              )}
+              ""
+            )}
           </CCard>
           <CCollapse show={!collapse[0]}>
             <CCard>
@@ -519,9 +522,7 @@ const AddEmployee = (props) => {
                     >
                       <CIcon
                         name={
-                          collapse[0]
-                            ? "cil-chevron-bottom"
-                            : "cil-chevron-top"
+                          collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
                         }
                       />
                     </CLink>
@@ -553,11 +554,7 @@ const AddEmployee = (props) => {
                   </CCol>
                   <CCol md="8">
                     {storeId.map((item, index) => (
-                      <CFormGroup
-                        variant="custom-checkbox"
-                        inline
-                        key={index}
-                      >
+                      <CFormGroup variant="custom-checkbox" inline key={index}>
                         <CInputCheckbox
                           custom
                           name="storeId"
@@ -589,7 +586,7 @@ const AddEmployee = (props) => {
                 onClick={goBack}
               >
                 BACK
-                </CButton>
+              </CButton>
             </CCol>
             <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
               <CButton
@@ -600,7 +597,7 @@ const AddEmployee = (props) => {
                 onClick={goBack}
               >
                 CANCEL
-                </CButton>
+              </CButton>
             </CCol>
             <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
               <CButton
@@ -612,12 +609,11 @@ const AddEmployee = (props) => {
                 onClick={saveEmployee}
               >
                 SAVE
-                </CButton>
+              </CButton>
             </CCol>
           </CRow>
         </CCol>
       </CRow>
-
     </React.Fragment>
   );
 };

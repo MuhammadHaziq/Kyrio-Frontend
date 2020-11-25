@@ -21,17 +21,51 @@ import {
 } from "@coreui/react";
 import { MdPerson, MdLock, MdBusiness, MdFlag } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  CountryDropdown,
-  RegionDropdown,
-  CountryRegionData,
-} from "react-country-region-selector";
+import { CountryDropdown } from "react-country-region-selector";
 import { signup } from "../../actions/authAction";
 import validator from "validator";
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const [formState, setFormState] = useState({
+    values: {
+      username: "",
+      email: "",
+      password: "",
+      businessName: "",
+      country: "",
+    },
+    errors: {
+      username: false,
+      email: false,
+      password: false,
+      businessName: false,
+      country: false,
+      terms: false,
+    },
+  });
+
   const dispatch = useDispatch();
   const msg = useSelector((state) => state.msg);
+
+  useEffect(() => {
+    fetch("https://extreme-ip-lookup.com/json/")
+      .then((res) => res.json())
+      .then((response) => {
+        setFormState((formState) => ({
+          ...formState,
+          values: {
+            ...formState.values,
+            country: response.country,
+          },
+        }));
+      })
+      .catch((data, status) => {
+        console.log("Request failed:", data);
+      });
+  }, []);
+
   useEffect(() => {
     if (msg.error) {
       setLoading(false);
@@ -54,25 +88,6 @@ const Register = () => {
       setRedirect(true);
     }
   }, [msg]);
-  const [loading, setLoading] = useState(false);
-  const [redirect, setRedirect] = useState(false);
-  const [formState, setFormState] = useState({
-    values: {
-      username: "",
-      email: "",
-      password: "",
-      businessName: "",
-      country: "",
-    },
-    errors: {
-      username: false,
-      email: false,
-      password: false,
-      businessName: false,
-      country: false,
-      terms: false,
-    },
-  });
 
   const handleChange = (event) => {
     event.persist();

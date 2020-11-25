@@ -60,7 +60,7 @@ const TimeCards = () => {
     setShowAlert(!showAlert);
   };
 
-  const addTimeCard = () => {
+  const addRole = () => {
     setFadeUserRoles(false);
     setFadeAddUserRoles(true);
     setUserRolesUpdate(false);
@@ -85,15 +85,15 @@ const TimeCards = () => {
             />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeAddUserRoles ? (
           <CFade timeout={timeout} in={fadeAddUserRoles}>
             <AddEmployeeTime goBack={goBack} />
           </CFade>
         ) : (
-            ""
-          )}
+          ""
+        )}
         {fadeUserRoles ? (
           <React.Fragment>
             <CCol xs="12" sm="12">
@@ -110,7 +110,7 @@ const TimeCards = () => {
                       <CButton
                         color="success"
                         className="btn-square pull right"
-                        onClick={addTimeCard}
+                        onClick={addRole}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -124,29 +124,29 @@ const TimeCards = () => {
                             className="ci-primary"
                           ></polygon>
                         </svg>
-                        ADD TIMECARD
+                        ADD ROLE
                       </CButton>
 
                       {userRoles.user_roles.filter(
                         (item) => item.isDeleted === true
                       ).length > 0 ? (
-                          <React.Fragment>
-                            <ConformationAlert
-                              button_text="Delete"
-                              heading="Delete User Role"
-                              section={`Are you sure you want to delete the User Role?`}
-                              buttonAction={deleteUserRole}
-                              show_alert={showAlert}
-                              hideAlert={setShowAlert}
-                              variant="outline"
-                              className="ml-2 btn-square"
-                              color="danger"
-                              block={false}
-                            />
-                          </React.Fragment>
-                        ) : (
-                          ""
-                        )}
+                        <React.Fragment>
+                          <ConformationAlert
+                            button_text="Delete"
+                            heading="Delete User Role"
+                            section={`Are you sure you want to delete the User Role?`}
+                            buttonAction={deleteUserRole}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
+                            variant="outline"
+                            className="ml-2 btn-square"
+                            color="danger"
+                            block={false}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
                     </CCol>
                   </CRow>
                 </CCardHeader>
@@ -157,8 +157,8 @@ const TimeCards = () => {
             </CCol>
           </React.Fragment>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
     </React.Fragment>
   );

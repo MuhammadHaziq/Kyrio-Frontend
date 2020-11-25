@@ -1,8 +1,10 @@
 import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import { useSelector } from "react-redux";
 
 const UserRolesDatatable = (props) => {
+  const auth = useSelector((state) => state.auth);
   const AccessModules = (cell, row) => {
     const backOffice = row.allowBackoffice.enable === true ? "Back office" : "";
     const pos = row.allowPOS.enable === true ? "POS" : "";
@@ -34,6 +36,7 @@ const UserRolesDatatable = (props) => {
     mode: "checkbox",
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
+    unselectable: [1],
   };
   /**
    *

@@ -14,7 +14,6 @@ import {
   CInvalidFeedback,
   CFormText,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import { MdEmail, MdPhone, MdAddLocation, MdNote } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";

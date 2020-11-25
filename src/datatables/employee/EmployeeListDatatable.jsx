@@ -34,6 +34,7 @@ const EmployeeListDatatable = (props) => {
     mode: "checkbox",
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
+    unselectable: [1],
   };
   /**
    *

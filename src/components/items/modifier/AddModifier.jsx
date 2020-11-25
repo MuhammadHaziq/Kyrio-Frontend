@@ -25,6 +25,7 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
+import { MdLocalOffer } from "react-icons/md";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { add_new_modifier } from "../../../actions/items/modifiresActions";
@@ -37,7 +38,7 @@ const AddModifier = (props) => {
     checkAll: true,
   });
   const [modifierFields, setModifierFields] = useState([
-    { id: "0", name: "test", price: "$0.0", position: 0 },
+    { id: "0", name: "", price: "", position: 0 },
   ]);
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
@@ -535,10 +536,11 @@ const AddModifier = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    {storeId.filter((item) => item.isSelected !== true)
+                    Available in all stores
+                    {/*storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
-                      : "Select All"}
+                      : "Select All"*/}
                   </CLabel>
                 </CFormGroup>
               </CCol>

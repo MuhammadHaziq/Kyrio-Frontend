@@ -227,6 +227,7 @@ const TimeCards = () => {
   }
 
   const handleEvent = (event, picker) => {
+    // console.log(picker.startDate);
     setDateRange({
       startDate: picker.startDate,
       endDate: picker.endDate,

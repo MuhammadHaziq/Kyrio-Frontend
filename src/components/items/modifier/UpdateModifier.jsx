@@ -42,7 +42,7 @@ const UpdateModifier = (props) => {
   });
   const [showAlert, setShowAlert] = useState(false);
   const [modifierFields, setModifierFields] = useState([
-    { _id: "0", name: "test", price: "$0.0", position: 0 },
+    { _id: "0", name: "", price: "", position: 0 },
   ]);
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
@@ -583,10 +583,11 @@ const UpdateModifier = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    {storeId.filter((item) => item.isSelected !== true)
+                    Available in all stores
+                    {/*storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
-                      : "Select All"}
+                      : "Select All"*/}
                   </CLabel>
                 </CFormGroup>
               </CCol>

@@ -13,14 +13,14 @@ import {
 import CIcon from '@coreui/icons-react'
 import dateformat from "dateformat";
 import MainChartExample from '../charts/MainChartExample.js'
-
+import FilterComponent from './FilterComponent'
 const Dashboard = () => {
 
   const [month, setMonth] = useState(dateformat(new Date(),"m"));
   const [year, setYear] = useState(dateformat(new Date(),"yyyy"));
 
   const getDaysInMonth = (month, year) => (new Array(31)).fill('').map((v,i)=>new Date(year,month-1,i+1)).filter(v=>v.getMonth()===month-1).map(itm=>dateformat(itm,"mmm dd"))
-  
+
   const [Days, setDays] = useState(getDaysInMonth(month,year));
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
@@ -45,7 +45,7 @@ const Dashboard = () => {
   const changeFilter = (v) => {
     if(v === "Hours"){
       setFilter("Hours");
-      
+
     } else if(v === "Days"){
       setFilter("Days");
       setLoading(false);
@@ -67,11 +67,13 @@ const Dashboard = () => {
         }
       })
       setLoading(true);
-      
+
     }
   }
   return (
     <>
+    <FilterComponent/>
+    
       <CCard>
         <CCardBody>
           <CRow>

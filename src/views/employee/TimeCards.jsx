@@ -53,14 +53,18 @@ const TimeCards = () => {
     endDate: moment(),
     ranges: {
       Today: [moment(), moment()],
-      Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
-      "Last 7 Days": [moment().subtract(6, "days"), moment()],
-      "Last 30 Days": [moment().subtract(29, "days"), moment()],
-      "This Month": [moment().startOf("month"), moment().endOf("month")],
-      "Last Month": [
-        moment().subtract(1, "month").startOf("month"),
-        moment().subtract(1, "month").endOf("month"),
-      ],
+      Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+      'This Month': [moment().startOf('month'), moment().endOf('month')],
+      'Last Month': [
+        moment()
+          .subtract(1, 'month')
+          .startOf('month'),
+        moment()
+          .subtract(1, 'month')
+          .endOf('month')
+      ]
     },
   });
   const [fields, setFields] = useState({
@@ -226,9 +230,10 @@ const TimeCards = () => {
     label = start;
   }
 
-  const handleEvent = (event, picker) => {
+  const handleEvent = (event, picker)=> {
     // console.log(picker.startDate);
     setDateRange({
+      ...dateRange,
       startDate: picker.startDate,
       endDate: picker.endDate,
     });
@@ -246,15 +251,15 @@ const TimeCards = () => {
             />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeAddTimeCard ? (
           <CFade timeout={timeout} in={fadeAddTimeCard}>
             <AddEmployeeTime store={store.stores_list} goBack={goBack} />
           </CFade>
         ) : (
-          ""
-        )}
+            ""
+          )}
         {fadeTimeCard ? (
           <React.Fragment>
             <CRow className="mb-3">
@@ -279,7 +284,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Stores"
                       : storeId.filter((item) => item.isSelected === true)
-                          .length + " Stores"}
+                        .length + " Stores"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => storeHandleChange("0")}>
@@ -334,7 +339,7 @@ const TimeCards = () => {
                       .length === 0
                       ? "All Employees"
                       : employeeId.filter((item) => item.isSelected === true)
-                          .length + " Employee"}
+                        .length + " Employee"}
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem onClick={() => employeeHandleChange("0")}>
@@ -420,23 +425,23 @@ const TimeCards = () => {
                         {timeCard.timeCard_list.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
-                          <React.Fragment>
-                            <ConformationAlert
-                              button_text="Delete"
-                              heading="Delete Time Card"
-                              section={`Are you sure you want to delete the Time Card?`}
-                              buttonAction={deleteTimeCard}
-                              show_alert={showAlert}
-                              hideAlert={setShowAlert}
-                              variant="outline"
-                              className="ml-2 btn-square"
-                              color="danger"
-                              block={false}
-                            />
-                          </React.Fragment>
-                        ) : (
-                          ""
-                        )}
+                            <React.Fragment>
+                              <ConformationAlert
+                                button_text="Delete"
+                                heading="Delete Time Card"
+                                section={`Are you sure you want to delete the Time Card?`}
+                                buttonAction={deleteTimeCard}
+                                show_alert={showAlert}
+                                hideAlert={setShowAlert}
+                                variant="outline"
+                                className="ml-2 btn-square"
+                                color="danger"
+                                block={false}
+                              />
+                            </React.Fragment>
+                          ) : (
+                            ""
+                          )}
                       </CCol>
                     </CRow>
                   </CCardHeader>
@@ -451,8 +456,8 @@ const TimeCards = () => {
             </CRow>
           </React.Fragment>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     </React.Fragment>
   );

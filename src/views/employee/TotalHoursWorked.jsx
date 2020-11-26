@@ -179,6 +179,7 @@ const TotalHoursWorked = () => {
 
   const handleEvent = (event, picker) => {
     setDateRange({
+      ...dateRange,
       startDate: picker.startDate,
       endDate: picker.endDate,
     });

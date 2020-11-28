@@ -1,6 +1,7 @@
 import settingsReducer from "./settingsReducer";
 import authReducer from "./authReducer";
 import messageReducer from "./messageReducer";
+import filterComponentReducer from "./dashboard/filterComponentReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -16,7 +17,7 @@ import featuresReducer from "./settings/featuresReducer";
 import receiptReducer from "./settings/receiptReducer";
 import customerReducer from "./customer/customerReducer";
 import employeeListReducer from "./employee/employeeListReducer";
-import timeCardReducer from './employee/timeCardReducer'
+import timeCardReducer from "./employee/timeCardReducer";
 import userRolesReducer from "./employee/userRolesReducer";
 import openTicketReducer from "./settings/openTicketReducer";
 import { combineReducers } from "redux";
@@ -34,6 +35,10 @@ const items = combineReducers({
   discountReducer,
   modifiresReducer,
 });
+const dashBoard = combineReducers({
+  filterComponentReducer,
+});
+
 const settingReducers = combineReducers({
   featuresReducer,
   paymentTypesReducer,
@@ -52,12 +57,13 @@ const customerReducers = combineReducers({
 const employeeReducers = combineReducers({
   employeeListReducer,
   userRolesReducer,
-  timeCardReducer
+  timeCardReducer,
 });
 const rootReducer = combineReducers({
   settings: settingsReducer,
   auth: authReducer,
   msg: messageReducer,
+  dashBoard,
   items,
   settingReducers,
   customerReducers,

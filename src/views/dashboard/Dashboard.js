@@ -16,12 +16,12 @@ import MainChartExample from "../charts/MainChartExample.js";
 import FilterComponent from "./FilterComponent";
 import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const [month, setMonth] = useState(dateformat(new Date(), "m"));
   const [year, setYear] = useState(dateformat(new Date(), "yyyy"));
-
   const getDaysInMonth = (month, year) =>
     new Array(31)
       .fill("")
@@ -29,182 +29,61 @@ const Dashboard = () => {
       .filter((v) => v.getMonth() === month - 1)
       .map((itm) => dateformat(itm, "mmm dd"));
 
-  const [Days, setDays] = useState(getDaysInMonth(month, year));
+  // const [Days, setDays] = useState(getDaysInMonth(month, year));
+  const [Days, setDays] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
   const [salesFilter, setSalesFilter] = useState("Gross Sales");
+  const [daysFilter, setDaysFilter] = useState([
+    { days: 0, name: "Hours", disable: true },
+    { days: 1, name: "Days", disable: true },
+    { days: 6, name: "Weeks", disable: true },
+    { days: 28, name: "Months", disable: true },
+    { days: 120, name: "Quaters", disable: true },
+    { days: 362, name: "Years", disable: true },
+  ]);
+  const usePrevious = (data) => {
+    const ref = React.useRef();
+    useEffect(() => {
+      ref.current = data;
+    }, [data]);
+    return ref.current;
+  };
 
+  const getNatural = (num) => {
+    return parseFloat(num.toString().split(".")[0]);
+  };
+
+  const days = (from, to) => {
+    var d = from,
+      a = [],
+      i = 0;
+
+    const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
+    const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
+    const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
+    const dateGape =
+      daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
+    while (i < getNatural(dateGape)) {
+      a.push(dateformat(d, "mmm dd"));
+      d = moment(d, "DD-MM-YYYY").add(diff, "days");
+      i++;
+    }
+    if (i === getNatural(daysDiff)) {
+      // include last day
+      a.push(dateformat(d, "mmm dd"));
+    }
+    setDays(a);
+    return a;
+  };
+
+  const filterComponent = useSelector(
+    (state) => state.dashBoard.filterComponentReducer
+  );
   // Sales by Day full month
-  const [sales, setSales] = useState({
-    grossSales: {
-      data: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        123,
-        14,
-        213,
-        3,
-        421,
-        123,
-        124,
-        123,
-        123,
-        412,
-        2312,
-        1412,
-        132,
-        24,
-        3435,
-        23,
-        12433,
-        123,
-        53,
-      ],
-      data2: [
-        1,
-        344,
-        3,
-        6757,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        23,
-        14,
-        4545,
-        3,
-        131,
-        643,
-        124,
-        123,
-        12351,
-        843,
-        786,
-        1412,
-        132,
-        24,
-        511,
-        23,
-        9867,
-        123,
-        42,
-      ],
-      data3: [
-        1,
-        32,
-        3141,
-        57,
-        55,
-        6241,
-        4123,
-        0,
-        85,
-        1,
-        767,
-        3453,
-        23,
-        341,
-        4545,
-        453,
-        2234,
-        453,
-        9866,
-        876,
-        542,
-        24,
-        23,
-        14243,
-        2435,
-        3454,
-        764,
-        456,
-        4,
-        234,
-        87,
-      ],
-      data4: [
-        1,
-        344,
-        3,
-        67,
-        5213,
-        5223,
-        211,
-        200,
-        67,
-        34,
-        1256,
-        634,
-        23,
-        598,
-        235,
-        0,
-        4223,
-        3456,
-        123,
-        345,
-        875,
-        56,
-        45,
-        2356,
-        234,
-        634,
-        4562,
-        4563,
-        0,
-        653,
-        234,
-      ],
-      data5: [
-        1,
-        344,
-        3,
-        757,
-        534,
-        4242,
-        2126,
-        0,
-        5844,
-        56,
-        12433,
-        1223,
-        23,
-        675,
-        7674,
-        234,
-        2368,
-        2346,
-        345,
-        123,
-        3466,
-        45,
-        56,
-        23624,
-        345,
-        234,
-        2432,
-        4325,
-        234,
-        546,
-        345,
-      ],
-      labels: Days,
-    },
-  });
+  const [sales, setSales] = useState({});
+  var prevDateRange = usePrevious(filterComponent.filterDate);
+  var prevDays = usePrevious(Days);
 
   useEffect(() => {
     return () => {
@@ -213,10 +92,216 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (prevDays !== Days && prevDays !== undefined) {
+      setSales({
+        grossSales: {
+          data: [
+            1,
+            2,
+            3,
+            4,
+            5,
+            62,
+            21,
+            142,
+            43,
+            1,
+            123,
+            123,
+            123,
+            14,
+            213,
+            3,
+            421,
+            123,
+            124,
+            123,
+            123,
+            412,
+            2312,
+            1412,
+            132,
+            24,
+            3435,
+            23,
+            12433,
+            123,
+            53,
+          ],
+          data2: [
+            1,
+            344,
+            3,
+            6757,
+            5,
+            62,
+            21,
+            142,
+            43,
+            1,
+            123,
+            123,
+            23,
+            14,
+            4545,
+            3,
+            131,
+            643,
+            124,
+            123,
+            12351,
+            843,
+            786,
+            1412,
+            132,
+            24,
+            511,
+            23,
+            9867,
+            123,
+            42,
+          ],
+          data3: [
+            1,
+            32,
+            3141,
+            57,
+            55,
+            6241,
+            4123,
+            0,
+            85,
+            1,
+            767,
+            3453,
+            23,
+            341,
+            4545,
+            453,
+            2234,
+            453,
+            9866,
+            876,
+            542,
+            24,
+            23,
+            14243,
+            2435,
+            3454,
+            764,
+            456,
+            4,
+            234,
+            87,
+          ],
+          data4: [
+            1,
+            344,
+            3,
+            67,
+            5213,
+            5223,
+            211,
+            200,
+            67,
+            34,
+            1256,
+            634,
+            23,
+            598,
+            235,
+            0,
+            4223,
+            3456,
+            123,
+            345,
+            875,
+            56,
+            45,
+            2356,
+            234,
+            634,
+            4562,
+            4563,
+            0,
+            653,
+            234,
+          ],
+          data5: [
+            1,
+            344,
+            3,
+            757,
+            534,
+            4242,
+            2126,
+            0,
+            5844,
+            56,
+            12433,
+            1223,
+            23,
+            675,
+            7674,
+            234,
+            2368,
+            2346,
+            345,
+            123,
+            3466,
+            45,
+            56,
+            23624,
+            345,
+            234,
+            2432,
+            4325,
+            234,
+            546,
+            345,
+          ],
+          labels: Days,
+        },
+      });
+    }
+  }, [prevDays, Days]);
+
+  useEffect(() => {
     if (sales.grossSales) {
       setLoading(true);
     }
   }, [sales.grossSales]);
+
+  useEffect(() => {
+    if (
+      filterComponent.filterDate !== prevDateRange &&
+      prevDateRange !== undefined
+    ) {
+      const timeDiff = moment
+        .duration(
+          moment(filterComponent.filterDate.endDate).diff(
+            moment(filterComponent.filterDate.startDate)
+          )
+        )
+        .asDays();
+
+      setDaysFilter(
+        daysFilter.map((item) => {
+          if (parseInt(item.days) <= getNatural(timeDiff)) {
+            return {
+              ...item,
+              disable: false,
+            };
+          }
+          return item;
+        })
+      );
+      days(
+        filterComponent.filterDate.startDate,
+        filterComponent.filterDate.endDate
+      );
+    }
+  }, [filterComponent.filterDate, prevDateRange]);
 
   const changeFilter = (v) => {
     if (v === "Hours") {
@@ -411,8 +496,8 @@ const Dashboard = () => {
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
+  console.log(sales);
 
-  console.log(salesFilter);
   return (
     <>
       <FilterComponent />
@@ -508,19 +593,18 @@ const Dashboard = () => {
                 <CIcon name="cil-cloud-download" />
               </CButton>
               <CButtonGroup className="float-right mr-3">
-                {["Hours", "Days", "Weeks", "Months", "Quaters", "Years"].map(
-                  (value) => (
-                    <CButton
-                      color="outline-secondary"
-                      key={value}
-                      className="mx-0"
-                      onClick={() => changeFilter(value)}
-                      active={value === filter}
-                    >
-                      {value}
-                    </CButton>
-                  )
-                )}
+                {daysFilter.map((value, index) => (
+                  <CButton
+                    color="outline-secondary"
+                    key={index}
+                    className="mx-0"
+                    onClick={() => changeFilter(value.name)}
+                    active={value.name === filter}
+                    disabled={value.disable}
+                  >
+                    {value.name}
+                  </CButton>
+                ))}
               </CButtonGroup>
             </CCol>
           </CRow>

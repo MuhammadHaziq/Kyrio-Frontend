@@ -69,7 +69,7 @@ const FilterComponent = (props) => {
   });
   const usePrevious = (data) => {
     const ref = React.useRef();
-    React.useEffect(() => {
+    useEffect(() => {
       ref.current = data;
     }, [data]);
     return ref.current;
@@ -293,7 +293,6 @@ const FilterComponent = (props) => {
     Math.floor(timeRange.startTime / 60 / 60) >= 12 ? "PM" : "AM";
   var endTimeZone = Math.floor(timeRange.endTime / 60 / 60) >= 12 ? "PM" : "AM";
 
-  console.log(toggleDropDown);
   return (
     <>
       <CRow className="mb-3">

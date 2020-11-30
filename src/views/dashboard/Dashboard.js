@@ -69,6 +69,7 @@ const Dashboard = () => {
         // include last day
         a.push(dateformat(d, "mmm dd"));
       }
+      setFilter("Days");
     } else if (getNatural(daysDiff) === 0) {
       const totalHours = 24;
       var i = 1;
@@ -77,6 +78,61 @@ const Dashboard = () => {
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
         i++;
       }
+      setFilter("Hours");
+    }
+    setDays(a);
+  };
+
+  const days_filter = (from, to, filterName) => {
+    var d = from,
+      a = [],
+      i = 0;
+
+    const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
+    var time = moment(to).toDate(); // This will return a copy of the Date that the moment uses
+    time.setHours(0);
+    time.setMinutes(0);
+    time.setSeconds(0);
+    time.setMilliseconds(0);
+    const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
+    const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
+    if (getNatural(daysDiff) > 0 && filterName === "Days") {
+      const dateGape =
+        daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
+      while (i < getNatural(dateGape)) {
+        a.push(dateformat(d, "mmm dd"));
+        d = moment(d, "DD-MM-YYYY").add(diff, "days");
+        i++;
+      }
+      if (i === getNatural(daysDiff)) {
+        // include last day
+        a.push(dateformat(d, "mmm dd"));
+      }
+      setFilter("Days");
+    }
+    // else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
+    //   const diff = getNatural(monthDiff) === 0 ? 7 : getNatural(monthDiff);
+    //   const dateGape =
+    //     daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
+    //   while (i < getNatural(dateGape)) {
+    //     a.push(dateformat(d, "mmm dd"));
+    //     d = moment(d, "DD-MM-YYYY").add(diff, "days");
+    //     i++;
+    //   }
+    //   if (i === getNatural(daysDiff)) {
+    //     // include last day
+    //     a.push(dateformat(d, "mmm dd"));
+    //   }
+    // }
+    else if (getNatural(daysDiff) === 0) {
+      const totalHours = 24;
+      var i = 1;
+      while (i <= totalHours) {
+        a.push(moment(time).format("LT"));
+        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
+        i++;
+      }
+      setFilter("Hours");
     }
     setDays(a);
   };
@@ -88,6 +144,7 @@ const Dashboard = () => {
   const [sales, setSales] = useState({});
   var prevDateRange = usePrevious(filterComponent.filterDate);
   var prevDays = usePrevious(Days);
+  var prevFilter = usePrevious(filter);
 
   useEffect(() => {
     return () => {
@@ -275,6 +332,13 @@ const Dashboard = () => {
   }, [prevDays, Days]);
 
   useEffect(() => {
+    if (prevFilter !== filter && prevFilter !== undefined) {
+      console.log("filter", filter);
+      console.log("prevFilter", prevFilter);
+    }
+  }, [prevFilter, filter]);
+
+  useEffect(() => {
     if (sales.grossSales) {
       setLoading(true);
     }
@@ -304,8 +368,12 @@ const Dashboard = () => {
                   ? true
                   : false,
             };
+          } else {
+            return {
+              ...item,
+              disable: true,
+            };
           }
-          return item;
         })
       );
       days(
@@ -316,7 +384,7 @@ const Dashboard = () => {
   }, [filterComponent.filterDate, prevDateRange]);
 
   const changeFilter = (v) => {
-    console.log(v);
+    setFilter(v);
     // if (v === "Hours") {
     //   setFilter("Hours");
     // } else if (v === "Days") {
@@ -509,7 +577,7 @@ const Dashboard = () => {
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
-  console.log(sales);
+  console.log(filter);
 
   return (
     <>

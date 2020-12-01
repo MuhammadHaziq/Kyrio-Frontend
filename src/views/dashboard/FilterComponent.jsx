@@ -27,7 +27,13 @@ import {
   MdDateRange,
   MdAvTimer,
 } from "react-icons/md";
-
+import {
+  change_in_date_time,
+  change_in_time,
+  stores_change,
+  employee_change,
+} from "../../actions/dashboard/filterComponentActions";
+import $ from "jquery";
 const FilterComponent = (props) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -63,7 +69,7 @@ const FilterComponent = (props) => {
   });
   const usePrevious = (data) => {
     const ref = React.useRef();
-    React.useEffect(() => {
+    useEffect(() => {
       ref.current = data;
     }, [data]);
     return ref.current;
@@ -76,8 +82,8 @@ const FilterComponent = (props) => {
   var prevEndDate = usePrevious(dateRange.endDate);
 
   // var prevCheckAll = usePrevious(fields.checkAll);
-// console.log(prevCheckAll);
-// console.log(fields.checkAll);
+  // console.log(prevCheckAll);
+  // console.log(fields.checkAll);
 
   useEffect(() => {
     dispatch(get_stores());
@@ -86,6 +92,7 @@ const FilterComponent = (props) => {
 
   useEffect(() => {
     console.log(dateRange);
+    dispatch(change_in_date_time(dateRange));
   }, [prevStartDate, prevEndDate]);
 
   // useEffect(() => {
@@ -135,6 +142,13 @@ const FilterComponent = (props) => {
           // !item.isSelected,
         };
       });
+      dispatch(
+        stores_change(
+          selectedStore.map((item) => {
+            return item._id;
+          })
+        )
+      );
     } else {
       selectedStore = storeId.slice().map((item) => {
         if (item._id === e) {
@@ -154,8 +168,14 @@ const FilterComponent = (props) => {
           ? true
           : false,
     });
-
     setStoreId(selectedStore);
+    dispatch(
+      stores_change(
+        selectedStore
+          .filter((item) => item.isSelected === true)
+          .map((item) => item._id)
+      )
+    );
   };
 
   const employeeHandleChange = (e) => {
@@ -172,6 +192,13 @@ const FilterComponent = (props) => {
           // !item.isSelected,
         };
       });
+      dispatch(
+        employee_change(
+          selectedEmployees.map((item) => {
+            return item._id;
+          })
+        )
+      );
     } else {
       selectedEmployees = employeeId.slice().map((item) => {
         if (item._id === e) {
@@ -193,6 +220,13 @@ const FilterComponent = (props) => {
     });
 
     setEmployeeId(selectedEmployees);
+    dispatch(
+      employee_change(
+        selectedEmployees
+          .filter((item) => item.isSelected === true)
+          .map((item) => item._id)
+      )
+    );
   };
 
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
@@ -258,6 +292,7 @@ const FilterComponent = (props) => {
   var startTimeZone =
     Math.floor(timeRange.startTime / 60 / 60) >= 12 ? "PM" : "AM";
   var endTimeZone = Math.floor(timeRange.endTime / 60 / 60) >= 12 ? "PM" : "AM";
+
   return (
     <>
       <CRow className="mb-3">
@@ -289,11 +324,13 @@ const FilterComponent = (props) => {
                 ? "All Day"
                 : startHours + startTimeZone + "-" + endHours + endTimeZone}
             </CDropdownToggle>
-            <CDropdownMenu style={{ width: "max-content" }}>
-              <CDropdownItem
-                onClick={() => handleOnChange(0)}
-                show={toggleDropDown[1]}
-              >
+
+            <CDropdownMenu
+              style={{ width: "max-content" }}
+              // show={toggleDropDown[0]}
+              id="dropdown0"
+            >
+              <CDropdownItem onClick={() => handleOnChange(0)}>
                 <CInputGroup variant="custom-radio" inline>
                   <CInputRadio
                     id="time_filter"
@@ -370,7 +407,9 @@ const FilterComponent = (props) => {
                 : storeId.filter((item) => item.isSelected === true).length +
                   " Stores"}
             </CDropdownToggle>
-            <CDropdownMenu show={toggleDropDown[1]}>
+            <CDropdownMenu
+            // show={toggleDropDown[1]}
+            >
               <CDropdownItem onClick={() => storeHandleChange("0")}>
                 {" "}
                 <CFormGroup variant="custom-checkbox" inline>
@@ -425,11 +464,10 @@ const FilterComponent = (props) => {
                 : employeeId.filter((item) => item.isSelected === true).length +
                   " Employee"}
             </CDropdownToggle>
-            <CDropdownMenu>
-              <CDropdownItem
-                show={toggleDropDown[2]}
-                onClick={() => employeeHandleChange("0")}
-              >
+            <CDropdownMenu
+            // show={toggleDropDown[2]}
+            >
+              <CDropdownItem onClick={() => employeeHandleChange("0")}>
                 {" "}
                 <CFormGroup variant="custom-checkbox" inline>
                   <CInputCheckbox

@@ -15,10 +15,13 @@ import dateformat from "dateformat";
 import MainChartExample from "../charts/MainChartExample.js";
 import FilterComponent from "./FilterComponent";
 import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
-import { get_sales_summary, delete_sales_summary } from '../../actions/dashboard/salesSummaryActions'
+import {
+  get_sales_summary,
+  delete_sales_summary,
+} from "../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesSummaryDatatable from '../../datatables/sales/SalesSummaryDatatable'
+import SalesSummaryDatatable from "../../datatables/sales/SalesSummaryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 
 const Dashboard = () => {
@@ -26,7 +29,9 @@ const Dashboard = () => {
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
-  const salesSummary = useSelector((state) => state.dashBoard.salesSummaryReducer)
+  const salesSummary = useSelector(
+    (state) => state.dashBoard.salesSummaryReducer
+  );
 
   const [Days, setDays] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -117,42 +122,46 @@ const Dashboard = () => {
         // include last day
         a.push(dateformat(d, "mmm dd"));
       }
-      setFilter("Days");
-    }
-    else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
-      // const totalWeeks = Math.floor(daysDiff / 7)
-      const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      // const weekDays = ['Mon','Tue','Wed', 'Thu', 'Fri', 'Sat', 'Sun']   
-      let j = 0
-      let weeks = []
+      setDays(a);
+      // setFilter("Days");
+    } else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
+      let j = 0;
+      let weeks = [];
       while (j <= daysDiff) {
-        let currentDay = 1
+        let currentDay = moment(d).day();
         if (j === 0) {
-          currentDay = moment(from).day()
+          currentDay = moment(d).day();
         }
-        
-        for (; currentDay <= 7; currentDay++) {
-            weeks
-
+        let weekRange = "";
+        weekRange = dateformat(d, "mmm dd");
+        if (currentDay === 7) {
+          weekRange = dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
+          weeks.push(weekRange);
           ++j;
+        } else {
+          for (; currentDay <= 7; currentDay++) {
+            const startDate = dateformat(d, "dd-mm-yyyy");
+            const endDate = dateformat(to, "dd-mm-yyyy");
+            if (
+              moment(startDate, "DD-MM-YYYY").isSame(
+                moment(endDate, "DD-MM-YYYY")
+              )
+            ) {
+              weekRange += " - " + dateformat(d, "mmm dd");
+              weeks.push(weekRange);
+              return;
+            } else if (currentDay === 7) {
+              weekRange += " - " + dateformat(d, "mmm dd");
+              weeks.push(weekRange);
+            }
+            d = moment(d, "DD-MM-YYYY").add(1, "days");
+            ++j;
+          }
         }
-
+        setDays(weeks);
+        console.log(weeks);
       }
-
-      // const diff = getNatural(monthDiff) === 0 ? 7 : getNatural(monthDiff);
-      // const dateGape =
-      //   daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-      // while (i < getNatural(dateGape)) {
-      //   a.push(dateformat(d, "mmm dd"));
-      //   d = moment(d, "DD-MM-YYYY").add(diff, "days");
-      //   i++;
-      // }
-      // if (i === getNatural(daysDiff)) {
-      //   // include last day
-      //   a.push(dateformat(d, "mmm dd"));
-      // }
-    }
-    else if (getNatural(daysDiff) === 0) {
+    } else if (getNatural(daysDiff) === 0) {
       const totalHours = 24;
       var i = 1;
       while (i <= totalHours) {
@@ -165,15 +174,15 @@ const Dashboard = () => {
     setDays(a);
   };
 
+  console.log(";days", Days);
   // Sales by Day full month
   const [sales, setSales] = useState({});
   var prevDateRange = usePrevious(filterComponent.filterDate);
   var prevDays = usePrevious(Days);
   var prevFilter = usePrevious(filter);
 
-
   useEffect(() => {
-    dispatch(get_sales_summary())
+    dispatch(get_sales_summary());
     return () => {
       setDays([]);
       setLoading(false);
@@ -362,6 +371,11 @@ const Dashboard = () => {
     if (prevFilter !== filter && prevFilter !== undefined) {
       console.log("filter", filter);
       console.log("prevFilter", prevFilter);
+      days_filter(
+        filterComponent.filterDate.startDate,
+        filterComponent.filterDate.endDate,
+        filter
+      );
     }
   }, [prevFilter, filter]);
 
@@ -392,8 +406,8 @@ const Dashboard = () => {
                 getNatural(timeDiff) == 0
                   ? false
                   : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0
-                    ? true
-                    : false,
+                  ? true
+                  : false,
             };
           } else {
             return {
@@ -611,11 +625,10 @@ const Dashboard = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(sales_id)
+    console.log(sales_id);
     dispatch(delete_sales_summary(JSON.stringify(sales_id)));
     setShowAlert(!showAlert);
   };
-
 
   console.log(filter);
 
@@ -735,8 +748,8 @@ const Dashboard = () => {
               style={{ height: "300px", marginTop: "40px" }}
             />
           ) : (
-              "Loading..."
-            )}
+            "Loading..."
+          )}
         </CCardBody>
       </CCard>
 
@@ -745,17 +758,8 @@ const Dashboard = () => {
           <CCard>
             <CCardHeader>
               <CRow>
-                <CCol
-                  xs="12"
-                  sm="4"
-                  md="4"
-                  xl="xl"
-                  className="mb-3 mb-xl-0"
-                >
-                  <CButton
-                    color="success"
-                    className="btn-square pull right"
-                  >
+                <CCol xs="12" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <CButton color="success" className="btn-square pull right">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
@@ -768,33 +772,35 @@ const Dashboard = () => {
                         className="ci-primary"
                       ></polygon>
                     </svg>
-                          Export
-
-                        </CButton>
+                    Export
+                  </CButton>
                   {salesSummary.sales_summary.filter(
                     (item) => item.isDeleted === true
                   ).length > 0 ? (
-                      <React.Fragment>
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete Sales"
-                          section={`Are you sure you want to delete the Sales Summary?`}
-                          buttonAction={deleteSalesSummary}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2 btn-square"
-                          color="danger"
-                          block={false}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                </CCol></CRow>
+                    <React.Fragment>
+                      <ConformationAlert
+                        button_text="Delete"
+                        heading="Delete Sales"
+                        section={`Are you sure you want to delete the Sales Summary?`}
+                        buttonAction={deleteSalesSummary}
+                        show_alert={showAlert}
+                        hideAlert={setShowAlert}
+                        variant="outline"
+                        className="ml-2 btn-square"
+                        color="danger"
+                        block={false}
+                      />
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )}
+                </CCol>
+              </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesSummaryDatatable sales_summary={salesSummary.sales_summary} />
+              <SalesSummaryDatatable
+                sales_summary={salesSummary.sales_summary}
+              />
             </CCardBody>
           </CCard>
         </CCol>

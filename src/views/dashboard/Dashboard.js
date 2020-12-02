@@ -119,20 +119,39 @@ const Dashboard = () => {
       }
       setFilter("Days");
     }
-    // else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
-    //   const diff = getNatural(monthDiff) === 0 ? 7 : getNatural(monthDiff);
-    //   const dateGape =
-    //     daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-    //   while (i < getNatural(dateGape)) {
-    //     a.push(dateformat(d, "mmm dd"));
-    //     d = moment(d, "DD-MM-YYYY").add(diff, "days");
-    //     i++;
-    //   }
-    //   if (i === getNatural(daysDiff)) {
-    //     // include last day
-    //     a.push(dateformat(d, "mmm dd"));
-    //   }
-    // }
+    else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
+      // const totalWeeks = Math.floor(daysDiff / 7)
+      const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      // const weekDays = ['Mon','Tue','Wed', 'Thu', 'Fri', 'Sat', 'Sun']   
+      let j = 0
+      let weeks = []
+      while (j <= daysDiff) {
+        let currentDay = 1
+        if (j === 0) {
+          currentDay = moment(from).day()
+        }
+        
+        for (; currentDay <= 7; currentDay++) {
+            weeks
+
+          ++j;
+        }
+
+      }
+
+      // const diff = getNatural(monthDiff) === 0 ? 7 : getNatural(monthDiff);
+      // const dateGape =
+      //   daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
+      // while (i < getNatural(dateGape)) {
+      //   a.push(dateformat(d, "mmm dd"));
+      //   d = moment(d, "DD-MM-YYYY").add(diff, "days");
+      //   i++;
+      // }
+      // if (i === getNatural(daysDiff)) {
+      //   // include last day
+      //   a.push(dateformat(d, "mmm dd"));
+      // }
+    }
     else if (getNatural(daysDiff) === 0) {
       const totalHours = 24;
       var i = 1;

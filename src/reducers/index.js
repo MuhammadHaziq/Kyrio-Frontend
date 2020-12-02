@@ -2,6 +2,7 @@ import settingsReducer from "./settingsReducer";
 import authReducer from "./authReducer";
 import messageReducer from "./messageReducer";
 import filterComponentReducer from "./dashboard/filterComponentReducer";
+import salesSummaryReducer from "./dashboard/salesSummaryReducer"
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -37,6 +38,7 @@ const items = combineReducers({
 });
 const dashBoard = combineReducers({
   filterComponentReducer,
+  salesSummaryReducer
 });
 
 const settingReducers = combineReducers({

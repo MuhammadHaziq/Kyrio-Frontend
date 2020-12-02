@@ -15,13 +15,22 @@ import dateformat from "dateformat";
 import MainChartExample from "../charts/MainChartExample.js";
 import FilterComponent from "./FilterComponent";
 import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
+import { get_sales_summary, delete_sales_summary } from '../../actions/dashboard/salesSummaryActions'
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import SalesSummaryDatatable from '../../datatables/sales/SalesSummaryDatatable'
+import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const filterComponent = useSelector(
+    (state) => state.dashBoard.filterComponentReducer
+  );
+  const salesSummary = useSelector((state) => state.dashBoard.salesSummaryReducer)
+
   const [Days, setDays] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [filter, setFilter] = useState("");
   const [salesFilter, setSalesFilter] = useState("Gross Sales");
   const [daysFilter, setDaysFilter] = useState([
@@ -137,16 +146,15 @@ const Dashboard = () => {
     setDays(a);
   };
 
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
   // Sales by Day full month
   const [sales, setSales] = useState({});
   var prevDateRange = usePrevious(filterComponent.filterDate);
   var prevDays = usePrevious(Days);
   var prevFilter = usePrevious(filter);
 
+
   useEffect(() => {
+    dispatch(get_sales_summary())
     return () => {
       setDays([]);
       setLoading(false);
@@ -365,8 +373,8 @@ const Dashboard = () => {
                 getNatural(timeDiff) == 0
                   ? false
                   : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0
-                  ? true
-                  : false,
+                    ? true
+                    : false,
             };
           } else {
             return {
@@ -577,6 +585,19 @@ const Dashboard = () => {
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
+
+  const deleteSalesSummary = () => {
+    const sales_id = salesSummary.sales_summary
+      .filter((item) => item.isDeleted === true)
+      .map((item) => {
+        return item._id;
+      });
+    console.log(sales_id)
+    dispatch(delete_sales_summary(JSON.stringify(sales_id)));
+    setShowAlert(!showAlert);
+  };
+
+
   console.log(filter);
 
   return (
@@ -695,304 +716,66 @@ const Dashboard = () => {
               style={{ height: "300px", marginTop: "40px" }}
             />
           ) : (
-            "Loading..."
-          )}
+              "Loading..."
+            )}
         </CCardBody>
       </CCard>
 
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>Traffic {" & "} Sales</CCardHeader>
-            <CCardBody>
-              <br />
+            <CCardHeader>
+              <CRow>
+                <CCol
+                  xs="12"
+                  sm="4"
+                  md="4"
+                  xl="xl"
+                  className="mb-3 mb-xl-0"
+                >
+                  <CButton
+                    color="success"
+                    className="btn-square pull right"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                      className="c-icon c-icon-sm"
+                      role="img"
+                    >
+                      <polygon
+                        fill="var(--ci-primary-color, currentColor)"
+                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                        className="ci-primary"
+                      ></polygon>
+                    </svg>
+                          Export
 
-              <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">
-                      <CIcon name="cil-people" />
-                    </th>
-                    <th>User</th>
-                    <th className="text-center">Country</th>
-                    <th>Usage</th>
-                    <th className="text-center">Payment Method</th>
-                    <th>Activity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/1.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
+                        </CButton>
+                  {salesSummary.sales_summary.filter(
+                    (item) => item.isDeleted === true
+                  ).length > 0 ? (
+                      <React.Fragment>
+                        <ConformationAlert
+                          button_text="Delete"
+                          heading="Delete Sales"
+                          section={`Are you sure you want to delete the Sales Summary?`}
+                          buttonAction={deleteSalesSummary}
+                          show_alert={showAlert}
+                          hideAlert={setShowAlert}
+                          variant="outline"
+                          className="ml-2 btn-square"
+                          color="danger"
+                          block={false}
                         />
-                        <span className="c-avatar-status bg-success"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Yiorgos Avraamu</div>
-                      <div className="small text-muted">
-                        <span>New</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-us" title="us" id="us" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>50%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="success"
-                        value="50"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-cc-mastercard" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>10 sec ago</strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/2.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                        <span className="c-avatar-status bg-danger"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Avram Tarasios</div>
-                      <div className="small text-muted">
-                        <span>Recurring</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-br" title="br" id="br" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>10%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="info"
-                        value="10"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-cc-visa" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>5 minutes ago</strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/3.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                        <span className="c-avatar-status bg-warning"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Quintin Ed</div>
-                      <div className="small text-muted">
-                        <span>New</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-in" title="in" id="in" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>74%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="warning"
-                        value="74"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-stripe" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>1 hour ago</strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/4.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                        <span className="c-avatar-status bg-secondary"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Enéas Kwadwo</div>
-                      <div className="small text-muted">
-                        <span>New</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-fr" title="fr" id="fr" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>98%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="danger"
-                        value="98"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-paypal" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>Last month</strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/5.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                        <span className="c-avatar-status bg-success"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Agapetus Tadeáš</div>
-                      <div className="small text-muted">
-                        <span>New</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-es" title="es" id="es" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>22%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="info"
-                        value="22"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-google-pay" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>Last week</strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-center">
-                      <div className="c-avatar">
-                        <img
-                          src={"avatars/6.jpg"}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                        <span className="c-avatar-status bg-danger"></span>
-                      </div>
-                    </td>
-                    <td>
-                      <div>Friderik Dávid</div>
-                      <div className="small text-muted">
-                        <span>New</span> | Registered: Jan 1, 2015
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-pl" title="pl" id="pl" />
-                    </td>
-                    <td>
-                      <div className="clearfix">
-                        <div className="float-left">
-                          <strong>43%</strong>
-                        </div>
-                        <div className="float-right">
-                          <small className="text-muted">
-                            Jun 11, 2015 - Jul 10, 2015
-                          </small>
-                        </div>
-                      </div>
-                      <CProgress
-                        className="progress-xs"
-                        color="success"
-                        value="43"
-                      />
-                    </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cib-cc-amex" />
-                    </td>
-                    <td>
-                      <div className="small text-muted">Last login</div>
-                      <strong>Yesterday</strong>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )}
+                </CCol></CRow>
+            </CCardHeader>
+            <CCardBody>
+              <SalesSummaryDatatable sales_summary={salesSummary.sales_summary} />
             </CCardBody>
           </CCard>
         </CCol>

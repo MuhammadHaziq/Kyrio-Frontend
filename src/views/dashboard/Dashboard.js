@@ -124,7 +124,17 @@ const Dashboard = () => {
     time.setMilliseconds(0);
     const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
     const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
-    if (getNatural(daysDiff) > 0 && filterName === "Days") {
+    if (getNatural(daysDiff) === 0 && filterName === "Hours") {
+      const totalHours = 24;
+      var i = 1;
+      while (i <= totalHours) {
+        a.push(moment(time).format("LT"));
+        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
+        i++;
+      }
+      setFilter("Hours");
+      setDays(a);
+    } else if (getNatural(daysDiff) > 1 && filterName === "Days") {
       const dateGape =
         daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
       while (i < getNatural(dateGape)) {
@@ -137,8 +147,8 @@ const Dashboard = () => {
         a.push(dateformat(d, "mmm dd"));
       }
       setDays(a);
-      // setFilter("Days");
-    } else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
+      setFilter("Days");
+    } else if (getNatural(daysDiff) >= 7 && filterName === "Weeks") {
       let j = 0;
       let weeks = [];
       while (j <= daysDiff) {
@@ -174,17 +184,22 @@ const Dashboard = () => {
         }
         setDays(weeks);
       }
-    } else if (getNatural(daysDiff) === 0) {
-      const totalHours = 24;
-      var i = 1;
-      while (i <= totalHours) {
-        a.push(moment(time).format("LT"));
-        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
-        i++;
+    } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
+      let startDate = dateformat(d, "dd-mm-yyyy");
+      let endDate = dateformat(to, "dd-mm-yyyy");
+      var timeValues = [];
+      console.log(moment(startDate, "M"));
+      // ||
+      // moment(startDate, "MM").isSame(moment(endDate, "MM"))
+      while (endDate > startDate) {
+        console.log(startDate);
+        
+        timeValues.push(dateformat(startDate, "dd-mmm-yyyy"));
+        console.log(timeValues);
+        startDate = moment(startDate, "DD-MM-YYYY").add(1, "month");
       }
-      setFilter("Hours");
+      console.log(timeValues);
     }
-    setDays(a);
   };
 
   useEffect(() => {
@@ -619,6 +634,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (prevFilter !== filter && prevFilter !== undefined) {
+      console.log(filter);
       days_filter(
         filterComponent.filterDate.startDate,
         filterComponent.filterDate.endDate,

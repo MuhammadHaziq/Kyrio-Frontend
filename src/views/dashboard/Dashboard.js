@@ -185,20 +185,50 @@ const Dashboard = () => {
         setDays(weeks);
       }
     } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
-      let startDate = dateformat(d, "dd-mm-yyyy");
-      let endDate = dateformat(to, "dd-mm-yyyy");
-      var timeValues = [];
-      console.log(moment(startDate, "M"));
-      // ||
-      // moment(startDate, "MM").isSame(moment(endDate, "MM"))
-      while (endDate > startDate) {
-        console.log(startDate);
-
-        timeValues.push(dateformat(startDate, "dd-mmm-yyyy"));
-        console.log(timeValues);
-        startDate = moment(startDate, "DD-MM-YYYY").add(1, "month");
+      let startDate = dateformat(d, "yyyy-mm-dd");
+      let endDate = dateformat(to, "yyyy-mm-dd");
+      console.log(startDate);
+      console.log(endDate);
+      var monthValues = [];
+      while (
+        moment(endDate).isAfter(startDate, "month") &&
+        moment(startDate).isSame(endDate, "year")
+      ) {
+        console.log(moment(startDate));
+        monthValues.push(dateformat(startDate, "mmm"));
+        startDate = dateformat(
+          moment(startDate, "DD-MM-YYYY").add(1, "months"),
+          "yyyy-mm-dd"
+        );
       }
-      console.log(timeValues);
+      console.log(moment(startDate).isSame(endDate, "month"));
+      if (moment(startDate).isSame(endDate, "month")) {
+        monthValues.push(dateformat(startDate, "mmm"));
+      }
+      console.log(startDate);
+      console.log(dateformat(startDate, "mmm"));
+      setDays(monthValues);
+    } else if (getNatural(daysDiff) >= 118 && filterName === "Quaters") {
+      let startDate = dateformat(d, "yyyy-mm-dd");
+      let endDate = dateformat(to, "yyyy-mm-dd");
+      console.log(startDate);
+      console.log(endDate);
+      var monthValues = [];
+      while (moment(endDate).isAfter(startDate, "month")) {
+        console.log(moment(startDate));
+        monthValues.push(dateformat(startDate, "mmm"));
+        startDate = dateformat(
+          moment(startDate, "DD-MM-YYYY").add(1, "months"),
+          "yyyy-mm-dd"
+        );
+      }
+      console.log(moment(startDate).isSame(endDate, "year"));
+      if (moment(startDate).isSame(endDate, "month")) {
+        monthValues.push(dateformat(startDate, "mmm"));
+      }
+      console.log(startDate);
+      console.log(dateformat(startDate, "mmm"));
+      setDays(monthValues);
     }
   };
 

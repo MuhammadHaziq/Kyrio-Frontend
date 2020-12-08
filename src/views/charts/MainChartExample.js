@@ -14,68 +14,65 @@ const MainChartExample = (attributes) => {
   };
 
   const defaultDatasets = (() => {
-    let elements = 27;
-    const data1 = [];
-    const data2 = [];
-    const data3 = [];
-    for (let i = 0; i <= elements; i++) {
-      data1.push(random(50, 200));
-      data2.push(random(80, 100));
-      data3.push(65);
-    }
-    return [
-      {
-        label: "Gross sales",
-        backgroundColor: hexToRgba(brandSuccess, 10),
-        borderColor: brandSuccess,
-        pointHoverBackgroundColor: brandSuccess,
-        borderWidth: 2,
-        data: attributes.sales.grossSales.data,
-      },
-      {
-        label: "Refunds",
-        backgroundColor: hexToRgba(brandDanger, 10),
-        borderColor: brandDanger,
-        pointHoverBackgroundColor: brandDanger,
-        borderWidth: 2,
-        data: attributes.sales.grossSales.data2,
-      },
-      {
-        label: "Discounts",
-        backgroundColor: hexToRgba(brandWarning, 10),
-        borderColor: brandWarning,
-        pointHoverBackgroundColor: brandWarning,
-        borderWidth: 2,
-        data: attributes.sales.grossSales.data3,
-      },
-      {
-        label: "Net Sales",
-        backgroundColor: hexToRgba(brandInfo, 10),
-        borderColor: brandInfo,
-        pointHoverBackgroundColor: brandInfo,
-        borderWidth: 2,
-        data: attributes.sales.grossSales.data4,
-      },
-      {
-        label: "Gross profit",
-        backgroundColor: hexToRgba(brandPrimary, 10),
-        borderColor: brandPrimary,
-        pointHoverBackgroundColor: brandPrimary,
-        borderWidth: 2,
-        data: attributes.sales.grossSales.data5,
-      },
-    ];
+    return attributes.sales;
+    // let elements = 27;
+    // const data1 = [];
+    // const data2 = [];
+    // const data3 = [];
+    // for (let i = 0; i <= elements; i++) {
+    //   data1.push(random(50, 200));
+    //   data2.push(random(80, 100));
+    //   data3.push(65);
+    // }
+    // return [
+    //   {
+    //     label: "Gross sales",
+    //     backgroundColor: hexToRgba(brandSuccess, 10),
+    //     borderColor: brandSuccess,
+    //     pointHoverBackgroundColor: brandSuccess,
+    //     borderWidth: 2,
+    //     data: attributes.sales.grossSales.data,
+    //   },
+    //   {
+    //     label: "Refunds",
+    //     backgroundColor: hexToRgba(brandDanger, 10),
+    //     borderColor: brandDanger,
+    //     pointHoverBackgroundColor: brandDanger,
+    //     borderWidth: 2,
+    //     data: attributes.sales.grossSales.data2,
+    //   },
+    //   {
+    //     label: "Discounts",
+    //     backgroundColor: hexToRgba(brandWarning, 10),
+    //     borderColor: brandWarning,
+    //     pointHoverBackgroundColor: brandWarning,
+    //     borderWidth: 2,
+    //     data: attributes.sales.grossSales.data3,
+    //   },
+    //   {
+    //     label: "Net Sales",
+    //     backgroundColor: hexToRgba(brandInfo, 10),
+    //     borderColor: brandInfo,
+    //     pointHoverBackgroundColor: brandInfo,
+    //     borderWidth: 2,
+    //     data: attributes.sales.grossSales.data4,
+    //   },
+    //   {
+    //     label: "Gross profit",
+    //     backgroundColor: hexToRgba(brandPrimary, 10),
+    //     borderColor: brandPrimary,
+    //     pointHoverBackgroundColor: brandPrimary,
+    //     borderWidth: 2,
+    //     data: attributes.sales.grossSales.data5,
+    //   },
+    // ];
   })();
 
   const defaultOptions = (() => {
     let data = [];
-    data.push(...attributes.sales.grossSales.data);
-    data.push(...attributes.sales.grossSales.data2);
-    data.push(...attributes.sales.grossSales.data3);
-    data.push(...attributes.sales.grossSales.data4);
-    data.push(...attributes.sales.grossSales.data5);
-
-    console.log(attributes.sales.grossSales.labels);
+    (attributes.sales || []).map((item) => {
+      return data.push(...item.data);
+    });
     return {
       maintainAspectRatio: false,
       legend: {
@@ -94,8 +91,8 @@ const MainChartExample = (attributes) => {
             ticks: {
               beginAtZero: true,
               maxTicksLimit: 10,
-              stepSize: Math.ceil(Math.max(...data) / 10),
-              max: Math.max(...data) + 100,
+              stepSize: Math.ceil(Math.max(...(data || [])) / 10),
+              max: Math.max(...(data || [])) + 100,
             },
             gridLines: {
               display: true,
@@ -113,14 +110,13 @@ const MainChartExample = (attributes) => {
       },
     };
   })();
-
   // render
   return (
     <CChartLine
       {...attributes}
       datasets={defaultDatasets}
       options={defaultOptions}
-      labels={attributes.sales.grossSales.labels}
+      labels={attributes.labels}
     />
   );
 };

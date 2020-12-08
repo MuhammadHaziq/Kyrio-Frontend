@@ -15,18 +15,30 @@ import dateformat from "dateformat";
 import MainChartExample from "../charts/MainChartExample.js";
 import FilterComponent from "./FilterComponent";
 import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
-import { get_sales_summary, delete_sales_summary } from '../../actions/dashboard/salesSummaryActions'
+import {
+  get_sales_summary,
+  delete_sales_summary,
+} from "../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesSummaryDatatable from '../../datatables/sales/SalesSummaryDatatable'
+import SalesSummaryDatatable from "../../datatables/sales/SalesSummaryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
+import { getStyle, hexToRgba } from "@coreui/utils/src";
+
+const brandSuccess = getStyle("success") || "#4dbd74";
+const brandInfo = getStyle("info") || "#20a8d8";
+const brandDanger = getStyle("danger") || "#f86c6b";
+const brandWarning = getStyle("warning") || "#e1a82d";
+const brandPrimary = getStyle("primary") || "#4638c2";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
-  const salesSummary = useSelector((state) => state.dashBoard.salesSummaryReducer)
+  const salesSummary = useSelector(
+    (state) => state.dashBoard.salesSummaryReducer
+  );
 
   const [Days, setDays] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -48,6 +60,13 @@ const Dashboard = () => {
     }, [data]);
     return ref.current;
   };
+  // Sales by Day full month
+  const [sales, setSales] = useState([]);
+  const [orginalSale, setOrginalSale] = useState([]);
+  var prevDateRange = usePrevious(filterComponent.filterDate);
+  var prevDays = usePrevious(Days);
+  var prevFilter = usePrevious(filter);
+  var prevSalesFilter = usePrevious(salesFilter);
 
   const getNatural = (num) => {
     return parseFloat(num.toString().split(".")[0]);
@@ -105,7 +124,17 @@ const Dashboard = () => {
     time.setMilliseconds(0);
     const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
     const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
-    if (getNatural(daysDiff) > 0 && filterName === "Days") {
+    if (getNatural(daysDiff) === 0 && filterName === "Hours") {
+      const totalHours = 24;
+      var i = 1;
+      while (i <= totalHours) {
+        a.push(moment(time).format("LT"));
+        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
+        i++;
+      }
+      setFilter("Hours");
+      setDays(a);
+    } else if (getNatural(daysDiff) > 1 && filterName === "Days") {
       const dateGape =
         daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
       while (i < getNatural(dateGape)) {
@@ -117,44 +146,64 @@ const Dashboard = () => {
         // include last day
         a.push(dateformat(d, "mmm dd"));
       }
+      setDays(a);
       setFilter("Days");
-    }
-    // else if (getNatural(daysDiff) > 0 && filterName === "Weeks") {
-    //   const diff = getNatural(monthDiff) === 0 ? 7 : getNatural(monthDiff);
-    //   const dateGape =
-    //     daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-    //   while (i < getNatural(dateGape)) {
-    //     a.push(dateformat(d, "mmm dd"));
-    //     d = moment(d, "DD-MM-YYYY").add(diff, "days");
-    //     i++;
-    //   }
-    //   if (i === getNatural(daysDiff)) {
-    //     // include last day
-    //     a.push(dateformat(d, "mmm dd"));
-    //   }
-    // }
-    else if (getNatural(daysDiff) === 0) {
-      const totalHours = 24;
-      var i = 1;
-      while (i <= totalHours) {
-        a.push(moment(time).format("LT"));
-        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
-        i++;
+    } else if (getNatural(daysDiff) >= 7 && filterName === "Weeks") {
+      let j = 0;
+      let weeks = [];
+      while (j <= daysDiff) {
+        let currentDay = moment(d).day();
+        if (j === 0) {
+          currentDay = moment(d).day();
+        }
+        let weekRange = "";
+        weekRange = dateformat(d, "mmm dd");
+        if (currentDay === 7) {
+          weekRange = dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
+          weeks.push(weekRange);
+          ++j;
+        } else {
+          for (; currentDay <= 7; currentDay++) {
+            const startDate = dateformat(d, "dd-mm-yyyy");
+            const endDate = dateformat(to, "dd-mm-yyyy");
+            if (
+              moment(startDate, "DD-MM-YYYY").isSame(
+                moment(endDate, "DD-MM-YYYY")
+              )
+            ) {
+              weekRange += " - " + dateformat(d, "mmm dd");
+              weeks.push(weekRange);
+              return;
+            } else if (currentDay === 6) {
+              weekRange += " - " + dateformat(d, "mmm dd");
+              weeks.push(weekRange);
+            }
+            d = moment(d, "DD-MM-YYYY").add(1, "days");
+            ++j;
+          }
+        }
+        setDays(weeks);
       }
-      setFilter("Hours");
+    } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
+      let startDate = dateformat(d, "dd-mm-yyyy");
+      let endDate = dateformat(to, "dd-mm-yyyy");
+      var timeValues = [];
+      console.log(moment(startDate, "M"));
+      // ||
+      // moment(startDate, "MM").isSame(moment(endDate, "MM"))
+      while (endDate > startDate) {
+        console.log(startDate);
+
+        timeValues.push(dateformat(startDate, "dd-mmm-yyyy"));
+        console.log(timeValues);
+        startDate = moment(startDate, "DD-MM-YYYY").add(1, "month");
+      }
+      console.log(timeValues);
     }
-    setDays(a);
   };
 
-  // Sales by Day full month
-  const [sales, setSales] = useState({});
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var prevDays = usePrevious(Days);
-  var prevFilter = usePrevious(filter);
-
-
   useEffect(() => {
-    dispatch(get_sales_summary())
+    dispatch(get_sales_summary());
     return () => {
       setDays([]);
       setLoading(false);
@@ -166,8 +215,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (prevDays !== Days && prevDays !== undefined) {
-      setSales({
-        grossSales: {
+      setSales([
+        {
           data: [
             1,
             2,
@@ -201,7 +250,14 @@ const Dashboard = () => {
             123,
             53,
           ],
-          data2: [
+          label: "Gross sales",
+          backgroundColor: hexToRgba(brandSuccess, 10),
+          borderColor: brandSuccess,
+          pointHoverBackgroundColor: brandSuccess,
+          borderWidth: 2,
+        },
+        {
+          data: [
             1,
             344,
             3,
@@ -234,7 +290,14 @@ const Dashboard = () => {
             123,
             42,
           ],
-          data3: [
+          label: "Refunds",
+          backgroundColor: hexToRgba(brandDanger, 10),
+          borderColor: brandDanger,
+          pointHoverBackgroundColor: brandDanger,
+          borderWidth: 2,
+        },
+        {
+          data: [
             1,
             32,
             3141,
@@ -267,7 +330,14 @@ const Dashboard = () => {
             234,
             87,
           ],
-          data4: [
+          label: "Discounts",
+          backgroundColor: hexToRgba(brandWarning, 10),
+          borderColor: brandWarning,
+          pointHoverBackgroundColor: brandWarning,
+          borderWidth: 2,
+        },
+        {
+          data: [
             1,
             344,
             3,
@@ -300,7 +370,14 @@ const Dashboard = () => {
             653,
             234,
           ],
-          data5: [
+          label: "Net Sales",
+          backgroundColor: hexToRgba(brandInfo, 10),
+          borderColor: brandInfo,
+          pointHoverBackgroundColor: brandInfo,
+          borderWidth: 2,
+        },
+        {
+          data: [
             1,
             344,
             3,
@@ -333,24 +410,244 @@ const Dashboard = () => {
             546,
             345,
           ],
-          labels: Days,
+          label: "Gross profit",
+          backgroundColor: hexToRgba(brandPrimary, 10),
+          borderColor: brandPrimary,
+          pointHoverBackgroundColor: brandPrimary,
+          borderWidth: 2,
         },
-      });
+      ]);
+      setOrginalSale([
+        {
+          data: [
+            1,
+            2,
+            3,
+            4,
+            5,
+            62,
+            21,
+            142,
+            43,
+            1,
+            123,
+            123,
+            123,
+            14,
+            213,
+            3,
+            421,
+            123,
+            124,
+            123,
+            123,
+            412,
+            2312,
+            1412,
+            132,
+            24,
+            3435,
+            23,
+            12433,
+            123,
+            53,
+          ],
+          label: "Gross sales",
+          backgroundColor: hexToRgba(brandSuccess, 10),
+          borderColor: brandSuccess,
+          pointHoverBackgroundColor: brandSuccess,
+          borderWidth: 2,
+        },
+        {
+          data: [
+            1,
+            344,
+            3,
+            6757,
+            5,
+            62,
+            21,
+            142,
+            43,
+            1,
+            123,
+            123,
+            23,
+            14,
+            4545,
+            3,
+            131,
+            643,
+            124,
+            123,
+            12351,
+            843,
+            786,
+            1412,
+            132,
+            24,
+            511,
+            23,
+            9867,
+            123,
+            42,
+          ],
+          label: "Refunds",
+          backgroundColor: hexToRgba(brandDanger, 10),
+          borderColor: brandDanger,
+          pointHoverBackgroundColor: brandDanger,
+          borderWidth: 2,
+        },
+        {
+          data: [
+            1,
+            32,
+            3141,
+            57,
+            55,
+            6241,
+            4123,
+            0,
+            85,
+            1,
+            767,
+            3453,
+            23,
+            341,
+            4545,
+            453,
+            2234,
+            453,
+            9866,
+            876,
+            542,
+            24,
+            23,
+            14243,
+            2435,
+            3454,
+            764,
+            456,
+            4,
+            234,
+            87,
+          ],
+          label: "Discounts",
+          backgroundColor: hexToRgba(brandWarning, 10),
+          borderColor: brandWarning,
+          pointHoverBackgroundColor: brandWarning,
+          borderWidth: 2,
+        },
+        {
+          data: [
+            1,
+            344,
+            3,
+            67,
+            5213,
+            5223,
+            211,
+            200,
+            67,
+            34,
+            1256,
+            634,
+            23,
+            598,
+            235,
+            0,
+            4223,
+            3456,
+            123,
+            345,
+            875,
+            56,
+            45,
+            2356,
+            234,
+            634,
+            4562,
+            4563,
+            0,
+            653,
+            234,
+          ],
+          label: "Net Sales",
+          backgroundColor: hexToRgba(brandInfo, 10),
+          borderColor: brandInfo,
+          pointHoverBackgroundColor: brandInfo,
+          borderWidth: 2,
+        },
+        {
+          data: [
+            1,
+            344,
+            3,
+            757,
+            534,
+            4242,
+            2126,
+            0,
+            5844,
+            56,
+            12433,
+            1223,
+            23,
+            675,
+            7674,
+            234,
+            2368,
+            2346,
+            345,
+            123,
+            3466,
+            45,
+            56,
+            23624,
+            345,
+            234,
+            2432,
+            4325,
+            234,
+            546,
+            345,
+          ],
+          label: "Gross profit",
+          backgroundColor: hexToRgba(brandPrimary, 10),
+          borderColor: brandPrimary,
+          pointHoverBackgroundColor: brandPrimary,
+          borderWidth: 2,
+        },
+      ]);
     }
   }, [prevDays, Days]);
 
   useEffect(() => {
+    if (prevSalesFilter !== salesFilter && prevSalesFilter !== undefined) {
+      console.log(salesFilter);
+      const sales = orginalSale.filter((item) => {
+        return item.label == salesFilter;
+      });
+      setSales(sales);
+    }
+  }, [prevSalesFilter, salesFilter]);
+
+  useEffect(() => {
     if (prevFilter !== filter && prevFilter !== undefined) {
-      console.log("filter", filter);
-      console.log("prevFilter", prevFilter);
+      console.log(filter);
+      days_filter(
+        filterComponent.filterDate.startDate,
+        filterComponent.filterDate.endDate,
+        filter
+      );
     }
   }, [prevFilter, filter]);
 
   useEffect(() => {
-    if (sales.grossSales) {
+    if (sales) {
       setLoading(true);
     }
-  }, [sales.grossSales]);
+  }, [sales]);
 
   useEffect(() => {
     if (
@@ -373,8 +670,8 @@ const Dashboard = () => {
                 getNatural(timeDiff) == 0
                   ? false
                   : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0
-                    ? true
-                    : false,
+                  ? true
+                  : false,
             };
           } else {
             return {
@@ -393,193 +690,7 @@ const Dashboard = () => {
 
   const changeFilter = (v) => {
     setFilter(v);
-    // if (v === "Hours") {
-    //   setFilter("Hours");
-    // } else if (v === "Days") {
-    //   setFilter("Days");
-    //   setLoading(false);
-    //   var today = new Date();
-    //   let last30days = [];
-    //   for (let i = 0; i < 30; i++) {
-    //     let date = dateformat(
-    //       new Date(new Date().setDate(today.getDate() - i)),
-    //       "mmm dd"
-    //     );
-    //     last30days.push(date);
-    //   }
-    //   setDays(last30days);
-    //   setSales({
-    //     grossSales: {
-    //       data: [
-    //         1,
-    //         2,
-    //         3,
-    //         4,
-    //         5,
-    //         62,
-    //         21,
-    //         142,
-    //         43,
-    //         1,
-    //         123,
-    //         123,
-    //         123,
-    //         14,
-    //         213,
-    //         3,
-    //         421,
-    //         123,
-    //         124,
-    //         123,
-    //         123,
-    //         412,
-    //         2312,
-    //         1412,
-    //         132,
-    //         24,
-    //         3435,
-    //         23,
-    //         12433,
-    //         123,
-    //         53,
-    //       ],
-    //       data2: [
-    //         3453,
-    //         344,
-    //         3,
-    //         6757,
-    //         5,
-    //         62,
-    //         21,
-    //         142,
-    //         43,
-    //         1,
-    //         123,
-    //         123,
-    //         23,
-    //         14,
-    //         4545,
-    //         3,
-    //         131,
-    //         643,
-    //         124,
-    //         123,
-    //         12351,
-    //         843,
-    //         786,
-    //         1412,
-    //         132,
-    //         24,
-    //         511,
-    //         23,
-    //         9867,
-    //         123,
-    //         42,
-    //       ],
-    //       data3: [
-    //         5000,
-    //         32,
-    //         3141,
-    //         57,
-    //         55,
-    //         6241,
-    //         4123,
-    //         0,
-    //         85,
-    //         1,
-    //         767,
-    //         3453,
-    //         23,
-    //         341,
-    //         4545,
-    //         453,
-    //         2234,
-    //         453,
-    //         9866,
-    //         876,
-    //         542,
-    //         24,
-    //         23,
-    //         14243,
-    //         2435,
-    //         3454,
-    //         764,
-    //         456,
-    //         4,
-    //         234,
-    //         87,
-    //       ],
-    //       data4: [
-    //         12312,
-    //         344,
-    //         3,
-    //         67,
-    //         5213,
-    //         5223,
-    //         211,
-    //         200,
-    //         67,
-    //         34,
-    //         12563,
-    //         634,
-    //         23,
-    //         598,
-    //         235,
-    //         0,
-    //         4223,
-    //         3456,
-    //         123,
-    //         345,
-    //         875,
-    //         56,
-    //         45,
-    //         2356,
-    //         234,
-    //         634,
-    //         4562,
-    //         4563,
-    //         0,
-    //         653,
-    //         234,
-    //       ],
-    //       data5: [
-    //         2342,
-    //         344,
-    //         3,
-    //         757,
-    //         534,
-    //         4242,
-    //         2126,
-    //         0,
-    //         5844,
-    //         56,
-    //         12433,
-    //         1223,
-    //         23,
-    //         675,
-    //         7674,
-    //         234,
-    //         2368,
-    //         2346,
-    //         345,
-    //         123,
-    //         3466,
-    //         45,
-    //         56,
-    //         23624,
-    //         345,
-    //         234,
-    //         2432,
-    //         4325,
-    //         234,
-    //         546,
-    //         345,
-    //       ],
-    //       labels: Days,
-    //     },
-    //   });
-    //   setLoading(true);
-    // }
+    setLoading(true);
   };
 
   const handleOnChangeSales = (e) => {
@@ -592,13 +703,10 @@ const Dashboard = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(sales_id)
+    console.log(sales_id);
     dispatch(delete_sales_summary(JSON.stringify(sales_id)));
     setShowAlert(!showAlert);
   };
-
-
-  console.log(filter);
 
   return (
     <>
@@ -611,7 +719,7 @@ const Dashboard = () => {
               md
               sm="12"
               className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Gross Sales")}
+              onClick={() => handleOnChangeSales("Gross sales")}
             >
               <div className="text-muted">Gross Sales</div>
               <strong>+29.703 (40%)</strong>
@@ -641,7 +749,7 @@ const Dashboard = () => {
               md
               sm="12"
               className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Discount")}
+              onClick={() => handleOnChangeSales("Discounts")}
             >
               <div className="text-muted">Discounts</div>
               <strong>+78.706 (60%)</strong>
@@ -671,7 +779,7 @@ const Dashboard = () => {
               md
               sm="12"
               className="mb-sm-2 mb-0 d-md-down-none"
-              onClick={() => handleOnChangeSales("Gross Profit")}
+              onClick={() => handleOnChangeSales("Gross profit")}
             >
               <div className="text-muted">Gross Profit</div>
               <strong>+970 (40.15%)</strong>
@@ -713,11 +821,12 @@ const Dashboard = () => {
           {loading ? (
             <MainChartExample
               sales={sales}
+              labels={Days}
               style={{ height: "300px", marginTop: "40px" }}
             />
           ) : (
-              "Loading..."
-            )}
+            "Loading..."
+          )}
         </CCardBody>
       </CCard>
 
@@ -726,17 +835,8 @@ const Dashboard = () => {
           <CCard>
             <CCardHeader>
               <CRow>
-                <CCol
-                  xs="12"
-                  sm="4"
-                  md="4"
-                  xl="xl"
-                  className="mb-3 mb-xl-0"
-                >
-                  <CButton
-                    color="success"
-                    className="btn-square pull right"
-                  >
+                <CCol xs="12" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <CButton color="success" className="btn-square pull right">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
@@ -749,33 +849,35 @@ const Dashboard = () => {
                         className="ci-primary"
                       ></polygon>
                     </svg>
-                          Export
-
-                        </CButton>
+                    Export
+                  </CButton>
                   {salesSummary.sales_summary.filter(
                     (item) => item.isDeleted === true
                   ).length > 0 ? (
-                      <React.Fragment>
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete Sales"
-                          section={`Are you sure you want to delete the Sales Summary?`}
-                          buttonAction={deleteSalesSummary}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2 btn-square"
-                          color="danger"
-                          block={false}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                </CCol></CRow>
+                    <React.Fragment>
+                      <ConformationAlert
+                        button_text="Delete"
+                        heading="Delete Sales"
+                        section={`Are you sure you want to delete the Sales Summary?`}
+                        buttonAction={deleteSalesSummary}
+                        show_alert={showAlert}
+                        hideAlert={setShowAlert}
+                        variant="outline"
+                        className="ml-2 btn-square"
+                        color="danger"
+                        block={false}
+                      />
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )}
+                </CCol>
+              </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesSummaryDatatable sales_summary={salesSummary.sales_summary} />
+              <SalesSummaryDatatable
+                sales_summary={salesSummary.sales_summary}
+              />
             </CCardBody>
           </CCard>
         </CCol>

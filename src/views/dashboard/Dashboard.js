@@ -51,7 +51,7 @@ const Dashboard = () => {
     { days: 6, name: "Weeks", disable: true },
     { days: 28, name: "Months", disable: true },
     { days: 120, name: "Quaters", disable: true },
-    { days: 362, name: "Years", disable: true },
+    { days: 365, name: "Years", disable: true },
   ]);
   const usePrevious = (data) => {
     const ref = React.useRef();
@@ -237,7 +237,7 @@ const Dashboard = () => {
           } else {
             d = moment(d, "DD-MM-YYYY").add(2, "M");
           }
-
+          //
           quaterRange =
             quaterRange + " - " + moment(d).endOf("month").format("MMM-DD");
           // dateformat(d, "mmm dd");
@@ -247,18 +247,15 @@ const Dashboard = () => {
         }
       }
       setDays(quaters);
-    } else if (getNatural(daysDiff) >= 360 && filterName === "Years") {
-      console.log(to.diff(d, "years"));
-      const totalYears = Math.ceil(to.diff(d, "years")) + 1;
-      console.log(totalYears);
+    } else if (getNatural(daysDiff) >= 365 && filterName === "Years") {
+      let endYear = moment(to).year();
+      let startYear = moment(from).year();
       let years = [];
-      let i = 0;
-      while (i < totalYears) {
+      while (startYear <= endYear) {
         const yearRange = dateformat(d, "yyyy");
         years.push(yearRange);
         d = moment(d, "DD-MM-YYYY").add(1, "Y");
-        console.log(d);
-        i++;
+        startYear = startYear + 1;
       }
       setDays(years);
     }

@@ -10,9 +10,10 @@ import {
   CSidebarNav,
   CSidebarNavDivider,
   CSidebarNavItem,
+  CListGroupItem,
 } from "@coreui/react";
 import { Redirect } from "react-router-dom";
-import { MdSettings } from "react-icons/md";
+import { MdSettings, MdStore } from "react-icons/md";
 import General from "./General/General";
 import BillingSubscription from "./BillingSubscriptions/BillingSubscription.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -52,7 +53,11 @@ const Settings = () => {
                 to: `${url}/${item.moduleName.replace(/\s/g, "")}`,
               })
             : ""
-          : ""
+          : setting.push({
+              _tag: "CSidebarNavItem",
+              name: item.heading,
+              icon: "cil-home",
+            })
       );
       setSettingBar(setting);
     }
@@ -77,16 +82,20 @@ const Settings = () => {
                     style={{ width: "100%" }}
                   >
                     <h5>
-                      <MdSettings style={{ fontSize: "30px" }} />
+                      <MdSettings style={{ fontSize: "30px", margin: "5px" }} />
                       {/* <strong>&nbsp;{t('Settings.settings')}</strong> */}
                       <strong>&nbsp;Settings</strong>
-                      <br />
-                      <small>
-                        {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{t('Settings.systemSettings')} */}
+                      <small
+                        style={{
+                          marginTop: "-10px",
+                          display: "grid",
+                        }}
+                      >
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System
                         settings
                       </small>
                     </h5>
+
                     <CSidebarNav>
                       <CCreateElement
                         items={settingBar}
@@ -95,6 +104,17 @@ const Settings = () => {
                           CSidebarNavItem,
                         }}
                       />
+                      {/*
+                      <h5>
+                        <MdStore style={{ fontSize: "30px" }} />
+                        <strong>&nbsp;Stores</strong>
+                        <br />
+                        <small>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store
+                          &amp; POS settings
+                        </small>
+                      </h5>
+                      */}
                     </CSidebarNav>
                   </CSidebar>
                 </CListGroup>
@@ -156,6 +176,7 @@ const Settings = () => {
                       name="Dining Options"
                       render={(props) => <DiningOptions {...props} />}
                     />
+
                     <Route
                       path={`${url}/Stores`}
                       exact

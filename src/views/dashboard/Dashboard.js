@@ -44,7 +44,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [filter, setFilter] = useState("");
-  const [salesFilter, setSalesFilter] = useState("Gross Sales");
+  const [salesFilter, setSalesFilter] = useState("All Sales");
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: true },
     { days: 1, name: "Days", disable: true },
@@ -683,17 +683,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (prevSalesFilter !== salesFilter && prevSalesFilter !== undefined) {
-      console.log(salesFilter);
-      const sales = orginalSale.filter((item) => {
-        return item.label == salesFilter;
-      });
-      setSales(sales);
+      if (salesFilter == "All Sales") {
+        setSales(orginalSale);
+      } else {
+        const sales = orginalSale.filter((item) => {
+          return item.label == salesFilter;
+        });
+        setSales(sales);
+      }
     }
   }, [prevSalesFilter, salesFilter]);
 
   useEffect(() => {
     if (prevFilter !== filter && prevFilter !== undefined) {
-      console.log(filter);
       days_filter(
         filterComponent.filterDate.startDate,
         filterComponent.filterDate.endDate,
@@ -769,7 +771,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <FilterComponent />
+      <FilterComponent
+        handleOnChangeSales={() => handleOnChangeSales("All Sales")}
+      />
 
       <CCard>
         <CCardHeader>
@@ -781,7 +785,13 @@ const Dashboard = () => {
               onClick={() => handleOnChangeSales("Gross sales")}
             >
               <div className="text-muted">Gross Sales</div>
-              <strong>+29.703 (40%)</strong>
+              <strong
+                style={{
+                  color: salesFilter === "Gross sales" ? "#45a164" : "",
+                }}
+              >
+                +29.703 (40%)
+              </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
@@ -796,7 +806,13 @@ const Dashboard = () => {
               onClick={() => handleOnChangeSales("Refunds")}
             >
               <div className="text-muted">Refunds</div>
-              <strong>+24.093 (20%)</strong>
+              <strong
+                style={{
+                  color: salesFilter === "Refunds" ? "#d16767" : "",
+                }}
+              >
+                +24.093 (20%)
+              </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
@@ -811,7 +827,13 @@ const Dashboard = () => {
               onClick={() => handleOnChangeSales("Discounts")}
             >
               <div className="text-muted">Discounts</div>
-              <strong>+78.706 (60%)</strong>
+              <strong
+                style={{
+                  color: salesFilter === "Discounts" ? "#e1a82d" : "",
+                }}
+              >
+                +78.706 (60%)
+              </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
@@ -826,7 +848,13 @@ const Dashboard = () => {
               onClick={() => handleOnChangeSales("Net Sales")}
             >
               <div className="text-muted">Net Sales</div>
-              <strong>+22.123 (80%)</strong>
+              <strong
+                style={{
+                  color: salesFilter === "Net Sales" ? "#4799eb" : "",
+                }}
+              >
+                +22.123 (80%)
+              </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
@@ -841,7 +869,13 @@ const Dashboard = () => {
               onClick={() => handleOnChangeSales("Gross profit")}
             >
               <div className="text-muted">Gross Profit</div>
-              <strong>+970 (40.15%)</strong>
+              <strong
+                style={{
+                  color: salesFilter === "Gross profit" ? "#4638c2" : "",
+                }}
+              >
+                +970 (40.15%)
+              </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}

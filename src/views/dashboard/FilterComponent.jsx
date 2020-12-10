@@ -510,6 +510,15 @@ const FilterComponent = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
+        <CCol sm="12" md="2" lg="2" xs="12">
+          <CButton
+            color="success"
+            className="btn-square pull right"
+            onClick={props.handleOnChangeSales}
+          >
+            Reset
+          </CButton>
+        </CCol>
       </CRow>
     </>
   );

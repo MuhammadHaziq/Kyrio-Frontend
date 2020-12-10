@@ -185,50 +185,82 @@ const Dashboard = () => {
         setDays(weeks);
       }
     } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
-      let startDate = dateformat(d, "yyyy-mm-dd");
-      let endDate = dateformat(to, "yyyy-mm-dd");
-      console.log(startDate);
-      console.log(endDate);
-      var monthValues = [];
-      while (
-        moment(endDate).isAfter(startDate, "month") &&
-        moment(startDate).isSame(endDate, "year")
-      ) {
-        console.log(moment(startDate));
+      let monthValues = [];
+      // &&
+      // moment(startDate).isSame(endDate, "year")
+      while (moment(to).isAfter(d, "month")) {
+        const startDate = dateformat(d, "yyyy-mm-dd");
         monthValues.push(dateformat(startDate, "mmm"));
-        startDate = dateformat(
-          moment(startDate, "DD-MM-YYYY").add(1, "months"),
-          "yyyy-mm-dd"
-        );
+        d = moment(d, "DD-MM-YYYY").add(1, "M");
       }
-      console.log(moment(startDate).isSame(endDate, "month"));
-      if (moment(startDate).isSame(endDate, "month")) {
+      if (moment(d).isSame(to, "month")) {
+        const startDate = dateformat(d, "yyyy-mm-dd");
         monthValues.push(dateformat(startDate, "mmm"));
       }
-      console.log(startDate);
-      console.log(dateformat(startDate, "mmm"));
       setDays(monthValues);
     } else if (getNatural(daysDiff) >= 118 && filterName === "Quaters") {
-      let startDate = dateformat(d, "yyyy-mm-dd");
-      let endDate = dateformat(to, "yyyy-mm-dd");
-      console.log(startDate);
-      console.log(endDate);
-      var monthValues = [];
-      while (moment(endDate).isAfter(startDate, "month")) {
-        console.log(moment(startDate));
-        monthValues.push(dateformat(startDate, "mmm"));
-        startDate = dateformat(
-          moment(startDate, "DD-MM-YYYY").add(1, "months"),
-          "yyyy-mm-dd"
-        );
+      const totalQuater = Math.floor(to.diff(d, "months") / 3);
+      let j = 0;
+      let quaters = [];
+      while (j <= totalQuater) {
+        let currentQuater = moment(d).month() + 1;
+        if (j === 0) {
+          currentQuater = moment(d).month() + 1;
+        }
+        let quaterRange = "";
+        quaterRange = dateformat(d, "mmm dd");
+        if (
+          (currentQuater === 3 ||
+            currentQuater === 6 ||
+            currentQuater === 9 ||
+            currentQuater === 12) &&
+          j === 0
+        ) {
+          quaterRange =
+            moment(d).format("MMM-DD") +
+            " - " +
+            moment(d).endOf("month").format("MMM-DD");
+          // dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
+          quaters.push(quaterRange);
+          d = moment(d, "DD-MM-YYYY").add(1, "M");
+          ++j;
+        } else {
+          quaterRange = moment(d).format("MMM-DD");
+          // dateformat(d, "mmm dd");
+          if (
+            moment(d).month() + 1 === 2 ||
+            moment(d).month() + 1 === 5 ||
+            moment(d).month() + 1 === 8 ||
+            moment(d).month() + 1 === 11
+          ) {
+            d = moment(d, "DD-MM-YYYY").add(1, "M");
+          } else {
+            d = moment(d, "DD-MM-YYYY").add(2, "M");
+          }
+
+          quaterRange =
+            quaterRange + " - " + moment(d).endOf("month").format("MMM-DD");
+          // dateformat(d, "mmm dd");
+          quaters.push(quaterRange);
+          d = moment(d, "DD-MM-YYYY").add(1, "M");
+          ++j;
+        }
       }
-      console.log(moment(startDate).isSame(endDate, "year"));
-      if (moment(startDate).isSame(endDate, "month")) {
-        monthValues.push(dateformat(startDate, "mmm"));
+      setDays(quaters);
+    } else if (getNatural(daysDiff) >= 360 && filterName === "Years") {
+      console.log(to.diff(d, "years"));
+      const totalYears = Math.ceil(to.diff(d, "years")) + 1;
+      console.log(totalYears);
+      let years = [];
+      let i = 0;
+      while (i < totalYears) {
+        const yearRange = dateformat(d, "yyyy");
+        years.push(yearRange);
+        d = moment(d, "DD-MM-YYYY").add(1, "Y");
+        console.log(d);
+        i++;
       }
-      console.log(startDate);
-      console.log(dateformat(startDate, "mmm"));
-      setDays(monthValues);
+      setDays(years);
     }
   };
 

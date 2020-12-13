@@ -102,7 +102,10 @@ class DiningOptions extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.dining_option_list !== this.props.dining_option_list) {
+    if (
+      prevProps.dining_option_list !== this.props.dining_option_list &&
+      this.props.dining_option_list !== undefined
+    ) {
       let result = [];
       // new Set(
       // const storeIds = this.props.dining_option_list.map((item) => {

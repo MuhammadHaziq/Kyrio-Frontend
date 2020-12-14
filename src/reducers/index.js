@@ -2,7 +2,7 @@ import settingsReducer from "./settingsReducer";
 import authReducer from "./authReducer";
 import messageReducer from "./messageReducer";
 import filterComponentReducer from "./dashboard/filterComponentReducer";
-import salesSummaryReducer from "./dashboard/salesSummaryReducer"
+import salesSummaryReducer from "./dashboard/salesSummaryReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -10,6 +10,7 @@ import modifiresReducer from "./items/modifiresReducer";
 import storeReducer from "./settings/storeReducer";
 import posDeviceReducer from "./settings/posDeviceReducer";
 import diningOptionReducer from "./settings/diningOptionReducer";
+import diningOptionReducer2 from "./settings/diningOptionReducer2";
 import taxesReducer from "./settings/taxesReducer";
 import kitchenPrinterReducer from "./settings/kitchenPrinterReducer";
 import paymentTypesReducer from "./settings/paymentTypesReducer";
@@ -38,7 +39,7 @@ const items = combineReducers({
 });
 const dashBoard = combineReducers({
   filterComponentReducer,
-  salesSummaryReducer
+  salesSummaryReducer,
 });
 
 const settingReducers = combineReducers({
@@ -49,6 +50,7 @@ const settingReducers = combineReducers({
   taxesReducer,
   kitchenPrinterReducer,
   diningOptionReducer,
+  diningOptionReducer2,
   storeReducer,
   posDeviceReducer,
   receiptReducer,

@@ -1,6 +1,9 @@
 import React from "react";
 
 const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+const Categories = React.lazy(() =>
+  import("./views/dashboard/categories/Categories")
+);
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
@@ -16,7 +19,12 @@ const TotalHoursWorked = React.lazy(() =>
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: "/", exact: true, name: "Home" },
-  { path: "/reports", name: "Reports", component: Dashboard },
+  { path: "/reports/sales", name: "Reports / Sales", component: Dashboard },
+  {
+    path: "/reports/categories",
+    name: "Reports / Categories",
+    component: Categories,
+  },
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },
   { path: "/categories", name: "Category-list", component: CategoryList },

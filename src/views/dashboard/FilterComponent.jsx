@@ -171,9 +171,12 @@ const FilterComponent = (props) => {
     setStoreId(selectedStore);
     dispatch(
       stores_change(
-        selectedStore
-          .filter((item) => item.isSelected === true)
-          .map((item) => item._id)
+        selectedStore.filter((item) => item.isSelected === true).length ===
+          store.stores_list.length && store.stores_list.length > 0
+          ? "0"
+          : selectedStore
+              .filter((item) => item.isSelected === true)
+              .map((item) => item._id)
       )
     );
   };
@@ -214,7 +217,7 @@ const FilterComponent = (props) => {
       ...fields,
       checkAllEmployee:
         selectedEmployees.filter((item) => item.isSelected === true).length ===
-          store.stores_list.length && store.stores_list.length > 0
+          employee.employee_list.length && employee.employee_list.length > 0
           ? true
           : false,
     });
@@ -222,9 +225,12 @@ const FilterComponent = (props) => {
     setEmployeeId(selectedEmployees);
     dispatch(
       employee_change(
-        selectedEmployees
-          .filter((item) => item.isSelected === true)
-          .map((item) => item._id)
+        selectedEmployees.filter((item) => item.isSelected === true).length ===
+          employee.employee_list.length && employee.employee_list.length > 0
+          ? "0"
+          : selectedEmployees
+              .filter((item) => item.isSelected === true)
+              .map((item) => item._id)
       )
     );
   };
@@ -325,11 +331,8 @@ const FilterComponent = (props) => {
                 : startHours + startTimeZone + "-" + endHours + endTimeZone}
             </CDropdownToggle>
 
-            <CDropdownMenu
-              style={{ width: "max-content" }}
-              // show={toggleDropDown[0]}
-              id="dropdown0"
-            >
+            <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
+              {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={() => handleOnChange(0)}>
                 <CInputGroup variant="custom-radio" inline>
                   <CInputRadio
@@ -407,9 +410,9 @@ const FilterComponent = (props) => {
                 : storeId.filter((item) => item.isSelected === true).length +
                   " Stores"}
             </CDropdownToggle>
-            <CDropdownMenu
-            // show={toggleDropDown[1]}
-            >
+            <CDropdownMenu style={{ width: "max-content" }}>
+              {/* show={toggleDropDown[1]} */}
+
               <CDropdownItem onClick={() => storeHandleChange("0")}>
                 {" "}
                 <CFormGroup variant="custom-checkbox" inline>
@@ -464,9 +467,8 @@ const FilterComponent = (props) => {
                 : employeeId.filter((item) => item.isSelected === true).length +
                   " Employee"}
             </CDropdownToggle>
-            <CDropdownMenu
-            // show={toggleDropDown[2]}
-            >
+            <CDropdownMenu>
+              {/*// show={toggleDropDown[2]}*/}
               <CDropdownItem onClick={() => employeeHandleChange("0")}>
                 {" "}
                 <CFormGroup variant="custom-checkbox" inline>

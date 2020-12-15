@@ -9,8 +9,8 @@ import {
 const initialState = {
   filterDate: {},
   filterTime: {},
-  filterStores: "",
-  filterEmployees: "",
+  filterStores: "0",
+  filterEmployees: "0",
 };
 const filterComponentReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case

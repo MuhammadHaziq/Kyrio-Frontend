@@ -64,6 +64,7 @@ const Dashboard = () => {
   const [sales, setSales] = useState([]);
   const [orginalSale, setOrginalSale] = useState([]);
   var prevDateRange = usePrevious(filterComponent.filterDate);
+  var changeInFilter = usePrevious(filterComponent);
   var prevDays = usePrevious(Days);
   var prevFilter = usePrevious(filter);
   var prevSalesFilter = usePrevious(salesFilter);
@@ -71,7 +72,6 @@ const Dashboard = () => {
   const getNatural = (num) => {
     return parseFloat(num.toString().split(".")[0]);
   };
-
   const days = (from, to) => {
     var d = from,
       a = [],
@@ -749,6 +749,13 @@ const Dashboard = () => {
     }
   }, [filterComponent.filterDate, prevDateRange]);
 
+  useEffect(() => {
+    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
+      console.log(changeInFilter, "PrevchangeInFilter");
+      console.log(filterComponent, "vchangeInFilter");
+    }
+  }, [filterComponent, changeInFilter]);
+
   const changeFilter = (v) => {
     setFilter(v);
     setLoading(true);
@@ -764,7 +771,7 @@ const Dashboard = () => {
       .map((item) => {
         return item._id;
       });
-    console.log(sales_id);
+    // console.log(sales_id);
     dispatch(delete_sales_summary(JSON.stringify(sales_id)));
     setShowAlert(!showAlert);
   };

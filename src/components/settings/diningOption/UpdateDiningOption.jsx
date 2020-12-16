@@ -52,7 +52,7 @@ const UpdateDiningOption = (props) => {
             if (item._id === ite.storeId) {
               return {
                 ...item,
-                isSelected: true,
+                isSelected: ite.isActive,
               };
             }
             return item;
@@ -98,12 +98,13 @@ const UpdateDiningOption = (props) => {
         dining_name: validator.isEmpty(fields.dining_name),
       });
     } else {
-      const store = storeId.filter((item) => item.isSelected === true);
+      // const store = storeId.filter((item) => item.isSelected === true);
       let storeData = [];
-      store.map((item) => {
+      storeId.map((item) => {
         return storeData.push({
           storeId: item._id,
           storeName: item.title,
+          isActive: item.isSelected,
         });
       });
 

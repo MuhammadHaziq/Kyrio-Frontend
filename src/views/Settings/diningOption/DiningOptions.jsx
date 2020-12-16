@@ -129,12 +129,14 @@ class DiningOptions extends Component {
                   isActive: ite.stores
                     .filter((str) => str.storeId === item.storeId)
                     .map((ites) => {
-                      return ites.isActive ? ites.isActive : false;
+                      return ites.isActive;
+                      // ? ites.isActive : false;
                     })[0],
                   position: ite.stores
                     .filter((str) => str.storeId === item.storeId)
                     .map((ites) => {
-                      return ites.position ? ites.position : ite.stores.length;
+                      return ites.position;
+                      // ? ites.position : ite.stores.length;
                     })[0],
                 }
               : ""
@@ -416,7 +418,7 @@ class DiningOptions extends Component {
                   </CCardHeader>
                   {this.state.items.map((dinings, index) =>
                     (dinings.data || []).length > 0 ? (
-                      <React.Fragment>
+                      <React.Fragment key={index}>
                         <CCardBody key={index}>
                           <CRow>
                             <CCol>

@@ -20,8 +20,8 @@ import { useSelector, useDispatch } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
 import Store from "./stores/Store.jsx";
 import PosDevice from "./posDevices/PosDevice.jsx";
-// import DiningOptions from "./diningOption/DiningOptions.jsx";
-import DiningOptions2 from "./diningOption/DiningOptions2.jsx";
+import DiningOptions from "./diningOption/DiningOptions.jsx";
+// import DiningOptions2 from "./diningOption/DiningOptions2.jsx";
 import KitchenPrinter from "./kitchenPrinter/KitchenPrinter.jsx";
 import PaymentTypes from "./paymentTypes/PaymentTypes.jsx";
 import OpenTickets from "./openTickets/OpenTickets.jsx";
@@ -175,7 +175,7 @@ const Settings = () => {
                       path={`${url}/DiningOptions`}
                       exact
                       name="Dining Options"
-                      render={(props) => <DiningOptions2 {...props} />}
+                      render={(props) => <DiningOptions {...props} />}
                     />
 
                     <Route

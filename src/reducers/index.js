@@ -5,6 +5,7 @@ import filterComponentReducer from "./dashboard/filterComponentReducer";
 import salesSummaryReducer from "./dashboard/salesSummaryReducer";
 import salesCategoryReducer from "./reports/salesCategoryReducer";
 import salesEmployeeReducer from "./reports/salesEmployeeReducer";
+import salesPaymentTypeReducer from "./reports/salesPaymentTypeReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -46,6 +47,7 @@ const dashBoard = combineReducers({
 const reports = combineReducers({
   salesCategoryReducer,
   salesCategoryReducer,
+  salesPaymentTypeReducer,
 });
 
 const settingReducers = combineReducers({

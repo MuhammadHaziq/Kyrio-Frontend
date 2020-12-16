@@ -15,15 +15,15 @@ import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_employee_summary,
-  delete_employee_sales_summary,
-} from "../../../actions/reports/salesEmployeeActions";
+  get_sales_payment_type_summary,
+  delete_payment_type_sales_summary,
+} from "../../../actions/reports/salesPaymentTypeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
+import SalesPaymentTypeDatatable from "../../../datatables/reports/SalesPaymentTypeDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
-const SalesEmployee = () => {
+const SalesPaymentType = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
@@ -70,7 +70,7 @@ const SalesEmployee = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesEmployee = () => {
+  const deleteSalesPaymentType = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
   };
@@ -105,7 +105,7 @@ const SalesEmployee = () => {
                         button_text="Delete"
                         heading="Delete Sales"
                         section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesEmployee}
+                        buttonAction={deleteSalesPaymentType}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -121,7 +121,7 @@ const SalesEmployee = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesEmployeeDatatable sales_by_employee_detail={[]} />
+              <SalesPaymentTypeDatatable sales_by_paymentType_detail={[]} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -130,4 +130,4 @@ const SalesEmployee = () => {
   );
 };
 
-export default SalesEmployee;
+export default SalesPaymentType;

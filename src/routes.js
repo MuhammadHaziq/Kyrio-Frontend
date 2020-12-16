@@ -7,6 +7,9 @@ const Categories = React.lazy(() =>
 const SalesEmployee = React.lazy(() =>
   import("./views/dashboard/employee/SalesEmployee")
 );
+const SalesPaymentType = React.lazy(() =>
+  import("./views/dashboard/paymentType/SalesPaymentType")
+);
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
@@ -32,6 +35,11 @@ const routes = [
     path: "/reports/employee",
     name: "Reports / Employee",
     component: SalesEmployee,
+  },
+  {
+    path: "/reports/pay-types",
+    name: "Reports / Payment Type",
+    component: SalesPaymentType,
   },
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },

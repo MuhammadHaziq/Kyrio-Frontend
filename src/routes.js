@@ -4,6 +4,9 @@ const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
 const Categories = React.lazy(() =>
   import("./views/dashboard/categories/Categories")
 );
+const SalesEmployee = React.lazy(() =>
+  import("./views/dashboard/employee/SalesEmployee")
+);
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
@@ -24,6 +27,11 @@ const routes = [
     path: "/reports/categories",
     name: "Reports / Categories",
     component: Categories,
+  },
+  {
+    path: "/reports/employee",
+    name: "Reports / Employee",
+    component: SalesEmployee,
   },
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },

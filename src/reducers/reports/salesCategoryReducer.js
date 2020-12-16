@@ -1,28 +1,28 @@
 import {
-  GET_SALES_CATEGORY_SUMMARY,
-  TOGGLE_SALE_CATEGORY_SUMMARY_SINGLE_SELECT,
-  TOGGLE_SALE_CATEGORY_SUMMARY_ALL_SELECT,
-  DELETE_SALES_CATEGORY_SUMMARY,
-  ROW_DATA_SALES_CATEGORY_SUMMARY,
+  GET_CATEGORY_SALES_SUMMARY,
+  TOGGLE_CATEGORY_SALE_SUMMARY_SINGLE_SELECT,
+  TOGGLE_CATEGORY_SALE_SUMMARY_ALL_SELECT,
+  DELETE_CATEGORY_SALES_SUMMARY,
+  ROW_DATA_CATEGORY_SALES_SUMMARY,
 } from "../../constants/ActionTypes";
 
 const initialState = {
-  sales_category_summary: [],
+  category_sales_summary: [],
   redirect_update: false,
   redirect_sale_category_summary: true,
 };
 const salesCategoryReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
-    case GET_SALES_CATEGORY_SUMMARY: {
+    case GET_CATEGORY_SALES_SUMMARY: {
       return Object.assign({}, state, {
-        sales_category_summary: action.response,
+        category_sales_summary: action.response,
       });
     }
 
-    case TOGGLE_SALE_CATEGORY_SUMMARY_SINGLE_SELECT: {
+    case TOGGLE_CATEGORY_SALE_SUMMARY_SINGLE_SELECT: {
       return Object.assign({}, state, {
-        sales_category_summary: state.sales_category_summary.map((item) => {
+        category_sales_summary: state.category_sales_summary.map((item) => {
           if (item._id === action.response._id) {
             return Object.assign({}, item, {
               isDeleted: !item.isDeleted,
@@ -33,9 +33,9 @@ const salesCategoryReducer = (state = initialState, action) => {
       });
     }
 
-    case TOGGLE_SALE_CATEGORY_SUMMARY_ALL_SELECT: {
+    case TOGGLE_CATEGORY_SALE_SUMMARY_ALL_SELECT: {
       return Object.assign({}, state, {
-        sales_category_summary: state.sales_category_summary.map((item) => {
+        category_sales_summary: state.category_sales_summary.map((item) => {
           return Object.assign({}, item, {
             isDeleted: action.response,
           });
@@ -43,16 +43,16 @@ const salesCategoryReducer = (state = initialState, action) => {
       });
     }
 
-    case DELETE_SALES_CATEGORY_SUMMARY: {
-      let sales_category_summary = state.sales_category_summary;
+    case DELETE_CATEGORY_SALES_SUMMARY: {
+      let category_sales_summary = state.category_sales_summary;
       for (const id of action.response) {
-        sales_category_summary = sales_category_summary.filter(
+        category_sales_summary = category_sales_summary.filter(
           (item) => item._id !== id
         );
       }
       return {
         ...state,
-        sales_category_summary,
+        category_sales_summary,
         redirect_update: false,
         redirect_sale_category_summary: true,
       };

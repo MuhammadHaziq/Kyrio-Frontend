@@ -117,7 +117,7 @@ const SalesCategoryDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.sales_summary.length,
+        value: props.category_sales_summary.length,
       },
     ],
     sizePerPage: 5,
@@ -129,7 +129,7 @@ const SalesCategoryDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.sales_summary}
+        data={props.category_sales_summary}
         version="4"
         hover={true}
         selectRow={selectRowProp}

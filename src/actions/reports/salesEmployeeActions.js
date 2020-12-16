@@ -1,15 +1,15 @@
 import {
-  GET_CATEGORY_SALES_SUMMARY,
-  TOGGLE_CATEGORY_SALE_SUMMARY_SINGLE_SELECT,
-  TOGGLE_CATEGORY_SALE_SUMMARY_ALL_SELECT,
-  DELETE_CATEGORY_SALES_SUMMARY,
-  ROW_DATA_CATEGORY_SALES_SUMMARY,
+  GET_EMPLOYEE_SALES_SUMMARY,
+  TOGGLE_EMPLOYEE_SALE_SUMMARY_SINGLE_SELECT,
+  TOGGLE_EMPLOYEE_SALE_SUMMARY_ALL_SELECT,
+  DELETE_EMPLOYEE_SALES_SUMMARY,
+  ROW_DATA_EMPLOYEE_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
-export const get_sales_category_summary = () => {
+export const get_sales_employee_summary = () => {
   return (dispatch) => {
     try {
       axios({
@@ -21,7 +21,7 @@ export const get_sales_category_summary = () => {
       })
         .then((response) => {
           dispatch({
-            type: GET_CATEGORY_SALES_SUMMARY,
+            type: GET_EMPLOYEE_SALES_SUMMARY,
             response: response.data,
           });
         })
@@ -59,28 +59,28 @@ export const get_sales_category_summary = () => {
   };
 };
 
-export const toggle_sales_category_summary_single_select = (data) => {
+export const toggle_employee_sales_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({
-      type: TOGGLE_CATEGORY_SALE_SUMMARY_SINGLE_SELECT,
+      type: TOGGLE_EMPLOYEE_SALE_SUMMARY_SINGLE_SELECT,
       response: data,
     });
   };
 };
 
-export const toggle_sales_category_summary_all_select = (status) => {
+export const toggle_employee_sales_summary_all_select = (status) => {
   return (dispatch) => {
     dispatch({
-      type: TOGGLE_CATEGORY_SALE_SUMMARY_ALL_SELECT,
+      type: TOGGLE_EMPLOYEE_SALE_SUMMARY_ALL_SELECT,
       response: status,
     });
   };
 };
 
-export const delete_sales_category_summary = (ids) => {
+export const delete_employee_sales_summary = (ids) => {
   return (dispatch) => {
     dispatch({
-      type: DELETE_CATEGORY_SALES_SUMMARY,
+      type: DELETE_EMPLOYEE_SALES_SUMMARY,
       response: JSON.parse(ids),
     });
     // try {
@@ -92,7 +92,7 @@ export const delete_sales_category_summary = (ids) => {
     //         },
     //     })
     //         .then((response) => {
-    //             dispatch({ type: DELETE_CATEGORY_SALES_SUMMARY, response: JSON.parse(ids) });
+    //             dispatch({ type: DELETE_EMPLOYEE_SALES_SUMMARY, response: JSON.parse(ids) });
     //             let msg = {
     //                 open: true,
     //                 message:
@@ -142,6 +142,6 @@ export const delete_sales_category_summary = (ids) => {
 
 export const update_row_data = (row) => {
   return (dispatch) => {
-    dispatch({ type: ROW_DATA_CATEGORY_SALES_SUMMARY, response: row });
+    dispatch({ type: ROW_DATA_EMPLOYEE_SALES_SUMMARY, response: row });
   };
 };

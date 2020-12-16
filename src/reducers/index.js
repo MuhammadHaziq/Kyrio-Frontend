@@ -3,6 +3,8 @@ import authReducer from "./authReducer";
 import messageReducer from "./messageReducer";
 import filterComponentReducer from "./dashboard/filterComponentReducer";
 import salesSummaryReducer from "./dashboard/salesSummaryReducer";
+import salesCategoryReducer from "./reports/salesCategoryReducer";
+import salesEmployeeReducer from "./reports/salesEmployeeReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -40,6 +42,10 @@ const items = combineReducers({
 const dashBoard = combineReducers({
   filterComponentReducer,
   salesSummaryReducer,
+});
+const reports = combineReducers({
+  salesCategoryReducer,
+  salesCategoryReducer,
 });
 
 const settingReducers = combineReducers({

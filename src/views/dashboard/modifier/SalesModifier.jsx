@@ -22,33 +22,28 @@ import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_summary,
-  delete_sales_summary,
-} from "../../../actions/dashboard/salesSummaryActions";
+  get_modifier_category_summary,
+  delete_modifier_category_summary,
+} from "../../../actions/reports/salesModifierActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
+import SalesModifierDatatable from "../../../datatables/reports/SalesModifierDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 
-const Categories = () => {
+const SalesModifier = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
 
   const [columns, setColumns] = useState([
-    { name: "item_sold", title: "Item Sold", isHidden: false },
+    { name: "modifier", title: "Modifier", isHidden: false },
+    { name: "quantity_sold", title: "Quantity Sold", isHidden: false },
     { name: "gross_sales", title: "Gross Sales", isHidden: false },
-    { name: "item_refund", title: "Item Refund", isHidden: false },
-    { name: "refunds", title: "Refunds", isHidden: false },
-    { name: "total_price", title: "Total Price", isHidden: false },
-    { name: "discount", title: "Discount", isHidden: false },
-    { name: "net_sales", title: "Net Sales", isHidden: false },
-    { name: "cost_of_good", title: "Cost Of Good", isHidden: false },
-    { name: "gross_profit", title: "Gross Profit", isHidden: false },
-    { name: "margin", title: "Margin", isHidden: false },
-    { name: "taxes", title: "Taxes", isHidden: true },
+    { name: "quantity_refunded", title: "Quantity Refunded", isHidden: true },
+    { name: "refunds", title: "Refunds", isHidden: true },
+    { name: "net_sales", title: "Net Sales", isHidden: true },
   ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -91,7 +86,7 @@ const Categories = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesCategory = () => {
+  const deleteSalesModifier = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
   };
@@ -139,8 +134,8 @@ const Categories = () => {
                       <ConformationAlert
                         button_text="Delete"
                         heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesCategory}
+                        section={`Are you sure you want to delete the Sales Modifier?`}
+                        buttonAction={deleteSalesModifier}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -198,8 +193,8 @@ const Categories = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesCategoryDatatable
-                category_sales_summary={[]}
+              <SalesModifierDatatable
+                sale_modifier_summary={[]}
                 columns={columns}
               />
             </CCardBody>
@@ -210,4 +205,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default SalesModifier;

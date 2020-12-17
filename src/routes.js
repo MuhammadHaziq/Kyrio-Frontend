@@ -10,6 +10,15 @@ const SalesEmployee = React.lazy(() =>
 const SalesPaymentType = React.lazy(() =>
   import("./views/dashboard/paymentType/SalesPaymentType")
 );
+const SalesModifier = React.lazy(() =>
+  import("./views/dashboard/modifier/SalesModifier")
+);
+const SalesDiscount = React.lazy(() =>
+  import("./views/dashboard/discount/SalesDiscount")
+);
+const SalesShift = React.lazy(() =>
+  import("./views/dashboard/shift/SalesShift")
+);
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
@@ -40,6 +49,21 @@ const routes = [
     path: "/reports/pay-types",
     name: "Reports / Payment Type",
     component: SalesPaymentType,
+  },
+  {
+    path: "/reports/modifiers",
+    name: "Reports / Modifier",
+    component: SalesModifier,
+  },
+  {
+    path: "/reports/discounts",
+    name: "Reports / Discount",
+    component: SalesDiscount,
+  },
+  {
+    path: "/reports/shift",
+    name: "Reports / Shift",
+    component: SalesShift,
   },
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },

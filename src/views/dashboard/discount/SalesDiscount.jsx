@@ -9,47 +9,26 @@ import {
   CCol,
   CProgress,
   CRow,
-  CInputCheckbox,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-  CFormGroup,
-  CLabel,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_summary,
-  delete_sales_summary,
-} from "../../../actions/dashboard/salesSummaryActions";
+  get_discount_summary,
+  delete_discount_summary,
+} from "../../../actions/reports/salesDiscountActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
+import SalesDiscountDatatable from "../../../datatables/reports/SalesDiscountDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
-import { getStyle, hexToRgba } from "@coreui/utils/src";
 
-const Categories = () => {
+const SalesDiscount = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
 
-  const [columns, setColumns] = useState([
-    { name: "item_sold", title: "Item Sold", isHidden: false },
-    { name: "gross_sales", title: "Gross Sales", isHidden: false },
-    { name: "item_refund", title: "Item Refund", isHidden: false },
-    { name: "refunds", title: "Refunds", isHidden: false },
-    { name: "total_price", title: "Total Price", isHidden: false },
-    { name: "discount", title: "Discount", isHidden: false },
-    { name: "net_sales", title: "Net Sales", isHidden: false },
-    { name: "cost_of_good", title: "Cost Of Good", isHidden: false },
-    { name: "gross_profit", title: "Gross Profit", isHidden: false },
-    { name: "margin", title: "Margin", isHidden: false },
-    { name: "taxes", title: "Taxes", isHidden: true },
-  ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
@@ -91,23 +70,9 @@ const Categories = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesCategory = () => {
+  const deleteSalesDiscount = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
-  };
-
-  const handleOnChangeCheck = (title) => {
-    setColumns(
-      columns.slice().map((item) => {
-        if (item.title.trim() === title.trim()) {
-          return {
-            ...item,
-            isHidden: !item.isHidden,
-          };
-        }
-        return item;
-      })
-    );
   };
 
   return (
@@ -140,7 +105,7 @@ const Categories = () => {
                         button_text="Delete"
                         heading="Delete Sales"
                         section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesCategory}
+                        buttonAction={deleteSalesDiscount}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -153,55 +118,10 @@ const Categories = () => {
                     ""
                   )}
                 </CCol>
-                <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CCol
-                    xs="12"
-                    sm="4"
-                    md="4"
-                    xl="xl"
-                    className="mb-3 mb-xl-0 float-right"
-                  >
-                    <CDropdown style={{ backgroundColor: "white" }}>
-                      <CDropdownToggle caret color="default  btn-block">
-                        Select Column
-                      </CDropdownToggle>
-                      <CDropdownMenu style={{ width: "max-content" }}>
-                        {columns.map((item, index) => {
-                          return (
-                            <React.Fragment>
-                              <CDropdownItem
-                                onClick={() => handleOnChangeCheck(item.title)}
-                              >
-                                <CFormGroup variant="custom-checkbox" inline>
-                                  <CInputCheckbox
-                                    custom
-                                    name="datatableColumn"
-                                    id={"datatableColumn" + index}
-                                    value={index}
-                                    checked={!item.isHidden}
-                                  />
-                                  <CLabel
-                                    variant="custom-checkbox"
-                                    id={"datatableColumn" + index}
-                                  >
-                                    {item.title}
-                                  </CLabel>
-                                </CFormGroup>
-                              </CDropdownItem>
-                            </React.Fragment>
-                          );
-                        })}
-                      </CDropdownMenu>
-                    </CDropdown>
-                  </CCol>
-                </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesCategoryDatatable
-                category_sales_summary={[]}
-                columns={columns}
-              />
+              <SalesDiscountDatatable sale_discount_summary={[]} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -210,4 +130,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default SalesDiscount;

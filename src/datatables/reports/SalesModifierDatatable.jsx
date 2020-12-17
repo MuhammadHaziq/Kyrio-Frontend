@@ -2,14 +2,14 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_sales_category_summary_single_select,
-  toggle_sales_category_summary_all_select,
+  toggle_modifier_category_summary_single_select,
+  toggle_modifier_category_summary_all_select,
   update_row_data,
-} from "../../actions/reports/salesCategoryActions";
+} from "../../actions/reports/salesModifierActions";
 import { useDispatch } from "react-redux";
 import dateFormat from "dateformat";
 
-const SalesCategoryDatatable = (props) => {
+const SalesModifierDatatable = (props) => {
   const dispatch = useDispatch();
 
   const showDate = (cell, row) => {
@@ -84,14 +84,14 @@ const SalesCategoryDatatable = (props) => {
   };
 
   const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_sales_category_summary_single_select(row));
+    dispatch(toggle_modifier_category_summary_single_select(row));
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      dispatch(toggle_sales_category_summary_all_select(true));
+      dispatch(toggle_modifier_category_summary_all_select(true));
     } else {
-      dispatch(toggle_sales_category_summary_all_select(false));
+      dispatch(toggle_modifier_category_summary_all_select(false));
     }
   };
 
@@ -117,7 +117,7 @@ const SalesCategoryDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.category_sales_summary.length,
+        value: props.sale_modifier_summary.length,
       },
     ],
     sizePerPage: 5,
@@ -129,7 +129,7 @@ const SalesCategoryDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.category_sales_summary}
+        data={props.sale_modifier_summary}
         version="4"
         hover={true}
         selectRow={selectRowProp}
@@ -144,41 +144,41 @@ const SalesCategoryDatatable = (props) => {
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="category" dataSort={true}>
-          Category
+        <TableHeaderColumn dataField="modifier" dataSort={true}>
+          Modifier
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="item_sold"
+          dataField="quantity_sold"
           dataSort={true}
           hidden={
             props.columns.filter((item) => {
-              return item.name.trim() === "item_sold".trim();
+              return item.name.trim() === "quantity_sold".trim();
             })[0]["isHidden"]
           }
         >
-          Items Sold
+          Quantity Sold
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="gross_sales"
+          dataField="quantity_sold"
           dataSort={true}
           hidden={
             props.columns.filter((item) => {
-              return item.name.trim() === "gross_sales".trim();
+              return item.name.trim() === "quantity_sold".trim();
             })[0]["isHidden"]
           }
         >
           Gross Sales
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="item_refund"
+          dataField="quantity_refunded"
           dataSort={true}
           hidden={
             props.columns.filter((item) => {
-              return item.name.trim() === "item_refund".trim();
+              return item.name.trim() === "quantity_refunded".trim();
             })[0]["isHidden"]
           }
         >
-          Items refunded
+          Quantity Refunded
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="refunds"
@@ -192,28 +192,6 @@ const SalesCategoryDatatable = (props) => {
           Refunds
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="total_price"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "total_price".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Cost of goods
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="discount"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "discount".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Discounts
-        </TableHeaderColumn>
-        <TableHeaderColumn
           dataField="net_sales"
           dataSort={true}
           hidden={
@@ -224,53 +202,9 @@ const SalesCategoryDatatable = (props) => {
         >
           Net sales
         </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="cost_of_good"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "cost_of_good".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Cost of goods
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="gross_profit"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "gross_profit".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Gross profit
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="margin"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "margin".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Margin
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="taxes"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "taxes".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Taxes
-        </TableHeaderColumn>
       </BootstrapTable>
     </React.Fragment>
   );
 };
 
-export default SalesCategoryDatatable;
+export default SalesModifierDatatable;

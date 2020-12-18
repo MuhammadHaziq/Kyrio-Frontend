@@ -9,21 +9,22 @@ import {
   CCol,
   CProgress,
   CRow,
+  CContainer,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_shift_summary,
-  delete_shift_summary,
-} from "../../../actions/reports/salesShiftActions";
+  get_tax_sale_summary,
+  delete_tax_sale,
+} from "../../../actions/reports/salesTaxesActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
+import SalesTaxDatatable from "../../../datatables/reports/SalesTaxDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
-const SalesShift = () => {
+const SalesTax = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
@@ -70,7 +71,7 @@ const SalesShift = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesShift = () => {
+  const deleteSalesTax = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
   };
@@ -78,6 +79,24 @@ const SalesShift = () => {
   return (
     <>
       <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <CCard>
+        <CCardBody>
+          <CRow>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>Taxable sales</h6>
+              <h2>0.00</h2>
+            </CCol>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>Non-taxable sales</h6>
+              <h2>0.00</h2>
+            </CCol>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>Total net sales</h6>
+              <h2>0.00</h2>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
       <CRow>
         <CCol>
           <CCard>
@@ -105,7 +124,7 @@ const SalesShift = () => {
                         button_text="Delete"
                         heading="Delete Sales"
                         section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesShift}
+                        buttonAction={deleteSalesTax}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -121,8 +140,7 @@ const SalesShift = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              shsgsghss
-        x <SalesShiftDatatable sale_shift_summary={[]} />
+              <SalesTaxDatatable taxes_sales_summary={[]} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -131,4 +149,4 @@ const SalesShift = () => {
   );
 };
 
-export default SalesShift;
+export default SalesTax;

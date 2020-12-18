@@ -9,26 +9,49 @@ import {
   CCol,
   CProgress,
   CRow,
+  CInputCheckbox,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  CFormGroup,
+  CLabel,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_shift_summary,
-  delete_shift_summary,
-} from "../../../actions/reports/salesShiftActions";
+  get_item_sale_summary,
+  delete_item_sale,
+} from "../../../actions/reports/salesItemActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
+import SalesItemDatatable from "../../../datatables/reports/SalesItemDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import { getStyle, hexToRgba } from "@coreui/utils/src";
 
-const SalesShift = () => {
+const SalesItem = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
 
+  const [columns, setColumns] = useState([
+    { name: "item", title: "Item", isHidden: false },
+    { name: "category", title: "Category", isHidden: false },
+    { name: "item_sold", title: "Items sold", isHidden: false },
+    { name: "sku", title: "SKU", isHidden: true },
+    { name: "gross_sale", title: "Gross sales", isHidden: false },
+    { name: "item_refunded", title: "Items refunded", isHidden: false },
+    { name: "refund", title: "Refunds", isHidden: true },
+    { name: "discount", title: "Discounts", isHidden: true },
+    { name: "net_sale", title: "Net Sales", isHidden: true },
+    { name: "cost_of_good", title: "Cost of goods", isHidden: true },
+    { name: "gross_profit", title: "Gross profit", isHidden: false },
+    { name: "margin", title: "Margin", isHidden: true },
+    { name: "taxes", title: "Taxes", isHidden: true },
+  ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
@@ -70,9 +93,23 @@ const SalesShift = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesShift = () => {
+  const deleteSalesItem = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
+  };
+
+  const handleOnChangeCheck = (title) => {
+    setColumns(
+      columns.slice().map((item) => {
+        if (item.title.trim() === title.trim()) {
+          return {
+            ...item,
+            isHidden: !item.isHidden,
+          };
+        }
+        return item;
+      })
+    );
   };
 
   return (
@@ -105,7 +142,7 @@ const SalesShift = () => {
                         button_text="Delete"
                         heading="Delete Sales"
                         section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesShift}
+                        buttonAction={deleteSalesItem}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -118,11 +155,52 @@ const SalesShift = () => {
                     ""
                   )}
                 </CCol>
+                <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                  <CCol
+                    xs="12"
+                    sm="4"
+                    md="4"
+                    xl="xl"
+                    className="mb-3 mb-xl-0 float-right"
+                  >
+                    <CDropdown style={{ backgroundColor: "white" }}>
+                      <CDropdownToggle caret color="default  btn-block">
+                        Select Column
+                      </CDropdownToggle>
+                      <CDropdownMenu style={{ width: "max-content" }}>
+                        {columns.map((item, index) => {
+                          return (
+                            <React.Fragment>
+                              <CDropdownItem
+                                onClick={() => handleOnChangeCheck(item.title)}
+                              >
+                                <CFormGroup variant="custom-checkbox" inline>
+                                  <CInputCheckbox
+                                    custom
+                                    name="datatableColumn"
+                                    id={"datatableColumn" + index}
+                                    value={index}
+                                    checked={!item.isHidden}
+                                  />
+                                  <CLabel
+                                    variant="custom-checkbox"
+                                    id={"datatableColumn" + index}
+                                  >
+                                    {item.title}
+                                  </CLabel>
+                                </CFormGroup>
+                              </CDropdownItem>
+                            </React.Fragment>
+                          );
+                        })}
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              shsgsghss
-        x <SalesShiftDatatable sale_shift_summary={[]} />
+              <SalesItemDatatable item_sale_summary={[]} columns={columns} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -131,4 +209,4 @@ const SalesShift = () => {
   );
 };
 
-export default SalesShift;
+export default SalesItem;

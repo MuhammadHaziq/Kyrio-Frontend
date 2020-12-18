@@ -1,3 +1,15 @@
 .td-column {
   white-space: normal !important;
 }
+.header-purchase {
+  background-color: seashell;
+  min-width: 3000px !important;
+}
+.body-purchase  {
+  min-width: 3000px !important;
+  background-color: seashell;
+}
+.container-purchase  {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}

@@ -20,10 +20,10 @@ import {
 } from "../../../actions/reports/salesShiftActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
+import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
-const SalesShift = () => {
+const SalesReceipts = () => {
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
@@ -70,7 +70,7 @@ const SalesShift = () => {
     }
   }, [filterComponent, changeInFilter]);
 
-  const deleteSalesShift = () => {
+  const deleteSalesReceipt = () => {
     console.log("Delete");
     setShowAlert(!showAlert);
   };
@@ -105,7 +105,7 @@ const SalesShift = () => {
                         button_text="Delete"
                         heading="Delete Sales"
                         section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesShift}
+                        buttonAction={deleteSalesReceipt}
                         show_alert={showAlert}
                         hideAlert={setShowAlert}
                         variant="outline"
@@ -121,8 +121,7 @@ const SalesShift = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              shsgsghss
-        x <SalesShiftDatatable sale_shift_summary={[]} />
+         <SalesReceiptDatatable sale_receipt_sumary={[]} />
             </CCardBody>
           </CCard>
         </CCol>
@@ -131,4 +130,4 @@ const SalesShift = () => {
   );
 };
 
-export default SalesShift;
+export default SalesReceipts;

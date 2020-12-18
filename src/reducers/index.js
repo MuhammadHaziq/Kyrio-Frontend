@@ -3,12 +3,14 @@ import authReducer from "./authReducer";
 import messageReducer from "./messageReducer";
 import filterComponentReducer from "./dashboard/filterComponentReducer";
 import salesSummaryReducer from "./dashboard/salesSummaryReducer";
+import salesItemReducer from "./reports/salesItemReducer";
 import salesCategoryReducer from "./reports/salesCategoryReducer";
 import salesModifierReducer from "./reports/salesModifierReducer";
 import salesEmployeeReducer from "./reports/salesEmployeeReducer";
 import salesPaymentTypeReducer from "./reports/salesPaymentTypeReducer";
 import salesDiscountReducer from "./reports/salesDiscountReducer";
 import salesShiftReducer from "./reports/salesShiftReducer";
+import salesTaxesReducer from "./reports/salesTaxesReducer";
 import itemReducer from "./items/itemReducer";
 import categoryReducer from "./items/categoryReducer";
 import discountReducer from "./items/discountReducer";
@@ -45,15 +47,16 @@ const items = combineReducers({
 });
 const dashBoard = combineReducers({
   filterComponentReducer,
-  salesSummaryReducer,
 });
 const reports = combineReducers({
-  salesCategoryReducer,
+  salesSummaryReducer,
+  salesItemReducer,
   salesCategoryReducer,
   salesPaymentTypeReducer,
   salesModifierReducer,
   salesDiscountReducer,
   salesShiftReducer,
+  salesTaxesReducer,
 });
 
 const settingReducers = combineReducers({

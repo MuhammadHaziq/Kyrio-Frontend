@@ -1,6 +1,7 @@
 import React from "react";
 
 const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+const SalesItem = React.lazy(() => import("./views/dashboard/item/SalesItem"));
 const Categories = React.lazy(() =>
   import("./views/dashboard/categories/Categories")
 );
@@ -10,12 +11,16 @@ const SalesEmployee = React.lazy(() =>
 const SalesPaymentType = React.lazy(() =>
   import("./views/dashboard/paymentType/SalesPaymentType")
 );
+const SalesReceipts = React.lazy(() =>
+  import("./views/dashboard/receipt/SalesReceipts")
+);
 const SalesModifier = React.lazy(() =>
   import("./views/dashboard/modifier/SalesModifier")
 );
 const SalesDiscount = React.lazy(() =>
   import("./views/dashboard/discount/SalesDiscount")
 );
+const SalesTax = React.lazy(() => import("./views/dashboard/taxes/SalesTax"));
 const SalesShift = React.lazy(() =>
   import("./views/dashboard/shift/SalesShift")
 );
@@ -36,6 +41,11 @@ const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/reports/sales", name: "Reports / Sales", component: Dashboard },
   {
+    path: "/reports/goods",
+    name: "Reports / Items",
+    component: SalesItem,
+  },
+  {
     path: "/reports/categories",
     name: "Reports / Categories",
     component: Categories,
@@ -51,6 +61,11 @@ const routes = [
     component: SalesPaymentType,
   },
   {
+    path: "/reports/average",
+    name: "Reports / Receipt",
+    component: SalesReceipts,
+  },
+  {
     path: "/reports/modifiers",
     name: "Reports / Modifier",
     component: SalesModifier,
@@ -64,6 +79,11 @@ const routes = [
     path: "/reports/shift",
     name: "Reports / Shift",
     component: SalesShift,
+  },
+  {
+    path: "/reports/tax",
+    name: "Reports / Tax",
+    component: SalesTax,
   },
   { path: "/settings", name: "Settings", component: Settings },
   { path: "/items", name: "Item-list", component: ItemsList },

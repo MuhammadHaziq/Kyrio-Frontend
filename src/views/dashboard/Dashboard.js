@@ -951,7 +951,7 @@ const Dashboard = () => {
                     </svg>
                     Export
                   </CButton>
-                  {salesSummary.sales_summary.filter(
+                  {typeof salesSummary !== "undefined" ? salesSummary.sales_summary.filter(
                     (item) => item.isDeleted === true
                   ).length > 0 ? (
                     <React.Fragment>
@@ -970,13 +970,13 @@ const Dashboard = () => {
                     </React.Fragment>
                   ) : (
                     ""
-                  )}
+                  ) : ""}
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
               <SalesSummaryDatatable
-                sales_summary={salesSummary.sales_summary}
+                sales_summary={typeof salesSummary !== "undefined" ? salesSummary.sales_summary : []}
               />
             </CCardBody>
           </CCard>

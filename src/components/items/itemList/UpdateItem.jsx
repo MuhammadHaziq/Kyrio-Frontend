@@ -42,7 +42,7 @@ const AddItem = (props) => {
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
-    color: "rgb(224, 224, 224)",
+    color: "#E0E0E0",
     availableForSale: false,
   });
   const [isHovered, setIsHovered] = useState(false);
@@ -225,14 +225,14 @@ const AddItem = (props) => {
   };
 
   const colors = [
-    { id: 0, color: "rgb(224, 224, 224)" },
-    { id: 1, color: "rgb(244, 67, 54)" },
-    { id: 2, color: "rgb(233, 30, 99)" },
-    { id: 3, color: "rgb(255, 152, 0)" },
-    { id: 4, color: "rgb(205, 220, 57)" },
-    { id: 5, color: "rgb(76, 175, 80)" },
-    { id: 6, color: "rgb(33, 150, 243)" },
-    { id: 7, color: "rgb(156, 39, 176)" },
+    { id: 0, color: "#E0E0E0" },
+    { id: 1, color: "#E04336" },
+    { id: 2, color: "#E91E63" },
+    { id: 3, color: "#FF9800" },
+    { id: 4, color: "#CDDC39" },
+    { id: 5, color: "#4CAF50" },
+    { id: 6, color: "#2196F3" },
+    { id: 7, color: "#9C27B0" },
   ];
   const handleClick = (event) => {
     // hiddenFileInput.current.click();
@@ -261,6 +261,16 @@ const AddItem = (props) => {
   };
   const handleChangeModifier = (idx) => (e) => {
     const state = modifierSwitch.map((x, index) => (idx === index ? !x : x));
+    const modifier = (modifiers || []).map((item, index) => {
+      if (idx === index) {
+        return {
+          ...item,
+          isSelected: !item.isSelected,
+        };
+      }
+      return item;
+    });
+    setModifiers(modifier);
     setModifierSwitch(state);
   };
   const toggleVariantModal = () => {

@@ -10,7 +10,6 @@ import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
 const Price = (props) => {
   const dispatch = useDispatch();
-  console.log("Price", props);
   const [storePrice, setStorePrice] = useState(props.item.price);
   useEffect(() => {
     if (props.item.price !== null && props.item.price !== undefined) {
@@ -166,21 +165,23 @@ const StoresDatatable = (props) => {
       <CRow>
         <table className="table">
           <thead>
-            <th>Available</th>
-            <th>Store</th>
-            <th>Price</th>
-            {props.stock === true ? (
-              <React.Fragment>
-                <th>In Stock</th>
-                <th>Low Stock</th>
-              </React.Fragment>
-            ) : (
-              ""
-            )}
+            <tr>
+              <th>Available</th>
+              <th>Store</th>
+              <th>Price</th>
+              {props.stock === true ? (
+                <React.Fragment>
+                  <th>In Stock</th>
+                  <th>Low Stock</th>
+                </React.Fragment>
+              ) : (
+                ""
+              )}
+            </tr>
           </thead>
           <tbody>
-            {(props.stores || []).map((item) => (
-              <tr>
+            {(props.stores || []).map((item, index) => (
+              <tr key={index}>
                 <td>
                   <CheckAvailablity item={item} />
                 </td>
@@ -192,7 +193,7 @@ const StoresDatatable = (props) => {
                   <React.Fragment>
                     <td>
                       <InStock item={item} />
-                    </td>{" "}
+                    </td>
                     <td>
                       <LowStock item={item} />
                     </td>

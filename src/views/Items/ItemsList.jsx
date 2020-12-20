@@ -32,7 +32,9 @@ import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddItem from "../../components/items/itemList/AddItem";
 import UpdateItem from "../../components/items/itemList/UpdateItem";
+import { get_modifires_list } from "../../actions/items/modifiresActions";
 import { useSelector, useDispatch } from "react-redux";
+import { get_stores } from "../../actions/settings/storeActions";
 
 const ItemsList = () => {
   let item = useSelector((state) => state.items.itemReducer);
@@ -65,6 +67,10 @@ const ItemsList = () => {
     dispatch(get_category_list());
     dispatch(get_items_stock());
     dispatch(get_items_store());
+    dispatch(get_stores());
+    if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {
+      dispatch(get_modifires_list(auth.user.stores[0]._id));
+    }
   }, [dispatch]);
 
   useEffect(() => {

@@ -39,6 +39,8 @@ const AddItem = (props) => {
     sold_by: "Each",
     price: "",
     cost: "$0.00",
+    sku: "",
+    item_barcode: "",
     represent_type: "Color_and_shape",
     color: "rgb(224, 224, 224)",
     availableForSale: false,
@@ -46,15 +48,17 @@ const AddItem = (props) => {
   const [isHovered, setIsHovered] = useState(false);
   const [itemImage, setItemImage] = useState(null);
   const [inventorySwitch, setInventorySwitch] = useState([false, false]);
-  const [modifierSwitch, setModifierSwitch] = useState([false, false]);
+  const [modifierSwitch, setModifierSwitch] = useState([]);
   const [receiptFile, setrReceiptFile] = useState("");
   const [variantModal, setVariantModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [modifiers, setModifiers] = useState([]);
 
   const [errors, setErrors] = useState({
     item_name: false,
   });
-
+  const store = useSelector((state) => state.settingReducers.storeReducer);
+  const modifire = useSelector((state) => state.items.modifiresReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const item = useSelector((state) => state.items.itemReducer);
 
@@ -68,6 +72,15 @@ const AddItem = (props) => {
       props.goBack();
     }
   }, [item.redirect_itemList]);
+
+  useEffect(() => {
+    let modifierSwitch = [];
+    (modifire.modifiers_list || []).map((item) => {
+      modifierSwitch.push(false);
+    });
+    setModifierSwitch(modifierSwitch);
+    setModifiers(modifire.modifiers_list);
+  }, [modifire.modifiers_list]);
 
   useEffect(() => {
     if (props.item_row_data !== undefined && props.item_row_data !== null) {
@@ -85,16 +98,28 @@ const AddItem = (props) => {
         cost: "$" + props.item_row_data.cost,
         represent_type: props.item_row_data.repoOnPos,
         color: props.item_row_data.color,
+        sku: props.item_row_data.sku || "",
+        item_barcode: props.item_row_data.barcode || "",
         availableForSale: props.item_row_data.availableForSale,
       });
       setInventorySwitch([
         props.item_row_data.compositeItem,
         props.item_row_data.trackStock,
       ]);
-      setModifierSwitch([
-        props.item_row_data.modifiersStatus,
-        props.item_row_data.dsd,
-      ]);
+      let selectedModifier = modifire.modifiers_list;
+      selectedModifier = selectedModifier.map((item) => {
+        if (
+          props.item_row_data.modifiers.filter((ite) => ite.id === item._id)
+            .length > 0
+        ) {
+          return {
+            ...item,
+            isSelected: true,
+          };
+        }
+        return item;
+      });
+      setModifiers(selectedModifier);
     }
   }, [props.item_row_data]);
 
@@ -111,15 +136,13 @@ const AddItem = (props) => {
       });
       return false;
     }
-    let modifiers = [];
-    item.store_list
-      .filter((item) => item.isSelected === true)
+    let modifier = [];
+    modifiers
+      .filter((ite) => ite.isSelected === true)
       .map((item) => {
-        return (item.modifiers || []).map((modi) => {
-          modifiers.push({
-            id: modi._id,
-            title: modi.title,
-          });
+        return modifier.push({
+          id: item._id,
+          title: item.title,
         });
       });
     let taxes = [];
@@ -162,12 +185,9 @@ const AddItem = (props) => {
       color: fields.color,
       compositeItem: inventorySwitch[0],
       trackStock: inventorySwitch[1],
-      modifiersStatus: modifierSwitch[0],
-      dsd: modifierSwitch[1],
-      modifiers:
-        modifierSwitch[0] === true
-          ? JSON.stringify(modifiers)
-          : JSON.stringify([]),
+      sku: fields.sku,
+      barcode: fields.item_barcode,
+      modifiers: JSON.stringify(modifier),
       taxes: JSON.stringify(taxes),
       stores: JSON.stringify(
         item.store_list.filter((item) => item.isSelected === true)
@@ -522,7 +542,7 @@ const AddItem = (props) => {
         </CCardBody>
       </CCard>
       {/**  Modifiers  */}
-      {item.total_modifiers > 0 ? (
+      {modifire.modifiers_list.length > 0 ? (
         <>
           <CCard>
             <CCardHeader>
@@ -533,51 +553,35 @@ const AddItem = (props) => {
 
             <CCardBody>
               <CCol xs="12" sm="12" md="12">
-                <CListGroup>
-                  <CListGroupItem
-                    key={0}
-                    className="justify-content-between"
-                    style={{
-                      border: "none",
-                      borderBottom: "1px solid #00000024",
-                    }}
-                  >
-                    <h6>
-                      Modifire
-                      <CSwitch
-                        className={"mx-1 float-right"}
-                        shape="pill"
-                        color={"success"}
-                        checked={modifierSwitch[0]}
-                        onChange={handleChangeModifier(0)}
-                      />
-                    </h6>
-                    <p style={{ lineHeight: "normal" }}>
-                      Available in all stores
-                    </p>
-                  </CListGroupItem>
-                  <CListGroupItem
-                    key={1}
-                    className="justify-content-between"
-                    style={{
-                      border: "none",
-                    }}
-                  >
-                    <h6>
-                      dsd
-                      <CSwitch
-                        className={"mx-1 float-right"}
-                        shape="pill"
-                        color={"success"}
-                        checked={modifierSwitch[1]}
-                        onChange={handleChangeModifier(1)}
-                      />
-                    </h6>
-                    <p style={{ lineHeight: "normal" }}>
-                      Available in all stores
-                    </p>
-                  </CListGroupItem>
-                </CListGroup>
+                {modifiers.map((item, index) => (
+                  <React.Fragment>
+                    <CListGroup>
+                      <CListGroupItem
+                        key={1}
+                        className="justify-content-between"
+                        style={{
+                          border: "none",
+                        }}
+                      >
+                        <h6>
+                          {item.title}
+                          <CSwitch
+                            className={"mx-1 float-right"}
+                            shape="pill"
+                            color={"success"}
+                            checked={item.isSelected}
+                            onChange={handleChangeModifier(index)}
+                          />
+                        </h6>
+                        <p style={{ lineHeight: "normal" }}>
+                          {item.stores.length === store.stores_list.length
+                            ? "Available in all stores"
+                            : item.stores.map((str) => str.name).join(",")}
+                        </p>
+                      </CListGroupItem>
+                    </CListGroup>
+                  </React.Fragment>
+                ))}
               </CCol>
             </CCardBody>
           </CCard>
@@ -585,6 +589,7 @@ const AddItem = (props) => {
       ) : (
         ""
       )}
+
       {/**  Stores  */}
       <CCard>
         <CCardHeader>

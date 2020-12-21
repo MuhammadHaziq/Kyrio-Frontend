@@ -37,7 +37,7 @@ const Dashboard = () => {
     (state) => state.dashBoard.filterComponentReducer
   );
   const salesSummary = useSelector(
-    (state) => state.dashBoard.salesSummaryReducer
+    (state) => state.reports.salesSummaryReducer
   );
 
   const [Days, setDays] = useState([]);
@@ -951,32 +951,40 @@ const Dashboard = () => {
                     </svg>
                     Export
                   </CButton>
-                  {typeof salesSummary !== "undefined" ? salesSummary.sales_summary.filter(
-                    (item) => item.isDeleted === true
-                  ).length > 0 ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesSummary}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
+                  {typeof salesSummary !== "undefined" ? (
+                    salesSummary.sales_summary.filter(
+                      (item) => item.isDeleted === true
+                    ).length > 0 ? (
+                      <React.Fragment>
+                        <ConformationAlert
+                          button_text="Delete"
+                          heading="Delete Sales"
+                          section={`Are you sure you want to delete the Sales Summary?`}
+                          buttonAction={deleteSalesSummary}
+                          show_alert={showAlert}
+                          hideAlert={setShowAlert}
+                          variant="outline"
+                          className="ml-2 btn-square"
+                          color="danger"
+                          block={false}
+                        />
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )
                   ) : (
                     ""
-                  ) : ""}
+                  )}
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
               <SalesSummaryDatatable
-                sales_summary={typeof salesSummary !== "undefined" ? salesSummary.sales_summary : []}
+                sales_summary={
+                  typeof salesSummary !== "undefined"
+                    ? salesSummary.sales_summary
+                    : []
+                }
               />
             </CCardBody>
           </CCard>

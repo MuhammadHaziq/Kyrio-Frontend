@@ -85,6 +85,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   msg: messageReducer,
   dashBoard,
+  reports,
   items,
   settingReducers,
   customerReducers,

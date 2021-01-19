@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CButton,
   CCard,
@@ -36,6 +36,7 @@ const PosDevice = () => {
   const posDevice = useSelector(
     (state) => state.settingReducers.posDeviceReducer
   );
+
   const store = useSelector((state) => state.settingReducers.storeReducer);
 
   useEffect(() => {
@@ -192,7 +193,9 @@ const PosDevice = () => {
                               : "cil-chevron-top"
                           }
                         />
-                      </CLink>
+                        className="table table-striped table-bordered"
+
+                                              </CLink>
                     </div>*/}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>

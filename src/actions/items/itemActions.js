@@ -29,6 +29,8 @@ import {
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 // import jwt from "jsonwebtoken";
+import $ from "jquery";
+$.DataTable = require("datatables.net");
 
 export const redirect_back_items = (status) => {
   return (dispatch) => {
@@ -38,23 +40,97 @@ export const redirect_back_items = (status) => {
     });
   };
 };
+
+export const get_items_list_server_side = (data) => {
+  return (dispatch) => {
+    // const url = `${BaseUrl}items/serverSide`;
+    // $("#itemListServerDatatable").DataTable().destroy().clear();
+    // $("#itemListServerDatatable").DataTable({
+    //   oLanguage: {
+    //     sInfo: "Total Items: _TOTAL_",
+    //   },
+    //   //"aaSorting": [[11,'desc'],[10,'desc']],
+    //   //"order": [[ 10, "desc"  ]],
+    //   oSearch: { sSearch: data.searchItem },
+    //   fixedHeader: true,
+    //   scrollX: true,
+    //   paging: true,
+    //   iDisplayLength: 20,
+    //   aLengthMenu: [
+    //     [20, 50, 100, 200, 500],
+    //     [20, 50, 100, 200, 500],
+    //   ],
+    //   lengthChange: true,
+    //   // searching: true,
+    //   ordering: false,
+    //   info: true,
+    //   // dom:
+    //   //   "<'row'<'col-sm-3'i><'col-sm-2'l><'col-sm-3'f><'col-sm-4'p>>" +
+    //   //   "<'row'<'col-sm-12'tr>>",
+    //   dom: '<"top"ifl<"clear">>rt<"bottom"p<"clear">>',
+    //   bProcessing: true,
+    //   bRetrieve: true,
+    //   bDestroy: true,
+    //   serverSide: true,
+    //   bAutoWidth: true,
+    //   ajax: {
+    //     url: url, // json datasource
+    //     headers: {
+    //       kyrioToken: `${localStorage.getItem("kyrio")}`,
+    //     },
+    //     // type: 'post', // method  , by default get
+    //     dataType: "json",
+    //     data: data,
+    //   },
+    //   deferRender: true,
+    // }); // End of DataTable
+    // $("#itemListServerDatatable").removeClass("hide");
+  };
+};
+
 export const get_items_list = (data) => {
   return (dispatch) => {
-    // const data = { page: 1, limit: 100, storeId: "adfaa0fs0dfa9dsf" };
-    try {
-      axios({
-        method: "get",
-        url: `${BaseUrl}items`,
-        params: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
-      })
-        .then((response) => {
-          dispatch({ type: GET_ITEM_LIST, response: response.data });
-        })
-        .catch((error) => {
-          console.log("err", error.response);
+        // const data = { page: 1, limit: 100, storeId: "adfaa0fs0dfa9dsf" };
+        $("#itemListServerDatatable").DataTable().clear().destroy();
+        try {
+          axios({
+            method: "get",
+            url: `${BaseUrl}items`,
+            params: data,
+            headers: {
+              kyrioToken: `${localStorage.getItem("kyrio")}`,
+            },
+          })
+            .then((response) => {
+              dispatch({ type: GET_ITEM_LIST, response: response.data });
+              $("#itemListServerDatatable").dataTable({
+                dom: '<"top"i>rt<"bottom"flp><"clear">',
+                paging: true,
+                ordering: true,
+                info: true,
+                searching: false,
+                scrollX: true,
+                scrollY: "50vh",
+                scrollCollapse: true,
+              });
+            })
+            .catch((error) => {
+              console.log("err", error.response);
+              let msg = {
+                open: true,
+                message:
+                  typeof error.response != "undefined"
+                    ? error.response.status === 404
+                      ? error.response.statusText
+                      : error.response.data.message
+                    : ERROR_MESSAGE,
+                object: error,
+                error: true,
+              };
+              dispatch({ type: MESSAGE, data: msg });
+            });
+        } catch (error) {
+          console.log("err catch", error);
           let msg = {
             open: true,
             message:
@@ -67,22 +143,7 @@ export const get_items_list = (data) => {
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
-        });
-    } catch (error) {
-      console.log("err catch", error);
-      let msg = {
-        open: true,
-        message:
-          typeof error.response != "undefined"
-            ? error.response.status === 404
-              ? error.response.statusText
-              : error.response.data.message
-            : ERROR_MESSAGE,
-        object: error,
-        error: true,
-      };
-      dispatch({ type: MESSAGE, data: msg });
-    }
+        }
   };
 };
 
@@ -426,6 +487,7 @@ export const toggle_select_all_item_stores = (status) => {
     });
   };
 };
+
 export const toggle_select_single_item_store = (id) => {
   return (dispatch) => {
     dispatch({
@@ -528,6 +590,7 @@ export const delete_item_varient = (data) => {
     });
   };
 };
+
 export const update_row_data = (row) => {
   return (dispatch) => {
     dispatch({
@@ -536,6 +599,7 @@ export const update_row_data = (row) => {
     });
   };
 };
+
 export const remove_row_data = (row) => {
   return (dispatch) => {
     dispatch({

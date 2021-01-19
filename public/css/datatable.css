@@ -5,11 +5,11 @@
   background-color: seashell;
   min-width: 3000px !important;
 }
-.body-purchase  {
+.body-purchase {
   min-width: 3000px !important;
   background-color: seashell;
 }
-.container-purchase  {
+.container-purchase {
   overflow-x: scroll;
   overflow-y: hidden;
 }

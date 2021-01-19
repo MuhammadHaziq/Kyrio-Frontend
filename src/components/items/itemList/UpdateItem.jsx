@@ -761,7 +761,7 @@ const AddItem = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="danger"
+            color="default"
             onClick={goBack}
           >
             CANCEL

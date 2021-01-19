@@ -40,6 +40,8 @@ const ItemsList = () => {
   let item = useSelector((state) => state.items.itemReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const auth = useSelector((state) => state.auth);
+  const modifire = useSelector((state) => state.items.modifiresReducer);
+  const store = useSelector((state) => state.settingReducers.storeReducer);
 
   const dispatch = useDispatch();
   // const [items, setItems] = useState(usersData)
@@ -57,7 +59,335 @@ const ItemsList = () => {
   const [fadeUpdateItem, setUpdateItem] = useState(false);
   const [fadeAddItem, setFadeAddItem] = useState(false);
   const [timeout] = useState(300);
+  let csvStores = [];
+  store.stores_list.map((item) => {
+    return csvStores.push(
+      {
+        label: `Available for sale [${item.title}]`,
+        key: `available_for_sale${item.title}`,
+      },
+      { label: `Price [${item.title}]`, key: `price${item.title}` },
+      { label: `In stock [${item.title}]`, key: `in_stock${item.title}` },
+      { label: `Low stock [${item.title}]`, key: `low_stock${item.title}` }
+    );
+  });
+  let modifierCsv = [];
+  modifire.modifiers_list.map((item) => {
+    return modifierCsv.push({
+      label: `Modifier -"${item.title}"`,
+      key: `modifier${item.title}`,
+    });
+  });
+  const headers = [
+    { label: "Handle", key: "handle" },
+    { label: "SKU", key: "sku" },
+    { label: "Name", key: "name" },
+    { label: "Category", key: "category" },
+    { label: "Sold by weight", key: "sold_by_weight" },
+    { label: "Option 1 name", key: "varient_1_name" },
+    { label: "Option 1 value", key: "varient_1_value" },
+    { label: "Option 2 name", key: "varient_2_name" },
+    { label: "Option 2 value", key: "varient_2_value" },
+    { label: "Option 3 name", key: "varient_3_name" },
+    { label: "Option 3 value", key: "varient_3_value" },
+    { label: "Default price", key: "price" },
+    { label: "Cost", key: "cost" },
+    { label: "Barcode", key: "barcode" },
+    { label: "SKU of included item", key: "sku_of_included_item" },
+    { label: "Quantity of included item", key: "quantity_of_included_item" },
+    { label: "Track stock", key: "track_stock" },
+    ...csvStores,
+    ...modifierCsv,
+  ];
+  console.log(headers);
+  let csvDownloadData = [];
+  // for (var i = 0; i < item.item_list.length; i++) {
+  //   var lengthOptionOne =
+  //     item.item_list[i].varients !== null &&
+  //     item.item_list[i].varients !== undefined
+  //       ? item.item_list[i].varients[0] !== undefined
+  //         ? item.item_list[i].varients[0]["optionValue"] !== undefined
+  //           ? item.item_list[i].varients[0]["optionValue"][0]["variantName"] !==
+  //             undefined
+  //             ? item.item_list[i].varients[0]["optionValue"][0]["variantName"]
+  //                 .length
+  //             : 0
+  //           : 0
+  //         : 0
+  //       : 0;
+  //   var lengthOptionTwo =
+  //     item.item_list[i].varients !== null &&
+  //     item.item_list[i].varients !== undefined
+  //       ? item.item_list[i].varients[1] !== undefined
+  //         ? item.item_list[i].varients[1]["optionValue"] !== undefined
+  //           ? item.item_list[i].varients[1]["optionValue"][0]["variantName"] !==
+  //             undefined
+  //             ? item.item_list[i].varients[1]["optionValue"][0]["variantName"]
+  //                 .length
+  //             : 0
+  //           : 0
+  //         : 0
+  //       : 0;
+  //   var lengthOptionThree =
+  //     item.item_list[i].varients !== null &&
+  //     item.item_list[i].varients !== undefined
+  //       ? item.item_list[i].varients[2] !== undefined
+  //         ? item.item_list[i].varients[2]["optionValue"] !== undefined
+  //           ? item.item_list[i].varients[2]["optionValue"][0]["variantName"] !==
+  //             undefined
+  //             ? item.item_list[i].varients[2]["optionValue"][0]["variantName"]
+  //                 .length
+  //             : 0
+  //           : 0
+  //         : 0
+  //       : 0;
+  //   var exportStores =
+  //     item.item_list[i].stores !== null &&
+  //     item.item_list[i].stores !== undefined
+  //       ? (item.item_list[i].stores || []).map((stor) => {
+  //           selectedStores.push({
+  //             [`available_for_sale${stor.title}`]: stor.title,
+  //           });
+  //         })
+  //       : [];
+  //   var maxValue = Math.max(
+  //     lengthOptionOne,
+  //     lengthOptionTwo,
+  //     lengthOptionThree
+  //   );
+  //   console.log(maxValue);
+  //   csvDownloadData.push({
+  //     handle: item.item_list[i].name.trim().replace(/\s+/g, "-").toLowerCase(),
+  //     name: item.item_list[i].name.trim(),
+  //     category:
+  //       item.item_list[i].category !== null
+  //         ? item.item_list[i].category["name"]
+  //         : "",
+  //     sold_by_weight:
+  //       item.item_list[i].soldByType == "Weight/Volume" ? "Y" : "N",
+  //     sold_by_weight:
+  //       item.item_list[i].soldByType == "Weight/Volume" ? "Y" : "N",
+  //     sku: item.item_list[i].sku,
+  //     varient_1_name:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[0] !== null &&
+  //           item.item_list[i].varients[0] !== undefined
+  //           ? item.item_list[i].varients[0]["optionName"]
+  //           : ""
+  //         : "",
+  //     varient_1_value:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[0] !== null &&
+  //           item.item_list[i].varients[0] !== undefined
+  //           ? item.item_list[i].varients[0]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[0]["optionValue"][0]["variantName"]
+  //             : ""
+  //           : ""
+  //         : "",
+  //     varient_2_name:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[1] !== null &&
+  //           item.item_list[i].varients[1] !== undefined
+  //           ? item.item_list[i].varients[1]["optionName"]
+  //           : ""
+  //         : "",
+  //     varient_2_value:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[1] !== null &&
+  //           item.item_list[i].varients[1] !== undefined
+  //           ? item.item_list[i].varients[1]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[1]["optionValue"][0]["variantName"]
+  //             : ""
+  //           : ""
+  //         : "",
+  //     varient_3_name:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[2] !== null &&
+  //           item.item_list[i].varients[2] !== undefined
+  //           ? item.item_list[i].varients[2]["optionName"]
+  //           : ""
+  //         : "",
+  //     varient_3_value:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[2] !== null &&
+  //           item.item_list[i].varients[2] !== undefined
+  //           ? item.item_list[i].varients[2]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[2]["optionValue"][0]["variantName"]
+  //             : ""
+  //           : ""
+  //         : "",
+  //     price:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[0] !== null &&
+  //           item.item_list[i].varients[0] !== undefined
+  //           ? item.item_list[i].varients[0]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[0]["optionValue"][0]["price"]
+  //             : ""
+  //           : ""
+  //         : item.item_list[i].price,
+  //     cost:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[0] !== null &&
+  //           item.item_list[i].varients[0] !== undefined
+  //           ? item.item_list[i].varients[0]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[0]["optionValue"][0]["cost"]
+  //             : ""
+  //           : ""
+  //         : item.item_list[i].cost,
+  //     barcode:
+  //       item.item_list[i].varients !== null &&
+  //       item.item_list[i].varients !== undefined
+  //         ? item.item_list[i].varients[0] !== null &&
+  //           item.item_list[i].varients[0] !== undefined
+  //           ? item.item_list[i].varients[0]["optionValue"] !== undefined
+  //             ? item.item_list[i].varients[0]["optionValue"][0]["barcode"]
+  //             : ""
+  //           : ""
+  //         : item.item_list[i].barcode,
+  //     sku_of_included_item: "",
+  //     quantity_of_included_item: "",
+  //     track_stock: item.item_list[i].trackStock == true ? "Y" : "N",
+  //   });
+  //
+  // }
 
+  item.item_list.map((item) => {
+    let varient = [];
+    var selectedStores = [];
+    var lengthOptionOne =
+      item.varients !== null && item.varients !== undefined
+        ? item.varients[0] !== undefined
+          ? item.varients[0]["optionValue"] !== undefined
+            ? item.varients[0]["optionValue"][0]["variantName"] !== undefined
+              ? item.varients[0]["optionValue"][0]["variantName"].length
+              : 0
+            : 0
+          : 0
+        : 0;
+    var lengthOptionTwo =
+      item.varients !== null && item.varients !== undefined
+        ? item.varients[1] !== undefined
+          ? item.varients[1]["optionValue"] !== undefined
+            ? item.varients[1]["optionValue"][0]["variantName"] !== undefined
+              ? item.varients[1]["optionValue"][0]["variantName"].length
+              : 0
+            : 0
+          : 0
+        : 0;
+    var lengthOptionThree =
+      item.varients !== null && item.varients !== undefined
+        ? item.varients[2] !== undefined
+          ? item.varients[2]["optionValue"] !== undefined
+            ? item.varients[2]["optionValue"][0]["variantName"] !== undefined
+              ? item.varients[2]["optionValue"][0]["variantName"].length
+              : 0
+            : 0
+          : 0
+        : 0;
+
+    var maxValue = Math.max(
+      lengthOptionOne,
+      lengthOptionTwo,
+      lengthOptionThree
+    );
+    console.log(maxValue);
+    csvDownloadData.push({
+      handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
+      name: item.name.trim(),
+      category: item.category !== null ? item.category["name"] : "",
+      sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
+      sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
+      sku: item.sku,
+      varient_1_name:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[0] !== null && item.varients[0] !== undefined
+            ? item.varients[0]["optionName"]
+            : ""
+          : "",
+      varient_1_value:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[0] !== null && item.varients[0] !== undefined
+            ? item.varients[0]["optionValue"] !== undefined
+              ? item.varients[0]["optionValue"][0]["variantName"]
+              : ""
+            : ""
+          : "",
+      varient_2_name:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[1] !== null && item.varients[1] !== undefined
+            ? item.varients[1]["optionName"]
+            : ""
+          : "",
+      varient_2_value:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[1] !== null && item.varients[1] !== undefined
+            ? item.varients[1]["optionValue"] !== undefined
+              ? item.varients[1]["optionValue"][0]["variantName"]
+              : ""
+            : ""
+          : "",
+      varient_3_name:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[2] !== null && item.varients[2] !== undefined
+            ? item.varients[2]["optionName"]
+            : ""
+          : "",
+      varient_3_value:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[2] !== null && item.varients[2] !== undefined
+            ? item.varients[2]["optionValue"] !== undefined
+              ? item.varients[2]["optionValue"][0]["variantName"]
+              : ""
+            : ""
+          : "",
+      price:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[0] !== null && item.varients[0] !== undefined
+            ? item.varients[0]["optionValue"] !== undefined
+              ? item.varients[0]["optionValue"][0]["price"]
+              : ""
+            : ""
+          : item.price,
+      cost:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[0] !== null && item.varients[0] !== undefined
+            ? item.varients[0]["optionValue"] !== undefined
+              ? item.varients[0]["optionValue"][0]["cost"]
+              : ""
+            : ""
+          : item.cost,
+      barcode:
+        item.varients !== null && item.varients !== undefined
+          ? item.varients[0] !== null && item.varients[0] !== undefined
+            ? item.varients[0]["optionValue"] !== undefined
+              ? item.varients[0]["optionValue"][0]["barcode"]
+              : ""
+            : ""
+          : item.barcode,
+      sku_of_included_item: "",
+      quantity_of_included_item: "",
+      track_stock: item.trackStock == true ? "Y" : "N",
+    });
+    // var exportStores =
+    //   item.stores !== null && item.stores !== undefined
+    //     ? (item.stores || []).map((stor) => {
+    //         csvDownloadData = [
+    //           ...csvDownloadData,
+    //           ([`available_for_sale${stor.title}`]: stor.title),
+    //         ];
+    //       })
+    //     : [];
+    return csvDownloadData;
+  });
+  console.log(csvDownloadData);
   useEffect(() => {
     setDefaultStoreId(auth.user.stores[0]._id);
     setStoreId(auth.user.stores[0]._id);

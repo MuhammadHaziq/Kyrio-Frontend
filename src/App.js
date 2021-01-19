@@ -17,6 +17,12 @@ const Register = React.lazy(() => import("./views/Authorization/Register"));
 const Page404 = React.lazy(() => import("./views/Errors/Page404"));
 const Page500 = React.lazy(() => import("./views/Errors/Page500"));
 const TheLayout = React.lazy(() => import("./containers/TheLayout"));
+const lightDatatable = React.lazy(() =>
+  require("./assets/css/all_datatables_light.css")
+);
+const darkDatatable = React.lazy(() =>
+  require("./assets/css/all_datatables_dark.css")
+);
 // "top-center"
 const MessageHandler = (props) => {
   const [visible, setVisible] = useState(3);
@@ -48,6 +54,10 @@ const MessageHandler = (props) => {
 
 const App = () => {
   const msg = useSelector((state) => state.msg);
+  const darkMode = useSelector((state) => state.settings.darkMode);
+  // {darkMode === true
+  //   ? require("./assets/css/all_datatables_dark.css")
+  //   : require("./assets/css/all_datatables_light.css")}
   return (
     <HashRouter>
       <React.Suspense fallback={loading}>

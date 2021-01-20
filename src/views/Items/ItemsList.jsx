@@ -104,6 +104,7 @@ const ItemsList = () => {
   /* Export Csv Data*/
   let csvDownloadData = [];
   var maxLength = 0;
+  var arrayIndex = 0;
   item.item_list.map((item, index) => {
     let varient = [];
     var selectedStores = [];
@@ -138,8 +139,7 @@ const ItemsList = () => {
       lengthOptionThree
     );
     maxLength = Math.max(maxLength, maxValue);
-    console.log(lengthOptionOne, lengthOptionTwo, lengthOptionThree);
-    console.log(maxLength);
+    console.log("iarrayIndex", arrayIndex);
     csvDownloadData.push({
       handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
       name: item.name.trim(),
@@ -223,7 +223,7 @@ const ItemsList = () => {
             (store.stores_list || []).map((stoor, storIndex) => {
               if (stoor._id == stor.id) {
                 csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (csvDownloadData.length == ky) {
+                  if (arrayIndex == ky) {
                     return {
                       ...it,
                       [`available_for_sale${stor.title}`]: "Y",
@@ -235,7 +235,7 @@ const ItemsList = () => {
                 });
               } else {
                 csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (csvDownloadData.length == ky) {
+                  if (arrayIndex == ky) {
                     return {
                       ...it,
                       [`available_for_sale${stor.title}`]: "N",
@@ -254,7 +254,7 @@ const ItemsList = () => {
         (item.modifiers || []).map((itModi, itModIndex) => {
           if (itModi.id == modi._id) {
             csvDownloadData = csvDownloadData.map((it, ky) => {
-              if (csvDownloadData.length == ky) {
+              if (arrayIndex == ky) {
                 return {
                   ...it,
                   [`modifier${modi.title}`]: "Y",
@@ -264,7 +264,7 @@ const ItemsList = () => {
             });
           } else {
             csvDownloadData = csvDownloadData.map((it, ky) => {
-              if (csvDownloadData.length == ky) {
+              if (arrayIndex == ky) {
                 return {
                   ...it,
                   [`modifier${modi.title}`]: "N",
@@ -299,27 +299,30 @@ const ItemsList = () => {
                 ? item.varients[2]["optionValue"][j]["variantName"]
                 : ""
               : "",
-              price:
-               item.varients[0] !== null && item.varients[0] !== undefined
-                    ? item.varients[0]["optionValue"] !== undefined
-                      ? item.varients[0]["optionValue"][j]["price"]
-                      : ""
-                    : "",
-              cost:
-                 item.varients[0] !== null && item.varients[0] !== undefined
-                    ? item.varients[0]["optionValue"] !== undefined
-                      ? item.varients[0]["optionValue"][j]["cost"]
-                      : ""
-                    : "",
-              barcode:
-               item.varients[0] !== null && item.varients[0] !== undefined
-                    ? item.varients[0]["optionValue"] !== undefined
-                      ? item.varients[0]["optionValue"][j]["barcode"]
-                      : ""
-                    : ""
+          price:
+            item.varients[0] !== null && item.varients[0] !== undefined
+              ? item.varients[0]["optionValue"] !== undefined
+                ? item.varients[0]["optionValue"][j]["price"]
+                : ""
+              : "",
+          cost:
+            item.varients[0] !== null && item.varients[0] !== undefined
+              ? item.varients[0]["optionValue"] !== undefined
+                ? item.varients[0]["optionValue"][j]["cost"]
+                : ""
+              : "",
+          barcode:
+            item.varients[0] !== null && item.varients[0] !== undefined
+              ? item.varients[0]["optionValue"] !== undefined
+                ? item.varients[0]["optionValue"][j]["barcode"]
+                : ""
+              : "",
         });
+        arrayIndex++;
       }
     }
+    arrayIndex = arrayIndex + 1;
+
     // item.varients !== null && item.varients !== undefined ?
     // (item.varients || []).map((itemVar, varIndex)=> {
     //     (itemVar.optionValue || []).map((iteOpt, optIndex)=> {

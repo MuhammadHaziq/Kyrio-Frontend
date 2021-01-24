@@ -31,6 +31,7 @@ import {
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddItem from "../../components/items/itemList/AddItem";
+import ImportItem from "../../components/items/itemList/ImportItem";
 import UpdateItem from "../../components/items/itemList/UpdateItem";
 import { get_modifires_list } from "../../actions/items/modifiresActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -59,6 +60,7 @@ const ItemsList = () => {
   const [fadeItem, setFadeItem] = useState(true);
   const [fadeUpdateItem, setUpdateItem] = useState(false);
   const [fadeAddItem, setFadeAddItem] = useState(false);
+  const [importItem, setUpdateImport] = useState(false);
   const [timeout] = useState(300);
   let csvStores = [];
   store.stores_list.map((item) => {
@@ -144,7 +146,6 @@ const ItemsList = () => {
       handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
       name: item.name.trim(),
       category: item.category !== null ? item.category["name"] : "",
-      sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
       sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
       sku: item.sku,
       varient_1_name:
@@ -323,16 +324,6 @@ const ItemsList = () => {
     }
     arrayIndex = arrayIndex + 1;
 
-    // item.varients !== null && item.varients !== undefined ?
-    // (item.varients || []).map((itemVar, varIndex)=> {
-    //     (itemVar.optionValue || []).map((iteOpt, optIndex)=> {
-    //       csvDownloadData.push({
-    //         handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
-    //         sku:iteOpt.sku,
-    //
-    //       })
-    //     })
-    // })
     return csvDownloadData;
   });
   /* End Export Csv Data*/
@@ -357,6 +348,7 @@ const ItemsList = () => {
       setFadeItem(false);
       setFadeAddItem(false);
       setUpdateItem(true);
+      setUpdateImport(false);
     }
   }, [item.redirect_update]);
 
@@ -431,13 +423,21 @@ const ItemsList = () => {
     setFadeItem(false);
     setFadeAddItem(true);
     setUpdateItem(false);
+    setUpdateImport(false);
     dispatch(redirect_back_items(false));
   };
-
+  const importList = () => {
+    setFadeItem(false);
+    setFadeAddItem(false);
+    setUpdateItem(false);
+    setUpdateImport(true);
+    dispatch(redirect_back_items(false));
+  };
   const goBack = () => {
     setFadeItem(true);
     setFadeAddItem(false);
     setUpdateItem(false);
+    setUpdateImport(false);
     dispatch(redirect_back_items(true));
     if (search !== "") {
       closeSearch();
@@ -478,6 +478,13 @@ const ItemsList = () => {
         ) : (
           ""
         )}
+        {importItem ? (
+          <CFade timeout={timeout} in={importItem}>
+            <ImportItem goBack={goBack} />
+          </CFade>
+        ) : (
+          ""
+        )}
         {fadeItem ? (
           <React.Fragment>
             <CRow>
@@ -511,7 +518,7 @@ const ItemsList = () => {
                         >
                           <CButton
                             color="success"
-                            className="btn-square pull right"
+                            className="btn-square pull-right"
                             onClick={addItem}
                           >
                             <svg
@@ -553,14 +560,26 @@ const ItemsList = () => {
                               />
                             </React.Fragment>
                           ) : (
-                            <CSVLink
-                              data={csvDownloadData}
-                              headers={headers}
-                              filename={"export_items.csv"}
-                              className="btn btn-primary"
-                            >
-                              Download me
-                            </CSVLink>
+                            <React.Fragment>
+                              <CButton
+                                color="default"
+                                className="ml-2 btn-square"
+                                variant="outline"
+                                onClick={importList}
+                              >
+                                Import
+                              </CButton>
+                              <CSVLink
+                                color="default"
+                                data={csvDownloadData}
+                                headers={headers}
+                                filename={"export_items.csv"}
+                                className="ml-2 btn-square"
+                                style={{ color: "#3c4b64" }}
+                              >
+                                Export
+                              </CSVLink>
+                            </React.Fragment>
                           )}
                         </CCol>
                         {showSearch === false ? (

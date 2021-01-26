@@ -23,14 +23,40 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import CSVReader from "react-csv-reader";
-
+import { save_csv, get_items_list } from "../../../actions/items/itemActions";
 const ImportItem = (props) => {
   const [addFile, setAddFile] = useState();
+  const item = useSelector((state) => state.items.itemReducer);
 
+  const dispatch = useDispatch();
   const goBack = () => {
     props.goBack();
   };
+  useEffect(() => {
+    if (
+      item.redirect_itemList !== undefined &&
+      item.redirect_itemList === true
+    ) {
+      props.goBack();
+    }
+  }, [item.redirect_itemList]);
 
+  const get_upload_file = (data, fileInfo) => {
+    setAddFile(data);
+    // dispatch(save_csv({ csvData: JSON.stringify(data) }));
+  };
+  const save_csv_db = (e) => {
+    dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
+  };
+  const papaparseOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    // transformHeader: header =>
+    //   header
+    //     .toLowerCase()
+    //     .replace(/\W/g, '_')
+  };
   return (
     <React.Fragment>
       <CRow>
@@ -49,9 +75,9 @@ const ImportItem = (props) => {
                     }}
                   >
                     <CSVReader
-                      parserOptions={{ header: true }}
+                      parserOptions={papaparseOptions}
                       onFileLoaded={(data, fileInfo) =>
-                        console.dir(data, fileInfo)
+                        get_upload_file(data, fileInfo)
                       }
                     />
                   </div>
@@ -93,6 +119,7 @@ const ImportItem = (props) => {
                   variant="outline"
                   className="btn-pill"
                   color="success"
+                  onClick={save_csv_db}
                 >
                   Upload
                 </CButton>

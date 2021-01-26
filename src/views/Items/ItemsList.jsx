@@ -102,7 +102,6 @@ const ItemsList = () => {
     ...csvStores,
     ...modifierCsv,
   ];
-  console.log(headers);
   /* Export Csv Data*/
   let csvDownloadData = [];
   var maxLength = 0;
@@ -141,11 +140,13 @@ const ItemsList = () => {
       lengthOptionThree
     );
     maxLength = Math.max(maxLength, maxValue);
-    console.log("iarrayIndex", arrayIndex);
     csvDownloadData.push({
       handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
       name: item.name.trim(),
-      category: item.category !== null ? item.category["name"] : "",
+      category:
+        item.category !== null && item.category !== undefined
+          ? item.category["name"]
+          : "",
       sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
       sku: item.sku,
       varient_1_name:
@@ -333,7 +334,7 @@ const ItemsList = () => {
     setStoreId(auth.user.stores[0]._id);
   }, [auth]);
   useEffect(() => {
-    dispatch(get_items_list());
+    // dispatch(get_items_list());
     dispatch(get_category_list());
     dispatch(get_items_stock());
     dispatch(get_items_store());

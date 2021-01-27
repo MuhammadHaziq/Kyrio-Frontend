@@ -18,6 +18,9 @@ const PosDeviceDatatable = (props) => {
   const getStoreName = (cell, row) => {
     return row.store.storeName;
   };
+  const setUdid = (cell, row) => {
+    return cell == "" || cell == null || typeof cell == "undefined" ? "Not Set" : cell;
+  };
   const status = (cell, row) => {
     return cell === false ? "Not activated" : "Activated";
   };
@@ -91,6 +94,13 @@ const PosDeviceDatatable = (props) => {
           dataFormat={getStoreName}
         >
           Store
+        </TableHeaderColumn>
+        <TableHeaderColumn
+          dataField="udid"
+          dataSort={true}
+          dataFormat={setUdid}
+        >
+          UDID
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="isActive"

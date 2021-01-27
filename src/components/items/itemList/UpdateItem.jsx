@@ -38,7 +38,7 @@ const AddItem = (props) => {
     categoryId: "0",
     sold_by: "Each",
     price: "",
-    cost: 0.00,
+    cost: 0.0,
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
@@ -95,7 +95,7 @@ const AddItem = (props) => {
             : "0",
         sold_by: props.item_row_data.soldByType,
         price: props.item_row_data.price,
-        cost:  props.item_row_data.cost,
+        cost: props.item_row_data.cost,
         represent_type: props.item_row_data.repoOnPos,
         color: props.item_row_data.color,
         sku: props.item_row_data.sku || "",
@@ -129,6 +129,12 @@ const AddItem = (props) => {
   };
 
   const updateItem = () => {
+    const inStock = item.store_list
+      .filter((item) => item.isSelected === true)
+      .map((item) => {
+        return item.inStock;
+      });
+    const stockQty = inStock.reduce((a, b) => a + b, 0);
     if (fields.item_name === "") {
       setErrors({
         ...errors,
@@ -196,8 +202,8 @@ const AddItem = (props) => {
       repoOnPos: fields.represent_type,
       itemColor:
         fields.represent_type === "Color_and_shape" ? fields.color : "",
-      image: itemImage,
-      stockQty: 200,
+      image: receiptFile,
+      stockQty: stockQty,
     };
     dispatch(update_item_record(data));
   };

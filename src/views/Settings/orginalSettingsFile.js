@@ -49,7 +49,7 @@ const Settings = () => {
   // const allowBackoffice = useSelector(
   //   (state) => state.settingReducers.featuresReducer.setting_features
   // )
-  const settings = useSelector((state) => state.auth.user.roleData.settings);
+  const settings = useSelector((state) => state.auth.user.settings);
   console.log("settings", settings);
   useEffect(() => {
     setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");

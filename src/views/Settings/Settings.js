@@ -33,7 +33,7 @@ import { HashRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 
 const Settings = () => {
   let { url } = useRouteMatch();
-  const settings = useSelector((state) => state.auth.user.roleData.settings);
+  const settings = useSelector((state) => state.auth.user.settings);
   const [show, setShow] = useState(true);
   const [settingBar, setSettingBar] = useState([]);
 

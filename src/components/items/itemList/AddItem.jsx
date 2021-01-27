@@ -37,7 +37,7 @@ const AddItem = (props) => {
     categoryId: "0",
     sold_by: "Each",
     price: "",
-    cost: 0.00,
+    cost: 0.0,
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
@@ -83,6 +83,12 @@ const AddItem = (props) => {
   };
 
   const submitItem = () => {
+    const inStock = item.store_list
+      .filter((item) => item.isSelected === true)
+      .map((item) => {
+        return item.inStock;
+      });
+    const stockQty = inStock.reduce((a, b) => a + b, 0);
     if (fields.item_name === "") {
       setErrors({
         ...errors,
@@ -178,8 +184,8 @@ const AddItem = (props) => {
       repoOnPos: fields.represent_type,
       itemColor:
         fields.represent_type === "Color_and_shape" ? fields.color : "",
-      image: itemImage,
-      stockQty: 200,
+      image: receiptFile,
+      stockQty: stockQty,
     };
     dispatch(save_item(data));
   };
@@ -266,6 +272,7 @@ const AddItem = (props) => {
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
+  console.log('receiptFile', receiptFile)
   return (
     <React.Fragment>
       <CCard>

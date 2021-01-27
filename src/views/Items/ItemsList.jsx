@@ -286,37 +286,66 @@ const ItemsList = () => {
           varient_1_value:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
-                ? item.varients[0]["optionValue"][j]["variantName"]
+                ? item.varients[0]["optionValue"][j] !== undefined
+                  ? item.varients[0]["optionValue"][j]["variantName"] !==
+                    undefined
+                    ? item.varients[0]["optionValue"][j]["variantName"]
+                    : ""
+                  : ""
                 : ""
               : "",
           varient_2_value:
             item.varients[1] !== null && item.varients[1] !== undefined
               ? item.varients[1]["optionValue"] !== undefined
-                ? item.varients[1]["optionValue"][j]["variantName"]
+                ? item.varients[1]["optionValue"][j] !== undefined
+                  ? item.varients[1]["optionValue"][j]["variantName"] !==
+                    undefined
+                    ? item.varients[1]["optionValue"][j]["variantName"]
+                    : ""
+                  : ""
                 : ""
               : "",
           varient_3_value:
             item.varients[2] !== null && item.varients[2] !== undefined
               ? item.varients[2]["optionValue"] !== undefined
-                ? item.varients[2]["optionValue"][j]["variantName"]
+                ? item.varients[2]["optionValue"][j] !== undefined
+                  ? item.varients[2]["optionValue"][j] !== undefined
+                    ? item.varients[2]["optionValue"][j]["variantName"] !==
+                      undefined
+                      ? item.varients[2]["optionValue"][j]["variantName"]
+                      : ""
+                    : ""
+                  : ""
                 : ""
               : "",
           price:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
-                ? item.varients[0]["optionValue"][j]["price"]
+                ? item.varients[0]["optionValue"][j] !== undefined
+                  ? item.varients[0]["optionValue"][j]["price"] !== undefined
+                    ? item.varients[0]["optionValue"][j]["price"]
+                    : ""
+                  : ""
                 : ""
               : "",
           cost:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
-                ? item.varients[0]["optionValue"][j]["cost"]
+                ? item.varients[0]["optionValue"][j] !== undefined
+                  ? item.varients[0]["optionValue"][j]["cost"] !== undefined
+                    ? item.varients[0]["optionValue"][j]["cost"]
+                    : ""
+                  : ""
                 : ""
               : "",
           barcode:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
-                ? item.varients[0]["optionValue"][j]["barcode"]
+                ? item.varients[0]["optionValue"][j] !== undefined
+                  ? item.varients[0]["optionValue"][j]["barcode"] !== undefined
+                    ? item.varients[0]["optionValue"][j]["barcode"]
+                    : ""
+                  : ""
                 : ""
               : "",
         });
@@ -328,7 +357,6 @@ const ItemsList = () => {
     return csvDownloadData;
   });
   /* End Export Csv Data*/
-  console.log(csvDownloadData);
   useEffect(() => {
     setDefaultStoreId(auth.user.stores[0]._id);
     setStoreId(auth.user.stores[0]._id);

@@ -37,7 +37,7 @@ const AddItem = (props) => {
     categoryId: "0",
     sold_by: "Each",
     price: "",
-    cost: "$0.00",
+    cost: 0.00,
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
@@ -142,7 +142,7 @@ const AddItem = (props) => {
                   return item.catTitle;
                 })[0],
             })
-          : JSON.stringify({ id: "0", name: "No Category" }),
+          : null,
       soldByType: fields.sold_by,
       price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
       cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,

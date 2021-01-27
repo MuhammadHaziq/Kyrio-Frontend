@@ -38,7 +38,7 @@ const AddItem = (props) => {
     categoryId: "0",
     sold_by: "Each",
     price: "",
-    cost: "$0.00",
+    cost: 0.00,
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
@@ -95,7 +95,7 @@ const AddItem = (props) => {
             : "0",
         sold_by: props.item_row_data.soldByType,
         price: props.item_row_data.price,
-        cost: "$" + props.item_row_data.cost,
+        cost:  props.item_row_data.cost,
         represent_type: props.item_row_data.repoOnPos,
         color: props.item_row_data.color,
         sku: props.item_row_data.sku || "",
@@ -152,9 +152,9 @@ const AddItem = (props) => {
         return (item.taxes || []).map((tax) => {
           taxes.push({
             id: tax._id,
-            title: tax.title,
-            type: tax.tax_type.title,
-            value: tax.tax_rate,
+            title: typeof tax.title == "undefined" ? "" : tax.title,
+            type: typeof tax.tax_type == "undefined" ? "" : tax.tax_type.title,
+            value: typeof tax.tax_rate == "undefined" ? null : tax.tax_rate,
           });
         });
       });
@@ -178,7 +178,7 @@ const AddItem = (props) => {
                   return item.catTitle;
                 })[0],
             })
-          : JSON.stringify({ id: "0", name: "No Category" }),
+          : null,
       soldByType: fields.sold_by,
       price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
       cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,

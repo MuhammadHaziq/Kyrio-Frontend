@@ -335,6 +335,13 @@ const EditEmployee = (props) => {
       dispatch(update_employee(data));
     }
   };
+  const changeMailStatus = (e) => {
+    const { name, value } = e.target;
+    setFields({
+      ...fields,
+      [name]: !fields.sendMail,
+    });
+  };
 
   const delete_employee_record = () => {
     const data = [props.employee_row_data._id];
@@ -440,30 +447,84 @@ const EditEmployee = (props) => {
                       <MdAccountCircle />
                     </CInputGroupText>
                   </CInputGroupPrepend>
-                  <CSelect
-                    className={
-                      errors.role === true
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    custom
-                    size="md"
-                    name="role"
-                    id="role"
-                    value={fields.role}
-                    onChange={handleOnChange}
-                    onBlur={handleOnBlur}
-                    invalid={errors.role}
-                  >
-                    <option value="0">Select Role</option>
-                    {(props.user_roles || []).map((item, index) => {
-                      return (
-                        <option value={item._id} key={index}>
-                          {item.roleName}
+                  {props.employee_row_data.role !== undefined &&
+                  props.employee_row_data.role["name"] !== undefined ? (
+                    props.employee_row_data.role["name"] == "onwer" ||
+                    props.employee_row_data.role["name"] == "Owner" ? (
+                      <CSelect
+                        className={
+                          errors.role === true
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
+                        custom
+                        size="md"
+                        name="role"
+                        id="role"
+                        value={fields.role}
+                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
+                        invalid={errors.role}
+                      >
+                        <option value={props.employee_row_data.role["id"]}>
+                          {props.employee_row_data.role["name"]}
                         </option>
-                      );
-                    })}
-                  </CSelect>
+                      </CSelect>
+                    ) : (
+                      <CSelect
+                        className={
+                          errors.role === true
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
+                        custom
+                        size="md"
+                        name="role"
+                        id="role"
+                        value={fields.role}
+                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
+                        invalid={errors.role}
+                      >
+                        <option value="0">Select Role</option>
+                        {(props.user_roles || []).map((item, index) => {
+                          return item.roleName !== "owner" &&
+                            item.roleName !== "Owner" ? (
+                            <React.Fragment>
+                              <option value={item._id} key={index}>
+                                {item.roleName}
+                              </option>
+                            </React.Fragment>
+                          ) : null;
+                        })}
+                      </CSelect>
+                    )
+                  ) : (
+                    <CSelect
+                      className={
+                        errors.role === true
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
+                      custom
+                      size="md"
+                      name="role"
+                      id="role"
+                      value={fields.role}
+                      onChange={handleOnChange}
+                      onBlur={handleOnBlur}
+                      invalid={errors.role}
+                    >
+                      <option value="0">Select Role</option>
+                      {(props.user_roles || []).map((item, index) => {
+                        return (
+                          <option value={item._id} key={index}>
+                            {item.roleName}
+                          </option>
+                        );
+                      })}
+                    </CSelect>
+                  )}
 
                   <CInvalidFeedback>
                     {errors.role === true ? "Please Enter Employee Role" : ""}
@@ -478,7 +539,7 @@ const EditEmployee = (props) => {
                         id={"sendMail"}
                         value={fields.sendMail}
                         checked={fields.sendMail}
-                        onChange={handleOnChange}
+                        onChange={changeMailStatus}
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"sendMail"}>
                         Invite to the back office

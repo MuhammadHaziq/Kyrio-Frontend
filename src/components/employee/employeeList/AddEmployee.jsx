@@ -264,7 +264,13 @@ const AddEmployee = (props) => {
       dispatch(add_new_employee(data));
     }
   };
-
+  const changeMailStatus = (e) => {
+    const { name, value } = e.target;
+    setFields({
+      ...fields,
+      [name]: !fields.sendMail,
+    });
+  };
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -378,11 +384,14 @@ const AddEmployee = (props) => {
                   >
                     <option value="0">Select Role</option>
                     {(props.user_roles || []).map((item, index) => {
-                      return (
-                        <option value={item._id} key={index}>
-                          {item.roleName}
-                        </option>
-                      );
+                      return item.roleName !== "owner" &&
+                        item.roleName !== "Owner" ? (
+                        <React.Fragment>
+                          <option value={item._id} key={index}>
+                            {item.roleName}
+                          </option>
+                        </React.Fragment>
+                      ) : null;
                     })}
                   </CSelect>
 
@@ -399,7 +408,7 @@ const AddEmployee = (props) => {
                         id={"sendMail"}
                         value={fields.sendMail}
                         checked={fields.sendMail}
-                        onChange={handleOnChange}
+                        onChange={changeMailStatus}
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"sendMail"}>
                         Invite to the back office

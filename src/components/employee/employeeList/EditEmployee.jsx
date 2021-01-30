@@ -335,6 +335,7 @@ const EditEmployee = (props) => {
       dispatch(update_employee(data));
     }
   };
+
   const changeMailStatus = (e) => {
     const { name, value } = e.target;
     setFields({
@@ -349,6 +350,7 @@ const EditEmployee = (props) => {
     setShowAlert(!showAlert);
   };
 
+  // console.log("storeId", storeId);
   return (
     <React.Fragment>
       <CRow className="justify-content-left">

@@ -354,6 +354,7 @@ export const update_item_record = (data) => {
         url: `${BaseUrl}items/`,
         data: data,
         headers: {
+          "Content-Type": "multipart/form-data",
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })

@@ -168,12 +168,12 @@ const EditEmployee = (props) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
       const allowBackOffice = (props.user_roles || [])
-        .filter((item) => item._id === props.employee_row_data.role["id"])
+        .filter((item) => item._id === props.employee_row_data.role_id)
         .map((item) => {
           return item.allowBackoffice.enable;
         })[0];
       const pos = (props.user_roles || [])
-        .filter((item) => item._id === props.employee_row_data.role["id"])
+        .filter((item) => item._id === props.employee_row_data.role_id)
         .map((item) => {
           return item.allowPOS.enable;
         })[0];

@@ -105,17 +105,6 @@ const AddItem = (props) => {
           title: item.title,
         });
       });
-    // let modifiers = [];
-    // item.store_list
-    //   .filter((item) => item.isSelected === true)
-    //   .map((item) => {
-    //     (item.modifiers || []).map((modi) => {
-    //       return modifiers.push({
-    //         id: modi._id,
-    //         title: modi.title,
-    //       });
-    //     });
-    //   });
     let taxes = [];
     item.store_list
       .filter((item) => item.isSelected === true)
@@ -135,40 +124,45 @@ const AddItem = (props) => {
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
-    const data = {
-      name: fields.item_name,
-      availableForSale: fields.availableForSale,
-      category:
-        fields.categoryId !== "0"
-          ? JSON.stringify({
-              id: fields.categoryId,
-              name: category.category_list
-                .filter((item) => item._id)
-                .map((item) => {
-                  return item.catTitle;
-                })[0],
-            })
-          : null,
-      soldByType: fields.sold_by,
-      price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
-      cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,
-      color: fields.color,
-      sku: fields.sku,
-      barcode: fields.item_barcode,
-      compositeItem: inventorySwitch[0],
-      trackStock: inventorySwitch[1],
-      // modifiersStatus: modifierSwitch[0],
-      // dsd: modifierSwitch[1],
-      // modifiers:
-      //   modifierSwitch[0] === true
-      //     ? JSON.stringify(modifier)
-      //     : JSON.stringify([]),
-      modifiers: JSON.stringify(modifier),
-      taxes: JSON.stringify(taxes),
-      stores: JSON.stringify(
-        item.store_list.filter((item) => item.isSelected === true)
-      ),
-      varients: JSON.stringify(
+    var formData = new FormData();
+    formData.append("name", fields.item_name);
+    formData.append("availableForSale", fields.availableForSale);
+    formData.append(
+      "category",
+      fields.categoryId !== "0"
+        ? JSON.stringify({
+            id: fields.categoryId,
+            name: category.category_list
+              .filter((item) => item._id)
+              .map((item) => {
+                return item.catTitle;
+              })[0],
+          })
+        : null
+    );
+    formData.append("soldByType", fields.sold_by);
+    formData.append(
+      "price",
+      fields.price !== null ? ReturnNumber(fields.price) : fields.price
+    );
+    formData.append(
+      "cost",
+      fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost
+    );
+    formData.append("color", fields.color);
+    formData.append("compositeItem", inventorySwitch[0]);
+    formData.append("trackStock", inventorySwitch[1]);
+    formData.append("sku", fields.sku);
+    formData.append("barcode", fields.item_barcode);
+    formData.append("modifiers", JSON.stringify(modifier));
+    formData.append("taxes", JSON.stringify(taxes));
+    formData.append(
+      "stores",
+      JSON.stringify(item.store_list.filter((item) => item.isSelected === true))
+    );
+    formData.append(
+      "variants",
+      JSON.stringify(
         item.item_variants.map((item) => {
           return {
             optionName: item.optionName,
@@ -180,14 +174,62 @@ const AddItem = (props) => {
             }),
           };
         })
-      ),
-      repoOnPos: fields.represent_type,
-      itemColor:
-        fields.represent_type === "Color_and_shape" ? fields.color : "",
-      image: receiptFile,
-      stockQty: stockQty,
-    };
-    dispatch(save_item(data));
+      )
+    );
+    formData.append("repoOnPos", fields.represent_type);
+    formData.append(
+      "itemColor",
+      fields.represent_type === "Color_and_shape" ? fields.color : ""
+    );
+    formData.append("image", receiptFile);
+    formData.append("stockQty", stockQty);
+    // const data = {
+    //   name: fields.item_name,
+    //   availableForSale: fields.availableForSale,
+    //   category:
+    //     fields.categoryId !== "0"
+    //       ? JSON.stringify({
+    //           id: fields.categoryId,
+    //           name: category.category_list
+    //             .filter((item) => item._id)
+    //             .map((item) => {
+    //               return item.catTitle;
+    //             })[0],
+    //         })
+    //       : null,
+    //   soldByType: fields.sold_by,
+    //   price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
+    //   cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,
+    //   color: fields.color,
+    //   sku: fields.sku,
+    //   barcode: fields.item_barcode,
+    //   compositeItem: inventorySwitch[0],
+    //   trackStock: inventorySwitch[1],
+    //   modifiers: JSON.stringify(modifier),
+    //   taxes: JSON.stringify(taxes),
+    //   stores: JSON.stringify(
+    //     item.store_list.filter((item) => item.isSelected === true)
+    //   ),
+    //   varients: JSON.stringify(
+    //     item.item_variants.map((item) => {
+    //       return {
+    //         optionName: item.optionName,
+    //         optionValue: (item.optionValue || []).map((ite) => {
+    //           return {
+    //             ...ite,
+    //             price: ReturnNumber(ite.price),
+    //           };
+    //         }),
+    //       };
+    //     })
+    //   ),
+    //   repoOnPos: fields.represent_type,
+    //   itemColor:
+    //     fields.represent_type === "Color_and_shape" ? fields.color : "",
+    //   image: receiptFile,
+    //   stockQty: stockQty,
+    // };
+    dispatch(save_item(formData));
   };
 
   const handleOnChange = (e) => {
@@ -272,7 +314,7 @@ const AddItem = (props) => {
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
-  console.log('receiptFile', receiptFile)
+  console.log("receiptFile", receiptFile);
   return (
     <React.Fragment>
       <CCard>

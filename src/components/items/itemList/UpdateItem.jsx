@@ -223,41 +223,6 @@ const AddItem = (props) => {
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
 
-    // const data = {
-    //   item_id: props.item_row_data._id,
-    //   name: fields.item_name,
-    //   availableForSale: false,
-    //   category:
-    //     fields.categoryId !== "0"
-    //       ? JSON.stringify({
-    //           id: fields.categoryId,
-    //           name: category.category_list
-    //             .filter((item) => item._id)
-    //             .map((item) => {
-    //               return item.catTitle;
-    //             })[0],
-    //         })
-    //       : null,
-    //   soldByType: fields.sold_by,
-    //   price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
-    //   cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,
-    //   color: fields.color,
-    //   compositeItem: inventorySwitch[0],
-    //   trackStock: inventorySwitch[1],
-    //   sku: fields.sku,
-    //   barcode: fields.item_barcode,
-    //   modifiers: JSON.stringify(modifier),
-    //   taxes: JSON.stringify(taxes),
-    //   stores: JSON.stringify(
-    //     item.store_list.filter((item) => item.isSelected === true)
-    //   ),
-    //   variants: JSON.stringify(item.item_variants),
-    //   repoOnPos: fields.represent_type,
-    //   itemColor:
-    //     fields.represent_type === "Color_and_shape" ? fields.color : "",
-    //   image: receiptFile,
-    //   stockQty: stockQty,
-    // };
     dispatch(update_item_record(formData));
   };
 
@@ -340,8 +305,13 @@ const AddItem = (props) => {
     const data = [props.item_row_data._id];
     dispatch(delete_item_list(JSON.stringify(data)));
   };
-  console.log("receiptFile", receiptFile);
-  console.log("itemImage", itemImage);
+  const disable =
+    fields.sku == undefined ||
+    fields.sku == null ||
+    fields.sku == "" ||
+    fields.item_name == undefined ||
+    fields.item_name == null ||
+    fields.item_name == "";
   return (
     <React.Fragment>
       <CCard>
@@ -835,6 +805,7 @@ const AddItem = (props) => {
             className="btn-pill pull-right"
             color="success"
             onClick={updateItem}
+            disabled={disable}
           >
             Update
           </CButton>

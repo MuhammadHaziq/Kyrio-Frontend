@@ -728,6 +728,7 @@ const ItemsList = () => {
                   </CCollapse>
                 </CCard>
               </CCol>
+
             </CRow>
             <CCard>
               <CCardHeader>Item List Detail</CCardHeader>

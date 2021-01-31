@@ -183,52 +183,6 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
-    // const data = {
-    //   name: fields.item_name,
-    //   availableForSale: fields.availableForSale,
-    //   category:
-    //     fields.categoryId !== "0"
-    //       ? JSON.stringify({
-    //           id: fields.categoryId,
-    //           name: category.category_list
-    //             .filter((item) => item._id)
-    //             .map((item) => {
-    //               return item.catTitle;
-    //             })[0],
-    //         })
-    //       : null,
-    //   soldByType: fields.sold_by,
-    //   price: fields.price !== null ? ReturnNumber(fields.price) : fields.price,
-    //   cost: fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost,
-    //   color: fields.color,
-    //   sku: fields.sku,
-    //   barcode: fields.item_barcode,
-    //   compositeItem: inventorySwitch[0],
-    //   trackStock: inventorySwitch[1],
-    //   modifiers: JSON.stringify(modifier),
-    //   taxes: JSON.stringify(taxes),
-    //   stores: JSON.stringify(
-    //     item.store_list.filter((item) => item.isSelected === true)
-    //   ),
-    //   varients: JSON.stringify(
-    //     item.item_variants.map((item) => {
-    //       return {
-    //         optionName: item.optionName,
-    //         optionValue: (item.optionValue || []).map((ite) => {
-    //           return {
-    //             ...ite,
-    //             price: ReturnNumber(ite.price),
-    //           };
-    //         }),
-    //       };
-    //     })
-    //   ),
-    //   repoOnPos: fields.represent_type,
-    //   itemColor:
-    //     fields.represent_type === "Color_and_shape" ? fields.color : "",
-    //   image: receiptFile,
-    //   stockQty: stockQty,
-    // };
     dispatch(save_item(formData));
   };
 
@@ -314,7 +268,14 @@ const AddItem = (props) => {
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
-  console.log("receiptFile", receiptFile);
+  const disable =
+    fields.sku == undefined ||
+    fields.sku == null ||
+    fields.sku == "" ||
+    fields.item_name == undefined ||
+    fields.item_name == null ||
+    fields.item_name == "";
+  console.log(disable);
   return (
     <React.Fragment>
       <CCard>
@@ -801,6 +762,7 @@ const AddItem = (props) => {
             className="btn-pill pull-right"
             color="success"
             onClick={submitItem}
+            disabled={disable}
           >
             SAVE
           </CButton>

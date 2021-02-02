@@ -83,6 +83,7 @@ const AddItem = (props) => {
   };
 
   const submitItem = () => {
+    
     const inStock = item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
@@ -143,11 +144,11 @@ const AddItem = (props) => {
     formData.append("soldByType", fields.sold_by);
     formData.append(
       "price",
-      fields.price !== null ? ReturnNumber(fields.price) : fields.price
+      fields.price !== null ? ReturnNumber(fields.price) : 0
     );
     formData.append(
       "cost",
-      fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost
+      fields.cost !== null ? ReturnNumber(fields.cost) : 0
     );
     formData.append("color", fields.color);
     formData.append("compositeItem", inventorySwitch[0]);
@@ -269,9 +270,6 @@ const AddItem = (props) => {
     setVariantModal(!variantModal);
   };
   const disable =
-    fields.sku == undefined ||
-    fields.sku == null ||
-    fields.sku == "" ||
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";

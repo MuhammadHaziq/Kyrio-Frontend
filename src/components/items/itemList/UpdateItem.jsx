@@ -26,6 +26,7 @@ import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import AddItemVariant from "./AddItemVariant";
 import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
+import { ImageUrl } from "../../../constants/baseUrls";
 import {
   update_item_record,
   toggle_item_stock,
@@ -46,6 +47,7 @@ const AddItem = (props) => {
     availableForSale: false,
   });
   const [isHovered, setIsHovered] = useState(false);
+  const [ImageName, setImageName] = useState("");
   const [itemImage, setItemImage] = useState(null);
   const [inventorySwitch, setInventorySwitch] = useState([false, false]);
   const [modifierSwitch, setModifierSwitch] = useState([]);
@@ -61,6 +63,7 @@ const AddItem = (props) => {
   const modifire = useSelector((state) => state.items.modifiresReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const item = useSelector((state) => state.items.itemReducer);
+  const accountId = useSelector((state) => state.auth.user.accountId);
 
   const dispatch = useDispatch();
 
@@ -102,11 +105,12 @@ const AddItem = (props) => {
         item_barcode: props.item_row_data.barcode || "",
         availableForSale: props.item_row_data.availableForSale,
       });
+      setImageName(props.item_row_data.image)
       setItemImage(
         props.item_row_data.image !== undefined &&
           props.item_row_data.image !== null &&
           props.item_row_data !== ""
-          ? `http://localhost:3000/media/items/${props.item_row_data.createdBy}/${props.item_row_data.image}`
+          ? `${ImageUrl}media/items/${accountId}/${props.item_row_data.image}`
           : null
       );
       setInventorySwitch([
@@ -180,6 +184,7 @@ const AddItem = (props) => {
     var formData = new FormData();
     formData.append("item_id", props.item_row_data._id);
     formData.append("name", fields.item_name);
+    formData.append("imageName", ImageName);
     formData.append("availableForSale", fields.availableForSale);
     formData.append(
       "category",
@@ -197,11 +202,11 @@ const AddItem = (props) => {
     formData.append("soldByType", fields.sold_by);
     formData.append(
       "price",
-      fields.price !== null ? ReturnNumber(fields.price) : fields.price
+      fields.price !== null ? ReturnNumber(fields.price) : 0
     );
     formData.append(
       "cost",
-      fields.cost !== null ? ReturnNumber(fields.cost) : fields.cost
+      fields.cost !== null ? ReturnNumber(fields.cost) : 0
     );
     formData.append("color", fields.color);
     formData.append("compositeItem", inventorySwitch[0]);
@@ -306,9 +311,6 @@ const AddItem = (props) => {
     dispatch(delete_item_list(JSON.stringify(data)));
   };
   const disable =
-    fields.sku == undefined ||
-    fields.sku == null ||
-    fields.sku == "" ||
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";

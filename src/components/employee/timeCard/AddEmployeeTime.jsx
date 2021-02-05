@@ -312,6 +312,7 @@ const AddEmployeeTime = (props) => {
   }
   return (
     <React.Fragment>
+
       <CRow className="justify-content-left">
         <CCol md="10" lg="10" xl="10">
           <CCard>
@@ -554,6 +555,7 @@ const AddEmployeeTime = (props) => {
           </CRow>
         </CCol>
       </CRow>
+
     </React.Fragment>
   );
 };

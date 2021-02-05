@@ -10,12 +10,13 @@ import {
 } from "@coreui/react";
 import UserRolesDatatable from "../../datatables/employee/UserRolesDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
-import AddEmployeeTime from "../../components/employee/timeCard/AddEmployeeTime.jsx";
 import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
+import AddRole from "../../components/employee/userRole/AddRole.jsx";
 import {
   redirect_back_user_roles,
   get_user_access_list,
   delete_employee,
+  get_roles_modules,
 } from "../../actions/employee/userRolesActions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -43,6 +44,7 @@ const TimeCards = () => {
 
   useEffect(() => {
     dispatch(get_user_access_list());
+    dispatch(get_roles_modules());
   }, []);
 
   const deleteUserRole = () => {
@@ -89,7 +91,7 @@ const TimeCards = () => {
         )}
         {fadeAddUserRoles ? (
           <CFade timeout={timeout} in={fadeAddUserRoles}>
-            <AddEmployeeTime goBack={goBack} />
+            <AddRole goBack={goBack} />
           </CFade>
         ) : (
           ""

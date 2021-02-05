@@ -39,7 +39,7 @@ const General = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [collapsed, setCollapsed] = React.useState([true, true]);
-  const [sChecked, setChecked] = React.useState(user.features);
+  const [sChecked, setChecked] = React.useState(user.roleData.features);
   const [showAlert, setShowAlert] = useState(false);
   const [language] = useState(languages.getData());
   const [checkPrev, setCheckPrev] = useState([]);
@@ -64,29 +64,29 @@ const General = () => {
 
   useEffect(() => {
     if (
-      user.features !== undefined &&
-      user.features !== null
+      user.roleData.features !== undefined &&
+      user.roleData.features !== null
     ) {
       setCheckPrev([
-        user.features.filter(
+        user.roleData.features.filter(
           (item) =>
             item.featureName.toUpperCase() ===
               "Customer displays".toUpperCase() && item.enable === true
         ).length > 0,
 
-        user.features.filter(
+        user.roleData.features.filter(
           (item) =>
             item.featureName.toUpperCase() === "Dining options".toUpperCase() &&
             item.enable === true
         ).length > 0,
-        user.features.filter(
+        user.roleData.features.filter(
           (item) =>
             item.featureName.toUpperCase() ===
               "Kitchen printers".toUpperCase() && item.enable === true
         ).length > 0,
       ]);
     }
-  }, [user.features]);
+  }, [user.roleData.features]);
 
   const handleChange = (event) => {
     event.persist();
@@ -474,7 +474,7 @@ const General = () => {
         <CCollapse show={collapsed[1]}>
           <CCardBody>
             <CListGroup>
-              {/*// user.features */}
+              {/*// user.roleData.features */}
               {(user.features || []).map((itm, index) => {
                 return (
                   <CListGroupItem

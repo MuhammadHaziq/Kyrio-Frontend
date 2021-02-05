@@ -282,7 +282,7 @@ const TotalHoursWorked = () => {
               </CDropdownItem>
               {(employeeId || []).map((item, index) => (
                 <CDropdownItem
-                  index={item._id}
+                  index={index}
                   onClick={() => employeeHandleChange(item._id)}
                 >
                   <CFormGroup variant="custom-checkbox" inline key={index}>

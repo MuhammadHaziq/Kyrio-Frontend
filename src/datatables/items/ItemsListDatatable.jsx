@@ -41,14 +41,19 @@ const ItemsListDatatable = (props) => {
   };
 
   const showStock = (cell, row) => {
-    let stocks = row.stores.map((item) => {
-      return +item.inStock || 0;
-    });
-    stocks = stocks.reduce((a, b) => {
-      return b + a;
-    });
+    
+    if(typeof row.stores !== "undefined" && row.stores.length > 0){
+      let stocks = row.stores.map((item) => {
+        return +item.inStock || 0;
+      });
+      stocks = stocks.reduce((a, b) => {
+        return b + a;
+      });
 
-    return stocks;
+      return stocks;
+    } else {
+      return row.stockQty
+    }
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_item_single_select(row));

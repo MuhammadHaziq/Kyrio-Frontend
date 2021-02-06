@@ -11,5 +11,15 @@ export const imageBaseUrl =
   ":" +
   "3000" +
   "/";
-export const BaseUrl = LocalUrl;
-export const ImageUrl = ImageLocalUrl;
+  let Base_Url = "";
+  let Image_Url = "";
+  if(window.location.hostname == "localhost"){
+    Base_Url = LocalUrl
+    Image_Url = ImageLocalUrl
+  } else if(window.location.hostname == "158.176.135.6"){
+    Base_Url = LiveUrl
+    Image_Url = ImageLiveUrl
+  }
+export const BaseUrl = Base_Url;
+export const ImageUrl = Image_Url;
+

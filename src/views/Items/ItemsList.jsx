@@ -141,14 +141,18 @@ const ItemsList = () => {
     );
     maxLength = Math.max(maxLength, maxValue);
     csvDownloadData.push({
-      handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
-      name: item.name.trim(),
+      handle:
+        item.name !== null && item.name !== undefined
+          ? item.name.trim().replace(/\s+/g, "-").toLowerCase()
+          : "",
+      name:
+        item.name !== null && item.name !== undefined ? item.name.trim() : "",
       category:
         item.category !== null && item.category !== undefined
           ? item.category["name"]
           : "",
       sold_by_weight: item.soldByType == "Weight/Volume" ? "Y" : "N",
-      sku: item.sku,
+      sku: item.sku !== null && item.sku !== undefined ? item.sku : "",
       varient_1_name:
         item.varients !== null && item.varients !== undefined
           ? item.varients[0] !== null && item.varients[0] !== undefined
@@ -282,7 +286,16 @@ const ItemsList = () => {
       for (var j = 1; j < maxLength; j++) {
         csvDownloadData.push({
           handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
-          sku: item.varients[0]["optionValue"][j]["sku"],
+          sku:
+            item.varients[0] !== null && item.varients[0] !== undefined
+              ? item.varients[0]["optionValue"] !== undefined
+                ? item.varients[0]["optionValue"][j] !== undefined
+                  ? item.varients[0]["optionValue"][j]["sku"] !== undefined
+                    ? item.varients[0]["optionValue"][j]["sku"]
+                    : ""
+                  : ""
+                : ""
+              : "",
           varient_1_value:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
@@ -728,7 +741,6 @@ const ItemsList = () => {
                   </CCollapse>
                 </CCard>
               </CCol>
-
             </CRow>
             <CCard>
               <CCardHeader>Item List Detail</CCardHeader>

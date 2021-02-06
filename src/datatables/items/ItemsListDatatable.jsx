@@ -12,19 +12,22 @@ const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
 
   const showCategory = (cell, row) => {
-    return row.category ? row.category.name || "" : "";
+    return row.category !== undefined && row.category !== null
+      ? row.category.name || ""
+      : "";
   };
   const showMargin = (cell, row) => {
-    if (+row.cost === +row.price) {
+    const price = row.price !== undefined && row.price !== null ? row.price : 0;
+    const cost = row.cost !== undefined && row.cost !== null ? row.cost : 0;
+    if (+cost === +price) {
       return "0 %";
     } else {
-      const margin =
-        +row.price === 0 ? +row.cost * 100 : (+row.cost / +row.price) * 100;
+      const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
       return margin.toFixed(2) + " %";
     }
   };
   const showPrice = (cell, row) => {
-    return row.price !== null
+    return row.price !== undefined && row.price !== null
       ? row.price.toLocaleString("en-US", {
           style: "currency",
           currency: "USD",
@@ -32,7 +35,7 @@ const ItemsListDatatable = (props) => {
       : "$ 0.00";
   };
   const showCost = (cell, row) => {
-    return row.cost !== null
+    return row.cost !== undefined && row.cost !== null
       ? row.cost.toLocaleString("en-US", {
           style: "currency",
           currency: "USD",
@@ -41,8 +44,7 @@ const ItemsListDatatable = (props) => {
   };
 
   const showStock = (cell, row) => {
-    
-    if(typeof row.stores !== "undefined" && row.stores.length > 0){
+    if (typeof row.stores !== "undefined" && row.stores.length > 0) {
       let stocks = row.stores.map((item) => {
         return +item.inStock || 0;
       });
@@ -52,7 +54,7 @@ const ItemsListDatatable = (props) => {
 
       return stocks;
     } else {
-      return row.stockQty
+      return row.stockQty;
     }
   };
   const onRowSelect = (row, isSelected, e) => {

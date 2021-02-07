@@ -8,6 +8,14 @@ const TotalHoursWorkedDatatable = (props) => {
   const EmployeeName = (cell, row) => {
     return row.employee !== undefined ? row.employee.name : "";
   };
+  const totalHour = (cell, row) => {
+    return row.timeDetail !== undefined && row.timeDetail.length > 0
+      ? row.timeDetail[0].totalWorkingHour !== undefined &&
+        row.timeDetail[0].totalWorkingHour !== null
+        ? row.timeDetail[0].totalWorkingHour
+        : ""
+      : "";
+  };
   /**
    *
    *  Datatable functions End
@@ -61,7 +69,11 @@ const TotalHoursWorkedDatatable = (props) => {
         >
           Store
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalHour" dataSort={true}>
+        <TableHeaderColumn
+          dataField="totalHour"
+          dataSort={true}
+          dataFormat={totalHour}
+        >
           Total Hour
         </TableHeaderColumn>
       </BootstrapTable>

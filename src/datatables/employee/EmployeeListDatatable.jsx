@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
@@ -12,10 +12,16 @@ const EmployeeListDatatable = (props) => {
   const dispatch = useDispatch();
 
   const phone = (cell, row) => {
-    return row.phone || "-";
+    return row.phone !== undefined && row.phone !== null
+      ? row.phone || "-"
+      : "-";
   };
   const Role = (cell, row) => {
-    return row.role !== undefined ? row.role["name"] || "-" : "-";
+    return row.role !== undefined
+      ? row.role["name"] !== undefined && row.role["name"] !== null
+        ? row.role["name"] || "-"
+        : "-"
+      : "-";
   };
 
   const onRowSelect = (row, isSelected, e) => {
@@ -29,12 +35,27 @@ const EmployeeListDatatable = (props) => {
       dispatch(toggle_employee_all_select(false));
     }
   };
-
   const selectRowProp = {
     mode: "checkbox",
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
-    unselectable: [1],
+    unselectable: [
+      props.employee_list !== undefined &&
+      props.employee_list !== null &&
+      props.employee_list.length > 0
+        ? props.employee_list
+            .filter((item) =>
+              item.role !== undefined && item.role !== null
+                ? item.role["name"] !== undefined && item.role["name"] !== null
+                  ? item.role["name"].toUpperCase() == "OWNER"
+                  : ""
+                : ""
+            )
+            .map((item) => {
+              return item.role["id"];
+            })[0]
+        : "",
+    ],
   };
   /**
    *
@@ -72,13 +93,21 @@ const EmployeeListDatatable = (props) => {
         pagination={true}
       >
         <TableHeaderColumn
-          dataField="_id"
+          dataField="role_id"
           dataSort={true}
           hidden={true}
           isKey={true}
         >
           Id
         </TableHeaderColumn>
+        {/*<TableHeaderColumn
+          dataField="_id"
+          dataSort={true}
+          hidden={true}
+          isKey={true}
+        >
+          Id
+        </TableHeaderColumn>*/}
         <TableHeaderColumn dataField="name" width="20%">
           Name
         </TableHeaderColumn>

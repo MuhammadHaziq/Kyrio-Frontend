@@ -10,8 +10,8 @@ import {
 } from "@coreui/react";
 import UserRolesDatatable from "../../datatables/employee/UserRolesDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
-import EditEmployee from "../../components/employee/employeeList/EditEmployee.jsx";
 import AddRole from "../../components/employee/userRole/AddRole.jsx";
+import EditUserRole from "../../components/employee/userRole/EditUserRole.jsx";
 import {
   redirect_back_user_roles,
   get_user_access_list,
@@ -66,14 +66,14 @@ const TimeCards = () => {
     setFadeUserRoles(false);
     setFadeAddUserRoles(true);
     setUserRolesUpdate(false);
-    // dispatch(redirect_back_user_roles(false));
+    dispatch(redirect_back_user_roles(false));
   };
 
   const goBack = () => {
     setFadeUserRoles(true);
     setFadeAddUserRoles(false);
     setUserRolesUpdate(false);
-    // dispatch(redirect_back_user_roles(true));
+    dispatch(redirect_back_user_roles(true));
   };
 
   return (
@@ -81,7 +81,7 @@ const TimeCards = () => {
       <div className="animated fadeIn">
         {fadeUserRolesUpdate ? (
           <CFade timeout={timeout} in={fadeUserRolesUpdate}>
-            <EditEmployee
+            <EditUserRole
               goBack={goBack}
               user_role_row_data={userRoles.user_role_row_data}
             />

@@ -7,6 +7,9 @@ import {
   REDIRECT_BACK_USER_ROLES,
   TOGGLE_BACK_OFFICE_MODULE,
   TOGGLE_POS_MODULE,
+  UPDATE_USER_ROLE,
+  GET_UPDATE_USER_ROLE,
+  REMOVE_SELECTED_MODULES,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -27,7 +30,7 @@ export const get_roles_modules = () => {
     try {
       axios({
         method: "GET",
-        url: `${BaseUrl}employee/userAccess/get_roles_modules`,
+        url: `${BaseUrl}roles/get_roles_modules`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -89,7 +92,8 @@ export const get_user_access_list = () => {
     try {
       axios({
         method: "GET",
-        url: `${BaseUrl}employee/userAccess`,
+        // url: `${BaseUrl}employee/userAccess`,
+        url: `${BaseUrl}roles/`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -135,17 +139,18 @@ export const add_new_role = (data) => {
     try {
       axios({
         method: "POST",
-        // url: `${BaseUrl}employee/employeeList`,
+        url: `${BaseUrl}roles/create`,
         data: data,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
+          console.log(response);
           dispatch({ type: ADD_NEW_USER_ROLE, response: response.data });
           let msg = {
             open: true,
-            message: "Employee Created Successfully",
+            message: "Role Added Successfully",
             object: {},
             error: false,
           };
@@ -186,6 +191,65 @@ export const add_new_role = (data) => {
     }
   };
 };
+
+export const update_user_role = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "PATCH",
+        url: `${BaseUrl}roles/update`,
+        data: data,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: UPDATE_USER_ROLE, response: response.data });
+          let msg = {
+            open: true,
+            message: "Role Updated Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 export const toggleBackOffice = (status) => {
   return (dispatch) => {
     dispatch({
@@ -216,6 +280,73 @@ export const toggle_pos_module = (id) => {
     dispatch({
       type: TOGGLE_POS_MODULE,
       id: id,
+    });
+  };
+};
+
+export const update_row_data = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "GET",
+        url: `${BaseUrl}roles/${data.role_id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          dispatch({
+            type: GET_UPDATE_USER_ROLE,
+            response: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+  // return (dispatch) => {
+  //   dispatch({
+  //     type: UPDATE_USER_ROLE,
+  //     response: data,
+  //   });
+  // };
+};
+
+export const remove_selected_modules = () => {
+  return (dispatch) => {
+    dispatch({
+      type: REMOVE_SELECTED_MODULES,
     });
   };
 };

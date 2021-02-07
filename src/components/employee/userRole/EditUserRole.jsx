@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   CButton,
   CCard,
@@ -30,26 +30,38 @@ import {
   togglePOS,
   toggle_back_office_module,
   toggle_pos_module,
-  remove_selected_modules,
-  add_new_role,
+  update_user_role,
 } from "../../../actions/employee/userRolesActions";
 // import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import { useSelector, useDispatch } from "react-redux";
-const AddRole = (props) => {
+const EditUserRole = (props) => {
   const dispatch = useDispatch();
   const [roleName, setRoleName] = useState("");
+  const [roleNameOrg, setRoleNameOrg] = useState("");
+  const [allowBackOffice, setBackOffice] = useState([]);
+  const [allowPos, setAllowPos] = useState([]);
   const [roles, setRoles] = useState({
     checkBackOffice: false,
     checkPos: false,
   });
   const [roleNameError, setRoleNameError] = useState(false);
-  const [roleNameDupError, setRoleNameSupError] = useState(false);
   const userRoles = useSelector(
     (state) => state.employeeReducers.userRolesReducer
   );
+
+  const prevBackOfficeCheck = useRef();
+  useEffect(() => {
+    prevBackOfficeCheck.current = roles.checkBackOffice;
+  });
+  const prevBackOffice = prevBackOfficeCheck.current;
+  const prevPosCheck = useRef();
+  useEffect(() => {
+    prevPosCheck.current = roles.checkPos;
+  });
+  const prevPos = prevPosCheck.current;
+
   const goBack = () => {
     props.goBack();
-    dispatch(remove_selected_modules());
   };
   useEffect(() => {
     if (
@@ -59,65 +71,162 @@ const AddRole = (props) => {
       props.goBack();
     }
   }, [userRoles.redirect_user_roles]);
-
   useEffect(() => {
-    console.log(roleNameDupError);
-
-    dispatch(toggleBackOffice(roles.checkBackOffice));
+    console.log("props.user_role_row_data", props.user_role_row_data);
+    if (props.user_role_row_data !== undefined) {
+      setRoleName(
+        props.user_role_row_data.roleName !== undefined &&
+          props.user_role_row_data.roleName !== null
+          ? props.user_role_row_data.roleName
+          : ""
+      );
+      setRoleNameOrg(
+        props.user_role_row_data.roleName !== undefined &&
+          props.user_role_row_data.roleName !== null
+          ? props.user_role_row_data.roleName
+          : ""
+      );
+      setBackOffice(
+        props.user_role_row_data.allowBackoffice !== undefined &&
+          props.user_role_row_data.allowBackoffice !== null
+          ? [props.user_role_row_data.allowBackoffice]
+          : []
+      );
+      setAllowPos(
+        props.user_role_row_data.allowPOS !== undefined &&
+          props.user_role_row_data.allowPOS !== null
+          ? [props.user_role_row_data.allowPOS]
+          : []
+      );
+      console.log(props.user_role_row_data.allowBackoffice, "asd3as");
+      setRoles({
+        ...roles,
+        checkBackOffice:
+          props.user_role_row_data.allowBackoffice !== undefined &&
+          props.user_role_row_data.allowBackoffice !== null &&
+          props.user_role_row_data.allowBackoffice.enable !== undefined
+            ? props.user_role_row_data.allowBackoffice.enable
+            : false,
+        checkPos:
+          props.user_role_row_data.allowPOS !== undefined &&
+          props.user_role_row_data.allowPOS !== null &&
+          props.user_role_row_data.allowPOS.enable !== undefined
+            ? props.user_role_row_data.allowPOS.enable
+            : false,
+      });
+    }
+  }, [props.user_role_row_data]);
+  useEffect(() => {
+    if (allowBackOffice.length > 0) {
+      setBackOffice(
+        (allowBackOffice || []).slice().map((item) => {
+          return {
+            ...item,
+            enable: roles.checkBackOffice,
+          };
+        })
+      );
+    }
   }, [roles.checkBackOffice]);
 
   useEffect(() => {
-    dispatch(togglePOS(roles.checkPos));
+    if (allowPos.length > 0) {
+      setAllowPos(
+        (allowPos || []).slice().map((item) => {
+          return {
+            ...item,
+            enable: roles.checkPos,
+          };
+        })
+      );
+    }
   }, [roles.checkPos]);
 
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     setRoleNameError(validator.isEmpty(value));
-    setRoleNameSupError(false);
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setRoleName(value);
   };
-  const changeOnBackOffice = (name, value) => {
+  const changeOnModule = (name, value) => {
     setRoles({
       ...roles,
       [name]: !value,
     });
   };
   const backOfficeCheck = (id) => {
-    dispatch(toggle_back_office_module(id));
+    console.log(id);
+    console.log(allowBackOffice);
+    setBackOffice(
+      allowBackOffice.slice().map((item) => {
+        return {
+          ...item,
+          modules: (item.modules || []).slice().map((mod, modIndex) => {
+            if (mod._id == id) {
+              return {
+                ...mod,
+                enable: !mod.enable,
+              };
+            }
+            return mod;
+          }),
+        };
+      })
+    );
   };
   const posToggleCheck = (id) => {
-    dispatch(toggle_pos_module(id));
+    setAllowPos(
+      allowPos.slice().map((item) => {
+        return {
+          ...item,
+          modules: (item.modules || []).slice().map((pos, modIndex) => {
+            if (pos._id == id) {
+              return {
+                ...pos,
+                enable: !pos.enable,
+              };
+            }
+            return pos;
+          }),
+        };
+      })
+    );
   };
-  const saveUserRole = (e) => {
+  const updateUserRole = () => {
     if (roleName !== undefined && roleName !== null && roleName.trim() === "") {
       setRoleNameError(validator.isEmpty(roleName));
-      return false;
-    } else if (roleName.toUpperCase() == "OWNER") {
-      setRoleNameSupError(true);
       return false;
     } else {
       const data = {
         name: roleName,
+        roleId:
+          props.user_role_row_data !== undefined &&
+          props.user_role_row_data !== null &&
+          props.user_role_row_data._id !== undefined &&
+          props.user_role_row_data._id !== null
+            ? props.user_role_row_data._id
+            : "",
         backoffice:
-          userRoles.backOfficeModules !== undefined &&
-          userRoles.backOfficeModules !== null &&
-          userRoles.backOfficeModules.length > 0
-            ? userRoles.backOfficeModules[0]
+          allowBackOffice !== undefined &&
+          allowBackOffice !== null &&
+          allowBackOffice.length > 0
+            ? allowBackOffice[0]
             : {},
         pos:
-          userRoles.posModules !== undefined &&
-          userRoles.posModules !== null &&
-          userRoles.posModules.length > 0
-            ? userRoles.posModules[0]
+          allowPos !== undefined && allowPos !== null && allowPos.length > 0
+            ? allowPos[0]
             : {},
       };
-      dispatch(add_new_role(data));
-      console.log(data);
+      dispatch(update_user_role(data));
     }
   };
+  console.log(allowPos);
+  console.log(allowBackOffice);
+  console.log(prevBackOffice);
+  console.log(roles.checkBackOffice);
+  console.log(roles.checkPos);
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -136,13 +245,11 @@ const AddRole = (props) => {
                         value={roleName}
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
-                        invalid={roleNameError || roleNameDupError}
+                        invalid={roleNameError}
+                        disabled={roleNameOrg.toUpperCase() == "OWNER"}
                       />
                       <CInvalidFeedback>
                         {roleNameError === true ? "Please Enter Role Name" : ""}
-                        {roleNameDupError === true
-                          ? "Role with the same name already exists"
-                          : ""}
                       </CInvalidFeedback>
                     </CInputGroup>
                   </CFormGroup>
@@ -182,9 +289,11 @@ const AddRole = (props) => {
                         shape="pill"
                         color={"success"}
                         checked={roles.checkPos}
+                        value={roles.checkPos}
                         onChange={() =>
-                          changeOnBackOffice("checkPos", roles.checkPos)
+                          changeOnModule("checkPos", roles.checkPos)
                         }
+                        disabled={roleNameOrg.toUpperCase() == "OWNER"}
                       />
                     </CCol>
                   </CRow>
@@ -194,59 +303,58 @@ const AddRole = (props) => {
                 <CRow>
                   <CCol sm="12" md="12" lg="12">
                     <CListGroup>
-                      {userRoles.posModules !== undefined &&
-                      userRoles.posModules !== null &&
-                      userRoles.posModules.length > 0
-                        ? (userRoles.posModules[0].modules || []).map(
-                            (item, index) => (
-                              <React.Fragment key={index}>
-                                <CListGroupItem
-                                  key={index}
-                                  style={{
-                                    border: "none",
-                                    marginLeft: "20px",
-                                  }}
-                                >
-                                  <CFormGroup variant="custom-checkbox">
-                                    <CInputCheckbox
-                                      custom
-                                      name="pos_module"
-                                      id={"pos_module" + index}
-                                      value={item.moduleId}
-                                      checked={item.enable}
-                                      onChange={() =>
-                                        posToggleCheck(item.moduleId)
-                                      }
+                      {allowPos !== undefined &&
+                      allowPos !== null &&
+                      allowPos.length > 0
+                        ? (allowPos[0].modules || []).map((item, index) => (
+                            <React.Fragment>
+                              <CListGroupItem
+                                key={index}
+                                style={{
+                                  border: "none",
+                                  marginLeft: "20px",
+                                }}
+                              >
+                                <CFormGroup variant="custom-checkbox">
+                                  <CInputCheckbox
+                                    custom
+                                    name="pos_module"
+                                    id={"pos_module" + index}
+                                    value={item._id}
+                                    checked={item.enable}
+                                    onChange={() => posToggleCheck(item._id)}
+                                    style={{
+                                      marginLeft: "0px",
+                                      width: "17px",
+                                      height: "20px",
+                                    }}
+                                    disabled={
+                                      roleNameOrg.toUpperCase() == "OWNER"
+                                    }
+                                  />
+                                  <CLabel
+                                    variant="custom-checkbox"
+                                    htmlFor={"pos_module" + index}
+                                    style={{
+                                      fontWeight: 400,
+                                      color: "rgba(0,0,0,0.87)",
+                                    }}
+                                  >
+                                    {item.moduleName}
+                                    <small
+                                      className="mb-1"
                                       style={{
-                                        marginLeft: "0px",
-                                        width: "17px",
-                                        height: "20px",
-                                      }}
-                                    />
-                                    <CLabel
-                                      variant="custom-checkbox"
-                                      htmlFor={"pos_module" + index}
-                                      style={{
-                                        fontWeight: 400,
-                                        color: "rgba(0,0,0,0.87)",
+                                        float: "left",
+                                        color: "#20202ad1",
                                       }}
                                     >
-                                      {item.moduleName}
-                                      <small
-                                        className="mb-1"
-                                        style={{
-                                          float: "left",
-                                          color: "#20202ad1",
-                                        }}
-                                      >
-                                        {item.description}
-                                      </small>
-                                    </CLabel>
-                                  </CFormGroup>
-                                </CListGroupItem>
-                              </React.Fragment>
-                            )
-                          )
+                                      {item.description}
+                                    </small>
+                                  </CLabel>
+                                </CFormGroup>
+                              </CListGroupItem>
+                            </React.Fragment>
+                          ))
                         : null}
                     </CListGroup>
                   </CCol>
@@ -291,12 +399,14 @@ const AddRole = (props) => {
                         shape="pill"
                         color={"success"}
                         checked={roles.checkBackOffice}
+                        value={roles.checkBackOffice}
                         onChange={() =>
-                          changeOnBackOffice(
+                          changeOnModule(
                             "checkBackOffice",
                             roles.checkBackOffice
                           )
                         }
+                        disabled={roleNameOrg.toUpperCase() == "OWNER"}
                       />
                     </CCol>
                   </CRow>
@@ -306,12 +416,12 @@ const AddRole = (props) => {
                 <CRow>
                   <CCol sm="12" md="12" lg="12">
                     <CListGroup>
-                      {userRoles.backOfficeModules !== undefined &&
-                      userRoles.backOfficeModules !== null &&
-                      userRoles.backOfficeModules.length > 0
-                        ? (userRoles.backOfficeModules[0].modules || []).map(
+                      {allowBackOffice !== undefined &&
+                      allowBackOffice !== null &&
+                      allowBackOffice.length > 0
+                        ? (allowBackOffice[0].modules || []).map(
                             (item, index) => (
-                              <React.Fragment key={index}>
+                              <React.Fragment>
                                 <CListGroupItem
                                   key={index}
                                   style={{
@@ -324,16 +434,17 @@ const AddRole = (props) => {
                                       custom
                                       name="kpyo_back"
                                       id={"kpyo_back" + index}
-                                      value={item.moduleId}
+                                      value={item._id}
                                       checked={item.enable}
-                                      onChange={() =>
-                                        backOfficeCheck(item.moduleId)
-                                      }
+                                      onChange={() => backOfficeCheck(item._id)}
                                       style={{
                                         marginLeft: "0px",
                                         width: "17px",
                                         height: "20px",
                                       }}
+                                      disabled={
+                                        roleNameOrg.toUpperCase() == "OWNER"
+                                      }
                                     />
                                     <CLabel
                                       variant="custom-checkbox"
@@ -381,7 +492,7 @@ const AddRole = (props) => {
                     variant="outline"
                     className="btn-pill pull-right"
                     color="success"
-                    onClick={saveUserRole}
+                    onClick={updateUserRole}
                   >
                     SAVE
                   </CButton>
@@ -394,4 +505,4 @@ const AddRole = (props) => {
     </React.Fragment>
   );
 };
-export default AddRole;
+export default EditUserRole;

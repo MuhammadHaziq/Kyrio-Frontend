@@ -1,23 +1,11 @@
 import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { update_row_data } from "../../actions/employee/userRolesActions";
 const UserRolesDatatable = (props) => {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const AccessModules = (cell, row) => {
-    const backOffice = row.allowBackoffice.enable === true ? "Back office" : "";
-    const pos = row.allowPOS.enable === true ? "POS" : "";
-    if (backOffice === "" && pos === "") {
-      return "";
-    } else if (backOffice !== "" && pos !== "") {
-      return backOffice + " And " + pos;
-    } else if (backOffice !== "") {
-      return backOffice;
-    } else {
-      return pos;
-    }
-  };
 
   const onRowSelect = (row, isSelected, e) => {
     // dispatch(toggle_employee_single_select(row));
@@ -61,7 +49,7 @@ const UserRolesDatatable = (props) => {
     sizePerPage: 5,
     onRowClick: function (row) {
       console.log(row);
-      // dispatch(update_row_data(row));
+      dispatch(update_row_data(row));
     },
   };
   return (
@@ -75,7 +63,7 @@ const UserRolesDatatable = (props) => {
         pagination={true}
       >
         <TableHeaderColumn
-          dataField="_id"
+          dataField="role_id"
           dataSort={true}
           hidden={true}
           isKey={true}
@@ -85,14 +73,10 @@ const UserRolesDatatable = (props) => {
         <TableHeaderColumn dataField="roleName" dataSort={true}>
           Role
         </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="access"
-          dataSort={true}
-          dataFormat={AccessModules}
-        >
+        <TableHeaderColumn dataField="access" dataSort={true}>
           Access
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="employees" dataSort={true}>
+        <TableHeaderColumn dataField="NoOfEmployees" dataSort={true}>
           Employees
         </TableHeaderColumn>
       </BootstrapTable>

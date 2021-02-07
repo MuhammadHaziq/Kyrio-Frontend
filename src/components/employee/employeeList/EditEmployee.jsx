@@ -43,6 +43,7 @@ const EditEmployee = (props) => {
     posPin: "0000",
     allowBackOffice: "",
     pos: "",
+    roleName: "",
   });
   const [errors, setErrors] = useState({
     name: false,
@@ -107,10 +108,15 @@ const EditEmployee = (props) => {
         email: props.employee_row_data.email,
         phone: props.employee_row_data.phone,
         role:
-          props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["id"] !== undefined
-            ? props.employee_row_data.role["id"]
+          props.employee_row_data.role_id !== undefined &&
+          props.employee_row_data.role_id !== undefined
+            ? props.employee_row_data.role_id
             : "0",
+        roleName:
+          props.employee_row_data.role !== undefined &&
+          props.employee_row_data.role["name"] !== undefined
+            ? props.employee_row_data.role["name"]
+            : "",
         sendMail:
           props.employee_row_data.role !== undefined &&
           props.employee_row_data.role["name"] === "Administrator"
@@ -130,10 +136,10 @@ const EditEmployee = (props) => {
           props.employee_row_data.role["id"] !== undefined
             ? (props.user_roles || [])
                 .filter(
-                  (item) => item._id === props.employee_row_data.role["id"]
+                  (item) => item.role_id === props.employee_row_data.role["id"]
                 )
                 .map((item) => {
-                  return item.allowBackoffice.enable;
+                  return item.allowBackoffice;
                 })[0]
             : "0",
         pos:
@@ -141,10 +147,10 @@ const EditEmployee = (props) => {
           props.employee_row_data.role["id"] !== undefined
             ? (props.user_roles || [])
                 .filter(
-                  (item) => item._id === props.employee_row_data.role["id"]
+                  (item) => item.role_id === props.employee_row_data.role["id"]
                 )
                 .map((item) => {
-                  return item.allowPOS.enable;
+                  return item.allowPOS;
                 })[0]
             : "0",
       });
@@ -168,14 +174,14 @@ const EditEmployee = (props) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
       const allowBackOffice = (props.user_roles || [])
-        .filter((item) => item._id === props.employee_row_data.role_id)
+        .filter((item) => item.role_id === props.employee_row_data.role_id)
         .map((item) => {
-          return item.allowBackoffice.enable;
+          return item.allowBackoffice;
         })[0];
       const pos = (props.user_roles || [])
-        .filter((item) => item._id === props.employee_row_data.role_id)
+        .filter((item) => item.role_id === props.employee_row_data.role_id)
         .map((item) => {
-          return item.allowPOS.enable;
+          return item.allowPOS;
         })[0];
       setFields({
         ...fields,
@@ -276,9 +282,9 @@ const EditEmployee = (props) => {
       return false;
     } else if (
       props.user_roles
-        .filter((item) => item._id === fields.role)
+        .filter((item) => item.role_id === fields.role)
         .map((item) => {
-          return item.allowPOS.enable;
+          return item.allowPOS;
         })[0] === true &&
       fields.posPin === "0000"
     ) {
@@ -305,10 +311,10 @@ const EditEmployee = (props) => {
         ),
         roles: JSON.stringify(
           props.user_roles
-            .filter((item) => item._id === fields.role)
+            .filter((item) => item.role_id === fields.role)
             .map((item) => {
               return {
-                id: item._id,
+                id: item.role_id,
                 name: item.roleName,
               };
             })[0]
@@ -316,18 +322,18 @@ const EditEmployee = (props) => {
       };
       if (
         props.user_roles
-          .filter((item) => item._id === fields.role)
+          .filter((item) => item.role_id === fields.role)
           .map((item) => {
-            return item.allowBackoffice.enable;
+            return item.allowBackoffice;
           })[0] === true
       ) {
         data.sendMail = fields.sendMail;
       }
       if (
         props.user_roles
-          .filter((item) => item._id === fields.role)
+          .filter((item) => item.role_id === fields.role)
           .map((item) => {
-            return item.allowPOS.enable;
+            return item.allowPOS;
           })[0] === true
       ) {
         data.posPin = fields.posPin;
@@ -394,6 +400,7 @@ const EditEmployee = (props) => {
                     onChange={handleOnChange}
                     onBlur={handleOnBlur}
                     invalid={errors.email}
+                    disabled={fields.roleName.toUpperCase() == "OWNER"}
                   />
                   <CInvalidFeedback>
                     {errors.email === true ? "Please Enter Employee Email" : ""}
@@ -493,7 +500,7 @@ const EditEmployee = (props) => {
                           return item.roleName !== "owner" &&
                             item.roleName !== "Owner" ? (
                             <React.Fragment>
-                              <option value={item._id} key={index}>
+                              <option value={item.role_id} key={index}>
                                 {item.roleName}
                               </option>
                             </React.Fragment>
@@ -685,6 +692,7 @@ const EditEmployee = (props) => {
                         value={0}
                         checked={fields.checkAll}
                         onChange={storeHandleChange}
+                        disabled={fields.roleName.toUpperCase() == "OWNER"}
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
                         {storeId.filter((item) => item.isSelected !== true)
@@ -704,6 +712,7 @@ const EditEmployee = (props) => {
                           value={item._id}
                           checked={item.isSelected}
                           onChange={storeHandleChange}
+                          disabled={fields.roleName.toUpperCase() == "OWNER"}
                         />
                         <CLabel
                           variant="custom-checkbox"
@@ -719,7 +728,7 @@ const EditEmployee = (props) => {
             </CCard>
           </CCollapse>
           <CRow>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+            {/*  <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
               <ConformationAlert
                 button_text="Delete"
                 heading="Delete Employee"
@@ -732,8 +741,8 @@ const EditEmployee = (props) => {
                 color="danger"
                 block={true}
               />
-            </CCol>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+            </CCol>*/}
+            <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0 pull-right">
               <CButton
                 block
                 variant="outline"
@@ -744,7 +753,7 @@ const EditEmployee = (props) => {
                 CANCEL
               </CButton>
             </CCol>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
+            <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0 form-actions pull-right">
               <CButton
                 block
                 type="submit"

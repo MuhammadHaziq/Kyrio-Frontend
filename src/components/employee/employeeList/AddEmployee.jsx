@@ -102,14 +102,14 @@ const AddEmployee = (props) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
       const allowBackOffice = (props.user_roles || [])
-        .filter((item) => item._id === e.target.value)
+        .filter((item) => item.role_id === e.target.value)
         .map((item) => {
-          return item.allowBackoffice.enable;
+          return item.allowBackoffice;
         })[0];
       const pos = (props.user_roles || [])
-        .filter((item) => item._id === e.target.value)
+        .filter((item) => item.role_id === e.target.value)
         .map((item) => {
-          return item.allowPOS.enable;
+          return item.allowPOS;
         })[0];
       setFields({
         ...fields,
@@ -204,9 +204,9 @@ const AddEmployee = (props) => {
       return false;
     } else if (
       props.user_roles
-        .filter((item) => item._id === fields.role)
+        .filter((item) => item.role_id === fields.role)
         .map((item) => {
-          return item.allowPOS.enable;
+          return item.allowPOS;
         })[0] === true &&
       fields.posPin === "0000"
     ) {
@@ -233,10 +233,10 @@ const AddEmployee = (props) => {
         ),
         roles: JSON.stringify(
           props.user_roles
-            .filter((item) => item._id === fields.role)
+            .filter((item) => item.role_id === fields.role)
             .map((item) => {
               return {
-                id: item._id,
+                id: item.role_id,
                 name: item.roleName,
               };
             })[0]
@@ -244,18 +244,18 @@ const AddEmployee = (props) => {
       };
       if (
         props.user_roles
-          .filter((item) => item._id === fields.role)
+          .filter((item) => item.role_id === fields.role)
           .map((item) => {
-            return item.allowBackoffice.enable;
+            return item.allowBackoffice;
           })[0] === true
       ) {
         data.sendMail = fields.sendMail;
       }
       if (
         props.user_roles
-          .filter((item) => item._id === fields.role)
+          .filter((item) => item.role_id === fields.role)
           .map((item) => {
-            return item.allowPOS.enable;
+            return item.allowPOS;
           })[0] === true
       ) {
         data.posPin = fields.posPin;
@@ -387,7 +387,7 @@ const AddEmployee = (props) => {
                       return item.roleName !== "owner" &&
                         item.roleName !== "Owner" ? (
                         <React.Fragment>
-                          <option value={item._id} key={index}>
+                          <option value={item.role_id} key={index}>
                             {item.roleName}
                           </option>
                         </React.Fragment>

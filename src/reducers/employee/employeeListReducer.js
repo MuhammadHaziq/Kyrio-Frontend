@@ -52,9 +52,18 @@ const employeeListReducer = (state = initialState, action) => {
     case TOGGLE_EMPLOYEE_ALL_SELECT: {
       return Object.assign({}, state, {
         employee_list: state.employee_list.map((item) => {
-          return Object.assign({}, item, {
-            isDeleted: action.response,
-          });
+          if (
+            item.role !== undefined &&
+            item.role !== null &&
+            item.role["name"] !== undefined &&
+            item.role["name"] !== null &&
+            item.role["name"].toUpperCase() !== "OWNER"
+          ) {
+            return Object.assign({}, item, {
+              isDeleted: action.response,
+            });
+          }
+          return item;
         }),
       });
     }
@@ -82,7 +91,7 @@ const employeeListReducer = (state = initialState, action) => {
     case UPDATE_EMPLOYEE: {
       return Object.assign({}, state, {
         employee_list: state.employee_list.map((item) => {
-          if ((item._id === action.response._id)) {
+          if (item._id === action.response._id) {
             return action.response;
           }
           return item;

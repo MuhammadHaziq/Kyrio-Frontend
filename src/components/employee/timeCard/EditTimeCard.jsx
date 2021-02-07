@@ -58,6 +58,8 @@ const EditTimeCard = (props) => {
     startTime: false,
     endTime: false,
   });
+  const [totalWorkingHour, setTolalHour] = useState(0);
+
   const [stores, setStores] = useState([]);
   const [employees, setEmployees] = useState([]);
   const dispatch = useDispatch();
@@ -279,6 +281,7 @@ const EditTimeCard = (props) => {
         clockInTime: timeRange.startTime,
         clockOutTime: timeRange.endTime,
         id: props.time_card_row_data._id,
+        totalWorkingHour: totalHour === "0:0" ? 0 : totalHour,
       };
       dispatch(update_timeCard(data));
     }
@@ -350,6 +353,7 @@ const EditTimeCard = (props) => {
     diffEndMin = parseFloat(startMins) - parseFloat(endMins);
     totalHour = diffStartHour + getNatural(timeDiff);
     totalHour = totalHour + ":" + Math.abs(diffEndMin);
+    // setTolalHour(totalHour === "0:0" ? 0 : totalHour);
   } else {
     let diffEndHour = 0;
     let diffEndMin = 0;
@@ -357,6 +361,7 @@ const EditTimeCard = (props) => {
     diffEndMin = parseFloat(startMins) - parseFloat(endMins);
     totalHour = diffEndHour + getNatural(timeDiff);
     totalHour = totalHour + ":" + Math.abs(diffEndMin);
+    // setTolalHour(totalHour === "0:0" ? 0 : totalHour);
   }
   return (
     <React.Fragment>

@@ -58,6 +58,7 @@ const AddEmployeeTime = (props) => {
     startTime: false,
     endTime: false,
   });
+  const [totalWorkingHour, setTolalHour] = useState(0);
   const [stores, setStores] = useState([]);
   const [employees, setEmployees] = useState([]);
   const dispatch = useDispatch();
@@ -231,6 +232,7 @@ const AddEmployeeTime = (props) => {
         clockOutDate: dateFormat(dateRange.endDate, "yyyy-mm-dd"),
         clockInTime: timeRange.startTime,
         clockOutTime: timeRange.endTime,
+        totalWorkingHour: totalHour === "0:0" ? 0 : totalHour,
       };
       dispatch(add_new_timeCard(data));
     }
@@ -302,6 +304,7 @@ const AddEmployeeTime = (props) => {
     diffEndMin = parseFloat(startMins) - parseFloat(endMins);
     totalHour = diffStartHour + getNatural(timeDiff);
     totalHour = totalHour + ":" + Math.abs(diffEndMin);
+    // setTolalHour(totalHour === "0:0" ? 0 : totalHour);
   } else {
     let diffEndHour = 0;
     let diffEndMin = 0;
@@ -309,10 +312,10 @@ const AddEmployeeTime = (props) => {
     diffEndMin = parseFloat(startMins) - parseFloat(endMins);
     totalHour = diffEndHour + getNatural(timeDiff);
     totalHour = totalHour + ":" + Math.abs(diffEndMin);
+    // setTolalHour(totalHour === "0:0" ? 0 : totalHour);
   }
   return (
     <React.Fragment>
-
       <CRow className="justify-content-left">
         <CCol md="10" lg="10" xl="10">
           <CCard>
@@ -555,7 +558,6 @@ const AddEmployeeTime = (props) => {
           </CRow>
         </CCol>
       </CRow>
-
     </React.Fragment>
   );
 };

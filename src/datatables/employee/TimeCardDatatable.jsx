@@ -65,58 +65,64 @@ const TimeCardDatatable = (props) => {
   };
 
   const totalHour = (cell, row) => {
-    let totalHour = 0;
-    const timeDiff = moment
-      .duration(
-        moment(row.timeDetail[0].clockOutDate).diff(
-          moment(row.timeDetail[0].clockInDate)
-        )
-      )
-      .asDays();
-
-    const getNatural = (num) => {
-      return parseFloat(num.toString().split(".")[0]) * 24;
-    };
-    let startHours =
-      row.timeDetail[0].clockInTime !== null &&
-      row.timeDetail[0].clockInTime !== undefined
-        ? row.timeDetail[0].clockInTime.split(":")[0] === "12"
-          ? 24
-          : row.timeDetail[0].clockInTime.split(":")[0]
-        : 0;
-    let startMins =
-      row.timeDetail[0].clockInTime !== null &&
-      row.timeDetail[0].clockInTime !== undefined
-        ? row.timeDetail[0].clockInTime.split(":")[1]
-        : 0;
-    let endHours =
-      row.timeDetail[0].clockOutTime !== null &&
-      row.timeDetail[0].clockOutTime !== undefined
-        ? row.timeDetail[0].clockOutTime.split(":")[0] === "12"
-          ? 24
-          : row.timeDetail[0].clockOutTime.split(":")[0]
-        : 0;
-    let endMins =
-      row.timeDetail[0].clockOutTime !== null &&
-      row.timeDetail[0].clockOutTime !== undefined
-        ? row.timeDetail[0].clockOutTime.split(":")[0]
-        : 0;
-
-    if (parseFloat(startHours) > parseFloat(endHours)) {
-      let diffStartHour = 0;
-      let diffEndMin = 0;
-      diffStartHour = parseFloat(startHours) - parseFloat(endHours);
-      diffEndMin = parseFloat(startMins) - parseFloat(endMins);
-      totalHour = diffStartHour + getNatural(timeDiff);
-      return totalHour + ":" + Math.abs(diffEndMin);
-    } else {
-      let diffEndHour = 0;
-      let diffEndMin = 0;
-      diffEndHour = parseFloat(endHours) - parseFloat(startHours);
-      diffEndMin = parseFloat(startMins) - parseFloat(endMins);
-      totalHour = diffEndHour + getNatural(timeDiff);
-      return totalHour + ":" + Math.abs(diffEndMin);
-    }
+    return row.timeDetail !== undefined && row.timeDetail.length > 0
+      ? row.timeDetail[0].totalWorkingHour !== undefined &&
+        row.timeDetail[0].totalWorkingHour !== null
+        ? row.timeDetail[0].totalWorkingHour
+        : ""
+      : "";
+    // let totalHour = 0;
+    // const timeDiff = moment
+    //   .duration(
+    //     moment(row.timeDetail[0].clockOutDate).diff(
+    //       moment(row.timeDetail[0].clockInDate)
+    //     )
+    //   )
+    //   .asDays();
+    //
+    // const getNatural = (num) => {
+    //   return parseFloat(num.toString().split(".")[0]) * 24;
+    // };
+    // let startHours =
+    //   row.timeDetail[0].clockInTime !== null &&
+    //   row.timeDetail[0].clockInTime !== undefined
+    //     ? row.timeDetail[0].clockInTime.split(":")[0] === "12"
+    //       ? 24
+    //       : row.timeDetail[0].clockInTime.split(":")[0]
+    //     : 0;
+    // let startMins =
+    //   row.timeDetail[0].clockInTime !== null &&
+    //   row.timeDetail[0].clockInTime !== undefined
+    //     ? row.timeDetail[0].clockInTime.split(":")[1]
+    //     : 0;
+    // let endHours =
+    //   row.timeDetail[0].clockOutTime !== null &&
+    //   row.timeDetail[0].clockOutTime !== undefined
+    //     ? row.timeDetail[0].clockOutTime.split(":")[0] === "12"
+    //       ? 24
+    //       : row.timeDetail[0].clockOutTime.split(":")[0]
+    //     : 0;
+    // let endMins =
+    //   row.timeDetail[0].clockOutTime !== null &&
+    //   row.timeDetail[0].clockOutTime !== undefined
+    //     ? row.timeDetail[0].clockOutTime.split(":")[0]
+    //     : 0;
+    //
+    // if (parseFloat(startHours) > parseFloat(endHours)) {
+    //   let diffStartHour = 0;
+    //   let diffEndMin = 0;
+    //   diffStartHour = parseFloat(startHours) - parseFloat(endHours);
+    //   diffEndMin = parseFloat(startMins) - parseFloat(endMins);
+    //   totalHour = diffStartHour + getNatural(timeDiff);
+    //   return totalHour + ":" + Math.abs(diffEndMin);
+    // } else {
+    //   let diffEndHour = 0;
+    //   let diffEndMin = 0;
+    //   diffEndHour = parseFloat(endHours) - parseFloat(startHours);
+    //   diffEndMin = parseFloat(startMins) - parseFloat(endMins);
+    //   totalHour = diffEndHour + getNatural(timeDiff);
+    //   return totalHour + ":" + Math.abs(diffEndMin);
+    // }
   };
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_timeCard_single_select(row));

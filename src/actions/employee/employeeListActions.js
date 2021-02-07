@@ -303,7 +303,52 @@ export const delete_employee = (ids) => {
 
 export const update_row_data = (row) => {
   return (dispatch) => {
-    dispatch({ type: ROW_DATA_EMPLOYEE_LIST, response: row });
+    try {
+      axios({
+        method: "GET",
+        url: `${BaseUrl}employee/employeeList/${row._id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: ROW_DATA_EMPLOYEE_LIST, response: response.data });
+
+          // dispatch({ type: DELETE_EMPLOYEE, response: JSON.parse(ids) });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };
 
@@ -319,7 +364,7 @@ export const update_employee = (data) => {
         },
       })
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           dispatch({ type: UPDATE_EMPLOYEE, response: response.data });
           let msg = {
             open: true,

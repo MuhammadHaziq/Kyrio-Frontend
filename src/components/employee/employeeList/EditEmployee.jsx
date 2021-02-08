@@ -40,6 +40,7 @@ const EditEmployee = (props) => {
     role: "",
     checkAll: true,
     sendMail: true,
+    enablePin: false,
     posPin: "0000",
     allowBackOffice: "",
     pos: "",
@@ -131,6 +132,9 @@ const EditEmployee = (props) => {
               ? "0000"
               : props.employee_row_data.posPin
             : "0000",
+        enablePin: props.employee_row_data.enablePin !== undefined
+          ? props.employee_row_data.enablePin
+          : false,
         allowBackOffice:
           props.employee_row_data.role !== undefined &&
           props.employee_row_data.role["id"] !== undefined
@@ -299,6 +303,7 @@ const EditEmployee = (props) => {
         name: fields.name,
         email: fields.email,
         phone: fields.phone,
+        enablePin: fields.enablePin,
         stores: JSON.stringify(
           storeId
             .filter((item) => item.isSelected === true)
@@ -349,7 +354,13 @@ const EditEmployee = (props) => {
       [name]: !fields.sendMail,
     });
   };
-
+  const changePinEnable = (e) => {
+    const { name, value } = e.target;
+    setFields({
+      ...fields,
+      [name]: !fields.enablePin,
+    });
+  };
   const delete_employee_record = () => {
     const data = [props.employee_row_data._id];
     dispatch(delete_employee(JSON.stringify(data)));
@@ -554,6 +565,20 @@ const EditEmployee = (props) => {
                         Invite to the back office
                       </CLabel>
                     </CFormGroup>
+                    <CFormGroup variant="custom-checkbox" inline key={0}>
+                      <CInputCheckbox
+                        custom
+                        name="enablePin"
+                        id={"enablePin"}
+                        value={fields.enablePin}
+                        checked={fields.enablePin}
+                        onChange={changePinEnable}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"enablePin"}>
+                        Enable Pin
+                      </CLabel>
+                    </CFormGroup>
+                    {fields.enablePin ? 
                     <CFormGroup>
                       <CLabel htmlFor="posPin">POS PIN</CLabel>
                       <CInputGroup>
@@ -579,6 +604,7 @@ const EditEmployee = (props) => {
                         </CInvalidFeedback>
                       </CInputGroup>
                     </CFormGroup>
+                    :""}
                   </React.Fragment>
                 ) : fields.allowBackOffice === true ? (
                   <React.Fragment>
@@ -596,7 +622,7 @@ const EditEmployee = (props) => {
                       </CLabel>
                     </CFormGroup>
                   </React.Fragment>
-                ) : fields.pos === true ? (
+                ) : fields.pos === true && fields.enablePin ? (
                   <React.Fragment>
                     <CFormGroup>
                       <CLabel htmlFor="posPin">POS PIN</CLabel>

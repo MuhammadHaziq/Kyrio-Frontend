@@ -49,6 +49,7 @@ const AddEmployee = (props) => {
     role: "",
     checkAll: true,
     sendMail: true,
+    enablePin: false,
     posPin: "0000",
     allowBackOffice: "",
     pos: "",
@@ -220,6 +221,7 @@ const AddEmployee = (props) => {
         name: fields.name,
         email: fields.email,
         phone: fields.phone,
+        enablePin: fields.enablePin,
         // role: fields.role,
         stores: JSON.stringify(
           storeId
@@ -260,7 +262,7 @@ const AddEmployee = (props) => {
       ) {
         data.posPin = fields.posPin;
       }
-      console.log(data);
+      
       dispatch(add_new_employee(data));
     }
   };
@@ -269,6 +271,13 @@ const AddEmployee = (props) => {
     setFields({
       ...fields,
       [name]: !fields.sendMail,
+    });
+  };
+  const changePinEnable = (e) => {
+    const { name, value } = e.target;
+    setFields({
+      ...fields,
+      [name]: !fields.enablePin,
     });
   };
   return (
@@ -414,6 +423,20 @@ const AddEmployee = (props) => {
                         Invite to the back office
                       </CLabel>
                     </CFormGroup>
+                    <CFormGroup variant="custom-checkbox" inline key={0}>
+                      <CInputCheckbox
+                        custom
+                        name="enablePin"
+                        id={"enablePin"}
+                        value={fields.enablePin}
+                        checked={fields.enablePin}
+                        onChange={changePinEnable}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"enablePin"}>
+                        Enable Pin
+                      </CLabel>
+                    </CFormGroup>
+                    {fields.enablePin ? 
                     <CFormGroup>
                       <CLabel htmlFor="posPin">POS PIN</CLabel>
                       <CInputGroup>
@@ -439,6 +462,7 @@ const AddEmployee = (props) => {
                         </CInvalidFeedback>
                       </CInputGroup>
                     </CFormGroup>
+                    :""}
                   </React.Fragment>
                 ) : fields.allowBackOffice === true ? (
                   <React.Fragment>
@@ -457,6 +481,7 @@ const AddEmployee = (props) => {
                     </CFormGroup>
                   </React.Fragment>
                 ) : fields.pos === true ? (
+                  fields.enablePin ? 
                   <React.Fragment>
                     <CFormGroup>
                       <CLabel htmlFor="posPin">POS PIN</CLabel>
@@ -484,6 +509,7 @@ const AddEmployee = (props) => {
                       </CInputGroup>
                     </CFormGroup>
                   </React.Fragment>
+                  : ""
                 ) : (
                   ""
                 )}

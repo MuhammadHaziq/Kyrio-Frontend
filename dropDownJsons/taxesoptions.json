@@ -2,30 +2,30 @@
   "_id": {
     "$oid": "5f52997c84bc96246e060082"
   },
-  "createdAt": {
+  "created_at": {
     "$date": "2020-09-04T19:40:22.556Z"
   },
   "title": "Apply the tax to the new items",
-  "createdBy": "5f3d691a243f971fbaedbb91",
+  "created_by": "5f3d691a243f971fbaedbb91",
   "__v": 0
 },{
   "_id": {
     "$oid": "5f52998584bc96246e060083"
   },
-  "createdAt": {
+  "created_at": {
     "$date": "2020-09-04T19:40:22.556Z"
   },
   "title": "Apply the tax to existing items",
-  "createdBy": "5f3d691a243f971fbaedbb91",
+  "created_by": "5f3d691a243f971fbaedbb91",
   "__v": 0
 },{
   "_id": {
     "$oid": "5f52998e84bc96246e060084"
   },
-  "createdAt": {
+  "created_at": {
     "$date": "2020-09-04T19:40:22.556Z"
   },
   "title": "Apply the tax to all new and existing items",
-  "createdBy": "5f3d691a243f971fbaedbb91",
+  "created_by": "5f3d691a243f971fbaedbb91",
   "__v": 0
 }]

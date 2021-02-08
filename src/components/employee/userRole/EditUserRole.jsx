@@ -337,16 +337,11 @@ const EditUserRole = (props) => {
                                     htmlFor={"pos_module" + index}
                                     style={{
                                       fontWeight: 400,
-                                      color: "rgba(0,0,0,0.87)",
                                     }}
                                   >
-                                    {item.moduleName}
+                                    {item.moduleName}<br/>
                                     <small
                                       className="mb-1"
-                                      style={{
-                                        float: "left",
-                                        color: "#20202ad1",
-                                      }}
                                     >
                                       {item.description}
                                     </small>
@@ -451,10 +446,14 @@ const EditUserRole = (props) => {
                                       htmlFor={"kpyo_back" + index}
                                       style={{
                                         fontWeight: 400,
-                                        color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.moduleName}
+                                      {item.moduleName}<br/>
+                                    <small
+                                      className="mb-1"
+                                    >
+                                      {item.description}
+                                    </small>
                                     </CLabel>
                                   </CFormGroup>
                                 </CListGroupItem>

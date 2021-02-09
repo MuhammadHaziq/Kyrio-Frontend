@@ -72,7 +72,6 @@ const EditUserRole = (props) => {
     }
   }, [userRoles.redirect_user_roles]);
   useEffect(() => {
-    console.log("props.user_role_row_data", props.user_role_row_data);
     if (props.user_role_row_data !== undefined) {
       setRoleName(
         props.user_role_row_data.roleName !== undefined &&
@@ -98,7 +97,6 @@ const EditUserRole = (props) => {
           ? [props.user_role_row_data.allowPOS]
           : []
       );
-      console.log(props.user_role_row_data.allowBackoffice, "asd3as");
       setRoles({
         ...roles,
         checkBackOffice:
@@ -157,8 +155,6 @@ const EditUserRole = (props) => {
     });
   };
   const backOfficeCheck = (id) => {
-    console.log(id);
-    console.log(allowBackOffice);
     setBackOffice(
       allowBackOffice.slice().map((item) => {
         return {
@@ -222,11 +218,6 @@ const EditUserRole = (props) => {
       dispatch(update_user_role(data));
     }
   };
-  console.log(allowPos);
-  console.log(allowBackOffice);
-  console.log(prevBackOffice);
-  console.log(roles.checkBackOffice);
-  console.log(roles.checkPos);
   return (
     <React.Fragment>
       <CRow className="justify-content-left">

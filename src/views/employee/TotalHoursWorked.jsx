@@ -134,7 +134,6 @@ const TotalHoursWorked = () => {
 
   const employeeHandleChange = (e) => {
     let selectedEmployees = [];
-    // console.log(e.target.value);
     if (e === "0") {
       setFields({
         ...fields,

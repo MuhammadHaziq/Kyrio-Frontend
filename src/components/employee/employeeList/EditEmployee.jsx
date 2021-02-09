@@ -132,9 +132,10 @@ const EditEmployee = (props) => {
               ? "0000"
               : props.employee_row_data.posPin
             : "0000",
-        enablePin: props.employee_row_data.enablePin !== undefined
-          ? props.employee_row_data.enablePin
-          : false,
+        enablePin:
+          props.employee_row_data.enablePin !== undefined
+            ? props.employee_row_data.enablePin
+            : false,
         allowBackOffice:
           props.employee_row_data.role !== undefined &&
           props.employee_row_data.role["id"] !== undefined
@@ -367,7 +368,6 @@ const EditEmployee = (props) => {
     setShowAlert(!showAlert);
   };
 
-  // console.log("storeId", storeId);
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -578,33 +578,35 @@ const EditEmployee = (props) => {
                         Enable Pin
                       </CLabel>
                     </CFormGroup>
-                    {fields.enablePin ? 
-                    <CFormGroup>
-                      <CLabel htmlFor="posPin">POS PIN</CLabel>
-                      <CInputGroup>
-                        <NumberFormat
-                          id="posPin"
-                          name="posPin"
-                          value={fields.posPin}
-                          format="# # # #"
-                          mask="_"
-                          onChange={handleOnChange}
-                          onBlur={handleOnBlur}
-                          invalid={errors.posPin}
-                          className={
-                            errors.posPin === true
-                              ? "form-control is-invalid"
-                              : "form-control"
-                          }
-                        />
-                        <CInvalidFeedback>
-                          {errors.posPin === true
-                            ? "Please Enter POS  Pin"
-                            : ""}
-                        </CInvalidFeedback>
-                      </CInputGroup>
-                    </CFormGroup>
-                    :""}
+                    {fields.enablePin ? (
+                      <CFormGroup>
+                        <CLabel htmlFor="posPin">POS PIN</CLabel>
+                        <CInputGroup>
+                          <NumberFormat
+                            id="posPin"
+                            name="posPin"
+                            value={fields.posPin}
+                            format="# # # #"
+                            mask="_"
+                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
+                            invalid={errors.posPin}
+                            className={
+                              errors.posPin === true
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                          />
+                          <CInvalidFeedback>
+                            {errors.posPin === true
+                              ? "Please Enter POS  Pin"
+                              : ""}
+                          </CInvalidFeedback>
+                        </CInputGroup>
+                      </CFormGroup>
+                    ) : (
+                      ""
+                    )}
                   </React.Fragment>
                 ) : fields.allowBackOffice === true ? (
                   <React.Fragment>
@@ -779,7 +781,12 @@ const EditEmployee = (props) => {
                 CANCEL
               </CButton>
             </CCol>
-            <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0 form-actions pull-right">
+            <CCol
+              sm="6"
+              md="6"
+              xl="xl"
+              className="mb-3 mb-xl-0 form-actions pull-right"
+            >
               <CButton
                 block
                 type="submit"

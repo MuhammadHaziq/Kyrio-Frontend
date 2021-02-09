@@ -10,7 +10,10 @@ import {
   TOGGLE_POS_MODULE,
   UPDATE_USER_ROLE,
   GET_UPDATE_USER_ROLE,
+  TOGGLE_ROLE_SINGLE_SELECT,
+  TOGGLE_ROLE_ALL_SELECT,
   REMOVE_SELECTED_MODULES,
+  DELETE_USER_ROLE,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -143,6 +146,37 @@ const userRolesReducer = (state = initialState, action) => {
         redirect_update: true,
       };
     }
+    case TOGGLE_ROLE_SINGLE_SELECT: {
+      return Object.assign({}, state, {
+        user_roles: state.user_roles.map((item) => {
+          if (item.role_id === action.response.role_id) {
+            return Object.assign({}, item, {
+              isDeleted: !item.isDeleted,
+            });
+          }
+          return item;
+        }),
+      });
+    }
+    case TOGGLE_ROLE_ALL_SELECT: {
+      return Object.assign({}, state, {
+        user_roles: state.user_roles.map((item) => {
+          if (
+            item.roleName !== undefined &&
+            item.roleName !== null &&
+            item.roleName !== undefined &&
+            item.roleName !== null &&
+            item.roleName.toUpperCase() !== "OWNER"
+          ) {
+            return Object.assign({}, item, {
+              isDeleted: action.status,
+            });
+          }
+          return item;
+        }),
+      });
+    }
+
     case REMOVE_SELECTED_MODULES: {
       return {
         ...state,
@@ -150,6 +184,19 @@ const userRolesReducer = (state = initialState, action) => {
         posModules: state.copyPosModules,
       };
     }
+    case DELETE_USER_ROLE: {
+      let user_roles = state.user_roles;
+      for (const id of action.response) {
+        user_roles = user_roles.filter((item) => item.role_id !== id);
+      }
+      return {
+        ...state,
+        user_roles,
+        redirect_user_roles: true,
+        redirect_update: false,
+      };
+    }
+
     default:
       return { ...state };
   }

@@ -112,6 +112,7 @@ const AddEmployee = (props) => {
         .map((item) => {
           return item.allowPOS;
         })[0];
+
       setFields({
         ...fields,
         posPin: "0000",
@@ -262,7 +263,7 @@ const AddEmployee = (props) => {
       ) {
         data.posPin = fields.posPin;
       }
-      
+
       dispatch(add_new_employee(data));
     }
   };
@@ -436,33 +437,35 @@ const AddEmployee = (props) => {
                         Enable Pin
                       </CLabel>
                     </CFormGroup>
-                    {fields.enablePin ? 
-                    <CFormGroup>
-                      <CLabel htmlFor="posPin">POS PIN</CLabel>
-                      <CInputGroup>
-                        <NumberFormat
-                          id="posPin"
-                          name="posPin"
-                          value={fields.posPin}
-                          format="# # # #"
-                          mask="_"
-                          onChange={handleOnChange}
-                          onBlur={handleOnBlur}
-                          invalid={errors.posPin}
-                          className={
-                            errors.posPin === true
-                              ? "form-control is-invalid"
-                              : "form-control"
-                          }
-                        />
-                        <CInvalidFeedback>
-                          {errors.posPin === true
-                            ? "Please Enter POS  Pin"
-                            : ""}
-                        </CInvalidFeedback>
-                      </CInputGroup>
-                    </CFormGroup>
-                    :""}
+                    {fields.enablePin ? (
+                      <CFormGroup>
+                        <CLabel htmlFor="posPin">POS PIN</CLabel>
+                        <CInputGroup>
+                          <NumberFormat
+                            id="posPin"
+                            name="posPin"
+                            value={fields.posPin}
+                            format="# # # #"
+                            mask="_"
+                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
+                            invalid={errors.posPin}
+                            className={
+                              errors.posPin === true
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                          />
+                          <CInvalidFeedback>
+                            {errors.posPin === true
+                              ? "Please Enter POS  Pin"
+                              : ""}
+                          </CInvalidFeedback>
+                        </CInputGroup>
+                      </CFormGroup>
+                    ) : (
+                      ""
+                    )}
                   </React.Fragment>
                 ) : fields.allowBackOffice === true ? (
                   <React.Fragment>
@@ -481,35 +484,37 @@ const AddEmployee = (props) => {
                     </CFormGroup>
                   </React.Fragment>
                 ) : fields.pos === true ? (
-                  fields.enablePin ? 
-                  <React.Fragment>
-                    <CFormGroup>
-                      <CLabel htmlFor="posPin">POS PIN</CLabel>
-                      <CInputGroup>
-                        <NumberFormat
-                          id="posPin"
-                          name="posPin"
-                          value={fields.posPin}
-                          format="# # # #"
-                          mask="_"
-                          onChange={handleOnChange}
-                          onBlur={handleOnBlur}
-                          invalid={errors.posPin}
-                          className={
-                            errors.posPin === true
-                              ? "form-control is-invalid"
-                              : "form-control"
-                          }
-                        />
-                        <CInvalidFeedback>
-                          {errors.posPin === true
-                            ? "Please Enter POS  Pin"
-                            : ""}
-                        </CInvalidFeedback>
-                      </CInputGroup>
-                    </CFormGroup>
-                  </React.Fragment>
-                  : ""
+                  fields.enablePin ? (
+                    <React.Fragment>
+                      <CFormGroup>
+                        <CLabel htmlFor="posPin">POS PIN</CLabel>
+                        <CInputGroup>
+                          <NumberFormat
+                            id="posPin"
+                            name="posPin"
+                            value={fields.posPin}
+                            format="# # # #"
+                            mask="_"
+                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
+                            invalid={errors.posPin}
+                            className={
+                              errors.posPin === true
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                          />
+                          <CInvalidFeedback>
+                            {errors.posPin === true
+                              ? "Please Enter POS  Pin"
+                              : ""}
+                          </CInvalidFeedback>
+                        </CInputGroup>
+                      </CFormGroup>
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )
                 ) : (
                   ""
                 )}

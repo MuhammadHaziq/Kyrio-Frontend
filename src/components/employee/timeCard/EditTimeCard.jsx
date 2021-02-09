@@ -84,7 +84,6 @@ const EditTimeCard = (props) => {
   }, []);
   useEffect(() => {
     if (props.store !== undefined && props.store.length > 0) {
-      console.log(props.store);
       setStores(props.store);
     }
   }, [props.store]);

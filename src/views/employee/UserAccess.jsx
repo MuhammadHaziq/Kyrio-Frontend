@@ -15,8 +15,8 @@ import EditUserRole from "../../components/employee/userRole/EditUserRole.jsx";
 import {
   redirect_back_user_roles,
   get_user_access_list,
-  delete_employee,
   get_roles_modules,
+  delete_user_role,
 } from "../../actions/employee/userRolesActions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -48,14 +48,15 @@ const TimeCards = () => {
   }, []);
 
   const deleteUserRole = () => {
-    console.log("employee");
-    // const employee_id = employee.employee_list
-    //   .filter((item) => item.isDeleted === true)
-    //   .map((item) => {
-    //     return item._id;
-    //   });
-    // dispatch(delete_employee(JSON.stringify(employee_id)));
-    // setShowAlert(!showAlert);
+    const roleId = userRoles.user_roles
+      .filter((item) => item.isDeleted === true)
+      .map((item) => {
+        return item.role_id;
+      });
+    console.log(roleId);
+    // delete_user_role
+    dispatch(delete_user_role(JSON.stringify(roleId)));
+    setShowAlert(!showAlert);
   };
 
   const hideAlert = () => {

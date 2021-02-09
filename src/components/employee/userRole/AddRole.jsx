@@ -61,8 +61,6 @@ const AddRole = (props) => {
   }, [userRoles.redirect_user_roles]);
 
   useEffect(() => {
-    console.log(roleNameDupError);
-
     dispatch(toggleBackOffice(roles.checkBackOffice));
   }, [roles.checkBackOffice]);
 
@@ -115,7 +113,6 @@ const AddRole = (props) => {
             : {},
       };
       dispatch(add_new_role(data));
-      console.log(data);
     }
   };
   return (
@@ -231,10 +228,9 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.moduleName}<br/>
-                                      <small
-                                        className="mb-1"
-                                      >
+                                      {item.moduleName}
+                                      <br />
+                                      <small className="mb-1">
                                         {item.description}
                                       </small>
                                     </CLabel>
@@ -339,10 +335,9 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.moduleName}<br/>
-                                      <small
-                                        className="mb-1"
-                                      >
+                                      {item.moduleName}
+                                      <br />
+                                      <small className="mb-1">
                                         {item.description}
                                       </small>
                                     </CLabel>

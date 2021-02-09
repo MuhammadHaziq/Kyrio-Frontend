@@ -10,6 +10,9 @@ import {
   UPDATE_USER_ROLE,
   GET_UPDATE_USER_ROLE,
   REMOVE_SELECTED_MODULES,
+  TOGGLE_ROLE_SINGLE_SELECT,
+  TOGGLE_ROLE_ALL_SELECT,
+  DELETE_USER_ROLE,
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
@@ -335,12 +338,6 @@ export const update_row_data = (data) => {
       dispatch({ type: MESSAGE, data: msg });
     }
   };
-  // return (dispatch) => {
-  //   dispatch({
-  //     type: UPDATE_USER_ROLE,
-  //     response: data,
-  //   });
-  // };
 };
 
 export const remove_selected_modules = () => {
@@ -348,5 +345,80 @@ export const remove_selected_modules = () => {
     dispatch({
       type: REMOVE_SELECTED_MODULES,
     });
+  };
+};
+
+export const toggle_role_single_select = (row) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ROLE_SINGLE_SELECT,
+      response: row,
+    });
+  };
+};
+export const toggle_role_all_select = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_ROLE_ALL_SELECT,
+      status: status,
+    });
+  };
+};
+export const delete_user_role = (ids) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "DELETE",
+        url: `${BaseUrl}roles/${ids}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({ type: DELETE_USER_ROLE, response: JSON.parse(ids) });
+          let msg = {
+            open: true,
+            message:
+              JSON.parse(ids).length > 1
+                ? "Employees Deleted Successfully"
+                : "Employee Deleted Successfully",
+            object: {},
+            error: false,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };

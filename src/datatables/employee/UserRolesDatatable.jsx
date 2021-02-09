@@ -2,21 +2,25 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import { useSelector, useDispatch } from "react-redux";
-import { update_row_data } from "../../actions/employee/userRolesActions";
+import {
+  update_row_data,
+  toggle_role_single_select,
+  toggle_role_all_select,
+} from "../../actions/employee/userRolesActions";
 const UserRolesDatatable = (props) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
   const onRowSelect = (row, isSelected, e) => {
-    // dispatch(toggle_employee_single_select(row));
+    dispatch(toggle_role_single_select(row));
     console.log(row);
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      // dispatch(toggle_employee_all_select(true));
+      dispatch(toggle_role_all_select(true));
     } else {
-      // dispatch(toggle_employee_all_select(false));
+      dispatch(toggle_role_all_select(false));
     }
   };
 
@@ -24,7 +28,23 @@ const UserRolesDatatable = (props) => {
     mode: "checkbox",
     onSelect: onRowSelect,
     onSelectAll: onSelectAll,
-    unselectable: [1],
+    unselectable: [
+      props.user_roles !== undefined &&
+      props.user_roles !== null &&
+      props.user_roles.length > 0
+        ? props.user_roles
+            .filter((item) =>
+              item.role_id !== undefined && item.role_id !== null
+                ? item.roleName !== undefined && item.roleName !== null
+                  ? item.roleName.toUpperCase() == "OWNER"
+                  : ""
+                : ""
+            )
+            .map((item) => {
+              return item.role_id;
+            })[0]
+        : "",
+    ],
   };
   /**
    *

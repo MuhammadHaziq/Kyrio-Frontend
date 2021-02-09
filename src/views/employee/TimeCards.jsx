@@ -173,7 +173,6 @@ const TimeCards = () => {
 
   const employeeHandleChange = (e) => {
     let selectedEmployees = [];
-    // console.log(e.target.value);
     if (e === "0") {
       setFields({
         ...fields,
@@ -231,7 +230,6 @@ const TimeCards = () => {
   }
 
   const handleEvent = (event, picker)=> {
-    // console.log(picker.startDate);
     setDateRange({
       ...dateRange,
       startDate: picker.startDate,

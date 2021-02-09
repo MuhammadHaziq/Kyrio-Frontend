@@ -83,7 +83,6 @@ const AddItem = (props) => {
   };
 
   const submitItem = () => {
-    
     const inStock = item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {

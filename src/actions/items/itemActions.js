@@ -254,6 +254,7 @@ export const get_items_store = () => {
         },
       })
         .then((response) => {
+          console.log(response);
           dispatch({ type: GET_ITEM_STORES, response: response.data.stores });
         })
         .catch((error) => {
@@ -537,6 +538,7 @@ export const save_csv = (data) => {
     }
   };
 };
+
 export const toggle_select_all_item_stores = (status) => {
   return (dispatch) => {
     dispatch({
@@ -650,11 +652,52 @@ export const delete_item_varient = (data) => {
 };
 
 export const update_row_data = (row) => {
+  console.log("row", row);
   return (dispatch) => {
-    dispatch({
-      type: UPDATE_ITEM_ROW_DATA,
-      response: row,
-    });
+    try {
+      axios({
+        method: "get",
+        url: `${BaseUrl}items/row/${row._id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: UPDATE_ITEM_ROW_DATA,
+            response: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };
 

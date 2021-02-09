@@ -26,6 +26,7 @@ import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_disocunt } from "../../../actions/items/discountActions";
+import NumberFormat from "react-number-format";
 
 const AddDiscount = (props) => {
   const discount = useSelector((state) => state.items.discountReducer);
@@ -226,13 +227,16 @@ const AddDiscount = (props) => {
             <CCol md="12">
               <CLabel htmlFor="discount_value">Value</CLabel>
               <CInputGroup>
-                <CInput
+                <NumberFormat
+                  className="form-control"
                   id="discount_value"
                   name="discount_value"
                   placeholder="Value"
                   onChange={handleOnChange}
                   value={fields.discount_value}
-                  type="number"
+                  thousandSeparator={true}
+                  allowNegative={false}
+                  decimalScale={2}
                 />
               </CInputGroup>
             </CCol>

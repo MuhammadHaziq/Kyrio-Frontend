@@ -210,10 +210,10 @@ export const delete_modifire = (ids) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-                object:
-                  typeof error.response != "undefined"
-                    ? error.response.data || {}
-                    : {},
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });
@@ -256,10 +256,54 @@ export const toggle_modifire_all_select = (status) => {
 
 export const update_row_data = (id) => {
   return (dispatch) => {
-    dispatch({
-      type: UPDATE_MODIFIER_ROW_DATA,
-      response: id,
-    });
+    console.log("id", id);
+    try {
+      axios({
+        method: "get",
+        url: `${BaseUrl}items/modifier/row/${id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          dispatch({
+            type: UPDATE_MODIFIER_ROW_DATA,
+            response: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
 };
 export const update_modifier = (data) => {
@@ -293,10 +337,10 @@ export const update_modifier = (data) => {
                   ? error.response.statusText
                   : error.response.data.message
                 : ERROR_MESSAGE,
-                object:
-                  typeof error.response != "undefined"
-                    ? error.response.data || {}
-                    : {},
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
             error: true,
           };
           dispatch({ type: MESSAGE, data: msg });

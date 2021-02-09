@@ -30,6 +30,7 @@ import {
   delete_discount,
 } from "../../../actions/items/discountActions";
 import ConformationAlert from "../../conformationAlert/ConformationAlert";
+import NumberFormat from "react-number-format";
 
 const UpdateDiscount = (props) => {
   const discount = useSelector((state) => state.items.discountReducer);
@@ -265,13 +266,16 @@ const UpdateDiscount = (props) => {
             <CCol md="12">
               <CLabel htmlFor="discount_value">Value</CLabel>
               <CInputGroup>
-                <CInput
+                <NumberFormat
+                  className="form-control"
                   id="discount_value"
                   name="discount_value"
                   placeholder="Value"
                   onChange={handleOnChange}
                   value={fields.discount_value}
-                  type="number"
+                  thousandSeparator={true}
+                  allowNegative={false}
+                  decimalScale={2}
                 />
               </CInputGroup>
             </CCol>

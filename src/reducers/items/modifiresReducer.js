@@ -73,9 +73,10 @@ const modifiresReducer = (state = initialState, action) => {
     }
     case UPDATE_MODIFIER_ROW_DATA: {
       return Object.assign({}, state, {
-        modifier_row_data: state.modifiers_list.filter(
-          (item) => item._id === action.response
-        )[0],
+        // modifier_row_data: state.modifiers_list.filter(
+        //   (item) => item._id === action.response
+        // )[0],
+        modifier_row_data: action.response,
         redirect_update_modifier: true,
         redirect_modifier: false,
       });

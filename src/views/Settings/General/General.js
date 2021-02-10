@@ -65,7 +65,8 @@ const General = () => {
   useEffect(() => {
     if (
       user.features !== undefined &&
-      user.features !== null
+      user.features !== null &&
+      user.featurers.length > 0
     ) {
       setCheckPrev([
         user.features.filter(
@@ -510,7 +511,7 @@ const General = () => {
         </CCollapse>
       </CCard>
       <CRow>
-        <CCol sm xs="12" md="2" lg="2" className="text-center mt-3">
+        <CCol sm xs="6" md="3" lg="3" className="text-center mt-3">
           <CButton
             color="secondary"
             block
@@ -520,7 +521,7 @@ const General = () => {
             CANCEL
           </CButton>
         </CCol>
-        <CCol sm xs="12" md="2" lg="2" className="text-center mt-3">
+        <CCol sm xs="6" md="3" lg="3" className="text-center mt-3">
           <CButton
             color="success"
             block

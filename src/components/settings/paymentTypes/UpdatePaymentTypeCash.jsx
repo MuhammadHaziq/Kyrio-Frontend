@@ -88,6 +88,13 @@ const UpdatePaymentType = (props) => {
           ? props.update_data.paymentType.paymentTypeId || "0"
           : "0"
       );
+      setCashPaymentRound(
+        props.update_data !== undefined &&
+          props.update_data !== null &&
+          Object.keys(props.update_data).length > 0
+          ? props.update_data.cashPaymentRound || "0.01"
+          : "0.01"
+      );
     }
   }, [props.update_data]);
   useEffect(() => {

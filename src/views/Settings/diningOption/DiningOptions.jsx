@@ -107,16 +107,6 @@ class DiningOptions extends Component {
       this.props.dining_option_list !== undefined
     ) {
       let result = [];
-      // new Set(
-      // const storeIds = this.props.dining_option_list.map((item) => {
-      //   return item.data.map((ite) => {
-      //     ite.stores.map((stor) => {
-      //       return stor.storeId;
-      //     });
-      //   });
-      // });
-      // console.log(storeIds);
-      // );
       this.props.dining_option_list.map((item, index) => {
         return result.push({
           storeId: item.storeId,
@@ -337,7 +327,6 @@ class DiningOptions extends Component {
   };
 
   render() {
-    console.log(this.state.items);
     const {
       timeout,
       fadeDiningOption,

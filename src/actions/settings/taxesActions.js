@@ -502,6 +502,7 @@ export const get_store_item_taxes = (data) => {
     }
   };
 };
+
 export const update_item_tax = (data) => {
   return (dispatch) => {
     try {
@@ -596,6 +597,7 @@ export const toggle_select_single = (row) => {
     });
   };
 };
+
 export const toggle_select_all = (status) => {
   return (dispatch) => {
     dispatch({
@@ -607,11 +609,56 @@ export const toggle_select_all = (status) => {
 
 export const update_row_data_tax = (data) => {
   return (dispatch) => {
-    dispatch({
-      type: UPDATE_ROW_DATA_TAX,
-      response: data,
-    });
+    try {
+      axios({
+        method: "get",
+        url: `${BaseUrl}tax/row/${data._id}`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({
+            type: UPDATE_ROW_DATA_TAX,
+            response: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
   };
+  return (dispatch) => {};
 };
 
 export const remove_row_update_data = () => {

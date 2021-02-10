@@ -66,7 +66,7 @@ const General = () => {
     if (
       user.features !== undefined &&
       user.features !== null &&
-      user.featurers.length > 0
+      user.features.length > 0
     ) {
       setCheckPrev([
         user.features.filter(

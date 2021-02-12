@@ -17,7 +17,7 @@ const SalesSummaryDatatable = (props) => {
     }
 
     const showGrossSale = (cell, row) => {
-        return row.total_after_discount !== null
+        return typeof row.total_after_discount !== "undefined" && row.total_after_discount !== null
             ? row.total_after_discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -33,7 +33,8 @@ const SalesSummaryDatatable = (props) => {
         }
     };
     const showRefund = (cell, row) => {
-        return row.refund_amount !== null
+        console.log(typeof row.refund_amount)
+        return typeof row.refund_amount !== "undefined" && row.refund_amount !== null
             ? row.refund_amount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -41,7 +42,7 @@ const SalesSummaryDatatable = (props) => {
             : "$ 0.00";
     };
     const showDiscount = (cell, row) => {
-        return row.total_discount !== null
+        return typeof row.total_discount !== "undefined" && row.total_discount !== null
             ? row.total_discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -50,7 +51,7 @@ const SalesSummaryDatatable = (props) => {
     };
 
     const showCostGood = (cell, row) => {
-        return row.total_price !== null
+        return typeof row.total_price !== "undefined" && row.total_price !== null
             ? row.total_price.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -59,7 +60,7 @@ const SalesSummaryDatatable = (props) => {
     };
 
     const showNetSale = (cell, row) => {
-        return row.total_after_discount !== null
+        return typeof row.total_after_discount !== "undefined" && row.total_after_discount !== null
             ? row.total_after_discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -67,7 +68,7 @@ const SalesSummaryDatatable = (props) => {
             : "$ 0.00";
     }
     const showProfit = (cell, row) => {
-        return row.total_after_discount !== null
+        return typeof row.total_after_discount !== "undefined" && row.total_after_discount !== null
             ? row.total_after_discount.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
@@ -75,7 +76,7 @@ const SalesSummaryDatatable = (props) => {
             : "$ 0.00";
     }
     const ShowTax = (cell, row) => {
-        return row.total_tax !== null
+        return typeof row.total_tax !== "undefined" && row.total_tax !== null
             ? row.total_tax.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",

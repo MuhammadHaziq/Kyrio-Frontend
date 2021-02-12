@@ -105,7 +105,7 @@ const AddItem = (props) => {
         item_barcode: props.item_row_data.barcode || "",
         availableForSale: props.item_row_data.availableForSale,
       });
-      setImageName(props.item_row_data.image)
+      setImageName(props.item_row_data.image);
       setItemImage(
         props.item_row_data.image !== undefined &&
           props.item_row_data.image !== null &&
@@ -181,6 +181,7 @@ const AddItem = (props) => {
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
+    console.log("item.item_variants", item.item_variants);
     var formData = new FormData();
     formData.append("item_id", props.item_row_data._id);
     formData.append("name", fields.item_name);
@@ -219,7 +220,7 @@ const AddItem = (props) => {
       "stores",
       JSON.stringify(item.store_list.filter((item) => item.isSelected === true))
     );
-    formData.append("variants", JSON.stringify(item.item_variants));
+    formData.append("varients", JSON.stringify(item.item_variants));
     formData.append("repoOnPos", fields.represent_type);
     formData.append(
       "itemColor",
@@ -227,7 +228,9 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
-
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
     dispatch(update_item_record(formData));
   };
 
@@ -514,6 +517,8 @@ const AddItem = (props) => {
                 variantModal={variantModal}
                 toggleVariantModal={toggleVariantModal}
                 variants={item.item_variants}
+                price={fields.price}
+                cost={fields.cost}
               />
             </CCol>
           </CRow>

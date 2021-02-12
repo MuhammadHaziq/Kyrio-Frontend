@@ -161,7 +161,7 @@ const AddItem = (props) => {
       JSON.stringify(item.store_list.filter((item) => item.isSelected === true))
     );
     formData.append(
-      "variants",
+      "varients",
       JSON.stringify(
         item.item_variants.map((item) => {
           return {
@@ -470,6 +470,8 @@ const AddItem = (props) => {
           <CRow>
             <CCol sm="12" md="12" lg="12">
               <AddItemVariant
+                price={fields.price}
+                cost={fields.cost}
                 variantModal={variantModal}
                 toggleVariantModal={toggleVariantModal}
                 variants={item.item_variants}

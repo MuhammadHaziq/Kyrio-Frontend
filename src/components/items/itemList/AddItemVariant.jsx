@@ -34,11 +34,18 @@ const AddItemVariant = (props) => {
 
   const [variantFields, setVariantFields] = useState([
     {
-      _id: "0",
+      // comment Beacuse It Case Error When
+      // _id: "0",
       optionName: "",
       variantNames: [],
       optionValue: [
-        { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+        {
+          price: props.price,
+          cost: props.cost,
+          sku: "",
+          barcode: "",
+          variantName: [],
+        },
       ],
       position: 0,
     },
@@ -50,7 +57,7 @@ const AddItemVariant = (props) => {
       optionValue: false,
     },
   ]);
-// COmment For Tes
+  // COmment For Tes
   // useEffect(() => {
   //   if (props.variants !== undefined && props.variants.length > 0) {
   //     setVariantFields(props.variants);
@@ -64,7 +71,7 @@ const AddItemVariant = (props) => {
   //     setVariantFieldsError(errors);
   //   }
   // }, [props]);
-// COmment For Tes
+  // COmment For Tes
 
   // a little function to help us with reordering the result
   const reorder = (data, startIndex, endIndex) => {
@@ -180,11 +187,17 @@ const AddItemVariant = (props) => {
       setVariantFields([
         ...variantFields,
         {
-          _id: variantFields.length.toString(),
+          // _id: variantFields.length.toString(),
           optionName: "",
           variantNames: [],
           optionValue: [
-            { price: "", cost: 0.0, sku: "", barcode: "", variantName: [] },
+            {
+              price: props.price,
+              cost: props.cost,
+              sku: "",
+              barcode: "",
+              variantName: [],
+            },
           ],
           position: variantFields.length,
         },
@@ -227,7 +240,8 @@ const AddItemVariant = (props) => {
   const closeModal = () => {
     setVariantFields([
       {
-        _id: "0",
+        // comment Beacuse It Case Error When
+        // _id: "0",
         optionName: "",
         variantNames: [],
         optionValue: [
@@ -268,8 +282,8 @@ const AddItemVariant = (props) => {
           variantNames: tag,
           optionValue: tag.map((ite) => {
             return {
-              price: "",
-              cost: 0.0,
+              price: props.price,
+              cost: props.cost,
               sku: "",
               barcode: "",
               variantName: ite,
@@ -291,6 +305,8 @@ const AddItemVariant = (props) => {
     setVariantFields(variants);
     dispatch(delete_item_varient_option(idx));
   };
+  console.log(variantFields);
+  console.log(props);
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
   return (
     <React.Fragment>
@@ -416,27 +432,31 @@ const AddItemVariant = (props) => {
               )}
             </Droppable>
           </DragDropContext>
-          <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
-            <CButton
-              className="btn-square pull right"
-              color="success"
-              onClick={addOptions}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                className="c-icon c-icon-sm"
-                role="img"
-              >
-                <polygon
-                  fill="var(--ci-primary-color, currentColor)"
-                  points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                  className="ci-primary"
-                ></polygon>
-              </svg>
-              ADD OPTION
-            </CButton>
-          </CCol>
+          {props.variants.length <= 3 ? (
+            <React.Fragment>
+              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
+                <CButton
+                  className="btn-square pull right"
+                  color="success"
+                  onClick={addOptions}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    className="c-icon c-icon-sm"
+                    role="img"
+                  >
+                    <polygon
+                      fill="var(--ci-primary-color, currentColor)"
+                      points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                      className="ci-primary"
+                    ></polygon>
+                  </svg>
+                  ADD OPTION
+                </CButton>
+              </CCol>
+            </React.Fragment>
+          ) : null}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>

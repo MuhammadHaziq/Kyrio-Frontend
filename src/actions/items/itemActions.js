@@ -498,6 +498,7 @@ export const save_csv = (data) => {
             type: REDIRECT_BACK_ITEMS,
             response: true,
           });
+          dispatch(get_items_store());
           let msg = {
             open: true,
             message: "Item Update Successfully",

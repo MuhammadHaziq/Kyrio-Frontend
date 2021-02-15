@@ -46,6 +46,14 @@ const ImportItem = (props) => {
       props.goBack();
     }
   }, [item.redirect_itemList]);
+  useEffect(() => {
+    if (
+      item.show_item_import_errors !== undefined &&
+      item.show_item_import_errors === true
+    ) {
+      SetUploadFileError(true);
+    }
+  }, [item.show_item_import_errors]);
 
   const get_upload_file = (data, fileInfo) => {
     setAddFile(data);
@@ -94,6 +102,7 @@ const ImportItem = (props) => {
           uploadFileScreen={uploadFileScreen}
           handle={uploadFieldsError.handle}
           sku={uploadFieldsError.sku}
+          errors={item.errors}
         />
       </React.Fragment>
     );
@@ -166,7 +175,6 @@ const ImportItem = (props) => {
                   </CButton>
                 </CCol>
               </CRow>
-
             </CCard>
           </CCol>
         </CRow>

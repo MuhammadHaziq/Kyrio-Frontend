@@ -23,6 +23,7 @@ import {
   UPDATE_ITEM_ROW_DATA,
   REMOVE_ROW_DATA,
   UPDATE_ITEM_RECORD,
+  ITEM_IMPORT_ERRORS,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -33,11 +34,13 @@ const initialState = {
   variants: [],
   redirect_itemList: false,
   redirect_update: false,
+  show_item_import_errors:false,
   item_stock_toggle: false,
   item_row_data: {},
   orignal_store_list: [],
   total_modifiers: 0,
   orignal_total_modifiers: 0,
+  errors: [],
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -46,6 +49,7 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         redirect_itemList: action.response,
         redirect_update: false,
+        show_item_import_errors:false
       });
     }
 
@@ -115,6 +119,7 @@ const itemReducer = (state = initialState, action) => {
         }),
         redirect_itemList: true,
         redirect_update: false,
+        show_item_import_errors:false
       });
     }
     case TOGGLE_SELECT_ALL_ITEM_STORES: {
@@ -346,6 +351,7 @@ const itemReducer = (state = initialState, action) => {
         item_variants: [],
         redirect_itemList: true,
         redirect_update: false,
+        show_item_import_errors:false,
       };
       // return Object.assign({}, state, {
       //   item_list: state.item_list.filter((item) => {
@@ -388,7 +394,13 @@ const itemReducer = (state = initialState, action) => {
         redirect_update: true,
       });
     }
-
+    case ITEM_IMPORT_ERRORS: {
+      return {
+        ...state,
+        errors: action.response,
+        show_item_import_errors:true
+      };
+    }
     case REMOVE_ROW_DATA: {
       return Object.assign({}, state, {
         item_row_data: {},
@@ -397,6 +409,8 @@ const itemReducer = (state = initialState, action) => {
         total_modifiers: state.orignal_total_modifiers,
         redirect_itemList: true,
         redirect_update: false,
+        errors: [],
+        show_item_import_errors:false
       });
     }
     default:

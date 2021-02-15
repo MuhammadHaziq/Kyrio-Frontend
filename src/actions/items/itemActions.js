@@ -25,6 +25,7 @@ import {
   UPDATE_ITEM_ROW_DATA,
   REMOVE_ROW_DATA,
   UPDATE_ITEM_RECORD,
+  ITEM_IMPORT_ERRORS,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -509,18 +510,26 @@ export const save_csv = (data) => {
         })
         .catch((error) => {
           console.log("err", error.response);
-          let msg = {
-            open: true,
-            message:
-              typeof error.response != "undefined"
-                ? error.response.status === 404
-                  ? error.response.statusText
-                  : error.response.data.message
-                : ERROR_MESSAGE,
-            object: error,
-            error: true,
-          };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({
+            type: ITEM_IMPORT_ERRORS,
+            response:
+              typeof error.response != "undefined" &&
+              typeof error.response.data != "undefined" 
+                ? error.response.data
+                : [],
+          });
+          // let msg = {
+          //   open: true,
+          //   message:
+          //     typeof error.response != "undefined"
+          //       ? error.response.status === 404
+          //         ? error.response.statusText
+          //         : error.response.data.message
+          //       : ERROR_MESSAGE,
+          //   object: error,
+          //   error: true,
+          // };
+          // dispatch({ type: MESSAGE, data: msg });
         });
     } catch (error) {
       console.log("err catch", error);

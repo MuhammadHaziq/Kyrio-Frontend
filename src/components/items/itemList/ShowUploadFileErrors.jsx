@@ -122,6 +122,137 @@ const ShowUploadFileErrors = (props) => {
                         })}
                       </CListGroupItem>
                     ) : null}
+                    {props.errors.length > 0 ? (
+                      props.errors[0].skuErrors.length > 0 ? (
+                        <React.Fragment>
+                          <CListGroupItem>
+                            <CRow>
+                              <CCol sm="4" lg="4" md="4">
+                                <p style={{  float: "left" }}>
+                                  Different Items Cannot Have the Same "SKU"
+                                </p>
+                              </CCol>
+                              <CCol sm="8" lg="8" md="8">
+                                <div
+                                  style={{
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+
+                                    height: "1.2em",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <b>Cells: </b>{" "}
+                                  {props.errors[0].skuErrors.map((item) => {
+                                    return `B${item.index + 2} `;
+                                  })}
+                                </div>
+                              </CCol>
+                            </CRow>
+                          </CListGroupItem>
+                        </React.Fragment>
+                      ) : null
+                    ) : null}
+                    {props.errors.length > 0 ? (
+                      props.errors[0].handleErrors.length > 0 ? (
+                        <React.Fragment>
+                          <CListGroupItem>
+                            <CRow>
+                              <CCol sm="4" lg="4" md="4">
+                                <p style={{  float: "left" }}>
+                                  Different Items Cannot Have the Same "Handles"
+                                </p>
+                              </CCol>
+                              <CCol sm="8" lg="8" md="8">
+                                <div
+                                  style={{
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+
+                                    height: "1.2em",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <b>Cells: </b>{" "}
+                                  {props.errors[0].handleErrors.map((item) => {
+                                    return `A${item.index + 2} `;
+                                  })}
+                                </div>
+                              </CCol>
+                            </CRow>
+                          </CListGroupItem>
+                        </React.Fragment>
+                      ) : null
+                    ) : null}
+                    {props.errors.length > 0 ? (
+                      props.errors[0].handleErrors.length > 0 &&
+                      props.errors[0].handleErrors.filter(
+                        (item) => item.totalLength > 71
+                      ).length > 0 ? (
+                        <React.Fragment>
+                          <CListGroupItem>
+                            <CRow>
+                              <CCol sm="4" lg="4" md="4">
+                                <p style={{  float: "left" }}>
+                                  "Handles" Fields cannot contain more than 72
+                                  charactores
+                                </p>
+                              </CCol>
+                              <CCol sm="8" lg="8" md="8">
+                                <div
+                                  style={{
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+
+                                    height: "1.2em",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <b>Cells: </b>{" "}
+                                  {props.errors[0].handleErrors
+                                    .filter((item) => item.totalLength > 71)
+                                    .map((item) => {
+                                      return `A${item.index + 2} `;
+                                    })}
+                                </div>
+                              </CCol>
+                            </CRow>
+                          </CListGroupItem>
+                        </React.Fragment>
+                      ) : null
+                    ) : null}
+                    {props.errors.length > 0 ? (
+                      props.errors[0].NameLength.length > 0 ? (
+                        <React.Fragment>
+                          <CListGroupItem>
+                            <CRow>
+                              <CCol sm="4" lg="4" md="4">
+                                <p style={{  float: "left" }}>
+                                  "Name" Fields cannot contain more than 64
+                                  charactores
+                                </p>
+                              </CCol>
+                              <CCol sm="8" lg="8" md="8">
+                                <div
+                                  style={{
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+
+                                    height: "1.2em",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <b>Cells: </b>{" "}
+                                  {props.errors[0].NameLength.map((item) => {
+                                    return `C${item.index + 2} `;
+                                  })}
+                                </div>
+                              </CCol>
+                            </CRow>
+                          </CListGroupItem>
+                        </React.Fragment>
+                      ) : null
+                    ) : null}
                   </CListGroup>
                 </CCol>
               </CRow>

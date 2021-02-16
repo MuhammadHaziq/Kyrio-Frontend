@@ -26,6 +26,37 @@ const ShowUploadFileErrors = (props) => {
   const goBack = () => {
     props.goBack();
   };
+  const skuErrorsCount =
+    props.errors.length > 0
+      ? props.errors[0].skuErrors.length > 0
+        ? props.errors[0].skuErrors.length
+        : 0
+      : 0;
+  const handleErrorsCount =
+    props.errors.length > 0
+      ? props.errors[0].handleErrors.length > 0
+        ? props.errors[0].handleErrors.length
+        : 0
+      : 0;
+  const handleLengthCount =
+    props.errors.length > 0
+      ? props.errors[0].handleLength.length > 0
+        ? props.errors[0].handleLength.length
+        : 0
+      : 0;
+  const NameLengthCount =
+    props.errors.length > 0
+      ? props.errors[0].NameLength.length > 0
+        ? props.errors[0].NameLength.length
+        : 0
+      : 0;
+
+  const totalErrors =
+    Number(skuErrorsCount) +
+    Number(handleErrorsCount) +
+    Number(handleLengthCount) +
+    Number(NameLengthCount);
+
   return (
     <React.Fragment>
       <CRow>
@@ -56,7 +87,7 @@ const ShowUploadFileErrors = (props) => {
                   }}
                 >
                   Errors found:
-                  {props.sku.length + props.handle.length}
+                  {props.sku.length + props.handle.length + totalErrors}
                   <small style={{ color: "rgba(0, 0, 0, 0.87)" }}>
                     Fix errors in the importing file and try downloading again.
                   </small>
@@ -107,7 +138,7 @@ const ShowUploadFileErrors = (props) => {
                           }}
                         >
                           {props.handle.map((item) => {
-                            return `Cell:A${item.index}`;
+                            return `Cell:A${item.index}, `;
                           })}
                         </div>
                       </CListGroupItem>
@@ -128,7 +159,7 @@ const ShowUploadFileErrors = (props) => {
                           <CListGroupItem>
                             <CRow>
                               <CCol sm="4" lg="4" md="4">
-                                <p style={{  float: "left" }}>
+                                <p style={{ float: "left" }}>
                                   Different Items Cannot Have the Same "SKU"
                                 </p>
                               </CCol>
@@ -144,7 +175,7 @@ const ShowUploadFileErrors = (props) => {
                                 >
                                   <b>Cells: </b>{" "}
                                   {props.errors[0].skuErrors.map((item) => {
-                                    return `B${item.index + 2} `;
+                                    return `B${item.index + 2}, `;
                                   })}
                                 </div>
                               </CCol>
@@ -159,7 +190,7 @@ const ShowUploadFileErrors = (props) => {
                           <CListGroupItem>
                             <CRow>
                               <CCol sm="4" lg="4" md="4">
-                                <p style={{  float: "left" }}>
+                                <p style={{ float: "left" }}>
                                   Different Items Cannot Have the Same "Handles"
                                 </p>
                               </CCol>
@@ -175,7 +206,7 @@ const ShowUploadFileErrors = (props) => {
                                 >
                                   <b>Cells: </b>{" "}
                                   {props.errors[0].handleErrors.map((item) => {
-                                    return `A${item.index + 2} `;
+                                    return `A${item.index + 2}, `;
                                   })}
                                 </div>
                               </CCol>
@@ -185,15 +216,12 @@ const ShowUploadFileErrors = (props) => {
                       ) : null
                     ) : null}
                     {props.errors.length > 0 ? (
-                      props.errors[0].handleErrors.length > 0 &&
-                      props.errors[0].handleErrors.filter(
-                        (item) => item.totalLength > 71
-                      ).length > 0 ? (
+                      props.errors[0].handleLength.length > 0 ? (
                         <React.Fragment>
                           <CListGroupItem>
                             <CRow>
                               <CCol sm="4" lg="4" md="4">
-                                <p style={{  float: "left" }}>
+                                <p style={{ float: "left" }}>
                                   "Handles" Fields cannot contain more than 72
                                   charactores
                                 </p>
@@ -209,11 +237,9 @@ const ShowUploadFileErrors = (props) => {
                                   }}
                                 >
                                   <b>Cells: </b>{" "}
-                                  {props.errors[0].handleErrors
-                                    .filter((item) => item.totalLength > 71)
-                                    .map((item) => {
-                                      return `A${item.index + 2} `;
-                                    })}
+                                  {props.errors[0].handleLength.map((item) => {
+                                    return `A${item.index + 2}, `;
+                                  })}
                                 </div>
                               </CCol>
                             </CRow>
@@ -227,7 +253,7 @@ const ShowUploadFileErrors = (props) => {
                           <CListGroupItem>
                             <CRow>
                               <CCol sm="4" lg="4" md="4">
-                                <p style={{  float: "left" }}>
+                                <p style={{ float: "left" }}>
                                   "Name" Fields cannot contain more than 64
                                   charactores
                                 </p>
@@ -244,7 +270,7 @@ const ShowUploadFileErrors = (props) => {
                                 >
                                   <b>Cells: </b>{" "}
                                   {props.errors[0].NameLength.map((item) => {
-                                    return `C${item.index + 2} `;
+                                    return `C${item.index + 2}, `;
                                   })}
                                 </div>
                               </CCol>

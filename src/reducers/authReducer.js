@@ -13,37 +13,35 @@ const settingsReducer = (state = initialState, action) => {
       const data = JSON.parse(action.response);
       return Object.assign({}, state, {
         user: Object.assign({}, state.user, {
-          roleData: Object.assign({}, state.user.roleData, {
-            features: state.user.roleData.features.slice().map((item) => {
-              return Object.assign({}, item, {
-                enable:
-                  data.filter((ite) => ite.featureId === item.featureId)
-                    .length > 0
-                    ? data
-                        .filter((ite) => ite.featureId === item.featureId)
-                        .map((ite) => {
-                          return ite.enable;
-                        })[0]
-                    : item.enable,
-              });
-            }),
-            settings: Object.assign({}, state.user.roleData.settings, {
-              settingModules: state.user.roleData.settings.settingModules
-                .slice()
-                .map((item) => {
-                  return Object.assign({}, item, {
-                    enable:
-                      data.filter((ite) => ite.featureId === item.featureId)
-                        .length > 0
-                        ? data
-                            .filter((ite) => ite.featureId === item.featureId)
-                            .map((ite) => {
-                              return ite.enable;
-                            })[0]
-                        : item.enable,
-                  });
-                }),
-            }),
+          features: state.user.features.slice().map((item) => {
+            return Object.assign({}, item, {
+              enable:
+                data.filter((ite) => ite.featureId === item.featureId).length >
+                0
+                  ? data
+                      .filter((ite) => ite.featureId === item.featureId)
+                      .map((ite) => {
+                        return ite.enable;
+                      })[0]
+                  : item.enable,
+            });
+          }),
+          settings: Object.assign({}, state.user.settings, {
+            settingModules: state.user.settings.settingModules
+              .slice()
+              .map((item) => {
+                return Object.assign({}, item, {
+                  enable:
+                    data.filter((ite) => ite.featureId === item.featureId)
+                      .length > 0
+                      ? data
+                          .filter((ite) => ite.featureId === item.featureId)
+                          .map((ite) => {
+                            return ite.enable;
+                          })[0]
+                      : item.enable,
+                });
+              }),
           }),
         }),
       });
@@ -54,10 +52,42 @@ const settingsReducer = (state = initialState, action) => {
   }
 };
 export default settingsReducer;
-// data.filter((ite) => ite.featureId === item.featureId)
-//   ? data
-//       .filter((ite) => ite.featureId === item.featureId)
-//       .map((ite) => {
-//         return ite.enable;
-//       })[0]
-//   : item.enable,
+//   case TOGGLE_FEATURE_MODULE: {
+//     const data = JSON.parse(action.response);
+//     return Object.assign({}, state, {
+//       user: Object.assign({}, state.user, {
+//         roleData: Object.assign({}, state.user.roleData, {
+//           features: state.user.roleData.features.slice().map((item) => {
+//             return Object.assign({}, item, {
+//               enable:
+//                 data.filter((ite) => ite.featureId === item.featureId)
+//                   .length > 0
+//                   ? data
+//                       .filter((ite) => ite.featureId === item.featureId)
+//                       .map((ite) => {
+//                         return ite.enable;
+//                       })[0]
+//                   : item.enable,
+//             });
+//           }),
+//           settings: Object.assign({}, state.user.roleData.settings, {
+//             settingModules: state.user.roleData.settings.settingModules
+//               .slice()
+//               .map((item) => {
+//                 return Object.assign({}, item, {
+//                   enable:
+//                     data.filter((ite) => ite.featureId === item.featureId)
+//                       .length > 0
+//                       ? data
+//                           .filter((ite) => ite.featureId === item.featureId)
+//                           .map((ite) => {
+//                             return ite.enable;
+//                           })[0]
+//                       : item.enable,
+//                 });
+//               }),
+//           }),
+//         }),
+//       }),
+//     });
+//   }

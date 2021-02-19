@@ -17,6 +17,7 @@ import {
   CSwitch,
   CImg,
   CSelect,
+  CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { Link } from "react-router-dom";
@@ -283,47 +284,49 @@ const ShowUploadFileErrors = (props) => {
                 </CCol>
               </CRow>
             </CCardBody>
-            <CRow>
-              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <a
-                  rel={"external"}
-                  href="https://help.loyverse.com/help/importing-and-exporting?utm_source=Back%20Office&utm_medium=Exporting%20and%20Importing"
-                  target="_blank"
-                >
+            <CCardFooter>
+              <CRow>
+                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <a
+                    rel={"external"}
+                    href="https://help.loyverse.com/help/importing-and-exporting?utm_source=Back%20Office&utm_medium=Exporting%20and%20Importing"
+                    target="_blank"
+                  >
+                    <CButton
+                      block
+                      variant="outline"
+                      className="btn-pill"
+                      color="secondary"
+                    >
+                      Help
+                    </CButton>
+                  </a>
+                </CCol>
+                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     block
                     variant="outline"
                     className="btn-pill"
                     color="secondary"
+                    onClick={goBack}
                   >
-                    Help
+                    Cancel
                   </CButton>
-                </a>
-              </CCol>
-              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
-                  variant="outline"
-                  className="btn-pill"
-                  color="secondary"
-                  onClick={goBack}
-                >
-                  Cancel
-                </CButton>
-              </CCol>
-              <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                <CButton
-                  block
-                  type="button"
-                  variant="outline"
-                  className="btn-pill"
-                  color="success"
-                  onClick={props.uploadFileScreen}
-                >
-                  Retry
-                </CButton>
-              </CCol>
-            </CRow>
+                </CCol>
+                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <CButton
+                    block
+                    type="button"
+                    variant="outline"
+                    className="btn-pill"
+                    color="success"
+                    onClick={props.uploadFileScreen}
+                  >
+                    Retry
+                  </CButton>
+                </CCol>
+              </CRow>
+            </CCardFooter>
           </CCard>
         </CCol>
       </CRow>

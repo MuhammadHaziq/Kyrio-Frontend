@@ -257,7 +257,7 @@ const UpdateKitchenPrinter = (props) => {
                   block
                   variant="outline"
                   className="btn-pill pull-right"
-                  color="secondary"
+                  color="danger"
                   onClick={goBack}
                 >
                   CANCEL

@@ -445,18 +445,7 @@ const AddTax = (props) => {
       ) : null}
 
       <CRow>
-        <CCol sm="2" md="4" className="mb-3 mb-xl-0">
-          <CButton
-            block
-            variant="outline"
-            className="btn-pill pull-right"
-            color="default"
-            onClick={goBack}
-          >
-            BACK
-          </CButton>
-        </CCol>
-        <CCol sm="2" md="4" className="mb-3 mb-xl-0">
+        <CCol sm="6" md="6" className="mb-3 mb-xl-0">
           <CButton
             block
             variant="outline"
@@ -464,10 +453,10 @@ const AddTax = (props) => {
             color="danger"
             onClick={goBack}
           >
-            CANCEL
+            BACK
           </CButton>
         </CCol>
-        <CCol sm="2" md="4" className="mb-3 mb-xl-0 form-actions">
+        <CCol sm="6" md="6" className="mb-3 mb-xl-0 form-actions">
           <CButton
             block
             type="click"

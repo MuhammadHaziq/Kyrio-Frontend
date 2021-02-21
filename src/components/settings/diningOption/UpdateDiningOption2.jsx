@@ -339,10 +339,10 @@ const UpdateDiningOption2 = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="secondary"
+            color="danger"
             onClick={goBack}
           >
-            Back
+            CANCEL
           </CButton>
         </CCol>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
@@ -354,7 +354,7 @@ const UpdateDiningOption2 = (props) => {
             color="success"
             onClick={updateDiningOptions}
           >
-            Update
+            UPDATE
           </CButton>
         </CCol>
       </CRow>

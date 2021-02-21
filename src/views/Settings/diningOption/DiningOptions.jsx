@@ -33,28 +33,6 @@ const reorder = (data, startIndex, endIndex, storeId) => {
   const result = data;
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
-  // result.map((item) => {
-  //   if (item.storeId === storeId) {
-  //     console.log("splice", item.data.splice(startIndex, 1)[0]);
-  //     return item.data.splice(startIndex, 1);
-  //     // return removed.push(item.data.splice(startIndex, 1)[0]);
-  //     // return removed;
-  //   }
-  //   return item;
-  //   return item.data.splice(startIndex, 1);
-  // });
-  // result.map((item) => {
-  //   if (item.storeId === storeId) {
-  //     return {
-  //       ...item,
-  //       data: item.data.splice(endIndex, 0, removed),
-  //     };
-  //   }
-  //   return item;
-  //   // return item.data.splice(endIndex, 0, removed);
-  // });
-
   return result;
 };
 
@@ -422,7 +400,10 @@ class DiningOptions extends Component {
                                   style={{
                                     fontSize: "13px",
                                     fontWeight: "500",
-                                    color: "rgba(0,0,0,0.54)",
+                                    color:
+                                      this.props.darkMode === true
+                                        ? "rgba(220,220,222,1)"
+                                        : "rgba(0,0,0,0.54)",
                                     marginLeft: "30px",
                                     display: "flex",
                                   }}
@@ -434,7 +415,10 @@ class DiningOptions extends Component {
                                   style={{
                                     fontSize: "13px",
                                     fontWeight: "500",
-                                    color: "rgba(0,0,0,0.54)",
+                                    color:
+                                      this.props.darkMode === true
+                                        ? "rgba(220,220,222,1)"
+                                        : "rgba(0,0,0,0.54)",
                                     display: "flex",
                                     marginLeft: "-50px",
                                   }}
@@ -582,6 +566,7 @@ const mapStateToProps = (state) => {
     redirect_update: state.settingReducers.diningOptionReducer.redirect_update,
     update_data: state.settingReducers.diningOptionReducer.update_data,
     store: state.settingReducers.storeReducer.stores_list,
+    darkMode: state.settings.darkMode,
   };
 };
 

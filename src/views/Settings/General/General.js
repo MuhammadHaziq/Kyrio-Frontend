@@ -511,17 +511,17 @@ const General = () => {
         </CCollapse>
       </CCard>
       <CRow>
-        <CCol sm xs="6" md="3" lg="3" className="text-center mt-3">
+        <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
           <CButton
-            color="secondary"
+            color="danger"
             block
             className="btn-pill pull-right"
             outline="outline"
           >
-            CANCEL
+            BACK
           </CButton>
         </CCol>
-        <CCol sm xs="6" md="3" lg="3" className="text-center mt-3">
+        <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
           <CButton
             color="success"
             block

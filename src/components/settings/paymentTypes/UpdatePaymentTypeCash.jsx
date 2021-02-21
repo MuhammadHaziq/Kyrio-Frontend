@@ -189,12 +189,12 @@ const UpdatePaymentType = (props) => {
               </CSelect>
             </CFormGroup>
             <CRow>
-              <CCol col="6" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+              <CCol col="6" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                 <CButton
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="secondary"
+                  color="danger"
                   onClick={goBack}
                 >
                   CANCEL
@@ -202,8 +202,8 @@ const UpdatePaymentType = (props) => {
               </CCol>
               <CCol
                 col="6"
-                sm="4"
-                md="4"
+                sm="6"
+                md="6"
                 xl="xl"
                 className="mb-3 mb-xl-0 form-actions"
               >

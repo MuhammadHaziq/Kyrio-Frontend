@@ -51,15 +51,11 @@ const TheLayout = () => {
   };
   useEffect(() => {
     if (darkMode === true) {
-      // require("../assets/css/all_datatables_dark.css");
       removefile("css/all_datatables_light.css", "css");
       loadjscssfile("css/all_datatables_dark.css", "css");
-      // require("../assets/css/data_datatable.css");
     } else {
       removefile("css/all_datatables_dark.css", "css");
       loadjscssfile("css/all_datatables_light.css", "css");
-      // require("../assets/css/all_datatables_light.css");
-      // require("../assets/css/light_datatable.css");
     }
   }, [darkMode]);
   return (

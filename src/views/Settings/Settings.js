@@ -124,6 +124,12 @@ const Settings = () => {
                 <HashRouter>
                   <Switch>
                     <Route
+                      path={`${url}`}
+                      exact
+                      name="Setting Features"
+                      render={(props) => <General {...props} />}
+                    />
+                    <Route
                       path={`${url}/Features`}
                       exact
                       name="Setting Features"

@@ -249,7 +249,7 @@ const UpdatePaymentType = (props) => {
                   block
                   className="btn-pill pull-right"
                   variant="outline"
-                  color="secondary"
+                  color="danger"
                   onClick={goBack}
                 >
                   CANCEL

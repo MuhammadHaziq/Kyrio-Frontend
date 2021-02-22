@@ -268,12 +268,23 @@ const Receipt = (props) => {
                     <p>Emailed receipt</p>
                     <CLabel htmlFor="upload-button-receipt">
                       {receiptImage !== null ? (
-                        <CImg
-                          src={receiptImage}
-                          alt=""
-                          width="100px"
-                          height="80px"
-                        />
+                        <>
+                          <i
+                            class="fa fa-times"
+                            aria-hidden="true"
+                            style={{
+                              display: "block",
+                              position: "inherit",
+                              float: "right",
+                            }}
+                          ></i>
+                          <CImg
+                            src={receiptImage}
+                            alt=""
+                            width="100px"
+                            height="80px"
+                          />
+                        </>
                       ) : (
                         <CIcon name="cil-file" height="80px" />
                       )}
@@ -309,12 +320,23 @@ const Receipt = (props) => {
                     <p>Printed receipt</p>
                     <CLabel htmlFor="upload-button-printed-receipt">
                       {printedReceiptImage !== null ? (
-                        <CImg
-                          src={printedReceiptImage}
-                          alt=""
-                          width="100px"
-                          height="80px"
-                        />
+                        <>
+                          <i
+                            class="fa fa-times"
+                            aria-hidden="true"
+                            style={{
+                              display: "block",
+                              position: "inherit",
+                              float: "right",
+                            }}
+                          ></i>
+                          <CImg
+                            src={printedReceiptImage}
+                            alt=""
+                            width="100px"
+                            height="80px"
+                          />
+                        </>
                       ) : (
                         <CIcon name="cil-file" height="80px" />
                       )}

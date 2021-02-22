@@ -354,7 +354,7 @@ const AddRole = (props) => {
             </CCardBody>
             <CCardFooter>
               <CRow>
-                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     block
                     variant="outline"
@@ -366,8 +366,8 @@ const AddRole = (props) => {
                   </CButton>
                 </CCol>
                 <CCol
-                  sm="4"
-                  md="4"
+                  sm="6"
+                  md="6"
                   xl="xl"
                   className="mb-3 mb-xl-0 form-actions"
                 >

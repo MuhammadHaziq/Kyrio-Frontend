@@ -155,29 +155,17 @@ const AddCategory = (props) => {
         </CCardBody>
         <CCardFooter>
           <CRow>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-              <CButton
-                block
-                variant="outline"
-                className="btn-pill pull-right"
-                color="secondary"
-                onClick={goBack}
-              >
-                BACK
-              </CButton>
-            </CCol>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+            <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
               <CButton
                 block
                 variant="outline"
                 className="btn-pill pull-right"
                 color="danger"
-                onClick={goBack}
               >
-                CANCEL
+                BACK
               </CButton>
             </CCol>
-            <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0 form-actions">
+            <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0 form-actions">
               <CButton
                 block
                 type="submit"

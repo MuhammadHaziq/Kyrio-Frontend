@@ -635,7 +635,7 @@ const UpdateModifier = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="primary"
+            color="danger"
             onClick={goBack}
           >
             CANCEL

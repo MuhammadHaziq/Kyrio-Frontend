@@ -286,34 +286,19 @@ const ShowUploadFileErrors = (props) => {
             </CCardBody>
             <CCardFooter>
               <CRow>
-                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                  <a
-                    rel={"external"}
-                    href="https://help.loyverse.com/help/importing-and-exporting?utm_source=Back%20Office&utm_medium=Exporting%20and%20Importing"
-                    target="_blank"
-                  >
-                    <CButton
-                      block
-                      variant="outline"
-                      className="btn-pill"
-                      color="secondary"
-                    >
-                      Help
-                    </CButton>
-                  </a>
-                </CCol>
-                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     block
                     variant="outline"
                     className="btn-pill"
-                    color="secondary"
+                    color="danger"
                     onClick={goBack}
                   >
-                    Cancel
+                    BACK;
+
                   </CButton>
                 </CCol>
-                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     block
                     type="button"

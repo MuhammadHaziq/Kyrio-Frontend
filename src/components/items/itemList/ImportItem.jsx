@@ -33,6 +33,9 @@ const ImportItem = (props) => {
     sku: [],
     handle: [],
   });
+  const [errors, setErrors] = useState({
+    uploadFileError: false,
+  });
   const item = useSelector((state) => state.items.itemReducer);
 
   const dispatch = useDispatch();
@@ -57,31 +60,46 @@ const ImportItem = (props) => {
   }, [item.show_item_import_errors]);
 
   const get_upload_file = (data, fileInfo) => {
+    setErrors({
+      ...errors,
+      uploadFileError: false,
+    });
     setAddFile(data);
   };
   const save_csv_db = (e) => {
     var handle = [];
     var sku = [];
-    addFile.forEach(function (x, index) {
-      console.log(x);
-      if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
-        handle.push({ index });
-      }
-      if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
-        sku.push({ index });
-      }
-    });
-    if (handle.length > 0 || sku.length > 0) {
-      console.log(handle, sku);
-      SetUploadFileError(true);
-      setUploadErrorFields({
-        ...uploadFieldsError,
-        sku: sku,
-        handle: handle,
+    if (
+      typeof addFile === "null" ||
+      typeof addFile === "undefined" ||
+      addFile.length === 0
+    ) {
+      setErrors({
+        ...errors,
+        uploadFileError: true,
       });
       return false;
+    } else {
+      addFile.forEach(function (x, index) {
+        console.log(x);
+        if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
+          handle.push({ index });
+        }
+        if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
+          sku.push({ index });
+        }
+      });
+      if (handle.length > 0 || sku.length > 0) {
+        SetUploadFileError(true);
+        setUploadErrorFields({
+          ...uploadFieldsError,
+          sku: sku,
+          handle: handle,
+        });
+        return false;
+      }
+      dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
     }
-    dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
   };
   const papaparseOptions = {
     header: true,
@@ -131,40 +149,29 @@ const ImportItem = (props) => {
                           get_upload_file(data, fileInfo)
                         }
                       />
+                      <CInvalidFeedback>
+                        {errors.uploadFileError === true
+                          ? "Please Select File"
+                          : ""}
+                      </CInvalidFeedback>
                     </div>
                   </CCol>
                 </CRow>
               </CCardBody>
               <CCardFooter>
                 <CRow>
-                  <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                    <a
-                      rel={"external"}
-                      href="https://help.loyverse.com/help/importing-and-exporting?utm_source=Back%20Office&utm_medium=Exporting%20and%20Importing"
-                      target="_blank"
-                    >
-                      <CButton
-                        block
-                        variant="outline"
-                        className="btn-pill"
-                        color="secondary"
-                      >
-                        Help
-                      </CButton>
-                    </a>
-                  </CCol>
-                  <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                     <CButton
                       block
                       variant="outline"
                       className="btn-pill"
-                      color="secondary"
+                      color="danger"
                       onClick={goBack}
                     >
-                      BACK
+                      CANCEL
                     </CButton>
                   </CCol>
-                  <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                     <CButton
                       block
                       type="button"

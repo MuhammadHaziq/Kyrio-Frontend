@@ -330,10 +330,9 @@ const EditUserRole = (props) => {
                                       fontWeight: 400,
                                     }}
                                   >
-                                    {item.moduleName}<br/>
-                                    <small
-                                      className="mb-1"
-                                    >
+                                    {item.moduleName}
+                                    <br />
+                                    <small className="mb-1">
                                       {item.description}
                                     </small>
                                   </CLabel>
@@ -439,12 +438,11 @@ const EditUserRole = (props) => {
                                         fontWeight: 400,
                                       }}
                                     >
-                                      {item.moduleName}<br/>
-                                    <small
-                                      className="mb-1"
-                                    >
-                                      {item.description}
-                                    </small>
+                                      {item.moduleName}
+                                      <br />
+                                      <small className="mb-1">
+                                        {item.description}
+                                      </small>
                                     </CLabel>
                                   </CFormGroup>
                                 </CListGroupItem>
@@ -459,7 +457,7 @@ const EditUserRole = (props) => {
             </CCardBody>
             <CCardFooter>
               <CRow>
-                <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
+                <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     block
                     variant="outline"
@@ -467,12 +465,12 @@ const EditUserRole = (props) => {
                     color="danger"
                     onClick={goBack}
                   >
-                    CANCEL
+                    BACK
                   </CButton>
                 </CCol>
                 <CCol
-                  sm="4"
-                  md="4"
+                  sm="6"
+                  md="6"
                   xl="xl"
                   className="mb-3 mb-xl-0 form-actions"
                 >

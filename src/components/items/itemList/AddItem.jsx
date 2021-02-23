@@ -268,11 +268,16 @@ const AddItem = (props) => {
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
+
+  const removeSelectedImages = (name) => {
+    setItemImage(null);
+  };
+
   const disable =
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
-  console.log(disable);
+
   return (
     <React.Fragment>
       <CCard>
@@ -691,18 +696,26 @@ const AddItem = (props) => {
                       fields.represent_type === "Color_and_shape" ? 0.4 : "",
                   }}
                 >
-                  <CLabel htmlFor="upload-button-receipt">
-                    {itemImage !== null ? (
-                      <CImg
-                        src={itemImage}
-                        alt=""
-                        width="100px"
-                        height="80px"
-                      />
-                    ) : (
+                  {itemImage !== null ? (
+                    <>
+                      <div onClick={() => removeSelectedImages("itemImage")}>
+                        <i
+                          class="fa fa-times"
+                          aria-hidden="true"
+                          style={{
+                            display: "block",
+                            position: "inherit",
+                            float: "right",
+                          }}
+                        ></i>
+                      </div>
+                      <CImg src={itemImage} alt="" width="80px" height="80px" />
+                    </>
+                  ) : (
+                    <CLabel htmlFor="upload-button-receipt">
                       <CIcon name="cil-file" height="50px" />
-                    )}
-                  </CLabel>
+                    </CLabel>
+                  )}
                   <CInput
                     type="file"
                     id="upload-button-receipt"

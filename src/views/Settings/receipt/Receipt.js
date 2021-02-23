@@ -130,27 +130,39 @@ const Receipt = (props) => {
   //   });
 
   const uploadReceiptImage = (e) => {
-    setrReceiptFile(e.target.files[0]);
-    let reader = new FileReader();
+    if (
+      e.target.files !== undefined &&
+      e.target.files !== null &&
+      e.target.files.length > 0
+    ) {
+      setrReceiptFile(e.target.files[0]);
+      let reader = new FileReader();
 
-    reader.onloadend = () => {
-      setReceiptImage(reader.result);
-    };
+      reader.onloadend = () => {
+        setReceiptImage(reader.result);
+      };
 
-    reader.readAsDataURL(e.target.files[0]);
-
+      reader.readAsDataURL(e.target.files[0]);
+    }
     // setReceiptImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const uploadPrintedReceiptImage = (e) => {
-    setPrintedReceiptFile(e.target.files[0]);
-    let reader = new FileReader();
+    console.log(e.target.files);
+    if (
+      e.target.files !== undefined &&
+      e.target.files !== null &&
+      e.target.files.length > 0
+    ) {
+      setPrintedReceiptFile(e.target.files[0]);
+      let reader = new FileReader();
 
-    reader.onloadend = () => {
-      setPrintedReceiptImage(reader.result);
-    };
+      reader.onloadend = () => {
+        setPrintedReceiptImage(reader.result);
+      };
 
-    reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
+    }
     // setPrintedReceiptImage(URL.createObjectURL(e.target.files[0]));
   };
 
@@ -195,6 +207,15 @@ const Receipt = (props) => {
       ...errors,
       [name]: value === "0" ? true : false,
     });
+  };
+
+  const removeSelectedImages = (name) => {
+    console.log(name);
+    if (name === "printedReceiptImage") {
+      setPrintedReceiptImage(null);
+    } else {
+      setReceiptImage(null);
+    }
   };
 
   const saveReceipt = (e) => {
@@ -266,9 +287,12 @@ const Receipt = (props) => {
                     onMouseLeave={() => setIsHovered(false)}
                   >
                     <p>Emailed receipt</p>
-                    <CLabel htmlFor="upload-button-receipt">
-                      {receiptImage !== null ? (
-                        <>
+
+                    {receiptImage !== null ? (
+                      <>
+                        <div
+                          onClick={() => removeSelectedImages("receiptImage")}
+                        >
                           <i
                             class="fa fa-times"
                             aria-hidden="true"
@@ -278,17 +302,19 @@ const Receipt = (props) => {
                               float: "right",
                             }}
                           ></i>
-                          <CImg
-                            src={receiptImage}
-                            alt=""
-                            width="100px"
-                            height="80px"
-                          />
-                        </>
-                      ) : (
+                        </div>
+                        <CImg
+                          src={receiptImage}
+                          alt=""
+                          width="80px"
+                          height="80px"
+                        />
+                      </>
+                    ) : (
+                      <CLabel htmlFor="upload-button-receipt">
                         <CIcon name="cil-file" height="80px" />
-                      )}
-                    </CLabel>
+                      </CLabel>
+                    )}
                     <CInput
                       type="file"
                       id="upload-button-receipt"
@@ -318,9 +344,13 @@ const Receipt = (props) => {
                     onMouseLeave={() => setPrintedReceiptHover(false)}
                   >
                     <p>Printed receipt</p>
-                    <CLabel htmlFor="upload-button-printed-receipt">
-                      {printedReceiptImage !== null ? (
-                        <>
+                    {printedReceiptImage !== null ? (
+                      <>
+                        <div
+                          onClick={() =>
+                            removeSelectedImages("printedReceiptImage")
+                          }
+                        >
                           <i
                             class="fa fa-times"
                             aria-hidden="true"
@@ -330,17 +360,19 @@ const Receipt = (props) => {
                               float: "right",
                             }}
                           ></i>
-                          <CImg
-                            src={printedReceiptImage}
-                            alt=""
-                            width="100px"
-                            height="80px"
-                          />
-                        </>
-                      ) : (
+                        </div>
+                        <CImg
+                          src={printedReceiptImage}
+                          alt=""
+                          width="80px"
+                          height="80px"
+                        />
+                      </>
+                    ) : (
+                      <CLabel htmlFor="upload-button-printed-receipt">
                         <CIcon name="cil-file" height="80px" />
-                      )}
-                    </CLabel>
+                      </CLabel>
+                    )}
                     <CInput
                       type="file"
                       id="upload-button-printed-receipt"

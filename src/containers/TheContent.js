@@ -45,11 +45,6 @@ const TheContent = () => {
                         : path,
                       ...rest,
                     }));
-                  console.log(
-                    `Generated crumbs for ${props.match.path}`,
-                    Component
-                  );
-                  crumbs.map(({ name, path }) => console.log({ name, path }));
                   return (
                     <CFade>
                       <Component {...props} />

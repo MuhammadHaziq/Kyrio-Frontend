@@ -405,6 +405,17 @@ const ItemsList = () => {
     }
   }, [dispatch, defaultStoreId, pagination]);
 
+  const getItemsOnImport = () => {
+    const data = {
+      page: pagination,
+      limit: 500,
+      storeId: defaultStoreId,
+    };
+    if (defaultStoreId !== undefined) {
+      dispatch(get_items_list(data));
+    }
+  }
+  
   useEffect(() => {
     if (storeId !== undefined) {
       searchFilterRecords();
@@ -522,7 +533,7 @@ const ItemsList = () => {
         )}
         {importItem ? (
           <CFade timeout={timeout} in={importItem}>
-            <ImportItem goBack={goBack} />
+            <ImportItem goBack={goBack} getItemsOnImport={getItemsOnImport} />
           </CFade>
         ) : (
           ""

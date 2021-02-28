@@ -1,22 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
-  CFormGroup,
-  CInput,
-  CLabel,
   CRow,
-  CInputGroup,
   CInvalidFeedback,
-  CInputRadio,
-  CListGroup,
-  CListGroupItem,
-  CSwitch,
-  CImg,
-  CSelect,
   CCardFooter,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
@@ -47,6 +36,7 @@ const ImportItem = (props) => {
       item.redirect_itemList !== undefined &&
       item.redirect_itemList === true
     ) {
+      props.getItemsOnImport();
       props.goBack();
     }
   }, [item.redirect_itemList]);
@@ -81,7 +71,7 @@ const ImportItem = (props) => {
       return false;
     } else {
       addFile.forEach(function (x, index) {
-        console.log(x);
+        // console.log(x);
         if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
           handle.push({ index });
         }

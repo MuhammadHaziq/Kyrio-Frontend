@@ -495,7 +495,7 @@ export const save_csv = (data) => {
         },
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({
             type: REDIRECT_BACK_ITEMS,
             response: true,

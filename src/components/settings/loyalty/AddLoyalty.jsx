@@ -151,9 +151,9 @@ const AddLoyalty = (props) => {
             block
             variant="outline"
             className="btn-pill float-right"
-            color="secondary"
+            color="danger"
           >
-            CANCEL
+            BACK
           </CButton>
         </CCol>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0 form-actions">

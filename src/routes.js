@@ -25,6 +25,7 @@ const SalesShift = React.lazy(() =>
   import("./views/dashboard/shift/SalesShift")
 );
 const Settings = React.lazy(() => import("./views/Settings/Settings"));
+const Features = React.lazy(() => import("./views/Settings/General/General"));
 const ItemsList = React.lazy(() => import("./views/Items/ItemsList"));
 const CategoryList = React.lazy(() => import("./views/Items/CategoryList"));
 const DiscountList = React.lazy(() => import("./views/Items/DiscountList"));
@@ -38,82 +39,107 @@ const TotalHoursWorked = React.lazy(() =>
 );
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: "/", exact: true, name: "Home" },
-  { path: "/reports/sales", name: "Reports / Sales", component: Dashboard },
+  { path: "/", exact: true, name: "Home", Component: Dashboard },
+  { path: "/reports/sales", name: "Reports / Sales", Component: Dashboard },
   {
     path: "/reports/goods",
     name: "Reports / Items",
-    component: SalesItem,
+    Component: SalesItem,
   },
   {
     path: "/reports/categories",
     name: "Reports / Categories",
-    component: Categories,
+    Component: Categories,
   },
   {
     path: "/reports/employee",
     name: "Reports / Employee",
-    component: SalesEmployee,
+    Component: SalesEmployee,
   },
   {
     path: "/reports/pay-types",
     name: "Reports / Payment Type",
-    component: SalesPaymentType,
+    Component: SalesPaymentType,
   },
   {
     path: "/reports/average",
     name: "Reports / Receipt",
-    component: SalesReceipts,
+    Component: SalesReceipts,
   },
   {
     path: "/reports/modifiers",
     name: "Reports / Modifier",
-    component: SalesModifier,
+    Component: SalesModifier,
   },
   {
     path: "/reports/discounts",
     name: "Reports / Discount",
-    component: SalesDiscount,
+    Component: SalesDiscount,
   },
   {
     path: "/reports/shift",
     name: "Reports / Shift",
-    component: SalesShift,
+    Component: SalesShift,
   },
   {
     path: "/reports/tax",
     name: "Reports / Tax",
-    component: SalesTax,
+    Component: SalesTax,
   },
-  { path: "/settings", name: "Settings", component: Settings },
-  { path: "/items", name: "Item-list", component: ItemsList },
-  { path: "/categories", name: "Category-list", component: CategoryList },
-  { path: "/discounts", name: "Discount-list", component: DiscountList },
-  { path: "/modifiers", name: "Modifire-list", component: Modifires },
-  { path: "/customers", name: "Customer", component: Customers },
+  { path: "/settings", name: "Settings", Component: Settings },
+  {
+    path: "/settings/Features",
+    name: "Features",
+    exact: true,
+    Component: Features,
+  },
+  {
+    path: "/settings/Features",
+    name: "Features",
+    Component: Features,
+  },
+  {
+    path: "/settings/Features",
+    name: "Features",
+    Component: Features,
+  },
+  {
+    path: "/settings/Features",
+    name: "Features",
+    Component: Features,
+  },
+  // { path: "/settings", name: "Settings", Component: Settings },
+  // { path: "/settings", name: "Settings", Component: Settings },
+  // { path: "/settings", name: "Settings", Component: Settings },
+  // { path: "/settings", name: "Settings", Component: Settings },
+  { path: "/items", name: "Item-list", Component: ItemsList },
+  { path: "/categories", name: "Category-list", Component: CategoryList },
+  { path: "/discounts", name: "Discount-list", Component: DiscountList },
+  { path: "/modifiers", name: "Modifire-list", Component: Modifires },
+  { path: "/customers", name: "Customer", Component: Customers },
   {
     path: "/employees",
     name: "Employee List",
     exact: true,
-    component: EmployeeList,
+    Component: EmployeeList,
   },
   {
     path: "/employees/user_roles",
     name: "User Roles",
     exact: true,
-    component: UserAccess,
+    Component: UserAccess,
   },
   {
     path: "/employees/timecard",
     name: "Employee Time Card",
     exact: true,
-    component: TimeCards,
+    Component: TimeCards,
   },
   {
     path: "/employees/total-hour-worked",
     name: "Employee Total Hours Worked",
     exact: true,
-    component: TotalHoursWorked,
+    Component: TotalHoursWorked,
   },
 ];
 

@@ -14,6 +14,7 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
+  CInputGroupAppend,
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +22,7 @@ import {
   add_new_open_ticket,
   redirect_back_ticket,
   get_store_open_ticket,
+  delete_open_ticket,
 } from "../../../actions/settings/openTicketActions";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
@@ -35,9 +37,6 @@ const OpenTickets = () => {
   const [values, setValues] = useState([]);
   const [errors, setErrors] = useState([]);
   const dispatch = useDispatch();
-  const posDevice = useSelector(
-    (state) => state.settingReducers.posDeviceReducer
-  );
   const store_tickets = useSelector(
     (state) => state.settingReducers.openTicketReducer.store_ticket
   );
@@ -49,6 +48,7 @@ const OpenTickets = () => {
     setValues([]);
     setErrors([]);
     setFadeOpenTicket(true);
+    setChecked(false);
   };
 
   useEffect(() => {
@@ -63,6 +63,7 @@ const OpenTickets = () => {
   useEffect(() => {
     dispatch(get_store_open_ticket("0"));
   }, [dispatch]);
+
   const storeHandleChange = (e) => {
     const storeObject = store.stores_list.filter((item) => {
       return item._id === e.target.value;
@@ -81,15 +82,6 @@ const OpenTickets = () => {
     dispatch(get_store_open_ticket(e.target.value));
   };
 
-  const deleteOpenTicket = () => {
-    const data = posDevice.pos_device_list
-      .filter((item) => item.isDeleted === true)
-      .map((item) => {
-        return item._id;
-      });
-    console.log(data);
-    // dispatch(delete_pos_devices(JSON.stringify(data)));
-  };
   const getItemStyle = (isDragging, draggableStyle) => ({
     // styles we need to apply on draggables
     ...draggableStyle,
@@ -99,6 +91,7 @@ const OpenTickets = () => {
   const getListStyle = (isDraggingOver) => ({
     //background: isDraggingOver ? 'lightblue' : 'lightgrey',
   });
+
   const getItems = (count) => {
     let data = [1, 2, 3].map((k) => ({
       id: `item-${k}`,
@@ -107,6 +100,7 @@ const OpenTickets = () => {
     }));
     return data;
   };
+
   const addTicket = (index) => {
     if (index !== 0) {
       for (let id = 1; id < index; id++) {
@@ -130,6 +124,7 @@ const OpenTickets = () => {
     let newTicket = itemList.map((k, index) => ({
       id: `item-${index + 1}`,
       value: k.value,
+      ticketId: k.ticketId,
     }));
 
     let list = newTicket.map((itm) => {
@@ -143,15 +138,15 @@ const OpenTickets = () => {
     setItems(newTicket);
   };
 
-  const deleteTicket = (selectedItem, index) => {
-    let itemList = items;
-    for (var i = 0; i < itemList.length; i++) {
-      if (itemList[i].id === selectedItem.id) {
-        itemList.splice(i, 1);
-      }
-    }
-    setItems(items);
-  };
+  // const deleteTicket = (selectedItem, index) => {
+  //   let itemList = items;
+  //   for (var i = 0; i < itemList.length; i++) {
+  //     if (itemList[i].id === selectedItem.id) {
+  //       itemList.splice(i, 1);
+  //     }
+  //   }
+  //   setItems(items);
+  // };
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -159,6 +154,7 @@ const OpenTickets = () => {
 
     return result;
   };
+
   const onDragEnd = (result) => {
     const data = reorder(items, result.source.index, result.destination.index);
     const dataValues = reorder(
@@ -185,18 +181,33 @@ const OpenTickets = () => {
       }
     }
   };
+
   const handleChange = (e, index) => {
     let values = items.map((itm, i) => {
       return i === index ? e.target.value : itm.value;
     });
     let itemList = items.map((itm, i) => {
       return i === index
-        ? { id: itm.id, value: e.target.value }
-        : { id: itm.id, value: itm.value };
+        ? {
+            id: itm.id,
+            value:
+              e.target.value !== undefined &&
+              e.target.value !== null &&
+              e.target.value !== ""
+                ? e.target.value.trim()
+                : "",
+            ticketId: itm.ticketId,
+          }
+        : {
+            id: itm.id,
+            value: itm.value,
+            ticketId: itm.ticketId,
+          };
     });
     setItems(itemList);
     setValues(values);
   };
+
   const saveOpenTicket = () => {
     const sendData = {
       ticket_name: values,
@@ -204,6 +215,24 @@ const OpenTickets = () => {
     };
     dispatch(add_new_open_ticket(sendData));
   };
+  const deleteSingleOpenTicket = (id, index, selectItemId) => {
+    const item = items.filter((item) => {
+      return item.id !== selectItemId;
+    });
+    // setItems(item);
+    const data = {
+      ticket_id: id,
+      ticket_name: (item || []).map((item) => {
+        return item.value;
+      }),
+      store: selectedStoreObject,
+      selectItemId: selectItemId,
+      index: index,
+    };
+    console.log(data);
+    dispatch(delete_open_ticket(data));
+  };
+  console.log(items);
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -215,23 +244,7 @@ const OpenTickets = () => {
                   <CRow>
                     <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                       <h2>Open tickets</h2>
-                      {posDevice.pos_device_list.filter(
-                        (item) => item.isDeleted === true
-                      ).length > 0 ? (
-                        <CButton
-                          variant="outline"
-                          className="ml-2"
-                          color="danger"
-                          onClick={deleteOpenTicket}
-                        >
-                          <CIcon name="cil-trash" />
-                          DELETE
-                        </CButton>
-                      ) : (
-                        ""
-                      )}
                     </CCol>
-
                     <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                       <CFormGroup>
                         <CSelect
@@ -312,7 +325,9 @@ const OpenTickets = () => {
                                               <CInputGroup>
                                                 <CInputGroupPrepend>
                                                   <CInputGroupText>
-                                                    <CIcon name={"cil-waves"} />
+                                                    <CIcon
+                                                      name={"cil-align-center"}
+                                                    />
                                                   </CInputGroupText>
                                                 </CInputGroupPrepend>
                                                 <CInput
@@ -325,6 +340,19 @@ const OpenTickets = () => {
                                                     handleChange(e, index)
                                                   }
                                                 />
+                                                <CInputGroupAppend
+                                                  onClick={() =>
+                                                    deleteSingleOpenTicket(
+                                                      item.ticketId,
+                                                      index,
+                                                      item.id
+                                                    )
+                                                  }
+                                                >
+                                                  <CInputGroupText>
+                                                    <CIcon name="cil-trash" />
+                                                  </CInputGroupText>
+                                                </CInputGroupAppend>
                                               </CInputGroup>
                                             </CFormGroup>
                                           </CCol>
@@ -368,7 +396,7 @@ const OpenTickets = () => {
                         variant="outline"
                         onClick={goBack}
                       >
-                        CANCEL
+                        {sChecked ? "CANCEL" : "BACK"}
                       </CButton>
                     </CCol>
                     <CCol sm xs="12" className="text-center mt-3">

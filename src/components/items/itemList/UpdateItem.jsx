@@ -228,9 +228,6 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + " - " + pair[1]);
-    }
     dispatch(update_item_record(formData));
   };
 
@@ -249,6 +246,7 @@ const AddItem = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
+
   const changeColor = (e) => {
     setFields({
       ...fields,
@@ -266,6 +264,7 @@ const AddItem = (props) => {
     { id: 6, color: "#2196F3" },
     { id: 7, color: "#9C27B0" },
   ];
+
   const handleClick = (event) => {
     // hiddenFileInput.current.click();
     document.getElementById("upload-button-receipt").click();
@@ -291,6 +290,7 @@ const AddItem = (props) => {
       toggle_item_stock(!inventorySwitch[1]);
     }
   };
+
   const handleChangeModifier = (idx) => (e) => {
     const state = modifierSwitch.map((x, index) => (idx === index ? !x : x));
     const modifier = (modifiers || []).map((item, index) => {
@@ -305,6 +305,7 @@ const AddItem = (props) => {
     setModifiers(modifier);
     setModifierSwitch(state);
   };
+
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
@@ -313,10 +314,16 @@ const AddItem = (props) => {
     const data = [props.item_row_data._id];
     dispatch(delete_item_list(JSON.stringify(data)));
   };
+
+  const removeSelectedImages = (name) => {
+    setItemImage(null);
+  };
+
   const disable =
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
+
   return (
     <React.Fragment>
       <CCard>
@@ -739,18 +746,26 @@ const AddItem = (props) => {
                       fields.represent_type === "Color_and_shape" ? 0.4 : "",
                   }}
                 >
-                  <CLabel htmlFor="upload-button-receipt">
-                    {itemImage !== null ? (
-                      <CImg
-                        src={itemImage}
-                        alt=""
-                        width="100px"
-                        height="80px"
-                      />
-                    ) : (
+                  {itemImage !== null ? (
+                    <>
+                      <div onClick={() => removeSelectedImages("itemImage")}>
+                        <i
+                          class="fa fa-times"
+                          aria-hidden="true"
+                          style={{
+                            display: "block",
+                            position: "inherit",
+                            float: "right",
+                          }}
+                        ></i>
+                      </div>
+                      <CImg src={itemImage} alt="" width="80px" height="80px" />
+                    </>
+                  ) : (
+                    <CLabel htmlFor="upload-button-receipt">
                       <CIcon name="cil-file" height="50px" />
-                    )}
-                  </CLabel>
+                    </CLabel>
+                  )}
                   <CInput
                     type="file"
                     id="upload-button-receipt"
@@ -798,7 +813,7 @@ const AddItem = (props) => {
             block
             variant="outline"
             className="btn-pill pull-right"
-            color="default"
+            color="danger"
             onClick={goBack}
           >
             CANCEL

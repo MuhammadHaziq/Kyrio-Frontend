@@ -3,6 +3,7 @@ import {
   ADD_NEW_OPEN_TICKET,
   MESSAGE,
   ERROR_MESSAGE,
+  UPDATE_STORE_OPEN_TICKET,
   REDIRECT_BACK_TICKET,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
@@ -324,3 +325,71 @@ export const get_store_dining = (data) => {
   };
 };
 */
+
+export const delete_open_ticket = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "POST",
+        url: `${BaseUrl}tickets`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+        data: data,
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({
+            type: UPDATE_STORE_OPEN_TICKET,
+            response: data,
+          });
+          let msg = {
+            open: true,
+            message:
+              typeof response != "undefined"
+                ? response.data.message != "undefined"
+                  ? response.data.message
+                  : "Record Not Found"
+                : "",
+            object: {},
+            error: false,
+          };
+          if (response.data.message !== undefined) {
+            dispatch({ type: MESSAGE, data: msg });
+          }
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status == 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object:
+              typeof error.response != "undefined"
+                ? error.response.data || {}
+                : {},
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status == 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};

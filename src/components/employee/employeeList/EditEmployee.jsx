@@ -775,7 +775,7 @@ const EditEmployee = (props) => {
                 block
                 variant="outline"
                 className="btn-pill pull-right"
-                color="default"
+                color="danger"
                 onClick={goBack}
               >
                 CANCEL

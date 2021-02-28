@@ -33,7 +33,6 @@ const SalesSummaryDatatable = (props) => {
         }
     };
     const showRefund = (cell, row) => {
-        console.log(typeof row.refund_amount)
         return typeof row.refund_amount !== "undefined" && row.refund_amount !== null
             ? row.refund_amount.toLocaleString("en-US", {
                 style: "currency",

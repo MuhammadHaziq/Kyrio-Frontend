@@ -91,11 +91,20 @@ const FilterComponent = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    // alert('sas')
-    dispatch(change_in_date_time(dateRange));
+
+    if (prevStartDate !== undefined && prevEndDate !== undefined) {
+      console.log(dateRange);
+      console.log(prevStartDate, "prevStartDate");
+      console.log(prevEndDate, "prevEndDate");
+      dispatch(change_in_date_time(dateRange));
+    }
   }, [
-    (dateRange.startDate !== prevStartDate && dateRange.startDate !== null) ||
-      (dateRange.endDate !== prevEndDate && dateRange.endDate !== null),
+    (dateRange.startDate !== prevStartDate &&
+      dateRange.startDate !== undefined &&
+      dateRange.startDate !== null) ||
+      (dateRange.endDate !== prevEndDate &&
+        dateRange.endDate !== undefined &&
+        dateRange.endDate !== null),
   ]);
 
   // useEffect(() => {

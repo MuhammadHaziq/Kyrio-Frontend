@@ -802,7 +802,13 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
+    // if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
+    if (
+      filterComponent.filterStores !== undefined &&
+      filterComponent.filterStores !== "0" &&
+      filterComponent.filterEmployees !== undefined &&
+      filterComponent.filterEmployees !== "0"
+    ) {
       // console.log(filterComponent, "vcwqwqhangeInFilter");
       const data = {
         startDate: dateformat(
@@ -827,7 +833,14 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-    if (prevdaysDates !== daysDates && daysDates !== undefined) {
+    if (
+      prevdaysDates !== daysDates &&
+      daysDates !== undefined &&
+      filterComponent.filterStores !== undefined &&
+      filterComponent.filterStores !== "0" &&
+      filterComponent.filterEmployees !== undefined &&
+      filterComponent.filterEmployees !== "0"
+    ) {
       // console.log(changeInFilter, "PrevchangeInFilter");
       // console.log(filterComponent, "vchangeInFilter");
       // console.log(daysDates, "daysDates");

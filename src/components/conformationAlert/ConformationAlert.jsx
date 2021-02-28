@@ -11,7 +11,7 @@ const ConformationAlert = (props) => {
       message: props.section,
       buttons: [
         {
-          label: "Cancle",
+          label: "Cancel",
           onClick: props.hideAlert,
         },
         {

@@ -772,14 +772,15 @@ const ItemsList = () => {
                         <ConformationAlert
                           button_text="Delete"
                           heading="Delete item"
-                          section={`Are you sure you want to delete the item (${item.item_list
-                            .filter((item) => {
-                              return item.isDeleted === true;
-                            })
-                            .map((item) => {
-                              return item.name;
-                            })
-                            .join(",")}) ?`}
+                          // section={`Are you sure you want to delete the item (${item.item_list
+                          //   .filter((item) => {
+                          //     return item.isDeleted === true;
+                          //   })
+                          //   .map((item) => {
+                          //     return item.name;
+                          //   })
+                          //   .join(",")}) ?`}
+                          section={`Are you sure you want to delete (${item.item_list.length}) items  ?`}
                           buttonAction={deleteItem}
                           show_alert={showAlert}
                           hideAlert={setShowAlert}

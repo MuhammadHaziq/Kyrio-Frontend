@@ -429,14 +429,15 @@ export const delete_item_list = (id) => {
   return (dispatch) => {
     try {
       axios({
-        method: "delete",
-        url: `${BaseUrl}items/${id}`,
+        method: "post",
+        url: `${BaseUrl}items/delete`,
+        data: { ids: id},
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: DELETE_ITEM_LIST, response: JSON.parse(id) });
           let msg = {
             open: true,

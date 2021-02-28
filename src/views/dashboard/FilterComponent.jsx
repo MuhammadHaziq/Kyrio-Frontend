@@ -91,9 +91,12 @@ const FilterComponent = (props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(dateRange);
+    // alert('sas')
     dispatch(change_in_date_time(dateRange));
-  }, [prevStartDate, prevEndDate]);
+  }, [
+    (dateRange.startDate !== prevStartDate && dateRange.startDate !== null) ||
+      (dateRange.endDate !== prevEndDate && dateRange.endDate !== null),
+  ]);
 
   // useEffect(() => {
   //   if (prevCheckAll !== fields.checkAll) {
@@ -110,6 +113,13 @@ const FilterComponent = (props) => {
         };
       });
       setStoreId(stores);
+      dispatch(
+        stores_change(
+          store.stores_list.map((item) => {
+            return item._id;
+          })
+        )
+      );
     }
   }, [store.stores_list]);
 
@@ -124,6 +134,13 @@ const FilterComponent = (props) => {
           isSelected: true,
         };
       });
+      dispatch(
+        employee_change(
+          employee.employee_list.map((item) => {
+            return item._id;
+          })
+        )
+      );
       setEmployeeId(employees);
     }
   }, [employee.employee_list]);
@@ -159,6 +176,15 @@ const FilterComponent = (props) => {
         }
         return item;
       });
+      dispatch(
+        stores_change(
+          selectedStore
+            .filter((item) => item.isSelected === true)
+            .map((item) => {
+              return item._id;
+            })
+        )
+      );
     }
     setFields({
       ...fields,
@@ -169,16 +195,16 @@ const FilterComponent = (props) => {
           : false,
     });
     setStoreId(selectedStore);
-    dispatch(
-      stores_change(
-        selectedStore.filter((item) => item.isSelected === true).length ===
-          store.stores_list.length && store.stores_list.length > 0
-          ? "0"
-          : selectedStore
-              .filter((item) => item.isSelected === true)
-              .map((item) => item._id)
-      )
-    );
+    // dispatch(
+    //   stores_change(
+    //     selectedStore.filter((item) => item.isSelected === true).length ===
+    //       store.stores_list.length && store.stores_list.length > 0
+    //       ? "0"
+    //       : selectedStore
+    //           .filter((item) => item.isSelected === true)
+    //           .map((item) => item._id)
+    //   )
+    // );
   };
 
   const employeeHandleChange = (e) => {
@@ -212,6 +238,16 @@ const FilterComponent = (props) => {
         }
         return item;
       });
+      console.log("selectedEmployees", selectedEmployees);
+      dispatch(
+        employee_change(
+          selectedEmployees
+            .filter((item) => item.isSelected === true)
+            .map((item) => {
+              return item._id;
+            })
+        )
+      );
     }
     setFields({
       ...fields,
@@ -223,16 +259,16 @@ const FilterComponent = (props) => {
     });
 
     setEmployeeId(selectedEmployees);
-    dispatch(
-      employee_change(
-        selectedEmployees.filter((item) => item.isSelected === true).length ===
-          employee.employee_list.length && employee.employee_list.length > 0
-          ? "0"
-          : selectedEmployees
-              .filter((item) => item.isSelected === true)
-              .map((item) => item._id)
-      )
-    );
+    // dispatch(
+    //   employee_change(
+    //     selectedEmployees.filter((item) => item.isSelected === true).length ===
+    //       employee.employee_list.length && employee.employee_list.length > 0
+    //       ? "0"
+    //       : selectedEmployees
+    //           .filter((item) => item.isSelected === true)
+    //           .map((item) => item._id)
+    //   )
+    // );
   };
 
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
@@ -299,6 +335,62 @@ const FilterComponent = (props) => {
     Math.floor(timeRange.startTime / 60 / 60) >= 12 ? "PM" : "AM";
   var endTimeZone = Math.floor(timeRange.endTime / 60 / 60) >= 12 ? "PM" : "AM";
 
+  const resetFilters = () => {
+    setFields({
+      checkAll: true,
+      checkAllEmployee: true,
+      time_filter: 0,
+    });
+    const stores = store.stores_list.slice().map((item) => {
+      return {
+        ...item,
+        isSelected: true,
+      };
+    });
+    setStoreId(stores);
+    dispatch(
+      stores_change(
+        store.stores_list.map((item) => {
+          return item._id;
+        })
+      )
+    );
+    const employees = employee.employee_list.slice().map((item) => {
+      return {
+        ...item,
+        isSelected: true,
+      };
+    });
+    dispatch(
+      employee_change(
+        employee.employee_list.map((item) => {
+          return item._id;
+        })
+      )
+    );
+    setEmployeeId(employees);
+    setToggleDropDown([false, false, false]);
+    setTimeRange({
+      startTime: "0",
+      endTime: "0",
+    });
+    setDateRange({
+      startDate: moment(),
+      endDate: moment(),
+      ranges: {
+        Today: [moment(), moment()],
+        Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
+        "Last 7 Days": [moment().subtract(6, "days"), moment()],
+        "Last 30 Days": [moment().subtract(29, "days"), moment()],
+        "This Month": [moment().startOf("month"), moment().endOf("month")],
+        "Last Month": [
+          moment().subtract(1, "month").startOf("month"),
+          moment().subtract(1, "month").endOf("month"),
+        ],
+      },
+    });
+    props.handleOnChangeSales();
+  };
   return (
     <>
       <CRow className="mb-3">
@@ -516,7 +608,7 @@ const FilterComponent = (props) => {
           <CButton
             color="success"
             className="btn-square pull right"
-            onClick={props.handleOnChangeSales}
+            onClick={resetFilters}
           >
             Reset
           </CButton>

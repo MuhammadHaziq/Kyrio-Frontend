@@ -99,6 +99,7 @@ const Settings = () => {
 
                     <CSidebarNav>
                       <CCreateElement
+                        style={{borderBootom:'16px'}}
                         items={settingBar}
                         components={{
                           CSidebarNavDivider,

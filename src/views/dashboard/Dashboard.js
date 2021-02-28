@@ -18,6 +18,7 @@ import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
 import {
   get_sales_summary,
   delete_sales_summary,
+  get_filter_sales_summary,
 } from "../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -39,8 +40,12 @@ const Dashboard = () => {
   const salesSummary = useSelector(
     (state) => state.reports.salesSummaryReducer
   );
-
+  const store = useSelector((state) => state.settingReducers.storeReducer);
+  const employee = useSelector(
+    (state) => state.employeeReducers.employeeListReducer
+  );
   const [Days, setDays] = useState([]);
+  const [daysDates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [filter, setFilter] = useState("");
@@ -68,6 +73,7 @@ const Dashboard = () => {
   var prevDays = usePrevious(Days);
   var prevFilter = usePrevious(filter);
   var prevSalesFilter = usePrevious(salesFilter);
+  var prevdaysDates = usePrevious(daysDates);
 
   const getNatural = (num) => {
     return parseFloat(num.toString().split(".")[0]);
@@ -76,7 +82,7 @@ const Dashboard = () => {
     var d = from,
       a = [],
       i = 0;
-
+    var daysDates = [];
     const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
     var time = moment(to).toDate(); // This will return a copy of the Date that the moment uses
     time.setHours(0);
@@ -89,12 +95,14 @@ const Dashboard = () => {
       const dateGape =
         daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
       while (i < getNatural(dateGape)) {
+        daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
         d = moment(d, "DD-MM-YYYY").add(diff, "days");
         i++;
       }
       if (i === getNatural(daysDiff)) {
         // include last day
+        daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
       }
       setFilter("Days");
@@ -102,6 +110,7 @@ const Dashboard = () => {
       const totalHours = 24;
       var i = 1;
       while (i <= totalHours) {
+        daysDates.push(moment(time).format("LT"));
         a.push(moment(time).format("LT"));
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
         i++;
@@ -109,13 +118,14 @@ const Dashboard = () => {
       setFilter("Hours");
     }
     setDays(a);
+    setDates(daysDates);
   };
 
   const days_filter = (from, to, filterName) => {
     var d = from,
       a = [],
       i = 0;
-
+    var daysDates = [];
     const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
     var time = moment(to).toDate(); // This will return a copy of the Date that the moment uses
     time.setHours(0);
@@ -128,38 +138,49 @@ const Dashboard = () => {
       const totalHours = 24;
       var i = 1;
       while (i <= totalHours) {
+        daysDates.push(moment(time).format("LT"));
         a.push(moment(time).format("LT"));
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
         i++;
       }
       setFilter("Hours");
       setDays(a);
+      setDates(daysDates);
     } else if (getNatural(daysDiff) > 1 && filterName === "Days") {
       const dateGape =
         daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
       while (i < getNatural(dateGape)) {
+        daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
         d = moment(d, "DD-MM-YYYY").add(diff, "days");
         i++;
       }
       if (i === getNatural(daysDiff)) {
         // include last day
+        daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
       }
       setDays(a);
       setFilter("Days");
+      setDates(daysDates);
     } else if (getNatural(daysDiff) >= 7 && filterName === "Weeks") {
       let j = 0;
       let weeks = [];
+      let weekDays = [];
       while (j <= daysDiff) {
         let currentDay = moment(d).day();
         if (j === 0) {
           currentDay = moment(d).day();
         }
         let weekRange = "";
+        let weekRangeDays = "";
+        weekRangeDays = dateformat(d, "mmm dd yyyy");
         weekRange = dateformat(d, "mmm dd");
         if (currentDay === 7) {
+          weekRangeDays =
+            dateformat(d, "mmm dd yyyy") + " - " + dateformat(d, "mmm dd yyyy");
           weekRange = dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
+          weekDays.push(weekRangeDays);
           weeks.push(weekRange);
           ++j;
         } else {
@@ -171,11 +192,15 @@ const Dashboard = () => {
                 moment(endDate, "DD-MM-YYYY")
               )
             ) {
+              weekRangeDays += " - " + dateformat(d, "mmm dd yyyy");
               weekRange += " - " + dateformat(d, "mmm dd");
+              weekDays.push(weekRangeDays);
               weeks.push(weekRange);
               return;
             } else if (currentDay === 6) {
+              weekRangeDays += " - " + dateformat(d, "mmm dd yyyy");
               weekRange += " - " + dateformat(d, "mmm dd");
+              weekDays.push(weekRangeDays);
               weeks.push(weekRange);
             }
             d = moment(d, "DD-MM-YYYY").add(1, "days");
@@ -183,32 +208,40 @@ const Dashboard = () => {
           }
         }
         setDays(weeks);
+        setDates(weekDays);
       }
     } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
       let monthValues = [];
+      let monthDates = [];
       // &&
       // moment(startDate).isSame(endDate, "year")
       while (moment(to).isAfter(d, "month")) {
         const startDate = dateformat(d, "yyyy-mm-dd");
         monthValues.push(dateformat(startDate, "mmm"));
+        monthDates.push(dateformat(startDate, "mmm yyyy"));
         d = moment(d, "DD-MM-YYYY").add(1, "M");
       }
       if (moment(d).isSame(to, "month")) {
         const startDate = dateformat(d, "yyyy-mm-dd");
         monthValues.push(dateformat(startDate, "mmm"));
+        monthDates.push(dateformat(startDate, "mmm yyyy"));
       }
       setDays(monthValues);
+      setDates(monthDates);
     } else if (getNatural(daysDiff) >= 118 && filterName === "Quaters") {
       const totalQuater = Math.floor(to.diff(d, "months") / 3);
       let j = 0;
       let quaters = [];
+      let quatersDates = [];
       while (j <= totalQuater) {
         let currentQuater = moment(d).month() + 1;
         if (j === 0) {
           currentQuater = moment(d).month() + 1;
         }
         let quaterRange = "";
+        let quaterRangeDate = "";
         quaterRange = dateformat(d, "mmm dd");
+        quaterRangeDate = dateformat(d, "mmm dd yyyy");
         if (
           (currentQuater === 3 ||
             currentQuater === 6 ||
@@ -220,11 +253,17 @@ const Dashboard = () => {
             moment(d).format("MMM-DD") +
             " - " +
             moment(d).endOf("month").format("MMM-DD");
+          quaterRangeDate =
+            moment(d).format("MMM DD YYYY") +
+            " - " +
+            moment(d).endOf("month").format("MMM DD YYYY");
           // dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
           quaters.push(quaterRange);
+          quatersDates.push(quaterRangeDate);
           d = moment(d, "DD-MM-YYYY").add(1, "M");
           ++j;
         } else {
+          quaterRangeDate = moment(d).format("MMM DD YYYY");
           quaterRange = moment(d).format("MMM-DD");
           // dateformat(d, "mmm dd");
           if (
@@ -238,26 +277,35 @@ const Dashboard = () => {
             d = moment(d, "DD-MM-YYYY").add(2, "M");
           }
           //
+          quaterRangeDate =
+            quaterRangeDate +
+            " - " +
+            moment(d).endOf("month").format("MMM DD YYYY");
           quaterRange =
             quaterRange + " - " + moment(d).endOf("month").format("MMM-DD");
           // dateformat(d, "mmm dd");
+          quatersDates.push(quaterRangeDate);
           quaters.push(quaterRange);
           d = moment(d, "DD-MM-YYYY").add(1, "M");
           ++j;
         }
       }
       setDays(quaters);
+      setDates(quatersDates);
     } else if (getNatural(daysDiff) >= 365 && filterName === "Years") {
       let endYear = moment(to).year();
       let startYear = moment(from).year();
       let years = [];
+      let yearsDate = [];
       while (startYear <= endYear) {
         const yearRange = dateformat(d, "yyyy");
         years.push(yearRange);
+        yearsDate.push(yearRange);
         d = moment(d, "DD-MM-YYYY").add(1, "Y");
         startYear = startYear + 1;
       }
       setDays(years);
+      setDates(yearsDate);
     }
   };
 
@@ -702,7 +750,8 @@ const Dashboard = () => {
         filter
       );
     }
-  }, [prevFilter, filter]);
+    // prevFilter
+  }, [filter]);
 
   useEffect(() => {
     if (sales) {
@@ -747,14 +796,63 @@ const Dashboard = () => {
         filterComponent.filterDate.endDate
       );
     }
-  }, [filterComponent.filterDate, prevDateRange]);
+    // , prevDateRange
+  }, [
+    filterComponent.filterDate !== prevDateRange && prevDateRange !== undefined,
+  ]);
 
   useEffect(() => {
     if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
+      // console.log(filterComponent, "vcwqwqhangeInFilter");
+      const data = {
+        startDate: dateformat(
+          filterComponent.filterDate.startDate,
+          "yyyy-mm-dd"
+        ),
+        endDate: dateformat(filterComponent.filterDate.endDate, "yyyy-mm-dd"),
+        stores: filterComponent.filterStores,
+        employees: filterComponent.filterEmployees,
+        divider: filter,
+        graph: Days,
+        // need this formate with year to match with date filter exactly
+        matches: daysDates,
+      };
+      dispatch(get_filter_sales_summary(data));
+      console.log("data", data);
     }
-  }, [filterComponent, changeInFilter]);
+  }, [
+    filterComponent.filterStores,
+    filterComponent.filterEmployees,
+    filterComponent.filterTime,
+  ]);
+
+  useEffect(() => {
+    if (prevdaysDates !== daysDates && daysDates !== undefined) {
+      // console.log(changeInFilter, "PrevchangeInFilter");
+      // console.log(filterComponent, "vchangeInFilter");
+      // console.log(daysDates, "daysDates");
+      const data = {
+        startDate: dateformat(
+          filterComponent.filterDate.startDate,
+          "yyyy-mm-dd"
+        ),
+        endDate: dateformat(filterComponent.filterDate.endDate, "yyyy-mm-dd"),
+        stores: filterComponent.filterStores,
+        employees: filterComponent.filterEmployees,
+        divider: filter,
+        graph: Days,
+        // need this formate with year to match with date filter exactly
+        matches: daysDates,
+      };
+      dispatch(get_filter_sales_summary(data));
+      console.log("data", data);
+    }
+    // daysDates
+  }, [
+    prevdaysDates !== daysDates &&
+      daysDates !== undefined &&
+      daysDates !== null,
+  ]);
 
   const changeFilter = (v) => {
     setFilter(v);
@@ -775,7 +873,63 @@ const Dashboard = () => {
     dispatch(delete_sales_summary(JSON.stringify(sales_id)));
     setShowAlert(!showAlert);
   };
-
+  // console.log("Dayss", Days);
+  // console.log("Daysss", daysDates);
+  const grossSales =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.GrossSales !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.GrossSales !== null
+          ? salesSummary.sales_graph_data.SalesTotal.GrossSales
+          : 0
+        : 0
+      : 0;
+  const refunds =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.Refunds !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.Refunds !== null
+          ? salesSummary.sales_graph_data.SalesTotal.Refunds
+          : 0
+        : 0
+      : 0;
+  const discounts =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.discounts !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.discounts !== null
+          ? salesSummary.sales_graph_data.SalesTotal.discounts
+          : 0
+        : 0
+      : 0;
+  const netSales =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.NetSales !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.NetSales !== null
+          ? salesSummary.sales_graph_data.SalesTotal.NetSales
+          : 0
+        : 0
+      : 0;
+  const grossProfit =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.GrossProfit !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.GrossProfit !== null
+          ? salesSummary.sales_graph_data.SalesTotal.GrossProfit
+          : 0
+        : 0
+      : 0;
   return (
     <>
       <FilterComponent
@@ -785,27 +939,166 @@ const Dashboard = () => {
       <CCard>
         <CCardHeader>
           <CRow className="text-center">
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Gross sales")}
-            >
-              <div className="text-muted">Gross Sales</div>
-              <strong
-                style={{
-                  color: salesFilter === "Gross sales" ? "#45a164" : "",
-                }}
-              >
-                +29.703 (40%)
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="success"
-                value={40}
-              />
-            </CCol>
+            {salesSummary.sales_graph_data !== undefined &&
+            salesSummary.sales_graph_data !== null ? (
+              salesSummary.sales_graph_data.SalesTotal !== undefined &&
+              salesSummary.sales_graph_data.SalesTotal !== null ? (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Gross sales")}
+                  >
+                    <div className="text-muted">Gross Sales</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Gross sales" ? "#45a164" : "",
+                      }}
+                    >
+                      +{grossSales}(
+                      {grossSales === "0" || grossSales === 0
+                        ? 0
+                        : grossSales / 100}{" "}
+                      %)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={grossSales}
+                    />
+                  </CCol>
+                </>
+              ) : (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Gross sales")}
+                  >
+                    <div className="text-muted">Gross Sales</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Gross sales" ? "#45a164" : "",
+                      }}
+                    >
+                      +0 (0%)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={0}
+                    />
+                  </CCol>
+                </>
+              )
+            ) : (
+              <>
+                <CCol
+                  md
+                  sm="12"
+                  className="mb-sm-2 mb-0"
+                  onClick={() => handleOnChangeSales("Gross sales")}
+                >
+                  <div className="text-muted">Gross Sales</div>
+                  <strong
+                    style={{
+                      color: salesFilter === "Gross sales" ? "#45a164" : "",
+                    }}
+                  >
+                    +0 (0%)
+                  </strong>
+                  <CProgress
+                    className="progress-xs mt-2"
+                    precision={1}
+                    color="success"
+                    value={0}
+                  />
+                </CCol>
+              </>
+            )}
+            {salesSummary.sales_graph_data !== undefined &&
+            salesSummary.sales_graph_data !== null ? (
+              salesSummary.sales_graph_data.SalesTotal !== undefined &&
+              salesSummary.sales_graph_data.SalesTotal !== null ? (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Refunds")}
+                  >
+                    <div className="text-muted">Refunds</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Refunds" ? "#d16767" : "",
+                      }}
+                    >
+                      +{refunds}(
+                      {refunds === "0" || refunds === 0 ? 0 : refunds / 100} %)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={refunds}
+                    />
+                  </CCol>
+                </>
+              ) : (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Refunds")}
+                  >
+                    <div className="text-muted">Refunds</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Refunds" ? "#d16767" : "",
+                      }}
+                    >
+                      +0 (0%)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={0}
+                    />
+                  </CCol>
+                </>
+              )
+            ) : (
+              <>
+                <CCol
+                  md
+                  sm="12"
+                  className="mb-sm-2 mb-0"
+                  onClick={() => handleOnChangeSales("Refunds")}
+                >
+                  <div className="text-muted">Refunds</div>
+                  <strong
+                    style={{
+                      color: salesFilter === "Refunds" ? "#d16767" : "",
+                    }}
+                  >
+                    +0 (0%)
+                  </strong>
+                  <CProgress
+                    className="progress-xs mt-2"
+                    precision={1}
+                    color="success"
+                    value={0}
+                  />
+                </CCol>
+              </>
+            )}
+            {/*
             <CCol
               md
               sm="12"
@@ -827,6 +1120,89 @@ const Dashboard = () => {
                 value={40}
               />
             </CCol>
+            */}
+            {salesSummary.sales_graph_data !== undefined &&
+            salesSummary.sales_graph_data !== null ? (
+              salesSummary.sales_graph_data.SalesTotal !== undefined &&
+              salesSummary.sales_graph_data.SalesTotal !== null ? (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Discounts")}
+                  >
+                    <div className="text-muted">Discounts</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Discounts" ? "#e1a82d" : "",
+                      }}
+                    >
+                      +{discounts}(
+                      {discounts === "0" || discounts === 0
+                        ? 0
+                        : discounts / 100}{" "}
+                      %)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={discounts}
+                    />
+                  </CCol>
+                </>
+              ) : (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Discounts")}
+                  >
+                    <div className="text-muted">Discounts</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Discounts" ? "#e1a82d" : "",
+                      }}
+                    >
+                      +0 (0%)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={0}
+                    />
+                  </CCol>
+                </>
+              )
+            ) : (
+              <>
+                <CCol
+                  md
+                  sm="12"
+                  className="mb-sm-2 mb-0"
+                  onClick={() => handleOnChangeSales("Discounts")}
+                >
+                  <div className="text-muted">Discounts</div>
+                  <strong
+                    style={{
+                      color: salesFilter === "Discounts" ? "#e1a82d" : "",
+                    }}
+                  >
+                    +0 (0%)
+                  </strong>
+                  <CProgress
+                    className="progress-xs mt-2"
+                    precision={1}
+                    color="success"
+                    value={0}
+                  />
+                </CCol>
+              </>
+            )}
+            {/*
             <CCol
               md
               sm="12"
@@ -848,6 +1224,87 @@ const Dashboard = () => {
                 value={40}
               />
             </CCol>
+            */}
+            {salesSummary.sales_graph_data !== undefined &&
+            salesSummary.sales_graph_data !== null ? (
+              salesSummary.sales_graph_data.SalesTotal !== undefined &&
+              salesSummary.sales_graph_data.SalesTotal !== null ? (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Net Sales")}
+                  >
+                    <div className="text-muted">Net Sales</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Net Sales" ? "#4799eb" : "",
+                      }}
+                    >
+                      +{netSales}(
+                      {netSales === "0" || netSales === 0 ? 0 : netSales / 100}{" "}
+                      %)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={netSales}
+                    />
+                  </CCol>
+                </>
+              ) : (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0"
+                    onClick={() => handleOnChangeSales("Net Sales")}
+                  >
+                    <div className="text-muted">Net Sales</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Net Sales" ? "#4799eb" : "",
+                      }}
+                    >
+                      +0 (0%)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={0}
+                    />
+                  </CCol>
+                </>
+              )
+            ) : (
+              <>
+                <CCol
+                  md
+                  sm="12"
+                  className="mb-sm-2 mb-0"
+                  onClick={() => handleOnChangeSales("Net Sales")}
+                >
+                  <div className="text-muted">Net Sales</div>
+                  <strong
+                    style={{
+                      color: salesFilter === "Net Sales" ? "#4799eb" : "",
+                    }}
+                  >
+                    +0 (0%)
+                  </strong>
+                  <CProgress
+                    className="progress-xs mt-2"
+                    precision={1}
+                    color="success"
+                    value={0}
+                  />
+                </CCol>
+              </>
+            )}
+            {/*
             <CCol
               md
               sm="12"
@@ -869,6 +1326,89 @@ const Dashboard = () => {
                 value={40}
               />
             </CCol>
+            */}
+            {salesSummary.sales_graph_data !== undefined &&
+            salesSummary.sales_graph_data !== null ? (
+              salesSummary.sales_graph_data.SalesTotal !== undefined &&
+              salesSummary.sales_graph_data.SalesTotal !== null ? (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0 d-md-down-none"
+                    onClick={() => handleOnChangeSales("Gross profit")}
+                  >
+                    <div className="text-muted">Gross Profit</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Gross profit" ? "#4638c2" : "",
+                      }}
+                    >
+                      +{grossProfit}(
+                      {grossProfit === "0" || grossProfit === 0
+                        ? 0
+                        : grossProfit / 100}{" "}
+                      %)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={grossProfit}
+                    />
+                  </CCol>
+                </>
+              ) : (
+                <>
+                  <CCol
+                    md
+                    sm="12"
+                    className="mb-sm-2 mb-0 d-md-down-none"
+                    onClick={() => handleOnChangeSales("Gross profit")}
+                  >
+                    <div className="text-muted">Gross Profit</div>
+                    <strong
+                      style={{
+                        color: salesFilter === "Gross profit" ? "#4638c2" : "",
+                      }}
+                    >
+                      +0 (0%)
+                    </strong>
+                    <CProgress
+                      className="progress-xs mt-2"
+                      precision={1}
+                      color="success"
+                      value={0}
+                    />
+                  </CCol>
+                </>
+              )
+            ) : (
+              <>
+                <CCol
+                  md
+                  sm="12"
+                  className="mb-sm-2 mb-0 d-md-down-none"
+                  onClick={() => handleOnChangeSales("Gross profit")}
+                >
+                  <div className="text-muted">Gross Profit</div>
+                  <strong
+                    style={{
+                      color: salesFilter === "Gross profit" ? "#4638c2" : "",
+                    }}
+                  >
+                    +0 (0%)
+                  </strong>
+                  <CProgress
+                    className="progress-xs mt-2"
+                    precision={1}
+                    color="success"
+                    value={0}
+                  />
+                </CCol>
+              </>
+            )}
+            {/*
             <CCol
               md
               sm="12"
@@ -889,6 +1429,7 @@ const Dashboard = () => {
                 value={40}
               />
             </CCol>
+            */}
           </CRow>
         </CCardHeader>
         <CCardBody>

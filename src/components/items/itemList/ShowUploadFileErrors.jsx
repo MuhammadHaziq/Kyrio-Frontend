@@ -294,8 +294,7 @@ const ShowUploadFileErrors = (props) => {
                     color="danger"
                     onClick={goBack}
                   >
-                    BACK;
-
+                    BACK
                   </CButton>
                 </CCol>
                 <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">

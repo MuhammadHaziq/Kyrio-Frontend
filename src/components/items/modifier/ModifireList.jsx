@@ -38,9 +38,10 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   background:
     that.props.settings.darkMode === true
       ? isDragging
-        ? "rgb(19 18 18 / 42%)"
-        : "rgb(19 18 18 / 42%)"
-      : isDragging
+        ? "rgb(128 128 128 / 0%"
+        : "rgb(128 128 128 / 0%"
+      : // : "rgb(19 18 18 / 42%)"
+      isDragging
       ? "rgb(255 255 255)"
       : "rgb(255 255 255)",
 
@@ -52,9 +53,10 @@ const getListStyle = (isDraggingOver) => ({
   background:
     that.props.settings.darkMode === true
       ? isDraggingOver
-        ? "rgb(76 73 73)"
-        : "rgb(76 73 73)"
-      : isDraggingOver
+        ? "rgb(128 128 128 / 0%"
+        : "rgb(128 128 128 / 0%"
+      : // : "rgb(76 73 73)"
+      isDraggingOver
       ? "rgb(255 255 255)"
       : "rgb(255 255 255)",
   padding: grid,
@@ -173,7 +175,7 @@ class ModifireList extends Component {
       <React.Fragment>
         <CRow>
           <CCol xs="12">
-            <CFormGroup inline className="pull-right">
+            <CFormGroup inline className="pull-left">
               <CInputCheckbox
                 name="checkAll"
                 id={"checkAll"}
@@ -182,7 +184,8 @@ class ModifireList extends Component {
                 onChange={this.selectAll}
                 style={{
                   marginTop: "24px",
-                  marginLeft: "25px",
+                  marginLeft: "29px",
+                  bottom:'12px'
                 }}
               />
             </CFormGroup>

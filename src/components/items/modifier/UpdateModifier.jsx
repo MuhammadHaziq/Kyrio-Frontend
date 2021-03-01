@@ -47,6 +47,7 @@ const UpdateModifier = (props) => {
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
       name: false,
+      price: false,
     },
   ]);
   const [errors, setErrors] = useState({
@@ -105,7 +106,6 @@ const UpdateModifier = (props) => {
             name: false,
           });
         });
-        console.log(errors);
         setModifierFields(
           props.modifier_row_data.options.map((item) => {
             return {
@@ -128,31 +128,59 @@ const UpdateModifier = (props) => {
       });
       return false;
     }
-
-    const data = {
-      id: props.modifier_row_data._id,
-      title: fields.modifier_name,
-      options: JSON.stringify(
-        modifierFields.map((item) => {
-          return {
-            name: item.name,
-            price: item.price.split("$")[1],
-            position: item.position,
-          };
-        })
-      ),
-      stores: JSON.stringify(
-        storeId
-          .filter((item) => item.isSelected === true)
-          .map((ite) => {
+    const validateModiferFields = (modifierFields || []).filter((item) => {
+      return item.name.trim() == "" || item.price === "";
+    });
+    if (validator.isEmpty(fields.modifier_name)) {
+      setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
+      return false;
+    } else if (validateModiferFields.length > 0) {
+      const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
+        if (item.name.trim() == "" || item.price === "") {
+          const data = modifierFieldsError.map((ite, indx) => {
+            if (index === indx) {
+              return {
+                ...ite,
+                name: validator.isEmpty(item.name),
+                price: validator.isEmpty(item.price),
+              };
+            }
+            return ite;
+          });
+          setModifierFieldsError(data);
+        }
+      });
+      return false;
+    } else {
+      const data = {
+        id: props.modifier_row_data._id,
+        title: fields.modifier_name,
+        options: JSON.stringify(
+          modifierFields.map((item) => {
             return {
-              id: ite._id,
-              name: ite.title,
+              name: item.name,
+              price:
+                item.price.split("$")[1] !== undefined ||
+                item.price.split("$")[1] !== null
+                  ? item.price.split("$")[1].replace(",", "")
+                  : item.price.split("$")[1],
+              position: item.position,
             };
           })
-      ),
-    };
-    dispatch(update_modifier(data));
+        ),
+        stores: JSON.stringify(
+          storeId
+            .filter((item) => item.isSelected === true)
+            .map((ite) => {
+              return {
+                id: ite._id,
+                name: ite.title,
+              };
+            })
+        ),
+      };
+      dispatch(update_modifier(data));
+    }
   };
 
   const handleOnChange = (e) => {
@@ -225,14 +253,16 @@ const UpdateModifier = (props) => {
     margin: `0 0 ${grid}px 0`,
 
     // change background colour if dragging
-    background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
+    background: isDragging ? "rgb(128 128 128 / 0%)" : "rgb(128 128 128 / 0%)",
 
     // styles we need to apply on draggables
     ...draggableStyle,
   });
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
+    background: isDraggingOver
+      ? "rgb(128 128 128 / 0%)"
+      : "rgb(128 128 128 / 0%)",
     padding: grid,
     // width: 250,
   });
@@ -268,27 +298,26 @@ const UpdateModifier = (props) => {
 
   const addOptions = () => {
     const validateModiferFields = (modifierFields || []).filter((item) => {
-      return item.name.trim() == "";
+      return item.name.trim() == "" || item.price === "";
     });
     if (validator.isEmpty(fields.modifier_name)) {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
     } else if (validateModiferFields.length > 0) {
-      const modifierFieldsIndex =
-        modifierFields ||
-        [].map((item, index) => {
-          if (item.name.trim() == "") {
-            const data = modifierFieldsError.map((ite, indx) => {
-              if (index === indx) {
-                return {
-                  ...ite,
-                  name: validator.isEmpty(item.name),
-                };
-              }
-              return ite;
-            });
-            setModifierFieldsError(data);
-          }
-        });
+      const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
+        if (item.name.trim() == "" || item.price == "") {
+          const data = modifierFieldsError.map((ite, indx) => {
+            if (index === indx) {
+              return {
+                ...ite,
+                name: validator.isEmpty(item.name),
+                price: validator.isEmpty(item.price),
+              };
+            }
+            return ite;
+          });
+          setModifierFieldsError(data);
+        }
+      });
     } else {
       setModifierFields([
         ...modifierFields,
@@ -323,6 +352,7 @@ const UpdateModifier = (props) => {
         return {
           ...item,
           name: validator.isEmpty(modifierFields[idx].name),
+          price: validator.isEmpty(modifierFields[idx].price),
         };
       }
       return item;
@@ -456,10 +486,25 @@ const UpdateModifier = (props) => {
                                                 fixedDecimalScale={true}
                                                 className="form-control"
                                                 prefix={"$"}
+                                                invalid={
+                                                  modifierFieldsError[index]
+                                                    .price
+                                                }
+                                                onBlur={modifierFieldBlur(
+                                                  index
+                                                )}
                                                 onChange={handleOnChangeModifierField(
                                                   index
                                                 )}
                                               />
+                                              {modifierFieldsError[index]
+                                                .price === true ? (
+                                                <CInvalidFeedback
+                                                  style={{ display: "block" }}
+                                                >
+                                                  Please Enter Option Price
+                                                </CInvalidFeedback>
+                                              ) : null}
 
                                               {/*  <CInput
                                                 type="number"

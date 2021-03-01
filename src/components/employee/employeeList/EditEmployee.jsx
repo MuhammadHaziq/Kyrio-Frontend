@@ -267,19 +267,21 @@ const EditEmployee = (props) => {
         name: validator.isEmpty(fields.name),
       });
       return false;
-    } else if (fields.email === "" || fields.email === undefined) {
-      setErrors({
-        ...errors,
-        email: validator.isEmpty(fields.email),
-      });
-      return false;
-    } else if (fields.phone === "" || fields.phone === undefined) {
-      setErrors({
-        ...errors,
-        phone: validator.isEmpty(fields.phone),
-      });
-      return false;
-    } else if (fields.role === "0" || fields.role === undefined) {
+    }
+    // else if (fields.email === "" || fields.email === undefined) {
+    //   setErrors({
+    //     ...errors,
+    //     email: validator.isEmpty(fields.email),
+    //   });
+    //   return false;
+    // } else if (fields.phone === "" || fields.phone === undefined) {
+    //   setErrors({
+    //     ...errors,
+    //     phone: validator.isEmpty(fields.phone),
+    //   });
+    //   return false;
+    // }
+    else if (fields.role === "0" || fields.role === undefined) {
       setErrors({
         ...errors,
         role: true,
@@ -374,7 +376,19 @@ const EditEmployee = (props) => {
         <CCol md="9" lg="9" xl="6">
           <CCard>
             <CCardBody className="p-2">
-              <MdAccountCircle style={{ width: "150px", height: "150px" }} />
+              <CCol
+                md="4"
+                lg="4"
+                xl="4"
+                style={{
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "40%",
+                }}
+              >
+                <MdAccountCircle style={{ width: "150px", height: "150px" }} />
+              </CCol>{" "}
               <CFormGroup>
                 <CInputGroup className="mb-3">
                   <CInputGroupPrepend>

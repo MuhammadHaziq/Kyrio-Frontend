@@ -12,12 +12,14 @@ const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
 
   const showValue = (cell, row) => {
-    return row.type.toUpperCase() === "amount".toUpperCase()
-      ? row.value.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : row.value.toFixed(2) + " %";
+    return row.value !== undefined && row.value !== null
+      ? row.type.toUpperCase() === "amount".toUpperCase()
+        ? row.value.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })
+        : row.value.toFixed(2) + " %"
+      : "Variable, %";
   };
   const showRestricted = (cell, row) => {
     return row.restricted === true ? "Yes" : "No";

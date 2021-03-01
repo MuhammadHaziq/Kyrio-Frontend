@@ -43,6 +43,7 @@ const AddModifier = (props) => {
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
       name: false,
+      price: false,
     },
   ]);
   const [errors, setErrors] = useState({
@@ -92,31 +93,60 @@ const AddModifier = (props) => {
       });
       return false;
     }
-
-    const data = {
-      title: fields.modifier_name,
-      options: JSON.stringify(
-        modifierFields.map((item) => {
-          return {
-            name: item.name,
-            price: item.price.split("$")[1],
-            position: item.position,
-          };
-        })
-      ),
-      stores: JSON.stringify(
-        storeId
-          .filter((item) => item.isSelected === true)
-          .map((ite) => {
+    const validateModiferFields = (modifierFields || []).filter((item) => {
+      return item.name.trim() == "" || item.price === "";
+    });
+    if (validator.isEmpty(fields.modifier_name)) {
+      setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
+      return false;
+    } else if (validateModiferFields.length > 0) {
+      console.log(validateModiferFields);
+      const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
+        if (item.name.trim() == "" || item.price === "") {
+          const data = modifierFieldsError.map((ite, indx) => {
+            if (index === indx) {
+              return {
+                ...ite,
+                name: validator.isEmpty(item.name),
+                price: validator.isEmpty(item.price),
+              };
+            }
+            return ite;
+          });
+          setModifierFieldsError(data);
+        }
+      });
+      return false;
+    } else {
+      const data = {
+        title: fields.modifier_name,
+        options: JSON.stringify(
+          modifierFields.map((item) => {
             return {
-              id: ite._id,
-              name: ite.title,
+              name: item.name,
+              price:
+                item.price.split("$")[1] !== undefined ||
+                item.price.split("$")[1] !== null
+                  ? item.price.split("$")[1].replace(",", "")
+                  : item.price.split("$")[1],
+              position: item.position,
             };
           })
-      ),
-    };
-    dispatch(add_new_modifier(data));
-    console.log(data);
+        ),
+        stores: JSON.stringify(
+          storeId
+            .filter((item) => item.isSelected === true)
+            .map((ite) => {
+              return {
+                id: ite._id,
+                name: ite.title,
+              };
+            })
+        ),
+      };
+      dispatch(add_new_modifier(data));
+      console.log(data);
+    }
   };
 
   const handleOnChange = (e) => {
@@ -192,9 +222,10 @@ const AddModifier = (props) => {
     background:
       settings.darkMode === true
         ? isDragging
-          ? "rgb(19 18 18 / 42%)"
-          : "rgb(19 18 18 / 42%)"
-        : isDragging
+          ? "rgb(128 128 128 / 0%)"
+          : "rgb(128 128 128 / 0%)"
+        : // : "rgb(19 18 18 / 42%)"
+        isDragging
         ? "rgb(255 255 255)"
         : "rgb(255 255 255)",
 
@@ -206,9 +237,10 @@ const AddModifier = (props) => {
     background:
       settings.darkMode === true
         ? isDraggingOver
-          ? "rgb(76 73 73)"
-          : "rgb(76 73 73)"
-        : isDraggingOver
+          ? "rgb(128 128 128 / 0%)"
+          : "rgb(128 128 128 / 0%)"
+        : // : "rgb(76 73 73)"
+        isDraggingOver
         ? "rgb(255 255 255)"
         : "rgb(255 255 255)",
     padding: grid,
@@ -246,27 +278,27 @@ const AddModifier = (props) => {
 
   const addOptions = () => {
     const validateModiferFields = (modifierFields || []).filter((item) => {
-      return item.name.trim() == "";
+      return item.name.trim() == "" || item.price === "";
     });
     if (validator.isEmpty(fields.modifier_name)) {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
     } else if (validateModiferFields.length > 0) {
-      const modifierFieldsIndex =
-        modifierFields ||
-        [].map((item, index) => {
-          if (item.name.trim() == "") {
-            const data = modifierFieldsError.map((ite, indx) => {
-              if (index === indx) {
-                return {
-                  ...ite,
-                  name: validator.isEmpty(item.name),
-                };
-              }
-              return ite;
-            });
-            setModifierFieldsError(data);
-          }
-        });
+      const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
+        if (item.name.trim() == "" || item.price === "") {
+          const data = modifierFieldsError.map((ite, indx) => {
+            if (index === indx) {
+              return {
+                ...ite,
+                name: validator.isEmpty(item.name),
+                price: validator.isEmpty(item.price),
+              };
+            }
+            return ite;
+          });
+
+          setModifierFieldsError(data);
+        }
+      });
     } else {
       setModifierFields([
         ...modifierFields,
@@ -301,6 +333,7 @@ const AddModifier = (props) => {
         return {
           ...item,
           name: validator.isEmpty(modifierFields[idx].name),
+          price: validator.isEmpty(modifierFields[idx].price),
         };
       }
       return item;
@@ -428,7 +461,22 @@ const AddModifier = (props) => {
                                                 onChange={handleOnChangeModifierField(
                                                   index
                                                 )}
+                                                invalid={
+                                                  modifierFieldsError[index]
+                                                    .price
+                                                }
+                                                onBlur={modifierFieldBlur(
+                                                  index
+                                                )}
                                               />
+                                              {modifierFieldsError[index]
+                                                .price === true ? (
+                                                <CInvalidFeedback
+                                                  style={{ display: "block" }}
+                                                >
+                                                  Please Enter Option Price
+                                                </CInvalidFeedback>
+                                              ) : null}
                                             </CInputGroup>
                                           </CFormGroup>
                                         </CCol>

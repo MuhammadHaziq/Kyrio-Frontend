@@ -251,6 +251,8 @@ export const ROW_DATA_CUSTOMER = "ROW_DATA_CUSTOMER";
 export const UPDATE_POINTS_BALANCE = "UPDATE_POINTS_BALANCE";
 export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
 export const EDIT_PROFILE_VIEW = "EDIT_PROFILE_VIEW";
+// /Get Total WOrking Hour
+export const GET_TOTAL_WORING_HOURS = "GET_TOTAL_WORING_HOURS";
 
 /**
  *  Pos & Stores

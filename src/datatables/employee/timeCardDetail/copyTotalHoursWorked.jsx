@@ -2,6 +2,20 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 const TotalHoursWorkedDatatable = (props) => {
+  const StoreName = (cell, row) => {
+    return row.store !== undefined ? row.store.name : "";
+  };
+  const EmployeeName = (cell, row) => {
+    return row.employee !== undefined ? row.employee.name : "";
+  };
+  const totalHour = (cell, row) => {
+    return row.timeDetail !== undefined && row.timeDetail.length > 0
+      ? row.timeDetail[0].totalWorkingHour !== undefined &&
+        row.timeDetail[0].totalWorkingHour !== null
+        ? row.timeDetail[0].totalWorkingHour
+        : ""
+      : "";
+  };
   /**
    *
    *  Datatable functions End
@@ -19,7 +33,7 @@ const TotalHoursWorkedDatatable = (props) => {
       },
       {
         text: "All",
-        value: props.total_working_hours.length,
+        value: props.timeCard_list.length,
       },
     ],
     sizePerPage: 5,
@@ -27,27 +41,39 @@ const TotalHoursWorkedDatatable = (props) => {
   return (
     <React.Fragment>
       <BootstrapTable
-        data={props.total_working_hours}
+        data={props.timeCard_list}
         version="4"
         hover={true}
         options={options}
         pagination={true}
       >
         <TableHeaderColumn
-          dataField="id"
+          dataField="_id"
           dataSort={true}
           hidden={true}
           isKey={true}
         >
           Id
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="employeeName" dataSort={true}>
+        <TableHeaderColumn
+          dataField="employee"
+          dataSort={true}
+          dataFormat={EmployeeName}
+        >
           Employee
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="storeName" dataSort={true}>
+        <TableHeaderColumn
+          dataField="store"
+          dataSort={true}
+          dataFormat={StoreName}
+        >
           Store
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalWorkingHour" dataSort={true}>
+        <TableHeaderColumn
+          dataField="totalHour"
+          dataSort={true}
+          dataFormat={totalHour}
+        >
           Total Hour
         </TableHeaderColumn>
       </BootstrapTable>

@@ -34,14 +34,15 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   margin: `0 0 ${grid}px 0`,
 
   // change background colour if dragging
-  background: isDragging ? "rgb(255 255 255)" : "rgb(255 255 255)",
-
+  background: isDragging ? "rgb(128 128 128 / 0%)" : "rgb(128 128 128 / 0%)",
   // styles we need to apply on draggables
   ...draggableStyle,
 });
 
 const getListStyle = (isDraggingOver) => ({
-  background: isDraggingOver ? "rgb(255 255 255)" : "rgb(255 255 255)",
+  background: isDraggingOver
+    ? "rgb(128 128 128 / 0%)"
+    : "rgb(128 128 128 / 0%)",
   padding: grid,
   // width: 250,
 });
@@ -212,33 +213,33 @@ class ModifireList extends Component {
                                       }}
                                     />
 
-                                      <h6
-                                        className="d-flex w-100  justify-content-between"
-                                        style={{
-                                          marginBottom: "0px",
-                                          marginLeft: "29px",
-                                          color: "#20202a",
-                                          marginTop: "-12px",
-                                        }}
-                                      >
-                                        <b>{item.content}</b>
-                                      </h6>
+                                    <h6
+                                      className="d-flex w-100  justify-content-between"
+                                      style={{
+                                        marginBottom: "0px",
+                                        marginLeft: "29px",
+                                        color: "#20202a",
+                                        marginTop: "-12px",
+                                      }}
+                                    >
+                                      <b>{item.content}</b>
+                                    </h6>
 
-                                      <small
-                                        className="mb-1"
-                                        style={{
-                                          marginLeft: "45px",
-                                          color: "#20202ad1",
-                                        }}
-                                      >
-                                        {item.options}
-                                      </small>
-                                      <CIcon
-                                        style={{
-                                          float: "right",
-                                        }}
-                                        name={"cil-align-center"}
-                                      />
+                                    <small
+                                      className="mb-1"
+                                      style={{
+                                        marginLeft: "45px",
+                                        color: "#20202ad1",
+                                      }}
+                                    >
+                                      {item.options}
+                                    </small>
+                                    <CIcon
+                                      style={{
+                                        float: "right",
+                                      }}
+                                      name={"cil-align-center"}
+                                    />
                                   </CCol>
                                 </CListGroupItem>
                               </CRow>

@@ -16,7 +16,7 @@ import {
 } from "@coreui/react";
 import { get_employee_list } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
-import { get_timeCards } from "../../actions/employee/timeCardActions";
+import { get_total_time_hours } from "../../actions/employee/timeCardActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
@@ -65,7 +65,7 @@ const TotalHoursWorked = () => {
   useEffect(() => {
     dispatch(get_employee_list());
     dispatch(get_stores());
-    dispatch(get_timeCards());
+    dispatch(get_total_time_hours());
   }, [dispatch]);
 
   useEffect(() => {
@@ -319,7 +319,7 @@ const TotalHoursWorked = () => {
             </CCardHeader>
             <CCardBody>
               <TotalHoursWorkedDatatable
-                timeCard_list={timeCard.timeCard_list}
+                total_working_hours={timeCard.total_working_hours}
                 store={store.stores_list}
               />
             </CCardBody>

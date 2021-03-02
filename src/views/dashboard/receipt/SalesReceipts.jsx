@@ -28,6 +28,8 @@ const SalesReceipts = () => {
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
+  const user = useSelector((state) => state.auth.user);
+
 
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -99,7 +101,7 @@ const SalesReceipts = () => {
                     </svg>
                     Export
                   </CButton>
-                  {true ? (
+                  {user._id === user.owner_id  ? (
                     <React.Fragment>
                       <ConformationAlert
                         button_text="Delete"

@@ -18,7 +18,7 @@ import { unmount_filter } from "../../actions/dashboard/filterComponentActions";
 import {
   get_sales_summary,
   delete_sales_summary,
-  get_filter_sales_summary,
+  get_grap_sales_summary,
 } from "../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -78,6 +78,7 @@ const Dashboard = () => {
   const getNatural = (num) => {
     return parseFloat(num.toString().split(".")[0]);
   };
+
   const days = (from, to) => {
     var d = from,
       a = [],
@@ -823,7 +824,7 @@ const Dashboard = () => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-      dispatch(get_filter_sales_summary(data));
+      dispatch(get_grap_sales_summary(data));
       console.log("data", data);
     }
   }, [
@@ -857,7 +858,7 @@ const Dashboard = () => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-      dispatch(get_filter_sales_summary(data));
+      dispatch(get_grap_sales_summary(data));
       console.log("data", data);
     }
     // daysDates
@@ -943,6 +944,7 @@ const Dashboard = () => {
           : 0
         : 0
       : 0;
+
   return (
     <>
       <FilterComponent

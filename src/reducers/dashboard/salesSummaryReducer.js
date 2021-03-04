@@ -4,6 +4,7 @@ import {
   TOGGLE_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_SALE_SUMMARY_ALL_SELECT,
   DELETE_SALES_SUMMARY,
+  CHANGE_DAYS,
   ROW_DATA_SALES_SUMMARY,
 } from "../../constants/ActionTypes";
 
@@ -12,6 +13,7 @@ const initialState = {
   redirect_update: false,
   redirect_sale_summary: true,
   sales_graph_data: [],
+  filter_days: [],
 };
 const salesSummaryReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -49,7 +51,11 @@ const salesSummaryReducer = (state = initialState, action) => {
         }),
       });
     }
-
+    case CHANGE_DAYS: {
+      return Object.assign({}, state, {
+        filter_days: action.response,
+      });
+    }
     case DELETE_SALES_SUMMARY: {
       let sales_summary = state.sales_summary;
       for (const id of action.response) {

@@ -4,6 +4,7 @@ import {
   TOGGLE_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_SALE_SUMMARY_ALL_SELECT,
   DELETE_SALES_SUMMARY,
+  CHANGE_DAYS,
   ROW_DATA_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
@@ -57,7 +58,7 @@ export const get_sales_summary = () => {
   };
 };
 
-export const get_filter_sales_summary = (data) => {
+export const get_grap_sales_summary = (data) => {
   return (dispatch) => {
     try {
       axios({
@@ -123,6 +124,14 @@ export const toggle_sales_summary_all_select = (status) => {
   };
 };
 
+export const change_days = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_DAYS,
+      response: data,
+    });
+  };
+};
 export const delete_sales_summary = (ids) => {
   return (dispatch) => {
     dispatch({ type: DELETE_SALES_SUMMARY, response: JSON.parse(ids) });

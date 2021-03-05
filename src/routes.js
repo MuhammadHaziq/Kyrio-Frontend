@@ -1,7 +1,13 @@
 import React from "react";
 
-const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+// const Dashboard = React.lazy(() => import("./views/dashboard/Dashboard"));
+const Dashboard = React.lazy(() =>
+  import("./views/dashboard/salesByItems/SalesByItems")
+);
 const SalesItem = React.lazy(() => import("./views/dashboard/item/SalesItem"));
+// const SalesItem = React.lazy(() =>
+//   import("./views/dashboard/salesByItems/SalesByItems")
+// );
 const Categories = React.lazy(() =>
   import("./views/dashboard/categories/Categories")
 );

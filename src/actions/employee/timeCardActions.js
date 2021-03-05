@@ -303,7 +303,7 @@ export const update_row_data = (row) => {
     try {
       axios({
         method: "GET",
-        url: `${BaseUrl}employee/timecard/${row._id}`,
+        url: `${BaseUrl}employee/timecard/row/${row._id}`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },

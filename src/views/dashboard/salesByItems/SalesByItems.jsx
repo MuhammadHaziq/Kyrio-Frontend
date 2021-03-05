@@ -600,7 +600,7 @@ const SalesByItems = (props) => {
                     key={index}
                     className="mx-0"
                     onClick={() => changeFilter(value.name)}
-                    active={value.active === true}
+                    active={value.name === filter}
                     disabled={value.disable}
                   >
                     {value.name}

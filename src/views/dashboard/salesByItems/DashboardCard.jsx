@@ -21,8 +21,8 @@ const DashboardCard = (props) => {
   return (
     <CRow>
       <CCol
-        sm="6"
-        lg="3"
+        sm="4"
+        
         onClick={() => props.handleOnChangeSales("Gross sales")}
       >
         <CWidgetDropdown
@@ -43,7 +43,7 @@ const DashboardCard = (props) => {
         ></CWidgetDropdown>
       </CCol>
 
-      <CCol sm="6" lg="2" onClick={() => props.handleOnChangeSales("Refunds")}>
+      <CCol sm="4"  onClick={() => props.handleOnChangeSales("Refunds")}>
         <CWidgetDropdown
           color="gradient-danger"
           header={formatter.format(props.refunds)}
@@ -64,8 +64,8 @@ const DashboardCard = (props) => {
       </CCol>
 
       <CCol
-        sm="6"
-        lg="2"
+        sm="4"
+        
         onClick={() => props.handleOnChangeSales("Discounts")}
       >
         <CWidgetDropdown
@@ -89,7 +89,7 @@ const DashboardCard = (props) => {
 
       <CCol
         sm="6"
-        lg="2"
+        
         onClick={() => props.handleOnChangeSales("Net Sales")}
       >
         <CWidgetDropdown
@@ -109,7 +109,7 @@ const DashboardCard = (props) => {
       </CCol>
       <CCol
         sm="6"
-        lg="3"
+        
         onClick={() => props.handleOnChangeSales("Gross profit")}
       >
         <CWidgetDropdown
@@ -126,7 +126,7 @@ const DashboardCard = (props) => {
             />
           }
         >
-          {/*<CDropdown>
+          {/* <CDropdown>
             <CDropdownToggle caret className="text-white" color="transparent">
               <CIcon name="cil-settings" />
             </CDropdownToggle>
@@ -136,7 +136,7 @@ const DashboardCard = (props) => {
               <CDropdownItem>Something else here...</CDropdownItem>
               <CDropdownItem disabled>Disabled action</CDropdownItem>
             </CDropdownMenu>
-          </CDropdown>*/}
+          </CDropdown> */}
         </CWidgetDropdown>
       </CCol>
     </CRow>

@@ -383,7 +383,6 @@ const SalesItemFilter = (props) => {
         matches: daysDates,
       };
       dispatch(get_grap_sales_summary(data));
-      console.log("data", data);
     }
   }, [
     storeId !== undefined &&
@@ -414,13 +413,12 @@ const SalesItemFilter = (props) => {
           .map((item) => {
             return item._id;
           }),
-        divider: props.daysFilter,
+        divider: props.filter,//props.daysFilter,
         graph: Days,
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
       dispatch(get_grap_sales_summary(data));
-      console.log("data", data);
     }
   }, [Days]);
 
@@ -499,13 +497,12 @@ const SalesItemFilter = (props) => {
         .map((item) => {
           return item._id;
         }),
-      divider: props.daysFilter,
+      divider: props.filter,//props.daysFilter,
       graph: Days,
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
     dispatch(get_grap_sales_summary(data));
-    console.log("data", data);
   };
 
   const employeeHandleChange = (e) => {
@@ -556,13 +553,12 @@ const SalesItemFilter = (props) => {
         .map((item) => {
           return item._id;
         }),
-      divider: props.daysFilter,
+      divider: props.filter,//props.daysFilter,
       graph: Days,
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
     dispatch(get_grap_sales_summary(data));
-    console.log("data", data);
   };
 
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");

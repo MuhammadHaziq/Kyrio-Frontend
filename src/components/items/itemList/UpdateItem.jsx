@@ -176,9 +176,12 @@ const AddItem = (props) => {
         });
       });
     const ReturnNumber = (params) => {
-      let num = params;
-      num = Number.isInteger(num) ? num : num.replace("$", "");
-      num = Number.isInteger(num) ? num : num.replace(",", "");
+      let num =
+        typeof params !== undefined || typeof params !== null || params !== ""
+          ? params
+          : 0;
+      num = Number.isInteger(num) ? num : num.toString().replace("$", "");
+      num = Number.isInteger(num) ? num : num.toString().replace(",", "");
       return num;
     };
     console.log("item.item_variants", item.item_variants);
@@ -203,11 +206,15 @@ const AddItem = (props) => {
     formData.append("soldByType", fields.sold_by);
     formData.append(
       "price",
-      fields.price !== null ? ReturnNumber(fields.price) : 0
+      fields.price !== undefined && fields.price !== null
+        ? ReturnNumber(fields.price)
+        : 0
     );
     formData.append(
       "cost",
-      fields.cost !== null ? ReturnNumber(fields.cost) : 0
+      fields.cost !== undefined && fields.cost !== null
+        ? ReturnNumber(fields.cost)
+        : 0
     );
     formData.append("color", fields.color);
     formData.append("compositeItem", inventorySwitch[0]);

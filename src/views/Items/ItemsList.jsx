@@ -19,6 +19,7 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
+import ItemListNewDatatable from "../../datatables/items/ItemListNewDatatable.jsx";
 import {
   get_items_list,
   get_items_stock,
@@ -414,8 +415,8 @@ const ItemsList = () => {
     if (defaultStoreId !== undefined) {
       dispatch(get_items_list(data));
     }
-  }
-  
+  };
+
   useEffect(() => {
     if (storeId !== undefined) {
       searchFilterRecords();
@@ -779,18 +780,18 @@ const ItemsList = () => {
                     </CButton>
                     {item.item_list.filter((item) => item.isDeleted === true)
                       .length > 0 ? (
+                      /*section={`Are you sure you want to delete the item (${item.item_list
+                          .filter((item) => {
+                            return item.isDeleted === true;
+                          })
+                          .map((item) => {
+                            return item.name;
+                          })
+                          .join(",")}) ?`}*/
                       <React.Fragment>
                         <ConformationAlert
                           button_text="Delete"
                           heading="Delete item"
-                          // section={`Are you sure you want to delete the item (${item.item_list
-                          //   .filter((item) => {
-                          //     return item.isDeleted === true;
-                          //   })
-                          //   .map((item) => {
-                          //     return item.name;
-                          //   })
-                          //   .join(",")}) ?`}
                           section={`Are you sure you want to delete (${item.item_list.length}) items  ?`}
                           buttonAction={deleteItem}
                           show_alert={showAlert}
@@ -938,7 +939,7 @@ const ItemsList = () => {
                 </CRow>
               </CCardHeader>
               <CCardBody>
-                <ItemsListDatatable itemList={item.item_list} />
+                <ItemListNewDatatable itemList={item.item_list} />
               </CCardBody>
             </CCard>
           </React.Fragment>

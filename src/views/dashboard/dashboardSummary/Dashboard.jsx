@@ -17,16 +17,17 @@ import MainChartExample from "../charts/MainChartExample.js";
 import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import moment from "moment";
-import SalesItemFilter from "./SalesItemFilter";
-const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
+import DashboardFilter from "./DashboardFilter";
+import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
 
+const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
 const brandDanger = getStyle("danger") || "#f86c6b";
 const brandWarning = getStyle("warning") || "#e1a82d";
 const brandPrimary = getStyle("primary") || "#4638c2";
 
-const SalesByItems = (props) => {
+const Dashboard = (props) => {
   const dispatch = useDispatch();
   // States
   const [loading, setLoading] = useState(false);
@@ -456,7 +457,9 @@ const SalesByItems = (props) => {
   );
   // End Reducer Functions
   // UseEffects Functions
-  useEffect(() => {});
+  useEffect(() => {
+    dispatch(get_sales_summary());
+  }, []);
   //  End UseEffects Functions
   const usePrevious = (data) => {
     const ref = React.useRef();
@@ -580,7 +583,7 @@ const SalesByItems = (props) => {
         <CCardBody>
           <CRow>
             <CCol sm="12">
-              <SalesItemFilter
+              <DashboardFilter
                 daysFilter={daysFilter}
                 setDaysFilter={setDaysFilter}
                 filter={filter}
@@ -627,7 +630,13 @@ const SalesByItems = (props) => {
               className="mb-sm-2 mb-0"
               onClick={() => handleOnChangeSales("Gross sales")}
             >
-              <div className="text-muted">Gross Sales</div>
+              <div
+                className={
+                  salesFilter === "Gross sales" ? "text-success" : "text-muted"
+                }
+              >
+                Gross Sales
+              </div>
               <strong>
                 {formatter.format(grossSales)} (
                 {grossSales === "0" || grossSales === 0 ? 0 : grossSales / 100})
@@ -645,7 +654,13 @@ const SalesByItems = (props) => {
               className="mb-sm-2 mb-0 d-md-down-none"
               onClick={() => handleOnChangeSales("Refunds")}
             >
-              <div className="text-muted">Refunds</div>
+              <div
+                className={
+                  salesFilter === "Refunds" ? "text-info" : "text-muted"
+                }
+              >
+                Refunds
+              </div>
               <strong>
                 {" "}
                 {formatter.format(refunds)} (
@@ -664,7 +679,13 @@ const SalesByItems = (props) => {
               className="mb-sm-2 mb-0"
               onClick={() => handleOnChangeSales("Discounts")}
             >
-              <div className="text-muted">Discounts</div>
+              <div
+                className={
+                  salesFilter === "Discounts" ? "text-warning" : "text-muted"
+                }
+              >
+                Discounts
+              </div>
               <strong>
                 {formatter.format(discounts)} (
                 {discounts === "0" || discounts === 0 ? 0 : discounts / 100})
@@ -682,7 +703,13 @@ const SalesByItems = (props) => {
               className="mb-sm-2 mb-0"
               onClick={() => handleOnChangeSales("Net Sales")}
             >
-              <div className="text-muted">Net Sales</div>
+              <div
+                className={
+                  salesFilter === "Net Sales" ? "text-danger" : "text-muted"
+                }
+              >
+                Net Sales
+              </div>
               <strong>
                 {formatter.format(netSales)} (
                 {netSales === "0" || netSales === 0 ? 0 : netSales / 100})
@@ -700,7 +727,13 @@ const SalesByItems = (props) => {
               className="mb-sm-2 mb-0 d-md-down-none"
               onClick={() => handleOnChangeSales("Gross profit")}
             >
-              <div className="text-muted">Gross Profit</div>
+              <div
+                className={
+                  salesFilter === "Gross profit" ? "text-primary" : "text-muted"
+                }
+              >
+                Gross Profit
+              </div>
               <strong>
                 {" "}
                 {formatter.format(grossProfit)} (
@@ -712,6 +745,7 @@ const SalesByItems = (props) => {
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
+                color="primary"
                 value={grossProfit}
               />
             </CCol>
@@ -721,5 +755,5 @@ const SalesByItems = (props) => {
     </>
   );
 };
-export default SalesByItems;
+export default Dashboard;
 // Traffic //{" "}

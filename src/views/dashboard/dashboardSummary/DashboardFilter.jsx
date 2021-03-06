@@ -40,7 +40,7 @@ import {
 import dateformat from "dateformat";
 
 import $ from "jquery";
-const SalesItemFilter = (props) => {
+const DashboardFilter = (props) => {
   const dispatch = useDispatch();
   // Start Reducer Functions
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -115,7 +115,10 @@ const SalesItemFilter = (props) => {
     time.setMilliseconds(0);
     const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
     const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
-    if (getNatural(daysDiff) === 0 && filterName === "Hours") {
+    if (
+      (getNatural(daysDiff) === 0 || getNatural(daysDiff) === 1) &&
+      filterName === "Hours"
+    ) {
       const totalHours = 24;
       var i = 1;
       while (i <= totalHours) {
@@ -413,7 +416,7 @@ const SalesItemFilter = (props) => {
           .map((item) => {
             return item._id;
           }),
-        divider: props.filter,//props.daysFilter,
+        divider: props.filter, //props.daysFilter,
         graph: Days,
         // need this formate with year to match with date filter exactly
         matches: daysDates,
@@ -497,7 +500,7 @@ const SalesItemFilter = (props) => {
         .map((item) => {
           return item._id;
         }),
-      divider: props.filter,//props.daysFilter,
+      divider: props.filter, //props.daysFilter,
       graph: Days,
       // need this formate with year to match with date filter exactly
       matches: daysDates,
@@ -553,7 +556,7 @@ const SalesItemFilter = (props) => {
         .map((item) => {
           return item._id;
         }),
-      divider: props.filter,//props.daysFilter,
+      divider: props.filter, //props.daysFilter,
       graph: Days,
       // need this formate with year to match with date filter exactly
       matches: daysDates,
@@ -887,7 +890,7 @@ const SalesItemFilter = (props) => {
   );
 };
 
-export default SalesItemFilter;
+export default DashboardFilter;
 // <CCol sm="12" md="2" lg="2" xs="12">
 //   <CButton
 //     color="success"

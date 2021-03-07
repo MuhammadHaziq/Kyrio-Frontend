@@ -7,33 +7,33 @@ import {
   CLabel,
 } from "@coreui/react";
 import {
-  toggle_pos_single_select,
-  toggle_pso_all_select,
-  select_row_data_update,
-} from "../../../actions/settings/posDeviceActions";
+  toggle_payments_single_select,
+  toggle_payments_all_select,
+  update_row_data,
+} from "../../../actions/settings/paymentTypesActions";
 import { useDispatch } from "react-redux";
-const PosDeviceDatatable = (props) => {
+const PaymentTypesDatatableNew = (props) => {
   const dispatch = useDispatch();
 
   const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const check = (e, item) => {
-    dispatch(toggle_pos_single_select(item));
+    dispatch(toggle_payments_single_select(item));
   };
   const clickRow = (item, index, column) => {
     if (column !== "select") {
-      dispatch(select_row_data_update(item));
+      dispatch(update_row_data(item));
     }
   };
 
   const checkAll = (e, selectAll) => {
     setSelectAll(!selectAll);
-    dispatch(toggle_pso_all_select(!selectAll));
+    dispatch(toggle_payments_all_select(!selectAll));
   };
   return (
     <CDataTable
-      items={props.pos_devices}
+      items={props.payments}
       fields={[
         {
           key: "select",
@@ -41,10 +41,7 @@ const PosDeviceDatatable = (props) => {
           filter: false,
           _style: { width: "5%" },
         },
-        { key: "title", label: "Name", filter: false },
-        { key: "storeName", label: "Store", filter: false },
-        { key: "udid", label: "UDID", filter: false },
-        { key: "status", label: "Status", filter: false },
+        { key: "name", label: "Name", filter: false },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -75,6 +72,7 @@ const PosDeviceDatatable = (props) => {
                   id={`checkbox${item._id}`}
                   checked={item.isDeleted}
                   onChange={(e) => check(e, item)}
+                  disabled={item.name.toUpperCase() === "Cash".toUpperCase()}
                 />
                 <CLabel
                   variant="custom-checkbox"
@@ -84,28 +82,9 @@ const PosDeviceDatatable = (props) => {
             </td>
           );
         },
-        storeName: (item) => {
-          return <td>{item.store.storeName}</td>;
-        },
-        udid: (item) => {
-          return (
-            <td>
-              {item.udid == "" ||
-              item.udid == null ||
-              typeof item.udid == "undefined"
-                ? "Not Set"
-                : item.udid}
-            </td>
-          );
-        },
-        status: (item) => {
-          return (
-            <td>{item.isActive === false ? "Not activated" : "Activated"}</td>
-          );
-        },
       }}
     />
   );
 };
 
-export default PosDeviceDatatable;
+export default PaymentTypesDatatableNew;

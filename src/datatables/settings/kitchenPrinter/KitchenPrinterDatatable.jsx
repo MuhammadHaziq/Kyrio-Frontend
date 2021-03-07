@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_kitchen_printer_single_select,
   toggle_kitchen_printer_select_all,
@@ -10,87 +15,82 @@ import { useDispatch } from "react-redux";
 const KitchenPrinterDatatable = (props) => {
   const dispatch = useDispatch();
 
-  /**
-   *
-   *  Datatable functions start
-   *
-   ***/
-  const getCategory = (cell, row) => {
-    const categoryName = [];
-    row.categories.map((item) => {
-      return categoryName.push(item.categoryName);
-    });
-    return categoryName.join();
-  };
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_kitchen_printer_single_select(row));
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_kitchen_printer_select_all(true));
-    } else {
-      dispatch(toggle_kitchen_printer_select_all(false));
+  const check = (e, item) => {
+    dispatch(toggle_kitchen_printer_single_select(item));
+  };
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(select_update_row(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.kitchen_printer_list.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      console.log(row);
-      dispatch(select_update_row(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_kitchen_printer_select_all(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.kitchen_printer_list}
-        version="4"
-        striped
-        hover
-        selectRow={selectRowProp}
-        options={options}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          isKey={true}
-          dataSort={true}
-          hidden={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort={true}>
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="categories" dataFormat={getCategory}>
-          Categories
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.kitchen_printer_list}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "name", label: "Name", filter: false },
+        { key: "categories", label: "Categories", filter: false },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        categories: (item) => {
+          const categoryName = [];
+          item.categories.map((cat) => {
+            return categoryName.push(cat.categoryName);
+          });
+          return <td>{categoryName.join()}</td>;
+        },
+      }}
+    />
   );
 };
 

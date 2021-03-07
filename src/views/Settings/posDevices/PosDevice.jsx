@@ -180,23 +180,6 @@ const PosDevice = () => {
                         </CFormGroup>
                       </CCol>
                     </CRow>
-
-                    {/*<div className="card-header-actions">
-                      <CLink
-                        className="card-header-action"
-                        onClick={() => toggleCollapse(0)}
-                      >
-                        <CIcon
-                          name={
-                            collapse[0]
-                              ? "cil-chevron-bottom"
-                              : "cil-chevron-top"
-                          }
-                        />
-                        className="table table-striped table-bordered"
-
-                                              </CLink>
-                    </div>*/}
                   </CCardHeader>
                   <CCollapse show={collapse[0]}>
                     <CCardBody>

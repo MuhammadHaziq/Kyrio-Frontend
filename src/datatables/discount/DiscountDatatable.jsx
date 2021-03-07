@@ -1,106 +1,113 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_discount_single_select,
   toggle_discount_all_select,
   select_row_data_update,
 } from "../../actions/items/discountActions";
 import { useDispatch } from "react-redux";
-
-const ItemsListDatatable = (props) => {
+const DiscountDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const showValue = (cell, row) => {
-    return row.value !== undefined && row.value !== null
-      ? row.type.toUpperCase() === "amount".toUpperCase()
-        ? row.value.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })
-        : row.value.toFixed(2) + " %"
-      : "Variable, %";
-  };
-  const showRestricted = (cell, row) => {
-    return row.restricted === true ? "Yes" : "No";
-  };
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_discount_single_select(row));
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_discount_all_select(true));
-    } else {
-      dispatch(toggle_discount_all_select(false));
+  const check = (e, item) => {
+    // if (e.target.checked) {
+    //   setSelected([...selected, id]);
+    // } else {
+    //   setSelected(selected.filter((itemId) => itemId !== id));
+    // }
+    dispatch(toggle_discount_single_select(item));
+  };
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(select_row_data_update(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.discount.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(select_row_data_update(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_discount_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.discount}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-        search={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="title" dataSort={true}>
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="value" dataFormat={showValue}>
-          Value
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="restricted"
-          dataSort={true}
-          dataFormat={showRestricted}
-        >
-          Restricted access
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.discount}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "title", label: "Name", filter: true },
+        { key: "value", label: "Value", filter: true },
+        { key: "restricted", label: "Restricted Access", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        value: (item) => {
+          return (
+            <td>
+              {item.value !== undefined && item.value !== null
+                ? item.type.toUpperCase() === "amount".toUpperCase()
+                  ? item.value.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })
+                  : item.value.toFixed(2) + " %"
+                : "Variable, %"}
+            </td>
+          );
+        },
+        restricted: (item) => {
+          return <td>{item.restricted === true ? "Yes" : "No"}</td>;
+        },
+      }}
+    />
   );
 };
 
-export default ItemsListDatatable;
+export default DiscountDatatable;

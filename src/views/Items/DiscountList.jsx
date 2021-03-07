@@ -106,10 +106,10 @@ const DiscountList = (props) => {
             <CCard>
               <CCardHeader>
                 <CRow>
-                  <CCol xs="6" lg="6">
+                  <CCol xs="3" lg="3">
                     <CButton
                       color="success"
-                      className="btn-square pull right"
+                      className="btn-square"
                       onClick={addDicount}
                     >
                       <svg
@@ -127,7 +127,42 @@ const DiscountList = (props) => {
                       ADD DISCOUNT
                     </CButton>
                   </CCol>
-                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                  <CCol xs="2" md="2" xl="xl" className="btn-square pull-left">
+                    {discount.discount_list.filter(
+                      (item) => item.isDeleted === true
+                    ).length > 0 ? (
+                      <React.Fragment>
+                        <ConformationAlert
+                          button_text="Delete"
+                          heading="Delete Discount"
+                          section={`Are you sure you want to delete the Discount (${discount.discount_list
+                            .filter((item) => {
+                              return item.isDeleted === true;
+                            })
+                            .map((item) => {
+                              return item.title;
+                            })
+                            .join(",")}) ?`}
+                          buttonAction={delete_discounts}
+                          show_alert={showAlert}
+                          hideAlert={setShowAlert}
+                          variant="outline"
+                          className="ml-2"
+                          color="danger"
+                          block={false}
+                        />
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )}
+                  </CCol>
+
+                  <CCol
+                    xs="7"
+                    md="7"
+                    xl="xl"
+                    className="mb-3 mb-xl-0 pull-right"
+                  >
                     <CFormGroup>
                       <CSelect
                         custom
@@ -152,37 +187,6 @@ const DiscountList = (props) => {
               </CCardHeader>
 
               <CCardBody>
-                {discount.discount_list.filter(
-                  (item) => item.isDeleted === true
-                ).length > 0 ? (
-                  <React.Fragment>
-                    <CRow>
-                      <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete Discount"
-                          section={`Are you sure you want to delete the Discount (${discount.discount_list
-                            .filter((item) => {
-                              return item.isDeleted === true;
-                            })
-                            .map((item) => {
-                              return item.title;
-                            })
-                            .join(",")}) ?`}
-                          buttonAction={delete_discounts}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2"
-                          color="danger"
-                          block={false}
-                        />
-                      </CCol>
-                    </CRow>
-                  </React.Fragment>
-                ) : (
-                  ""
-                )}
                 <DiscountDatatable discount={discount.discount_list} />
               </CCardBody>
             </CCard>

@@ -1,65 +1,44 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import { get_store_row } from "../../../actions/settings/storeActions";
-import { useDispatch } from "react-redux";
 
+import { useDispatch } from "react-redux";
 const StoreDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const number_of_pos = (cell, row) => {
-    return cell;
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(get_store_row(item));
+    }
   };
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.stores.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(get_store_row(row));
-    },
-  };
+
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.stores}
-        version="4"
-        striped
-        hover
-        options={options}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          isKey={true}
-          dataSort={true}
-          hidden={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="title" dataSort={true}>
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="address">Address</TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="devices"
-          dataSort={true}
-          dataFormat={number_of_pos}
-        >
-          Number Of Pos
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.stores}
+      fields={[
+        { key: "title", label: "Name", filter: false },
+        { key: "address", label: "Address", filter: false },
+        { key: "devices", label: "Number Of Pos", filter: false },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      scopedSlots={{
+        devices: (item) => {
+          return <td>{item.devices || 0}</td>;
+        },
+      }}
+    />
   );
 };
 

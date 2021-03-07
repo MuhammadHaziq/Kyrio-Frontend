@@ -8,7 +8,7 @@ import {
   CRow,
   CFade,
 } from "@coreui/react";
-import PaymentTypesDatatable from "../../../datatables/settings/paymentTypes/PaymentTypesDatatable";
+import PaymentTypesDatatableNew from "../../../datatables/settings/paymentTypes/PaymentTypesDatatableNew";
 import { useSelector, useDispatch } from "react-redux";
 import AddNewPaymentType from "../../../components/settings/paymentTypes/AddNewPaymentType";
 import UpdatePaymentType from "../../../components/settings/paymentTypes/UpdatePaymentType";
@@ -175,7 +175,7 @@ const PaymentTypes = () => {
                     </CRow>
                   </CCardHeader>
                   <CCardBody>
-                    <PaymentTypesDatatable payments={payments_type} />
+                    <PaymentTypesDatatableNew payments={payments_type} />
                   </CCardBody>
                 </CCard>
               </CCol>

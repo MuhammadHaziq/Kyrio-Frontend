@@ -197,8 +197,12 @@ const UpdatePaymentType = (props) => {
                 onChange={paymentHandleChange}
               >
                 <option value="0">Payment type</option>
-                {props.payment_types.map((item) => {
-                  return <option value={item._id}>{item.title}</option>;
+                {props.payment_types.map((item, index) => {
+                  return (
+                    <option value={item._id} key={index}>
+                      {item.title}
+                    </option>
+                  );
                 })}
               </CSelect>
               <CInvalidFeedback>

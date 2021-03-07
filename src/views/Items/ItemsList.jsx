@@ -19,7 +19,6 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
-import ItemListNewDatatable from "../../datatables/items/ItemListNewDatatable.jsx";
 import {
   get_items_list,
   get_items_stock,
@@ -939,7 +938,7 @@ const ItemsList = () => {
                 </CRow>
               </CCardHeader>
               <CCardBody>
-                <ItemListNewDatatable itemList={item.item_list} />
+                <ItemsListDatatable itemList={item.item_list} />
               </CCardBody>
             </CCard>
           </React.Fragment>

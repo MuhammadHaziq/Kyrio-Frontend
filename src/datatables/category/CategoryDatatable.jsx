@@ -1,110 +1,118 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_category_single_select,
   toggle_category_all_select,
   select_row_data_update,
 } from "../../actions/items/categoryActions";
 import { useDispatch } from "react-redux";
-
 const CategoryDatatable = (props) => {
   const dispatch = useDispatch();
-  const categoryTitle = (cell, row) => {
-    return (
-      <React.Fragment>
-        <svg height="40" width="35">
-          <circle cx="15" cy="25" r="15" fill={row.catColor} />
-          Sorry, your browser does not support inline SVG.
-        </svg>
-        {cell}
-        <span>
-          <small
-            style={{
-              display: "grid",
-              marginLeft: "60px",
-              marginTop: "-15px",
-            }}
-          >
-            {row.total_items} {row.total_items > 1 ? "Items" : "Item"}
-          </small>
-        </span>
-      </React.Fragment>
-    );
-  };
 
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_category_single_select(row));
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_category_all_select(true));
-    } else {
-      dispatch(toggle_category_all_select(false));
+  const check = (e, item) => {
+    // if (e.target.checked) {
+    //   setSelected([...selected, id]);
+    // } else {
+    //   setSelected(selected.filter((itemId) => itemId !== id));
+    // }
+    dispatch(toggle_category_single_select(item));
+  };
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(select_row_data_update(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.categories.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      console.log(row);
-      dispatch(select_row_data_update(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_category_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.categories}
-        version="4"
-        hover
-        selectRow={selectRowProp}
-        options={options}
-        pagination
-        search
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="catTitle"
-          dataSort={true}
-          dataFormat={categoryTitle}
-        >
-          Name
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.categories}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "catTitle", label: "Name", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        catTitle: (item) => {
+          return (
+            <td>
+              <svg height="40" width="35">
+                <circle cx="15" cy="25" r="15" fill={item.catColor} />
+                Sorry, your browser does not support inline SVG.
+              </svg>
+              {item.catTitle}
+              <span>
+                <small
+                  style={{
+                    display: "grid",
+                    marginLeft: "60px",
+                    marginTop: "-15px",
+                  }}
+                >
+                  {item.total_items || 0}{" "}
+                  {item.total_items > 1 ? "Items" : "Item"}
+                </small>
+              </span>
+            </td>
+          );
+        },
+      }}
+    />
   );
 };
 
 export default CategoryDatatable;
+;

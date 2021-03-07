@@ -1,158 +1,155 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_item_single_select,
   toggle_item_all_select,
   update_row_data,
 } from "../../actions/items/itemActions";
 import { useDispatch } from "react-redux";
-
 const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const showCategory = (cell, row) => {
-    return row.category !== undefined && row.category !== null
-      ? row.category.name || ""
-      : "";
-  };
-  const showMargin = (cell, row) => {
-    const price = row.price !== undefined && row.price !== null ? row.price : 0;
-    const cost = row.cost !== undefined && row.cost !== null ? row.cost : 0;
-    if (+cost === +price) {
-      return "0 %";
-    } else {
-      const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
-      return margin.toFixed(2) + " %";
-    }
-  };
-  const showPrice = (cell, row) => {
-    return row.price !== undefined && row.price !== null
-      ? row.price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showCost = (cell, row) => {
-    return row.cost !== undefined && row.cost !== null
-      ? row.cost.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const showStock = (cell, row) => {
-    if (typeof row.stores !== "undefined" && row.stores.length > 0) {
-      let stocks = row.stores.map((item) => {
-        return +item.inStock || 0;
-      });
-      stocks = stocks.reduce((a, b) => {
-        return b + a;
-      });
-
-      return stocks;
-    } else {
-      return row.stockQty;
-    }
+  const check = (e, item) => {
+    // if (e.target.checked) {
+    //   setSelected([...selected, id]);
+    // } else {
+    //   setSelected(selected.filter((itemId) => itemId !== id));
+    // }
+    dispatch(toggle_item_single_select(item));
   };
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_item_single_select(row));
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_item_all_select(true));
-    } else {
-      dispatch(toggle_item_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.itemList.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(update_row_data(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_item_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.itemList}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort={true}>
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataFormat={showCategory}>
-          Category
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="price"
-          dataSort={true}
-          dataFormat={showPrice}
-        >
-          Price
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="cost"
-          dataSort={true}
-          dataFormat={showCost}
-        >
-          Cost
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="margin"
-          dataSort={true}
-          dataFormat={showMargin}
-        >
-          Margin %
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="stock"
-          dataSort={true}
-          dataFormat={showStock}
-        >
-          Stock
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.itemList}
+      fields={[
+        { key: "select", label: "Select", filter: false },
+        { key: "name", label: "Name", filter: true },
+        { key: "categoryName", label: "Category", filter: true },
+        { key: "price", label: "Price", filter: true },
+        { key: "cost", label: "Cost", filter: true },
+        { key: "margin", label: "Margin %", filter: true },
+        { key: "stockQty", label: "Stock", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        categoryName: (item) => {
+          return (
+            <td>
+              {item.category !== undefined && item.category !== null
+                ? item.category.name || ""
+                : ""}
+            </td>
+          );
+        },
+        price: (item) => {
+          return (
+            <td>
+              {item.price !== undefined && item.price !== null
+                ? item.price.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })
+                : "$ 0.00"}
+            </td>
+          );
+        },
+        cost: (item) => {
+          return (
+            <td>
+              {item.cost !== undefined && item.cost !== null
+                ? item.cost.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })
+                : "$ 0.00"}
+            </td>
+          );
+        },
+        margin: (item) => {
+          const price =
+            item.price !== undefined && item.price !== null ? item.price : 0;
+          const cost =
+            item.cost !== undefined && item.cost !== null ? item.cost : 0;
+          if (+cost === +price) {
+            return <td>{"0 %"}</td>;
+          } else {
+            const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
+            return <td>{margin.toFixed(2) + " %"}</td>;
+          }
+        },
+        stockQty: (item) => {
+          if (typeof item.stores !== "undefined" && item.stores.length > 0) {
+            let stocks = item.stores.map((item) => {
+              return +item.inStock || 0;
+            });
+            stocks = stocks.reduce((a, b) => {
+              return b + a;
+            });
+            if (stocks !== undefined || stocks !== null || stocks !== 0) {
+              return <td>{stocks}</td>;
+            } else {
+              return <td>{item.stockQty}</td>;
+            }
+          } else {
+            return <td>{item.stockQty}</td>;
+          }
+        },
+      }}
+    />
   );
 };
 

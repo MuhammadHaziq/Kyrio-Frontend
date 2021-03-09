@@ -186,34 +186,20 @@ const AddEmployee = (props) => {
   };
 
   const saveEmployee = () => {
+    
     if (fields.name === "") {
       setErrors({
         ...errors,
         name: validator.isEmpty(fields.name),
       });
       return false;
-    }
-    // else if (fields.email === "") {
-    //   setErrors({
-    //     ...errors,
-    //     email: validator.isEmpty(fields.email),
-    //   });
-    //   return false;
-    // }
-    else if (fields.role === "0" || fields.role === "") {
+    } else if (fields.role === "0" || fields.role === "") {
       setErrors({
         ...errors,
         role: true,
       });
       return false;
-    } else if (
-      props.user_roles
-        .filter((item) => item.role_id === fields.role)
-        .map((item) => {
-          return item.allowPOS;
-        })[0] === true &&
-      fields.posPin === "0000"
-    ) {
+    } else if(fields.enablePin && fields.posPin === "0000"){
       setErrors({
         ...errors,
         posPin: true,

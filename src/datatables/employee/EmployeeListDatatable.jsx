@@ -23,6 +23,11 @@ const EmployeeListDatatable = (props) => {
         : "-"
       : "-";
   };
+  const email = (cell, row) => {
+    return row.email !== undefined && row.email !== null
+      ? row.email || "-"
+      : "-";
+  };
 
   const onRowSelect = (row, isSelected, e) => {
     dispatch(toggle_employee_single_select(row));
@@ -111,7 +116,7 @@ const EmployeeListDatatable = (props) => {
         <TableHeaderColumn dataField="name" width="20%">
           Name
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="email" dataSort={true} width="20%">
+        <TableHeaderColumn dataField="email" dataSort={true} width="20%" dataFormat={email}>
           Email
         </TableHeaderColumn>
         <TableHeaderColumn dataField="phone" dataSort={true} dataFormat={phone}>

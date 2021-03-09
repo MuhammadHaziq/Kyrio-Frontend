@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   CDataTable,
-  CCardBody,
   CInputCheckbox,
   CFormGroup,
   CLabel,
@@ -98,7 +97,7 @@ const DiscountDatatable = (props) => {
                       currency: "USD",
                     })
                   : item.value.toFixed(2) + " %"
-                : "Variable, %"}
+                : item.type.toUpperCase() === "amount".toUpperCase() ? "Variable, Σ" : "Variable, %"}
             </td>
           );
         },

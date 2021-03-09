@@ -88,7 +88,7 @@ const DashboardCard = (props) => {
       </CCol>
 
       <CCol
-        sm="6"
+        sm="4"
         
         onClick={() => props.handleOnChangeSales("Net Sales")}
       >
@@ -107,8 +107,27 @@ const DashboardCard = (props) => {
           }
         ></CWidgetDropdown>
       </CCol>
+      <CCol sm="4"  onClick={() => props.handleOnChangeSales("Cost Of Goods")}>
+        <CWidgetDropdown
+          color="gradient-dark"
+          header={formatter.format(props.CostOfGoods)}
+          text="Cost Of Goods"
+          footerSlot={
+            <ChartLineSimple
+              pointed
+              className="mt-3 mx-3"
+              style={{ height: "70px" }}
+              dataPoints={[1, 18, 9, 17, 34, 22, 11]}
+              pointHoverBackgroundColor="light"
+              options={{ elements: { line: { tension: 0.00001 } } }}
+              label="Members"
+              labels="months"
+            />
+          }
+        ></CWidgetDropdown>
+      </CCol>
       <CCol
-        sm="6"
+        sm="4"
         
         onClick={() => props.handleOnChangeSales("Gross profit")}
       >

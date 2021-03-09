@@ -70,13 +70,15 @@ const AddCustomer = (props) => {
         name: validator.isEmpty(fields.name),
       });
       return false;
-    } else if (fields.email === "") {
-      setErrors({
-        ...errors,
-        email: validator.isEmpty(fields.email),
-      });
-      return false;
-    } else {
+    }
+    //  else if (fields.email === "") {
+    //   setErrors({
+    //     ...errors,
+    //     email: validator.isEmpty(fields.email),
+    //   });
+    //   return false;
+    // } 
+    else {
       const data = {
         name: fields.name,
         email: fields.email,

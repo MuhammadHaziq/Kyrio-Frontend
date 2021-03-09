@@ -26,6 +26,7 @@ const brandInfo = getStyle("info") || "#20a8d8";
 const brandDanger = getStyle("danger") || "#f86c6b";
 const brandWarning = getStyle("warning") || "#e1a82d";
 const brandPrimary = getStyle("primary") || "#4638c2";
+const brandSecondary = getStyle("secondary") || "#8a93a2";
 
 const Dashboard = (props) => {
   const dispatch = useDispatch();
@@ -43,39 +44,7 @@ const Dashboard = (props) => {
   const [salesFilter, setSalesFilter] = useState("All Sales");
   const [orginalSale, setOrginalSale] = useState([
     {
-      data: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        123,
-        14,
-        213,
-        3,
-        421,
-        123,
-        124,
-        123,
-        123,
-        412,
-        2312,
-        1412,
-        132,
-        24,
-        3435,
-        23,
-        12433,
-        123,
-        53,
-      ],
+      data: [],
       label: "Gross sales",
       backgroundColor: hexToRgba(brandSuccess, 10),
       borderColor: brandSuccess,
@@ -83,39 +52,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        6757,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        23,
-        14,
-        4545,
-        3,
-        131,
-        643,
-        124,
-        123,
-        12351,
-        843,
-        786,
-        1412,
-        132,
-        24,
-        511,
-        23,
-        9867,
-        123,
-        42,
-      ],
+      data: [],
       label: "Refunds",
       backgroundColor: hexToRgba(brandDanger, 10),
       borderColor: brandDanger,
@@ -123,39 +60,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        32,
-        3141,
-        57,
-        55,
-        6241,
-        4123,
-        0,
-        85,
-        1,
-        767,
-        3453,
-        23,
-        341,
-        4545,
-        453,
-        2234,
-        453,
-        9866,
-        876,
-        542,
-        24,
-        23,
-        14243,
-        2435,
-        3454,
-        764,
-        456,
-        4,
-        234,
-        87,
-      ],
+      data: [],
       label: "Discounts",
       backgroundColor: hexToRgba(brandWarning, 10),
       borderColor: brandWarning,
@@ -163,39 +68,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        67,
-        5213,
-        5223,
-        211,
-        200,
-        67,
-        34,
-        1256,
-        634,
-        23,
-        598,
-        235,
-        0,
-        4223,
-        3456,
-        123,
-        345,
-        875,
-        56,
-        45,
-        2356,
-        234,
-        634,
-        4562,
-        4563,
-        0,
-        653,
-        234,
-      ],
+      data: [],
       label: "Net Sales",
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
@@ -203,39 +76,15 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        757,
-        534,
-        4242,
-        2126,
-        0,
-        5844,
-        56,
-        12433,
-        1223,
-        23,
-        675,
-        7674,
-        234,
-        2368,
-        2346,
-        345,
-        123,
-        3466,
-        45,
-        56,
-        23624,
-        345,
-        234,
-        2432,
-        4325,
-        234,
-        546,
-        345,
-      ],
+      data: [],
+      label: "Cost Of Goods",
+      backgroundColor: hexToRgba(brandSecondary, 10),
+      borderColor: brandSecondary,
+      pointHoverBackgroundColor: brandSecondary,
+      borderWidth: 2,
+    },
+    {
+      data: [],
       label: "Gross profit",
       backgroundColor: hexToRgba(brandPrimary, 10),
       borderColor: brandPrimary,
@@ -245,39 +94,7 @@ const Dashboard = (props) => {
   ]);
   const [sales, setSales] = useState([
     {
-      data: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        123,
-        14,
-        213,
-        3,
-        421,
-        123,
-        124,
-        123,
-        123,
-        412,
-        2312,
-        1412,
-        132,
-        24,
-        3435,
-        23,
-        12433,
-        123,
-        53,
-      ],
+      data: [],
       label: "Gross sales",
       backgroundColor: hexToRgba(brandSuccess, 10),
       borderColor: brandSuccess,
@@ -285,39 +102,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        6757,
-        5,
-        62,
-        21,
-        142,
-        43,
-        1,
-        123,
-        123,
-        23,
-        14,
-        4545,
-        3,
-        131,
-        643,
-        124,
-        123,
-        12351,
-        843,
-        786,
-        1412,
-        132,
-        24,
-        511,
-        23,
-        9867,
-        123,
-        42,
-      ],
+      data: [],
       label: "Refunds",
       backgroundColor: hexToRgba(brandDanger, 10),
       borderColor: brandDanger,
@@ -325,39 +110,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        32,
-        3141,
-        57,
-        55,
-        6241,
-        4123,
-        0,
-        85,
-        1,
-        767,
-        3453,
-        23,
-        341,
-        4545,
-        453,
-        2234,
-        453,
-        9866,
-        876,
-        542,
-        24,
-        23,
-        14243,
-        2435,
-        3454,
-        764,
-        456,
-        4,
-        234,
-        87,
-      ],
+      data: [],
       label: "Discounts",
       backgroundColor: hexToRgba(brandWarning, 10),
       borderColor: brandWarning,
@@ -365,39 +118,7 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        67,
-        5213,
-        5223,
-        211,
-        200,
-        67,
-        34,
-        1256,
-        634,
-        23,
-        598,
-        235,
-        0,
-        4223,
-        3456,
-        123,
-        345,
-        875,
-        56,
-        45,
-        2356,
-        234,
-        634,
-        4562,
-        4563,
-        0,
-        653,
-        234,
-      ],
+      data: [],
       label: "Net Sales",
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
@@ -405,39 +126,15 @@ const Dashboard = (props) => {
       borderWidth: 2,
     },
     {
-      data: [
-        1,
-        344,
-        3,
-        757,
-        534,
-        4242,
-        2126,
-        0,
-        5844,
-        56,
-        12433,
-        1223,
-        23,
-        675,
-        7674,
-        234,
-        2368,
-        2346,
-        345,
-        123,
-        3466,
-        45,
-        56,
-        23624,
-        345,
-        234,
-        2432,
-        4325,
-        234,
-        546,
-        345,
-      ],
+      data: [],
+      label: "Cost Of Goods",
+      backgroundColor: hexToRgba(brandSecondary, 10),
+      borderColor: brandSecondary,
+      pointHoverBackgroundColor: brandSecondary,
+      borderWidth: 2,
+    },
+    {
+      data: [],
       label: "Gross profit",
       backgroundColor: hexToRgba(brandPrimary, 10),
       borderColor: brandPrimary,
@@ -460,6 +157,32 @@ const Dashboard = (props) => {
   useEffect(() => {
     dispatch(get_sales_summary());
   }, []);
+  
+  useEffect(() => {
+    if(typeof salesSummary.sales_graph_data !== "undefined"){
+      if(typeof salesSummary.sales_graph_data.graphRecord !== "undefined"){
+        const { GrossSales, Refunds, discounts, NetSales, CostOfGoods, GrossProfit } = salesSummary.sales_graph_data.graphRecord;
+        let filterSale = orginalSale.slice().map(sale => {
+          if(sale.label == "Gross sales"){
+            sale.data = GrossSales
+          } else if( sale.label == "Refunds" ){
+            sale.data = Refunds
+          } else if( sale.label == "Discounts" ){
+            sale.data = discounts
+          } else if( sale.label == "Net Sales" ){
+            sale.data = NetSales
+          } else if( sale.label == "Cost Of Goods" ){
+            sale.data = CostOfGoods
+          } else if( sale.label == "Gross profit" ){
+            sale.data = GrossProfit
+          }
+          return sale;
+        })
+        setOrginalSale(filterSale)
+        setSales(filterSale)
+      }
+    }
+  }, [salesSummary.sales_graph_data]);
   //  End UseEffects Functions
   const usePrevious = (data) => {
     const ref = React.useRef();
@@ -553,6 +276,17 @@ const Dashboard = (props) => {
           : 0
         : 0
       : 0;
+  const CostOfGoods =
+    salesSummary.sales_graph_data !== undefined &&
+    salesSummary.sales_graph_data !== null
+      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+        salesSummary.sales_graph_data.SalesTotal !== null
+        ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
+          salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
+          ? parseInt(salesSummary.sales_graph_data.SalesTotal.CostOfGoods)
+          : 0
+        : 0
+      : 0;
   const grossProfit =
     salesSummary.sales_graph_data !== undefined &&
     salesSummary.sales_graph_data !== null
@@ -576,6 +310,7 @@ const Dashboard = (props) => {
         refunds={refunds}
         discounts={discounts}
         netSales={netSales}
+        CostOfGoods={CostOfGoods}
         grossProfit={grossProfit}
         handleOnChangeSales={handleOnChangeSales}
       />
@@ -664,13 +399,14 @@ const Dashboard = (props) => {
               <strong>
                 {" "}
                 {formatter.format(refunds)} (
-                {refunds === "0" || refunds === 0 ? 0 : refunds / 100})
+                {refunds === "0" || refunds === 0 ? "0%" : parseInt(((refunds/grossSales)*100))+"%"}
+                )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="info"
-                value={refunds}
+                value={parseInt(((refunds/grossSales)*100))}
               />
             </CCol>
             <CCol
@@ -688,13 +424,14 @@ const Dashboard = (props) => {
               </div>
               <strong>
                 {formatter.format(discounts)} (
-                {discounts === "0" || discounts === 0 ? 0 : discounts / 100})
+                {discounts === "0" || discounts === 0 ? "0%" : parseInt(((discounts/grossSales)*100))+"%"}
+                )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="warning"
-                value={discounts}
+                value={parseInt(((discounts/grossSales)*100))}
               />
             </CCol>
             <CCol
@@ -705,20 +442,46 @@ const Dashboard = (props) => {
             >
               <div
                 className={
-                  salesFilter === "Net Sales" ? "text-danger" : "text-muted"
+                  salesFilter === "Net Sales" ? "text-info" : "text-muted"
                 }
               >
                 Net Sales
               </div>
               <strong>
                 {formatter.format(netSales)} (
-                {netSales === "0" || netSales === 0 ? 0 : netSales / 100})
+                {netSales === "0" || netSales === 0 ? "0%" : parseInt(((netSales/grossSales)*100))+"%"}
+                )
+              </strong>
+              <CProgress
+                className="progress-xs mt-2"
+                precision={1}
+                color="info"
+                value={parseInt(((netSales/grossSales)*100))}
+              />
+            </CCol>
+            <CCol
+              md
+              sm="12"
+              className="mb-sm-2 mb-0"
+              onClick={() => handleOnChangeSales("Cost Of Goods")}
+            >
+              <div
+                className={
+                  salesFilter === "Cost Of Goods" ? "text-danger" : "text-muted"
+                }
+              >
+                Cost Of Goods
+              </div>
+              <strong>
+                {formatter.format(CostOfGoods)} (
+                {CostOfGoods === "0" || CostOfGoods === 0 ? "0%" : parseInt(((CostOfGoods/grossSales)*100))+"%"}
+                )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="danger"
-                value={netSales}
+                value={parseInt(((CostOfGoods/grossSales)*100))}
               />
             </CCol>
             <CCol
@@ -737,16 +500,14 @@ const Dashboard = (props) => {
               <strong>
                 {" "}
                 {formatter.format(grossProfit)} (
-                {grossProfit === "0" || grossProfit === 0
-                  ? 0
-                  : grossProfit / 100}
+                  {grossProfit === "0" || grossProfit === 0 ? "0%" : parseInt(((grossProfit/grossSales)*100))+"%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="primary"
-                value={grossProfit}
+                value={parseInt(((grossProfit/grossSales)*100))}
               />
             </CCol>
           </CRow>

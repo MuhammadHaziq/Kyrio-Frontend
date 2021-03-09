@@ -287,14 +287,7 @@ const EditEmployee = (props) => {
         role: true,
       });
       return false;
-    } else if (
-      props.user_roles
-        .filter((item) => item.role_id === fields.role)
-        .map((item) => {
-          return item.allowPOS;
-        })[0] === true &&
-      fields.posPin === "0000"
-    ) {
+    } else if(fields.enablePin && fields.posPin === "0000"){
       setErrors({
         ...errors,
         posPin: true,

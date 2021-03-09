@@ -54,7 +54,7 @@ const TheContent = () => {
               />
             ))}
 
-            <Redirect from="/" to="/dashboard" />
+            <Redirect from="/" to="/reports/sales" />
           </Switch>
         </Suspense>
       </CContainer>

@@ -38,6 +38,8 @@ const UpdateDiscount = (props) => {
   const [collapse, setCollapse] = useState([true, true]);
   const [restricted_access, setRestrictedAccess] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [Percentage, setPercentage] = useState(true);
+  const [Amount, setAmount] = useState(false);
   const [fields, setFields] = useState({
     discount_name: "",
     discount_value: "",
@@ -144,7 +146,23 @@ const UpdateDiscount = (props) => {
       [name]: value,
     });
   };
-
+  const handleOnChangeToggle = (type) => {
+    if(type === "%"){
+      setPercentage(true)
+      setAmount(false)
+      setFields({
+        ...fields,
+        disocunt_type: "Percentage",
+      });
+    } else if(type === "$"){
+      setPercentage(false)
+      setAmount(true)
+      setFields({
+        ...fields,
+        disocunt_type: "Amount",
+      });
+    }
+  };
   const handleOnBlur = (e) => {
     const { name, value } = e.target;
     setErrors({
@@ -237,28 +255,35 @@ const UpdateDiscount = (props) => {
                 <CLabel>Type</CLabel>
               </CCol>
               <CCol sm="3">
-                <CInputGroup variant="custom-radio" inline>
-                  <CInputRadio
-                    id="disocunt_type"
-                    name="disocunt_type"
-                    onChange={handleOnChange}
+                <CFormGroup variant="custom-checkbox">
+                  <CInputCheckbox
+                    custom
+                    id="percentage"
+                    name="percentage"
+                    onChange={() => { handleOnChangeToggle("%") }}
                     value={"Percentage"}
+                    checked={Percentage}
                     checked={fields.disocunt_type === "Percentage"}
                   />
-                  <CLabel htmlFor="disocunt_type">Percentage</CLabel>
-                </CInputGroup>
+                  <CLabel variant="custom-checkbox" htmlFor="percentage">
+                    Percentage
+                  </CLabel>
+                </CFormGroup>
               </CCol>
               <CCol sm="3">
-                <CInputGroup variant="custom-radio" inline>
-                  <CInputRadio
-                    id="disocunt_type"
-                    name="disocunt_type"
-                    onChange={handleOnChange}
+                <CFormGroup variant="custom-checkbox">
+                  <CInputCheckbox
+                    custom
+                    id="amount"
+                    name="amount"
+                    onChange={() => { handleOnChangeToggle("$") }}
                     value={"Amount"}
                     checked={fields.disocunt_type === "Amount"}
                   />
-                  <CLabel htmlFor="disocunt_type">Amount</CLabel>
-                </CInputGroup>
+                  <CLabel variant="custom-checkbox" htmlFor="amount">
+                    Amount
+                  </CLabel>
+                </CFormGroup>
               </CCol>
             </CRow>
           </CCol>

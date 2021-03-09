@@ -220,6 +220,7 @@ const TimeCards = () => {
     setFadeAddTimeCard(false);
     setTimeCardUpdate(false);
     dispatch(redirect_back_timeCard(true));
+    dispatch(get_timeCards());
   };
 
   let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");

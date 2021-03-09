@@ -1,6 +1,11 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_timeCard_single_select,
   toggle_timeCard_all_select,
@@ -12,154 +17,144 @@ import dateFormat from "dateformat";
 const TimeCardDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const StoreName = (cell, row) => {
-    return row.store !== undefined ? row.store.name : "";
-  };
-  const EmployeeName = (cell, row) => {
-    return row.employee !== undefined ? row.employee.name : "";
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const clockIn = (cell, row) => {
-    const timeConst =
-      row.timeDetail !== undefined && row.timeDetail.length > 0
-        ? Number(row.timeDetail[0].clockInTime.split(":")[0]) >= 12
-          ? "PM"
-          : "AM"
-        : "-";
-    let time24 =
-      row.timeDetail !== undefined && row.timeDetail.length > 0
-        ? Number(row.timeDetail[0].clockInTime.split(":")[0])
-        : 0;
-    let time12 = time24 % 12 || 12;
-    time12 = time12 + ":" + row.timeDetail[0].clockInTime.split(":")[1];
-
-    return row.timeDetail !== undefined && row.timeDetail.length > 0
-      ? dateFormat(row.timeDetail[0].clockInDate, "mmmm d, yyyy") +
-          " " +
-          time12 +
-          " " +
-          timeConst
-      : "";
+  const check = (e, item) => {
+    dispatch(toggle_timeCard_single_select(item));
   };
-
-  const clockOut = (cell, row) => {
-    const timeConst =
-      row.timeDetail !== undefined && row.timeDetail.length > 0
-        ? Number(row.timeDetail[0].clockOutTime.split(":")[0]) >= 12
-          ? "PM"
-          : "AM"
-        : "-";
-    let time24 =
-      row.timeDetail !== undefined && row.timeDetail.length > 0
-        ? Number(row.timeDetail[0].clockOutTime.split(":")[0])
-        : 0;
-    let time12 = time24 % 12 || 12;
-    time12 = time12 + ":" + row.timeDetail[0].clockOutTime.split(":")[1];
-    return row.timeDetail !== undefined && row.timeDetail.length > 0
-      ? dateFormat(row.timeDetail[0].clockOutDate, "mmmm d, yyyy") +
-          " " +
-          time12 +
-          " " +
-          timeConst
-      : "";
-  };
-
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_timeCard_single_select(row));
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_timeCard_all_select(true));
-    } else {
-      dispatch(toggle_timeCard_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.timeCard_list.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(update_row_data(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_timeCard_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.timeCard_list}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="clockIn"
-          width="20%"
-          dataFormat={clockIn}
-          columnClassName="td-column"
-        >
-          Clock in
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="clockOut"
-          dataSort={true}
-          width="20%"
-          dataFormat={clockOut}
-          columnClassName="td-column"
-        >
-          Clock out
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="employee"
-          dataSort={true}
-          dataFormat={EmployeeName}
-        >
-          Employee
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="store"
-          dataSort={true}
-          dataFormat={StoreName}
-        >
-          Store
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalWorkingHour" dataSort={true}>
-          Total Hour
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.timeCard_list}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "clockIn", label: "Clock in", filter: true },
+        { key: "clockOut", label: "Clock out", filter: true },
+        { key: "employee", label: "Employee", filter: true },
+        { key: "store", label: "Store", filter: true },
+        { key: "totalWorkingHour", label: "Total Hour", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                  disabled={
+                    item.role !== undefined && item.role !== null
+                      ? item.role["name"] !== undefined &&
+                        item.role["name"] !== null
+                        ? item.role["name"].toUpperCase() == "OWNER"
+                        : ""
+                      : ""
+                  }
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        clockIn: (item) => {
+          const timeConst =
+            item.timeDetail !== undefined && item.timeDetail.length > 0
+              ? Number(item.timeDetail[0].clockInTime.split(":")[0]) >= 12
+                ? "PM"
+                : "AM"
+              : "-";
+          let time24 =
+            item.timeDetail !== undefined && item.timeDetail.length > 0
+              ? Number(item.timeDetail[0].clockInTime.split(":")[0])
+              : 0;
+          let time12 = time24 % 12 || 12;
+          time12 = time12 + ":" + item.timeDetail[0].clockInTime.split(":")[1];
+          return (
+            <td>
+              {item.timeDetail !== undefined && item.timeDetail.length > 0
+                ? dateFormat(item.timeDetail[0].clockInDate, "mmmm d, yyyy") +
+                  " " +
+                  time12 +
+                  " " +
+                  timeConst
+                : ""}
+            </td>
+          );
+        },
+        clockOut: (item) => {
+          const timeConst =
+            item.timeDetail !== undefined && item.timeDetail.length > 0
+              ? Number(item.timeDetail[0].clockOutTime.split(":")[0]) >= 12
+                ? "PM"
+                : "AM"
+              : "-";
+          let time24 =
+            item.timeDetail !== undefined && item.timeDetail.length > 0
+              ? Number(item.timeDetail[0].clockOutTime.split(":")[0])
+              : 0;
+          let time12 = time24 % 12 || 12;
+          time12 = time12 + ":" + item.timeDetail[0].clockOutTime.split(":")[1];
+          return (
+            <td>
+              {item.timeDetail !== undefined && item.timeDetail.length > 0
+                ? dateFormat(item.timeDetail[0].clockOutDate, "mmmm d, yyyy") +
+                  " " +
+                  time12 +
+                  " " +
+                  timeConst
+                : ""}
+            </td>
+          );
+        },
+        employee: (item) => {
+          return (
+            <td>{item.employee !== undefined ? item.employee.name : ""}</td>
+          );
+        },
+        store: (item) => {
+          return <td>{item.store !== undefined ? item.store.name : ""}</td>;
+        },
+      }}
+    />
   );
 };
 

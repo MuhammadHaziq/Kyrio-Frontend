@@ -1,132 +1,128 @@
 import React, { useState } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_employee_single_select,
   toggle_employee_all_select,
   update_row_data,
 } from "../../actions/employee/employeeListActions";
 import { useDispatch } from "react-redux";
-
 const EmployeeListDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const phone = (cell, row) => {
-    return row.phone !== undefined && row.phone !== null
-      ? row.phone || "-"
-      : "-";
-  };
-  const Role = (cell, row) => {
-    return row.role !== undefined
-      ? row.role["name"] !== undefined && row.role["name"] !== null
-        ? row.role["name"] || "-"
-        : "-"
-      : "-";
-  };
-  const email = (cell, row) => {
-    return row.email !== undefined && row.email !== null
-      ? row.email || "-"
-      : "-";
-  };
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_employee_single_select(row));
+  const check = (e, item) => {
+    dispatch(toggle_employee_single_select(item));
   };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_employee_all_select(true));
-    } else {
-      dispatch(toggle_employee_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-    unselectable: [
-      props.employee_list !== undefined &&
-      props.employee_list !== null &&
-      props.employee_list.length > 0
-        ? props.employee_list
-            .filter((item) =>
-              item.role !== undefined && item.role !== null
-                ? item.role["name"] !== undefined && item.role["name"] !== null
-                  ? item.role["name"].toUpperCase() == "OWNER"
-                  : ""
-                : ""
-            )
-            .map((item) => {
-              return item.role["id"];
-            })[0]
-        : "",
-    ],
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.employee_list.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(update_row_data(row));
-    },
+
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_employee_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.employee_list}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="role_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        {/*<TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>*/}
-        <TableHeaderColumn dataField="name" width="20%">
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="email" dataSort={true} width="20%" dataFormat={email}>
-          Email
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="phone" dataSort={true} dataFormat={phone}>
-          Phone
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="role" dataSort={true} dataFormat={Role}>
-          Role
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.employee_list}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "name", label: "Name", filter: true },
+        { key: "email", label: "Email", filter: true },
+        { key: "phone", label: "Phone", filter: true },
+        { key: "role", label: "Role", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      clickableRows
+      onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                  disabled={
+                    item.role !== undefined && item.role !== null
+                      ? item.role["name"] !== undefined &&
+                        item.role["name"] !== null
+                        ? item.role["name"].toUpperCase() == "OWNER"
+                        : ""
+                      : ""
+                  }
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        email: (item) => {
+          return (
+            <td>
+              {item.email !== undefined && item.email !== null
+                ? item.email || "-"
+                : "-"}
+            </td>
+          );
+        },
+        phone: (item) => {
+          return (
+            <td>
+              {item.phone !== undefined && item.phone !== null
+                ? item.phone || "-"
+                : "-"}
+            </td>
+          );
+        },
+        role: (item) => {
+          return (
+            <td>
+              {item.role !== undefined
+                ? item.role["name"] !== undefined && item.role["name"] !== null
+                  ? item.role["name"] || "-"
+                  : "-"
+                : "-"}
+            </td>
+          );
+        },
+      }}
+    />
   );
 };
 

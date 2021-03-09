@@ -561,7 +561,7 @@ const EditTimeCard = (props) => {
               <CRow>
                 <CCol sm="12" xs="12">
                   <TimeCardDetailDatatable
-                    timeCard_detail={props.time_card_row_data.timeDetail || []}
+                    timeCard_detail={props.time_card_row_data || []}
                   />
                 </CCol>
               </CRow>

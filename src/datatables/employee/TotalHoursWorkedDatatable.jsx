@@ -1,57 +1,26 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 const TotalHoursWorkedDatatable = (props) => {
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.total_working_hours.length,
-      },
-    ],
-    sizePerPage: 5,
-  };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.total_working_hours}
-        version="4"
-        hover={true}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="employeeName" dataSort={true}>
-          Employee
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="storeName" dataSort={true}>
-          Store
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="totalWorkingHour" dataSort={true}>
-          Total Hour
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.total_working_hours}
+      fields={[
+        { key: "employeeName", label: "Employee", filter: true },
+        { key: "storeName", label: "Store", filter: true },
+        { key: "totalWorkingHour", label: "Total Hour", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+    />
   );
 };
 

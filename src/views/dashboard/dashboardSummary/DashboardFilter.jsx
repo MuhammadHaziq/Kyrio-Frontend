@@ -122,7 +122,7 @@ const DashboardFilter = (props) => {
       const totalHours = 24;
       var i = 1;
       while (i <= totalHours) {
-        daysDates.push(moment(time).format("LT"));
+        daysDates.push(moment(time).format("MMM DD, YYYY, hh:mm A"));
         a.push(moment(time).format("LT"));
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
         i++;

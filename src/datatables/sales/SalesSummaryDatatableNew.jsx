@@ -1,37 +1,12 @@
 import React, { useState } from "react";
 import {
-  CDataTable,
-  CCardBody,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
+  CDataTable
 } from "@coreui/react";
-import {
-  toggle_sales_summary_single_select,
-  toggle_sales_summary_all_select,
-  update_row_data,
-} from "../../actions/dashboard/salesSummaryActions";
+
 import { useDispatch } from "react-redux";
-import dateFormat from "dateformat";
+
 const SalesSummaryDatatableNew = (props) => {
-  const dispatch = useDispatch();
 
-  const [selected, setSelected] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const check = (e, item) => {
-    dispatch(toggle_sales_summary_single_select(item));
-  };
-  // const clickRow = (item, index, column) => {
-  //   if (column !== "select") {
-  //     dispatch(update_row_data(item));
-  //   }
-  // };
-
-  const checkAll = (e, selectAll) => {
-    setSelectAll(!selectAll);
-    dispatch(toggle_sales_summary_all_select(!selectAll));
-  };
   return (
     <CDataTable
       items={props.sales_summary}

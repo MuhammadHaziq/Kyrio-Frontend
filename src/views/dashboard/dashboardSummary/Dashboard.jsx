@@ -1,24 +1,23 @@
 import React, { lazy, useState, useEffect } from "react";
 import {
-  CBadge,
   CButton,
   CButtonGroup,
   CCard,
   CCardBody,
   CCardFooter,
-  CCardHeader,
   CCol,
   CProgress,
   CRow,
-  CCallout,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import MainChartExample from "../charts/MainChartExample.js";
 import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
-import moment from "moment";
 import DashboardFilter from "./DashboardFilter";
 import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
+import socketIOClient from "socket.io-client";
+
+var socket = socketIOClient('http://localhost:3000/');
 
 const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
@@ -155,6 +154,7 @@ const Dashboard = (props) => {
   // End Reducer Functions
   // UseEffects Functions
   useEffect(() => {
+    socket.emit("connection");
     dispatch(get_sales_summary());
   }, []);
   

@@ -53,7 +53,7 @@ const SalesSummaryDatatableNew = (props) => {
       pagination
       scopedSlots={{
         Date: (item) => {
-          return <td>{dateFormat(item.created_at, "dd-mm-yyyy")}</td>;
+          return <td>{item.Date}</td>;
         },
         GrossSales: (item) => {
           return (

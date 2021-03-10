@@ -170,7 +170,7 @@ const SalesCategoryDatatable = (props) => {
           Gross Sales
         </TableHeaderColumn>
         <TableHeaderColumn
-          dataField="item_refund"
+          dataField="item_refunded"
           dataSort={true}
           hidden={
             props.columns.filter((item) => {

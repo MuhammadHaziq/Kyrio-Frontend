@@ -20,7 +20,7 @@ import {
 } from "../../../actions/reports/salesPaymentTypeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesPaymentTypeDatatable from "../../../datatables/reports/SalesPaymentTypeDatatable";
+import SalesPaymentTypeDatatableNew from "../../../datatables/reports/SalesPaymentTypeDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const SalesPaymentType = () => {
@@ -84,12 +84,21 @@ const SalesPaymentType = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                       className="c-icon c-icon-sm"
                       role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
@@ -121,7 +130,7 @@ const SalesPaymentType = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesPaymentTypeDatatable sales_by_paymentType_detail={[]} />
+              <SalesPaymentTypeDatatableNew sales_by_paymentType_detail={[]} />
             </CCardBody>
           </CCard>
         </CCol>

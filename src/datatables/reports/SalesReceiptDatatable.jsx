@@ -2,10 +2,10 @@ import React from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_shift_summary_single_select,
-  toggle_shift_summary_all_select,
+  toggle_receipt_summary_single_select,
+  toggle_receipt_summary_all_select,
   update_row_data,
-} from "../../actions/reports/salesShiftActions";
+} from "../../actions/reports/salesReceiptActions";
 import { useDispatch } from "react-redux";
 import dateFormat from "dateformat";
 
@@ -84,14 +84,14 @@ const SalesReceiptDatatable = (props) => {
   };
 
   const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_shift_summary_single_select(row));
+    dispatch(toggle_receipt_summary_single_select(row));
   };
 
   const onSelectAll = (isSelected, rows) => {
     if (isSelected) {
-      dispatch(toggle_shift_summary_all_select(true));
+      dispatch(toggle_receipt_summary_all_select(true));
     } else {
-      dispatch(toggle_shift_summary_all_select(false));
+      dispatch(toggle_receipt_summary_all_select(false));
     }
   };
 

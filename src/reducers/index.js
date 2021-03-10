@@ -8,6 +8,7 @@ import salesCategoryReducer from "./reports/salesCategoryReducer";
 import salesModifierReducer from "./reports/salesModifierReducer";
 import salesEmployeeReducer from "./reports/salesEmployeeReducer";
 import salesPaymentTypeReducer from "./reports/salesPaymentTypeReducer";
+import salesReceiptReducer from "./reports/salesReceiptReducer";
 import salesDiscountReducer from "./reports/salesDiscountReducer";
 import salesShiftReducer from "./reports/salesShiftReducer";
 import salesTaxesReducer from "./reports/salesTaxesReducer";
@@ -53,6 +54,7 @@ const reports = combineReducers({
   salesItemReducer,
   salesCategoryReducer,
   salesPaymentTypeReducer,
+  salesReceiptReducer,
   salesModifierReducer,
   salesDiscountReducer,
   salesShiftReducer,

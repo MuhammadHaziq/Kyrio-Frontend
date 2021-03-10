@@ -27,11 +27,17 @@ import {
 } from "../../../actions/reports/salesItemActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesItemDatatable from "../../../datatables/reports/SalesItemDatatable";
+import SalesItemDatatableNew from "../../../datatables/reports/SalesItemDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
-
+import $ from "jquery";
 const SalesItem = () => {
+  $(".dropdown-menu a").on("click", function (event) {
+    console.log("Event", event);
+    // event.stopPropagation();
+
+    // $(this).parent().toggleClass("open");
+  });
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
@@ -121,12 +127,21 @@ const SalesItem = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm"
+                      className="c-icon c-icon-sm "
                       role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
@@ -200,7 +215,7 @@ const SalesItem = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesItemDatatable item_sale_summary={[]} columns={columns} />
+              <SalesItemDatatableNew item_sale_summary={[]} columns={columns} />
             </CCardBody>
           </CCard>
         </CCol>

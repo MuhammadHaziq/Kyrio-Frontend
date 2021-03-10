@@ -15,12 +15,12 @@ import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_shift_summary,
-  delete_shift_summary,
-} from "../../../actions/reports/salesShiftActions";
+  get_receipt_summary,
+  delete_receipt_summary,
+} from "../../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
+import SalesReceiptDatatableNew from "../../../datatables/reports/SalesReceiptDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const SalesReceipts = () => {
@@ -29,7 +29,6 @@ const SalesReceipts = () => {
     (state) => state.dashBoard.filterComponentReducer
   );
   const user = useSelector((state) => state.auth.user);
-
 
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -86,12 +85,21 @@ const SalesReceipts = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                       className="c-icon c-icon-sm"
                       role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
@@ -101,7 +109,7 @@ const SalesReceipts = () => {
                     </svg>
                     Export
                   </CButton>
-                  {user._id === user.owner_id  ? (
+                  {user._id === user.owner_id ? (
                     <React.Fragment>
                       <ConformationAlert
                         button_text="Delete"
@@ -123,7 +131,7 @@ const SalesReceipts = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-         <SalesReceiptDatatable sale_receipt_sumary={[]} />
+              <SalesReceiptDatatableNew sale_receipt_sumary={[]} />
             </CCardBody>
           </CCard>
         </CCol>

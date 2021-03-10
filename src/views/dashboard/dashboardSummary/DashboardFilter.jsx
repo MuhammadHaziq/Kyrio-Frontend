@@ -365,7 +365,8 @@ const DashboardFilter = (props) => {
       storeId !== undefined &&
       storeId.length > 0 &&
       employeeId !== undefined &&
-      employeeId.length > 0
+      employeeId.length > 0 &&
+      props.resetFilter === false
     ) {
       const data = {
         startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
@@ -401,7 +402,8 @@ const DashboardFilter = (props) => {
       storeId !== undefined &&
       storeId.length > 0 &&
       employeeId !== undefined &&
-      employeeId.length > 0
+      employeeId.length > 0 &&
+      props.resetFilter === false
     ) {
       const data = {
         startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
@@ -424,6 +426,69 @@ const DashboardFilter = (props) => {
       dispatch(get_grap_sales_summary(data));
     }
   }, [Days]);
+
+  useEffect(() => {
+    if (
+      Days !== undefined &&
+      Days.length > 0 &&
+      storeId !== undefined &&
+      storeId.length > 0 &&
+      employeeId !== undefined &&
+      employeeId.length > 0 &&
+      props.resetFilter === true
+    ) {
+      const data = {
+        startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
+        endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
+        stores: storeId.map((item) => {
+          return item._id;
+        }),
+        employees: employeeId.map((item) => {
+          return item._id;
+        }),
+        divider: props.filter, //props.daysFilter,
+        graph: Days,
+        // need this formate with year to match with date filter exactly
+        matches: daysDates,
+      };
+      dispatch(get_grap_sales_summary(data));
+    }
+  }, [Days]);
+
+  useEffect(() => {
+    if (props.resetFilter !== undefined && props.resetFilter === true) {
+      setDateRange({
+        ...dateRange,
+        startDate: moment(),
+        endDate: moment(),
+      });
+      const employees = employee.employee_list.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: true,
+        };
+      });
+
+      setEmployeeId(employees);
+      const stores = store.stores_list.slice().map((item) => {
+        return {
+          ...item,
+          isSelected: true,
+        };
+      });
+      setStoreId(stores);
+      setFields({
+        checkAll: true,
+        checkAllEmployee: true,
+        time_filter: 0,
+      });
+      setToggleDropDown([false, false, false]);
+      setTimeRange({
+        startTime: "0",
+        endTime: "0",
+      });
+    }
+  }, [props.resetFilter]);
 
   useEffect(() => {
     if (store.stores_list !== undefined && store.stores_list.length > 0) {

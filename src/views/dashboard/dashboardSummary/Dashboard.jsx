@@ -15,9 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
 import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
-import socketIOClient from "socket.io-client";
-
-var socket = socketIOClient('http://localhost:3000/');
+import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
 
 const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
@@ -41,6 +39,7 @@ const Dashboard = (props) => {
     { days: 365, name: "Years", disable: true, active: false },
   ]);
   const [salesFilter, setSalesFilter] = useState("All Sales");
+  const [filterReset, setFilterReset] = useState(false);
   const [orginalSale, setOrginalSale] = useState([
     {
       data: [],
@@ -154,32 +153,38 @@ const Dashboard = (props) => {
   // End Reducer Functions
   // UseEffects Functions
   useEffect(() => {
-    socket.emit("connection");
     dispatch(get_sales_summary());
   }, []);
-  
+
   useEffect(() => {
-    if(typeof salesSummary.sales_graph_data !== "undefined"){
-      if(typeof salesSummary.sales_graph_data.graphRecord !== "undefined"){
-        const { GrossSales, Refunds, discounts, NetSales, CostOfGoods, GrossProfit } = salesSummary.sales_graph_data.graphRecord;
-        let filterSale = orginalSale.slice().map(sale => {
-          if(sale.label == "Gross sales"){
-            sale.data = GrossSales
-          } else if( sale.label == "Refunds" ){
-            sale.data = Refunds
-          } else if( sale.label == "Discounts" ){
-            sale.data = discounts
-          } else if( sale.label == "Net Sales" ){
-            sale.data = NetSales
-          } else if( sale.label == "Cost Of Goods" ){
-            sale.data = CostOfGoods
-          } else if( sale.label == "Gross profit" ){
-            sale.data = GrossProfit
+    if (typeof salesSummary.sales_graph_data !== "undefined") {
+      if (typeof salesSummary.sales_graph_data.graphRecord !== "undefined") {
+        const {
+          GrossSales,
+          Refunds,
+          discounts,
+          NetSales,
+          CostOfGoods,
+          GrossProfit,
+        } = salesSummary.sales_graph_data.graphRecord;
+        let filterSale = orginalSale.slice().map((sale) => {
+          if (sale.label == "Gross sales") {
+            sale.data = GrossSales;
+          } else if (sale.label == "Refunds") {
+            sale.data = Refunds;
+          } else if (sale.label == "Discounts") {
+            sale.data = discounts;
+          } else if (sale.label == "Net Sales") {
+            sale.data = NetSales;
+          } else if (sale.label == "Cost Of Goods") {
+            sale.data = CostOfGoods;
+          } else if (sale.label == "Gross profit") {
+            sale.data = GrossProfit;
           }
           return sale;
-        })
-        setOrginalSale(filterSale)
-        setSales(filterSale)
+        });
+        setOrginalSale(filterSale);
+        setSales(filterSale);
       }
     }
   }, [salesSummary.sales_graph_data]);
@@ -220,6 +225,7 @@ const Dashboard = (props) => {
         });
         setSales(sales);
       }
+      setFilterReset(false);
     }
   }, [prevSalesFilter, salesFilter]);
 
@@ -231,7 +237,9 @@ const Dashboard = (props) => {
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
-
+  const reset_Filter = () => {
+    setFilterReset(true);
+  };
   const grossSales =
     salesSummary.sales_graph_data !== undefined &&
     salesSummary.sales_graph_data !== null
@@ -323,12 +331,17 @@ const Dashboard = (props) => {
                 setDaysFilter={setDaysFilter}
                 filter={filter}
                 setFilter={setFilter}
+                resetFilter={filterReset}
               />
             </CCol>
           </CRow>
           <CRow>
             <CCol sm="12" className="d-none d-md-block float-right">
-              <CButton color="primary" className="float-right">
+              <CButton
+                color="primary"
+                className="float-right"
+                onClick={reset_Filter}
+              >
                 <CIcon name="cil-cloud-download" />
               </CButton>
               <CButtonGroup className="float-right mr-3">
@@ -399,14 +412,16 @@ const Dashboard = (props) => {
               <strong>
                 {" "}
                 {formatter.format(refunds)} (
-                {refunds === "0" || refunds === 0 ? "0%" : parseInt(((refunds/grossSales)*100))+"%"}
+                {refunds === "0" || refunds === 0
+                  ? "0%"
+                  : parseInt((refunds / grossSales) * 100) + "%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="info"
-                value={parseInt(((refunds/grossSales)*100))}
+                value={parseInt((refunds / grossSales) * 100)}
               />
             </CCol>
             <CCol
@@ -424,14 +439,16 @@ const Dashboard = (props) => {
               </div>
               <strong>
                 {formatter.format(discounts)} (
-                {discounts === "0" || discounts === 0 ? "0%" : parseInt(((discounts/grossSales)*100))+"%"}
+                {discounts === "0" || discounts === 0
+                  ? "0%"
+                  : parseInt((discounts / grossSales) * 100) + "%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="warning"
-                value={parseInt(((discounts/grossSales)*100))}
+                value={parseInt((discounts / grossSales) * 100)}
               />
             </CCol>
             <CCol
@@ -449,14 +466,16 @@ const Dashboard = (props) => {
               </div>
               <strong>
                 {formatter.format(netSales)} (
-                {netSales === "0" || netSales === 0 ? "0%" : parseInt(((netSales/grossSales)*100))+"%"}
+                {netSales === "0" || netSales === 0
+                  ? "0%"
+                  : parseInt((netSales / grossSales) * 100) + "%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="info"
-                value={parseInt(((netSales/grossSales)*100))}
+                value={parseInt((netSales / grossSales) * 100)}
               />
             </CCol>
             <CCol
@@ -474,14 +493,16 @@ const Dashboard = (props) => {
               </div>
               <strong>
                 {formatter.format(CostOfGoods)} (
-                {CostOfGoods === "0" || CostOfGoods === 0 ? "0%" : parseInt(((CostOfGoods/grossSales)*100))+"%"}
+                {CostOfGoods === "0" || CostOfGoods === 0
+                  ? "0%"
+                  : parseInt((CostOfGoods / grossSales) * 100) + "%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="danger"
-                value={parseInt(((CostOfGoods/grossSales)*100))}
+                value={parseInt((CostOfGoods / grossSales) * 100)}
               />
             </CCol>
             <CCol
@@ -500,18 +521,28 @@ const Dashboard = (props) => {
               <strong>
                 {" "}
                 {formatter.format(grossProfit)} (
-                  {grossProfit === "0" || grossProfit === 0 ? "0%" : parseInt(((grossProfit/grossSales)*100))+"%"}
+                {grossProfit === "0" || grossProfit === 0
+                  ? "0%"
+                  : parseInt((grossProfit / grossSales) * 100) + "%"}
                 )
               </strong>
               <CProgress
                 className="progress-xs mt-2"
                 precision={1}
                 color="primary"
-                value={parseInt(((grossProfit/grossSales)*100))}
+                value={parseInt((grossProfit / grossSales) * 100)}
               />
             </CCol>
           </CRow>
         </CCardFooter>
+      </CCard>
+      <CCard>
+        <CCardBody>
+          <SalesSummaryDatatableNew
+            {...props}
+            sales_summary={salesSummary.sales_graph_data.summary || []}
+          />
+        </CCardBody>
       </CCard>
     </>
   );

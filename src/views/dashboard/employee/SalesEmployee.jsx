@@ -20,7 +20,7 @@ import {
 } from "../../../actions/reports/salesEmployeeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
+import SalesEmployeeDatatableNew from "../../../datatables/reports/SalesEmployeeDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const SalesEmployee = () => {
@@ -84,12 +84,21 @@ const SalesEmployee = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                       className="c-icon c-icon-sm"
                       role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
@@ -121,7 +130,7 @@ const SalesEmployee = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesEmployeeDatatable sales_by_employee_detail={[]} />
+              <SalesEmployeeDatatableNew sales_by_employee_detail={[]} />
             </CCardBody>
           </CCard>
         </CCol>

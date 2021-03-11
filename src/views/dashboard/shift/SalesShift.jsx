@@ -20,7 +20,7 @@ import {
 } from "../../../actions/reports/salesShiftActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
+import SalesShiftDatatableNew from "../../../datatables/reports/SalesShiftDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const SalesShift = () => {
@@ -84,12 +84,21 @@ const SalesShift = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm"
+                      className="c-icon c-icon-sm "
                       role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
                     >
                       <polygon
                         fill="var(--ci-primary-color, currentColor)"
@@ -121,8 +130,7 @@ const SalesShift = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              shsgsghss
-        x <SalesShiftDatatable sale_shift_summary={[]} />
+              <SalesShiftDatatableNew sale_shift_summary={[]} />
             </CCardBody>
           </CCard>
         </CCol>

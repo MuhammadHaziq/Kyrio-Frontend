@@ -36,7 +36,6 @@ const reorder = (data, startIndex, endIndex, storeId) => {
 
   // result.map((item) => {
   //   if (item.storeId === storeId) {
-  //     console.log("splice", item.data.splice(startIndex, 1)[0]);
   //     return item.data.splice(startIndex, 1);
   //     // return removed.push(item.data.splice(startIndex, 1)[0]);
   //     // return removed;
@@ -252,7 +251,6 @@ class DiningOptions extends Component {
       .map((item) => {
         return item.data;
       })[0];
-    console.log(reorderCheck);
     reorderCheck.sort(this.compare);
 
     items = items.map((item) => {

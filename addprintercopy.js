@@ -91,7 +91,6 @@ const AddKitchenPrinter = (props) => {
         categories: JSON.stringify(categoryData),
         storeId: storeId,
       };
-      console.log(data);
       dispatch(add_new_kitchen_printer(data));
     }
   };

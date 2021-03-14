@@ -10,7 +10,7 @@ const composeEnhancers = composeWithDevTools({
   serialize: true
   // Specify name here, actionsBlacklist, actionsCreators and other options if needed
 });
-const middlewares = [thunk,logger]
+const middlewares = [thunk]
 const store = createStore(
   rootReducer,
   {},

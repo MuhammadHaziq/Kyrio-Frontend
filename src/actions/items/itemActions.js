@@ -431,7 +431,7 @@ export const delete_item_list = (id) => {
       axios({
         method: "post",
         url: `${BaseUrl}items/delete`,
-        data: { ids: id},
+        data: { ids: id },
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
@@ -485,6 +485,11 @@ export const delete_item_list = (id) => {
 
 export const save_csv = (data) => {
   return (dispatch) => {
+    dispatch({
+      type: ITEM_IMPORT_ERRORS,
+      response: [],
+      status:false
+    });
     try {
       axios({
         method: "POST",
@@ -515,9 +520,10 @@ export const save_csv = (data) => {
             type: ITEM_IMPORT_ERRORS,
             response:
               typeof error.response != "undefined" &&
-              typeof error.response.data != "undefined" 
+              typeof error.response.data != "undefined"
                 ? error.response.data
                 : [],
+                status:true
           });
           // let msg = {
           //   open: true,

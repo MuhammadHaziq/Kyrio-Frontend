@@ -70,24 +70,24 @@ const ImportItem = (props) => {
       });
       return false;
     } else {
-      addFile.forEach(function (x, index) {
-        // console.log(x);
-        if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
-          handle.push({ index });
-        }
-        if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
-          sku.push({ index });
-        }
-      });
-      if (handle.length > 0 || sku.length > 0) {
-        SetUploadFileError(true);
-        setUploadErrorFields({
-          ...uploadFieldsError,
-          sku: sku,
-          handle: handle,
-        });
-        return false;
-      }
+      // addFile.forEach(function (x, index) {
+      //   // console.log(x);
+      //   if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
+      //     handle.push({ index });
+      //   }
+      //   if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
+      //     sku.push({ index });
+      //   }
+      // });
+      // if (handle.length > 0 || sku.length > 0) {
+      //   SetUploadFileError(true);
+      //   setUploadErrorFields({
+      //     ...uploadFieldsError,
+      //     sku: sku,
+      //     handle: handle,
+      //   });
+      //   return false;
+      // }
       dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
     }
   };

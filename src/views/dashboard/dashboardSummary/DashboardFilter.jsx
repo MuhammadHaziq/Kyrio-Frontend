@@ -751,8 +751,8 @@ const DashboardFilter = (props) => {
 
   return (
     <>
-      <CRow className="mb-1">
-        <CCol sm="12" md="2" lg="2">
+      <CRow className="mb-4">
+        <CCol sm="12" md="3" lg="3">
           <DatetimeRangePicker
             startDate={dateRange.startDate}
             endDate={dateRange.endDate}
@@ -768,7 +768,7 @@ const DashboardFilter = (props) => {
             </CButton>
           </DatetimeRangePicker>
         </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
+        <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
               <MdAvTimer />{" "}
@@ -843,7 +843,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
+        <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
               <MdStoreMallDirectory />
@@ -895,7 +895,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
+        <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default btn-block">
               <MdPerson />{" "}

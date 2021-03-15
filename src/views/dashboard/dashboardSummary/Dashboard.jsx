@@ -341,6 +341,17 @@ const Dashboard = (props) => {
   });
   return (
     <>
+     <CRow>
+        <CCol sm="12">
+          <DashboardFilter
+            daysFilter={daysFilter}
+            setDaysFilter={setDaysFilter}
+            filter={filter}
+            setFilter={setFilter}
+            resetFilter={filterReset}
+          />
+        </CCol>
+      </CRow>
       <DashboardCard
         grossSales={grossSales}
         refunds={refunds}
@@ -352,17 +363,6 @@ const Dashboard = (props) => {
       />
       <CCard>
         <CCardBody>
-          <CRow>
-            <CCol sm="12">
-              <DashboardFilter
-                daysFilter={daysFilter}
-                setDaysFilter={setDaysFilter}
-                filter={filter}
-                setFilter={setFilter}
-                resetFilter={filterReset}
-              />
-            </CCol>
-          </CRow>
           <CRow>
             <CCol sm="12" className="d-none d-md-block float-right">
               <CButton

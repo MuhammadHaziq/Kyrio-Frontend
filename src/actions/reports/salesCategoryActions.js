@@ -9,17 +9,19 @@ import {
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
-export const get_sales_category_summary = () => {
+export const get_sales_category_summary = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "GET",
-        url: `${BaseUrl}sales/all`,
+        method: "POST",
+        url: `${BaseUrl}reports/sale/category`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
+        data: data,
       })
         .then((response) => {
+          console.log(response.data)
           dispatch({
             type: GET_CATEGORY_SALES_SUMMARY,
             response: response.data,

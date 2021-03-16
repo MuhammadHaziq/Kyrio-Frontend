@@ -22,20 +22,17 @@ import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_summary,
+  get_sales_category_summary,
   delete_sales_summary,
-} from "../../../actions/dashboard/salesSummaryActions";
+} from "../../../actions/reports/salesCategoryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import SalesCategoryDatatableNew from "../../../datatables/reports/SalesCategoryDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
-
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 const Categories = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
 
   const [columns, setColumns] = useState([
     { name: "item_sold", title: "Item Sold", isHidden: false },
@@ -50,16 +47,17 @@ const Categories = () => {
     { name: "margin", title: "Margin", isHidden: false },
     { name: "taxes", title: "Taxes", isHidden: true },
   ]);
+  const [daysFilter, setDaysFilter] = useState([
+    { days: 0, name: "Hours", disable: false, active: true },
+    { days: 1, name: "Days", disable: true, active: false },
+    { days: 6, name: "Weeks", disable: true, active: false },
+    { days: 28, name: "Months", disable: true, active: false },
+    { days: 120, name: "Quaters", disable: true, active: false },
+    { days: 365, name: "Years", disable: true, active: false },
+  ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [daysFilter, setDaysFilter] = useState([
-    { days: 0, name: "Hours", disable: true },
-    { days: 1, name: "Days", disable: true },
-    { days: 6, name: "Weeks", disable: true },
-    { days: 28, name: "Months", disable: true },
-    { days: 120, name: "Quaters", disable: true },
-    { days: 365, name: "Years", disable: true },
-  ]);
+  const [filterReset, setFilterReset] = useState(false);
   const usePrevious = (data) => {
     const ref = React.useRef();
     useEffect(() => {
@@ -70,8 +68,6 @@ const Categories = () => {
   // Sales by Day full month
   const [sales, setSales] = useState([]);
   const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
 
   const getNatural = (num) => {
     return parseFloat(num.toString().split(".")[0]);
@@ -83,13 +79,6 @@ const Categories = () => {
       dispatch(unmount_filter());
     };
   }, []);
-
-  useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
-    }
-  }, [filterComponent, changeInFilter]);
 
   const deleteSalesCategory = () => {
     console.log("Delete");
@@ -112,7 +101,12 @@ const Categories = () => {
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_sales_category_summary}
+      />
       <CRow>
         <CCol>
           <CCard>
@@ -220,3 +214,4 @@ const Categories = () => {
 };
 
 export default Categories;
+// <FilterComponent handleOnChangeSales={() => console.log("No Function")} />

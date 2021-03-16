@@ -17,8 +17,6 @@ import {
   CFormGroup,
   CLabel,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
@@ -26,14 +24,13 @@ import {
   delete_sales_summary,
 } from "../../../actions/reports/salesCategoryActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import SalesCategoryDatatableNew from "../../../datatables/reports/SalesCategoryDatatableNew";
+import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
-import { getStyle, hexToRgba } from "@coreui/utils/src";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 const Categories = () => {
   const dispatch = useDispatch();
 
+  const category_sales_summary = useSelector((state) => state.reports.salesCategoryReducer.category_sales_summary)
   const [columns, setColumns] = useState([
     { name: "item_sold", title: "Item Sold", isHidden: false },
     { name: "gross_sales", title: "Gross Sales", isHidden: false },
@@ -201,8 +198,8 @@ const Categories = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesCategoryDatatableNew
-                category_sales_summary={[]}
+              <SalesCategoryDatatable
+                category_sales_summary={category_sales_summary}
                 columns={columns}
               />
             </CCardBody>

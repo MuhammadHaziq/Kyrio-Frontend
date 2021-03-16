@@ -53,6 +53,7 @@ const reports = combineReducers({
   salesSummaryReducer,
   salesItemReducer,
   salesCategoryReducer,
+  salesEmployeeReducer,
   salesPaymentTypeReducer,
   salesReceiptReducer,
   salesModifierReducer,

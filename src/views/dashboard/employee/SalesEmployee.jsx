@@ -10,25 +10,21 @@ import {
   CProgress,
   CRow,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
   get_sales_employee_summary,
   delete_employee_sales_summary,
 } from "../../../actions/reports/salesEmployeeActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import SalesEmployeeDatatableNew from "../../../datatables/reports/SalesEmployeeDatatableNew";
+import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 
 const SalesEmployee = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
+  const employee_sales_summary = useSelector((state) => state.reports.salesReceiptReducer.employee_sales_summary)
 
+  const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
@@ -39,22 +35,8 @@ const SalesEmployee = () => {
     { days: 120, name: "Quaters", disable: true },
     { days: 365, name: "Years", disable: true },
   ]);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
 
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
+  // Sales by Day full month
 
   useEffect(() => {
     return () => {
@@ -63,12 +45,6 @@ const SalesEmployee = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
-    }
-  }, [filterComponent, changeInFilter]);
 
   const deleteSalesEmployee = () => {
     console.log("Delete");
@@ -77,7 +53,12 @@ const SalesEmployee = () => {
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_sales_employee_summary}
+      />
       <CRow>
         <CCol>
           <CCard>
@@ -130,7 +111,7 @@ const SalesEmployee = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesEmployeeDatatableNew sales_by_employee_detail={[]} />
+              <SalesEmployeeDatatable sales_by_employee_detail={employee_sales_summary} />
             </CCardBody>
           </CCard>
         </CCol>

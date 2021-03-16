@@ -10,26 +10,22 @@ import {
   CProgress,
   CRow,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
   get_receipt_summary,
   delete_receipt_summary,
 } from "../../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesReceiptDatatableNew from "../../../datatables/reports/SalesReceiptDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 
 const SalesReceipts = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
-  const user = useSelector((state) => state.auth.user);
+  const sale_receipt_summary = useSelector((state) => state.reports.salesEmployeeReducer.sale_receipt_summary)
 
+  const user = useSelector((state) => state.auth.user);
+  const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
@@ -40,22 +36,9 @@ const SalesReceipts = () => {
     { days: 120, name: "Quaters", disable: true },
     { days: 365, name: "Years", disable: true },
   ]);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
 
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
+  // Sales by Day full month
+
 
   useEffect(() => {
     return () => {
@@ -64,12 +47,6 @@ const SalesReceipts = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
-    }
-  }, [filterComponent, changeInFilter]);
 
   const deleteSalesReceipt = () => {
     console.log("Delete");
@@ -78,7 +55,30 @@ const SalesReceipts = () => {
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_receipt_summary}
+      />
+      <CCard>
+        <CCardBody>
+          <CRow>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>All Receipts</h6>
+              <h2>{sale_receipt_summary !== undefined && sale_receipt_summary !== null ? sale_receipt_summary.totalReceipts !== undefined && sale_receipt_summary.totalReceipts !== null ? sale_receipt_summary.totalReceipts : 0 : 0}</h2>
+            </CCol>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>Sales</h6>
+              <h2>{sale_receipt_summary !== undefined && sale_receipt_summary !== null ? sale_receipt_summary.totalSales !== undefined && sale_receipt_summary.totalSales !== null ? sale_receipt_summary.totalSales : 0 : 0}</h2>
+            </CCol>
+            <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
+              <h6>Refunds</h6>
+              <h2>{sale_receipt_summary !== undefined && sale_receipt_summary !== null ? sale_receipt_summary.totalRefunds !== undefined && sale_receipt_summary.totalRefunds !== null ? sale_receipt_summary.totalRefunds : 0 : 0}</h2>
+            </CCol>
+          </CRow>
+        </CCardBody>
+      </CCard>
       <CRow>
         <CCol>
           <CCard>
@@ -131,7 +131,7 @@ const SalesReceipts = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesReceiptDatatableNew sale_receipt_sumary={[]} />
+              <SalesReceiptDatatableNew sale_receipt_sumary={sale_receipt_summary !== undefined && sale_receipt_summary !== null ? (sale_receipt_summary.receipts || []) : []} />
             </CCardBody>
           </CCard>
         </CCol>

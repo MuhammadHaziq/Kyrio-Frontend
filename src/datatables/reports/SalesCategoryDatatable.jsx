@@ -1,275 +1,221 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+  CCardBody,
+  CInputCheckbox,
+  CFormGroup,
+  CLabel,
+} from "@coreui/react";
 import {
   toggle_sales_category_summary_single_select,
   toggle_sales_category_summary_all_select,
   update_row_data,
 } from "../../actions/reports/salesCategoryActions";
 import { useDispatch } from "react-redux";
-import dateFormat from "dateformat";
 
 const SalesCategoryDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const showDate = (cell, row) => {
-    return dateFormat(row.created_at, "dd-mm-yyyy");
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const check = (e, item) => {
+    dispatch(toggle_sales_category_summary_single_select(item));
   };
 
-  const showGrossSale = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showMargin = (cell, row) => {
-    if (+row.cash_received === +row.total_price) {
-      return "0 %";
-    } else {
-      const margin = (+row.cash_received / +row.total_price) * 100;
-      return margin.toFixed(2) + " %";
-    }
-  };
-  const showRefund = (cell, row) => {
-    return row.refund_amount !== null
-      ? row.refund_amount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showDiscount = (cell, row) => {
-    return row.total_discount !== null
-      ? row.total_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const showCostGood = (cell, row) => {
-    return row.total_price !== null
-      ? row.total_price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const showNetSale = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showProfit = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const ShowTax = (cell, row) => {
-    return row.total_tax !== null
-      ? row.total_tax.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_sales_category_summary_single_select(row));
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_sales_category_summary_all_select(true));
-    } else {
-      dispatch(toggle_sales_category_summary_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.category_sales_summary.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      console.log(row);
-      // dispatch(update_row_data(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_sales_category_summary_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.category_sales_summary}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="category" dataSort={true}>
-          Category
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="item_sold"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "item_sold".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Items Sold
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="gross_sales"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "gross_sales".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Gross Sales
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="item_refunded"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "item_refund".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Items refunded
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="refunds"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "refunds".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Refunds
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="total_price"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "total_price".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Cost of goods
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="discount"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "discount".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Discounts
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="net_sales"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "net_sales".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Net sales
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="cost_of_good"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "cost_of_good".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Cost of goods
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="gross_profit"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "gross_profit".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Gross profit
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="margin"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "margin".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Margin
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="taxes"
-          dataSort={true}
-          hidden={
-            props.columns.filter((item) => {
-              return item.name.trim() === "taxes".trim();
-            })[0]["isHidden"]
-          }
-        >
-          Taxes
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.category_sales_summary}
+      fields={[
+        {
+          key: "select",
+          label: "Select",
+          filter: false,
+          _style: { width: "5%" },
+        },
+        { key: "category", label: "Category", filter: true },
+        { key: "ItemsSold", label: "Items sold", filter: true },
+        { key: "GrossSales", label: "Gross sales", filter: true },
+        { key: "ItemsRefunded", label: "Items refunded", filter: true },
+        { key: "Refunds", label: "Refunds", filter: true },
+        { key: "discounts", label: "Discount", filter: true },
+        { key: "NetSales", label: "Net sales", filter: true },
+        { key: "CostOfGoods", label: "Cost of goods", filter: true },
+        { key: "GrossProfit", label: "Gross profit", filter: true },
+        { key: "margin", label: "Margin", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      // clickableRows
+      // onRowClick={clickRow}
+      columnHeaderSlot={{
+        select: [
+          <CFormGroup variant="custom-checkbox">
+            <CInputCheckbox
+              custom
+              id={`checkbox`}
+              onClick={(e) => checkAll(e, selectAll)}
+            />
+            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+          </CFormGroup>,
+        ],
+      }}
+      scopedSlots={{
+        select: (item) => {
+          return (
+            <td>
+              <CFormGroup variant="custom-checkbox">
+                <CInputCheckbox
+                  custom
+                  id={`checkbox${item._id}`}
+                  checked={item.isDeleted}
+                  onChange={(e) => check(e, item)}
+                  disabled={
+                    item.role !== undefined && item.role !== null
+                      ? item.role["name"] !== undefined &&
+                        item.role["name"] !== null
+                        ? item.role["name"].toUpperCase() == "OWNER"
+                        : ""
+                      : ""
+                  }
+                />
+                <CLabel
+                  variant="custom-checkbox"
+                  htmlFor={`checkbox${item._id}`}
+                />
+              </CFormGroup>
+            </td>
+          );
+        },
+        ItemsSold: (item) => {
+          return (
+            <td>
+              {typeof item.ItemsSold !== "undefined" &&
+                item.ItemsSold !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.ItemsSold))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        ItemsRefunded: (item) => {
+          return (
+            <td>
+              {typeof item.ItemsRefunded !== "undefined" &&
+                item.ItemsRefunded !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.ItemsRefunded))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        GrossSales: (item) => {
+          return (
+            <td>
+              {typeof item.GrossSales !== "undefined" &&
+                item.GrossSales !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.GrossSales))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        NetSales: (item) => {
+          return (
+            <td>
+              {typeof item.NetSales !== "undefined" &&
+                item.NetSales !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.NetSales))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        CostOfGoods: (item) => {
+          return (
+            <td>
+              {typeof item.CostOfGoods !== "undefined" &&
+                item.CostOfGoods !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.CostOfGoods))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        GrossProfit: (item) => {
+          return (
+            <td>
+              {typeof item.GrossProfit !== "undefined" &&
+                item.GrossProfit !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.GrossProfit))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        Margin: (item) => {
+          return (
+            <td>
+              {item.Margin !== "undefined" &&
+                item.Margin !== null
+                ? item.Margin.toFixed(2) + " %"
+                : "$ 0.00"}
+            </td>
+          )
+        },
+        Refunds: (item) => {
+          return (
+            <td>
+              {typeof item.Refunds !== "undefined" &&
+                item.Refunds !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.Refunds))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+        discounts: (item) => {
+          return (
+            <td>
+              {typeof item.discounts !== "undefined" &&
+                item.discounts !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.discounts))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        },
+      }}
+    />
   );
 };
 

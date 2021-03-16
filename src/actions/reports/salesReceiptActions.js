@@ -10,15 +10,16 @@ import {
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 
-export const get_receipt_summary = () => {
+export const get_receipt_summary = (data) => {
   return (dispatch) => {
     try {
       axios({
-        method: "GET",
-        url: `${BaseUrl}sales/all`,
+        method: "POST",
+        url: `${BaseUrl}reports/sale/receipts`,
         headers: {
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
+        data: data
       })
         .then((response) => {
           dispatch({

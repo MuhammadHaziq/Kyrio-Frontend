@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import {
   CDataTable,
-  CCardBody,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
 } from "@coreui/react";
 import {
   toggle_receipt_summary_single_select,
@@ -38,20 +34,20 @@ const SalesReceiptDatatableNew = (props) => {
     <CDataTable
       items={props.sale_receipt_sumary}
       fields={[
-        { key: "receipt_no", label: "Receipt no", filter: true },
+        { key: "receipt_number", label: "Receipt no", filter: true },
         {
-          key: "date",
+          key: "created_at",
           label: "Date",
           filter: true,
         },
         { key: "store", label: "Store", filter: true },
         {
-          key: "employee",
+          key: "user",
           label: "Employee",
           filter: true,
         },
         { key: "customer", label: "Customer", filter: true },
-        { key: "type", label: "Type", filter: true },
+        { key: "receipt_type", label: "Type", filter: true },
         { key: "total", label: "Total", filter: true },
       ]}
       itemsPerPage={10}
@@ -61,6 +57,41 @@ const SalesReceiptDatatableNew = (props) => {
       pagination
       // clickableRows
       // onRowClick={clickRow}
+      scopedSlots={{
+        created_at: (item) => {
+          return (
+            <td>
+              {typeof item.created_at !== "undefined" &&
+                item.created_at !== null ? dateFormat(item.created_at, 'yyyy-mm-dd')// '$100.00'
+                : '-'}
+            </td>
+          );
+        },
+        store: (item) => {
+          return (
+            <td>
+              {typeof item.store !== "undefined" &&
+                item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name : '' : ''}
+            </td>
+          );
+        },
+        customer: (item) => {
+          return (
+            <td>
+              {typeof item.customer !== "undefined" &&
+                item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '' : ''}
+            </td>
+          );
+        },
+        user: (item) => {
+          return (
+            <td>
+              {typeof item.user !== "undefined" &&
+                item.user !== null ? item.user.name !== undefined && item.user.name !== null ? item.user.name : '' : ''}
+            </td>
+          );
+        },
+      }}
     />
   );
 };

@@ -16,7 +16,7 @@ import {
   delete_receipt_summary,
 } from "../../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
-import SalesReceiptDatatableNew from "../../../datatables/reports/SalesReceiptDatatableNew";
+import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 
@@ -131,7 +131,7 @@ const SalesReceipts = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesReceiptDatatableNew sale_receipt_sumary={sale_receipt_summary !== undefined && sale_receipt_summary !== null ? (sale_receipt_summary.receipts || []) : []} />
+              <SalesReceiptDatatable sale_receipt_sumary={sale_receipt_summary !== undefined && sale_receipt_summary !== null ? (sale_receipt_summary.receipts || []) : []} />
             </CCardBody>
           </CCard>
         </CCol>

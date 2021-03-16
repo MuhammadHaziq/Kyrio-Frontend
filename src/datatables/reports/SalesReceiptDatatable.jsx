@@ -1,6 +1,7 @@
-import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
+import React, { useState } from "react";
+import {
+  CDataTable,
+} from "@coreui/react";
 import {
   toggle_receipt_summary_single_select,
   toggle_receipt_summary_all_select,
@@ -12,161 +13,86 @@ import dateFormat from "dateformat";
 const SalesReceiptDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const showDate = (cell, row) => {
-    return dateFormat(row.created_at, "dd-mm-yyyy");
+  const [selected, setSelected] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const check = (e, item) => {
+    dispatch(toggle_receipt_summary_single_select(item));
   };
 
-  const showGrossSale = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showMargin = (cell, row) => {
-    if (+row.cash_received === +row.total_price) {
-      return "0 %";
-    } else {
-      const margin = (+row.cash_received / +row.total_price) * 100;
-      return margin.toFixed(2) + " %";
-    }
-  };
-  const showRefund = (cell, row) => {
-    return row.refund_amount !== null
-      ? row.refund_amount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showDiscount = (cell, row) => {
-    return row.total_discount !== null
-      ? row.total_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const showCostGood = (cell, row) => {
-    return row.total_price !== null
-      ? row.total_price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const showNetSale = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const showProfit = (cell, row) => {
-    return row.total_after_discount !== null
-      ? row.total_after_discount.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-  const ShowTax = (cell, row) => {
-    return row.total_tax !== null
-      ? row.total_tax.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        })
-      : "$ 0.00";
-  };
-
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_receipt_summary_single_select(row));
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_receipt_summary_all_select(true));
-    } else {
-      dispatch(toggle_receipt_summary_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
-  };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.sale_receipt_sumary.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      console.log(row);
-      // dispatch(update_row_data(row));
-    },
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_receipt_summary_all_select(!selectAll));
   };
   return (
-    <React.Fragment>
-      <BootstrapTable
-        data={props.sale_receipt_sumary}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="receipt_no" dataSort={true}>
-          Receipt no.
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="date" dataSort={true}>
-          Date
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="store" dataSort={true}>
-          Store
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="employee" dataSort={true}>
-          Employee
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="customer" dataSort={true}>
-          Customer
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="type" dataSort={true}>
-          Type
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="total" dataSort={true}>
-          Total
-        </TableHeaderColumn>
-      </BootstrapTable>
-    </React.Fragment>
+    <CDataTable
+      items={props.sale_receipt_sumary}
+      fields={[
+        { key: "receipt_number", label: "Receipt no", filter: true },
+        {
+          key: "created_at",
+          label: "Date",
+          filter: true,
+        },
+        { key: "store", label: "Store", filter: true },
+        {
+          key: "user",
+          label: "Employee",
+          filter: true,
+        },
+        { key: "customer", label: "Customer", filter: true },
+        { key: "receipt_type", label: "Type", filter: true },
+        { key: "total", label: "Total", filter: true },
+      ]}
+      itemsPerPage={10}
+      columnFilter
+      sorter
+      hover
+      pagination
+      // clickableRows
+      // onRowClick={clickRow}
+      scopedSlots={{
+        created_at: (item) => {
+          return (
+            <td>
+              {typeof item.created_at !== "undefined" &&
+                item.created_at !== null ? dateFormat(item.created_at, 'yyyy-mm-dd')// '$100.00'
+                : '-'}
+            </td>
+          );
+        },
+        store: (item) => {
+          return (
+            <td>
+              {typeof item.store !== "undefined" &&
+                item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name : '' : ''}
+            </td>
+          );
+        },
+        customer: (item) => {
+          return (
+            <td>
+              {typeof item.customer !== "undefined" &&
+                item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '' : ''}
+            </td>
+          );
+        },
+        user: (item) => {
+          return (
+            <td>
+              {typeof item.user !== "undefined" &&
+                item.user !== null ? item.user.name !== undefined && item.user.name !== null ? item.user.name : '' : ''}
+            </td>
+          );
+        },
+      }}
+    />
   );
 };
 

@@ -65,9 +65,11 @@ const DashboardFilter = (props) => {
     startTime: "0",
     endTime: "0",
   });
+  const [startDate, setStartDate] = useState(localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment())
+  const [endDate, setEndDate] = useState(localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment())
   const [dateRange, setDateRange] = useState({
-    startDate: moment(),
-    endDate: moment(),
+    startDate: startDate,
+    endDate: endDate,
     ranges: {
       Today: [moment(), moment()],
       Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
@@ -637,6 +639,8 @@ const DashboardFilter = (props) => {
   }
 
   const handleEvent = (event, picker) => {
+    localStorage.setItem("startDate",picker.startDate)
+    localStorage.setItem("endDate",picker.endDate)
     setDateRange({
       ...dateRange,
       startDate: picker.startDate,
@@ -731,6 +735,8 @@ const DashboardFilter = (props) => {
       startTime: "0",
       endTime: "0",
     });
+    localStorage.setItem("startDate",moment())
+    localStorage.setItem("endDate",moment())
     setDateRange({
       startDate: moment(),
       endDate: moment(),
@@ -746,7 +752,7 @@ const DashboardFilter = (props) => {
         ],
       },
     });
-    props.handleOnChangeSales();
+    props.handleOnChangeSales("All Sales");
   };
 
   return (
@@ -895,7 +901,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="3" lg="3" xs="12">
+        <CCol sm="12" md="2" lg="2" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default btn-block">
               <MdPerson />{" "}
@@ -949,6 +955,14 @@ const DashboardFilter = (props) => {
               ))}
             </CDropdownMenu>
           </CDropdown>
+        </CCol>
+        <CCol sm="12" md="1" lg="1" xs="12">
+          <CButton
+            className="btn btn-outline-primary btn-block"
+            onClick={resetFilters}
+          >
+            Reset
+          </CButton>
         </CCol>
       </CRow>
     </>

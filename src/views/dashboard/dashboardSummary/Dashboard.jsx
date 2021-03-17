@@ -349,6 +349,7 @@ const Dashboard = (props) => {
             filter={filter}
             setFilter={setFilter}
             resetFilter={filterReset}
+            handleOnChangeSales={handleOnChangeSales}
           />
         </CCol>
       </CRow>

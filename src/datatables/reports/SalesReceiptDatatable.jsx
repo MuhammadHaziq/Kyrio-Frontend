@@ -48,7 +48,7 @@ const SalesReceiptDatatable = (props) => {
         },
         { key: "customer", label: "Customer", filter: true },
         { key: "receipt_type", label: "Type", filter: true },
-        { key: "total", label: "Total", filter: true },
+        { key: "total_price", label: "Total", filter: true },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -91,6 +91,19 @@ const SalesReceiptDatatable = (props) => {
             </td>
           );
         },
+        total_price: (item) => {
+          return (
+            <td>
+              {typeof item.total_price !== "undefined" &&
+                item.total_price !== null ? new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(Number(item.total_price))// '$100.00'
+                : new Intl.NumberFormat('en-US',
+                  { style: 'currency', currency: 'USD' }
+                ).format(0)}
+            </td>
+          );
+        }
       }}
     />
   );

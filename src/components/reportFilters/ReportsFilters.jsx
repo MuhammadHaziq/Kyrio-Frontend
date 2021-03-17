@@ -65,9 +65,10 @@ const ReportsFilters = (props) => {
     startTime: "0",
     endTime: "0",
   });
+
   const [dateRange, setDateRange] = useState({
-    startDate: moment(),
-    endDate: moment(),
+    startDate: localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment(),
+    endDate: localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment(),
     ranges: {
       Today: [moment(), moment()],
       Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
@@ -653,6 +654,8 @@ const ReportsFilters = (props) => {
   }
 
   const handleEvent = (event, picker) => {
+    localStorage.setItem("startDate",picker.startDate)
+    localStorage.setItem("endDate",picker.endDate)
     setDateRange({
       ...dateRange,
       startDate: picker.startDate,

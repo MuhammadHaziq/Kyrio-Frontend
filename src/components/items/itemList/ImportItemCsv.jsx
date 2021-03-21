@@ -12,11 +12,13 @@ import { CIcon } from "@coreui/icons-react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
-import CSVReader from "react-csv-reader";
+import { CSVReader } from "react-papaparse";
 import { save_csv, get_items_list } from "../../../actions/items/itemActions";
 import ShowUploadFileErrors from "./ShowUploadFileErrors";
 const ImportItem = (props) => {
-  const [addFile, setAddFile] = useState();
+  const buttonRef = React.createRef();
+
+  const [addFile, setAddFile] = useState(null);
   const [uploadFileError, SetUploadFileError] = useState(false);
   const [uploadFieldsError, setUploadErrorFields] = useState({
     sku: [],
@@ -54,42 +56,22 @@ const ImportItem = (props) => {
       ...errors,
       uploadFileError: false,
     });
-    console.log(fileInfo);
     setAddFile(data);
   };
   const save_csv_db = (e) => {
     var handle = [];
     var sku = [];
-    if (
-      typeof addFile === "null" ||
-      typeof addFile === "undefined" ||
-      addFile.length === 0
-    ) {
+    if (typeof addFile === "null" || typeof addFile === "undefined") {
       setErrors({
         ...errors,
         uploadFileError: true,
       });
       return false;
     } else {
-      // addFile.forEach(function (x, index) {
-      //   // console.log(x);
-      //   if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
-      //     handle.push({ index });
-      //   }
-      //   if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
-      //     sku.push({ index });
-      //   }
-      // });
-      // if (handle.length > 0 || sku.length > 0) {
-      //   SetUploadFileError(true);
-      //   setUploadErrorFields({
-      //     ...uploadFieldsError,
-      //     sku: sku,
-      //     handle: handle,
-      //   });
-      //   return false;
-      // }
-      dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
+      var fd = new FormData();
+      fd.append("csvFile", addFile);
+      // dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
+      dispatch(save_csv(fd));
     }
   };
   const papaparseOptions = {
@@ -104,6 +86,41 @@ const ImportItem = (props) => {
   const uploadFileScreen = () => {
     SetUploadFileError(false);
   };
+  const handleOpenDialog = (e) => {
+    // Note that the ref is set async, so it might be null at some point
+    if (buttonRef.current) {
+      buttonRef.current.open(e);
+    }
+  };
+
+  const handleOnDrop = (data, file) => {
+    console.log("---------------------------");
+    console.log(data);
+    setErrors({
+      ...errors,
+      uploadFileError: false,
+    });
+    setAddFile(file);
+    console.log(file);
+    console.log("---------------------------");
+  };
+  const handleOnError = (err, file, inputElem, reason) => {
+    console.log(err);
+  };
+
+  const handleOnRemoveFile = (data) => {
+    console.log("---------------------------");
+    console.log(data);
+    console.log("---------------------------");
+  };
+
+  const handleRemoveFile = (e) => {
+    // Note that the ref is set async, so it might be null at some point
+    if (buttonRef.current) {
+      buttonRef.current.removeFile(e);
+    }
+  };
+
   if (uploadFileError) {
     return (
       <React.Fragment>
@@ -125,27 +142,15 @@ const ImportItem = (props) => {
               <CCardBody>
                 <CRow>
                   <CCol sm="12" md="12" lg="12">
-                    <div
-                      style={{
-                        textAlign: "center",
-                        padding: "70px",
-                        border: "3px dashed #eeeeee",
-                        backgroundColor: "#f2f2f2",
-                        color: "rgba(0,0,0,0.87)",
-                      }}
+                    <CSVReader
+                      onDrop={handleOnDrop}
+                      onError={handleOnError}
+                      addRemoveButton
+                      removeButtonColor="#659cef"
+                      onRemoveFile={handleOnRemoveFile}
                     >
-                      <CSVReader
-                        parserOptions={papaparseOptions}
-                        onFileLoaded={(data, fileInfo) =>
-                          get_upload_file(data, fileInfo)
-                        }
-                      />
-                      <CInvalidFeedback>
-                        {errors.uploadFileError === true
-                          ? "Please Select File"
-                          : ""}
-                      </CInvalidFeedback>
-                    </div>
+                      <span>Drop CSV file here or click to upload.</span>
+                    </CSVReader>
                   </CCol>
                 </CRow>
               </CCardBody>
@@ -184,3 +189,24 @@ const ImportItem = (props) => {
   }
 };
 export default ImportItem;
+// <div
+//   style={{
+//     textAlign: "center",
+//     padding: "70px",
+//     border: "3px dashed #eeeeee",
+//     backgroundColor: "#f2f2f2",
+//     color: "rgba(0,0,0,0.87)",
+//   }}
+// >
+//   <CSVReader
+//     parserOptions={papaparseOptions}
+//     onFileLoaded={(data, fileInfo) =>
+//       get_upload_file(data, fileInfo)
+//     }
+//   />
+//   <CInvalidFeedback>
+//     {errors.uploadFileError === true
+//       ? "Please Select File"
+//       : ""}
+//   </CInvalidFeedback>
+// </div>

@@ -32,6 +32,7 @@ import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddItem from "../../components/items/itemList/AddItem";
 import ImportItem from "../../components/items/itemList/ImportItem";
+import ImportItemCsv from "../../components/items/itemList/ImportItemCsv";
 import UpdateItem from "../../components/items/itemList/UpdateItem";
 import { get_modifires_list } from "../../actions/items/modifiresActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -533,7 +534,7 @@ const ItemsList = () => {
         )}
         {importItem ? (
           <CFade timeout={timeout} in={importItem}>
-            <ImportItem goBack={goBack} getItemsOnImport={getItemsOnImport} />
+            <ImportItemCsv goBack={goBack} getItemsOnImport={getItemsOnImport} />
           </CFade>
         ) : (
           ""

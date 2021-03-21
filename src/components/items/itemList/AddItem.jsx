@@ -170,6 +170,7 @@ const AddItem = (props) => {
               return {
                 ...ite,
                 price: ReturnNumber(ite.price),
+                cost: ReturnNumber(ite.cost),
               };
             }),
           };

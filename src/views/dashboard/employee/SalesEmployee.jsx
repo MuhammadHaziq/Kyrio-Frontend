@@ -22,7 +22,7 @@ import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 
 const SalesEmployee = () => {
   const dispatch = useDispatch();
-  const employee_sales_summary = useSelector((state) => state.reports.salesReceiptReducer.employee_sales_summary)
+  const employee_sales_summary = useSelector((state) => state.reports.salesEmployeeReducer.employee_sales_summary)
 
   const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,7 @@ const SalesEmployee = () => {
   // Sales by Day full month
 
   useEffect(() => {
+    console.log(employee_sales_summary)
     return () => {
       setLoading(false);
       dispatch(unmount_filter());

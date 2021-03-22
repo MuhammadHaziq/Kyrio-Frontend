@@ -17,20 +17,21 @@ import {
   CFormGroup,
   CLabel,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
+// import CIcon from "@coreui/icons-react";
+// import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import {
-  get_item_sale_summary,
-  delete_item_sale,
-} from "../../../actions/reports/salesItemActions";
+// import {
+//   get_item_sale_summary,
+//   delete_item_sale,
+// } from "../../../actions/reports/salesItemActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
+// import moment from "moment";
 import SalesItemDatatableNew from "../../../datatables/reports/SalesItemDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
-import { getStyle, hexToRgba } from "@coreui/utils/src";
+// import { getStyle, hexToRgba } from "@coreui/utils/src";
 import $ from "jquery";
+
 const SalesItem = () => {
   $(".dropdown-menu a").on("click", function (event) {
     console.log("Event", event);
@@ -120,7 +121,7 @@ const SalesItem = () => {
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <FilterComponent handleOnChangeSales={() => console.log("No Function")}  />
       <CRow>
         <CCol>
           <CCard>

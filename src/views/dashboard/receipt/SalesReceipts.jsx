@@ -22,7 +22,7 @@ import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 
 const SalesReceipts = () => {
   const dispatch = useDispatch();
-  const sale_receipt_summary = useSelector((state) => state.reports.salesEmployeeReducer.sale_receipt_summary)
+  const sale_receipt_summary = useSelector((state) => state.reports.salesReceiptReducer.sale_receipt_summary)
 
   const user = useSelector((state) => state.auth.user);
   const [filterReset, setFilterReset] = useState(false);

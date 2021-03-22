@@ -488,7 +488,7 @@ export const save_csv = (data) => {
     dispatch({
       type: ITEM_IMPORT_ERRORS,
       response: [],
-      status: false
+      status: false,
     });
     try {
       axios({
@@ -496,13 +496,15 @@ export const save_csv = (data) => {
         url: `${BaseUrl}items/save_csv`,
         data: data,
         headers: {
+          "Content-Type": "multipart/form-data",
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
-        onUploadProgress: function (progressEvent) {
-          // Do whatever you want with the native progress event
-          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          console.log(percentCompleted)
-        },
+        timeout: 60 * 60 * 1000,
+        // onUploadProgress: function (progressEvent) {
+        //   const { loaded, total } = progressEvent;
+        //   let percent = Math.floor((loaded * 100) / total);
+        //   console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+        // },
       })
         .then((response) => {
           // console.log(response);
@@ -528,7 +530,7 @@ export const save_csv = (data) => {
                 typeof error.response.data != "undefined"
                 ? error.response.data
                 : [],
-            status: true
+            status: true,
           });
           // let msg = {
           //   open: true,

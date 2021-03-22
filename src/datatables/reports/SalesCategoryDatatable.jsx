@@ -52,7 +52,7 @@ const SalesCategoryDatatable = (props) => {
         { key: "NetSales", label: "Net sales", filter: true },
         { key: "CostOfGoods", label: "Cost of goods", filter: true },
         { key: "GrossProfit", label: "Gross profit", filter: true },
-        { key: "margin", label: "Margin", filter: true },
+        { key: "Margin", label: "Margin", filter: true },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -181,10 +181,7 @@ const SalesCategoryDatatable = (props) => {
         Margin: (item) => {
           return (
             <td>
-              {item.Margin !== "undefined" &&
-                item.Margin !== null
-                ? item.Margin.toFixed(2) + " %"
-                : "$ 0.00"}
+              {item.Margin +"%"}
             </td>
           )
         },

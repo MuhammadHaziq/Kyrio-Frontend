@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
     CDataTable,
-    CCardBody,
     CInputCheckbox,
     CFormGroup,
     CLabel,
@@ -12,7 +11,6 @@ import {
     update_row_data,
 } from "../../actions/reports/salesEmployeeActions";
 import { useDispatch } from "react-redux";
-import dateFormat from "dateformat";
 
 const SalesEmployeeDatatable = (props) => {
     const dispatch = useDispatch();

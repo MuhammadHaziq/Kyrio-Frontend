@@ -226,34 +226,34 @@ const ItemsList = () => {
     var exportStores =
       item.stores !== null && item.stores !== undefined
         ? (item.stores || []).map((stor) => {
-            (store.stores_list || []).map((stoor, storIndex) => {
-              if (stoor._id == stor.id) {
-                csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (arrayIndex == ky) {
-                    return {
-                      ...it,
-                      [`available_for_sale${stor.title}`]: "Y",
-                      [`in_stock${stor.title}`]: stor.inStock,
-                      [`low_stock${stor.title}`]: stor.lowStock,
-                    };
-                  }
-                  return it;
-                });
-              } else {
-                csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (arrayIndex == ky) {
-                    return {
-                      ...it,
-                      [`available_for_sale${stor.title}`]: "N",
-                      [`in_stock${stor.title}`]: stor.inStock,
-                      [`low_stock${stor.title}`]: stor.lowStock,
-                    };
-                  }
-                  return it;
-                });
-              }
-            });
-          })
+          (store.stores_list || []).map((stoor, storIndex) => {
+            if (stoor._id == stor.id) {
+              csvDownloadData = csvDownloadData.map((it, ky) => {
+                if (arrayIndex == ky) {
+                  return {
+                    ...it,
+                    [`available_for_sale${stor.title}`]: "Y",
+                    [`in_stock${stor.title}`]: stor.inStock,
+                    [`low_stock${stor.title}`]: stor.lowStock,
+                  };
+                }
+                return it;
+              });
+            } else {
+              csvDownloadData = csvDownloadData.map((it, ky) => {
+                if (arrayIndex == ky) {
+                  return {
+                    ...it,
+                    [`available_for_sale${stor.title}`]: "N",
+                    [`in_stock${stor.title}`]: stor.inStock,
+                    [`low_stock${stor.title}`]: stor.lowStock,
+                  };
+                }
+                return it;
+              });
+            }
+          });
+        })
         : [];
     var exportModifier = (modifire.modifiers_list || []).map(
       (modi, modIndex) => {
@@ -401,7 +401,7 @@ const ItemsList = () => {
       storeId: defaultStoreId,
     };
     if (defaultStoreId !== undefined) {
-      dispatch(get_items_list(data));
+      // dispatch(get_items_list(data));
     }
   }, [dispatch, defaultStoreId, pagination]);
 
@@ -412,7 +412,7 @@ const ItemsList = () => {
       storeId: defaultStoreId,
     };
     if (defaultStoreId !== undefined) {
-      dispatch(get_items_list(data));
+      // dispatch(get_items_list(data));
     }
   };
 

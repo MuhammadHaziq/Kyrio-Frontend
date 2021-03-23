@@ -26,6 +26,7 @@ import {
   REMOVE_ROW_DATA,
   UPDATE_ITEM_RECORD,
   ITEM_IMPORT_ERRORS,
+  REDIRECT_CONFIRM_UPLOAD,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
@@ -483,12 +484,80 @@ export const delete_item_list = (id) => {
   };
 };
 
+export const validate_csv = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: ITEM_IMPORT_ERRORS,
+      response: [],
+      status: false,
+      import_loading:true
+
+    });
+    try {
+      axios({
+        method: "POST",
+        url: `${BaseUrl}items/validate_csv`,
+        data: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          if (response.data.success === true) {
+            dispatch({
+              type: REDIRECT_CONFIRM_UPLOAD,
+              response: true,
+              conifrm_message:response.data.message
+            });
+            let msg = {
+              open: true,
+              message: "Confirm To Upload Items",
+              object: {},
+              error: false,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          }
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          dispatch({
+            type: ITEM_IMPORT_ERRORS,
+            response:
+              typeof error.response != "undefined" &&
+              typeof error.response.data != "undefined"
+                ? error.response.data
+                : [],
+            status: true,
+            import_loading:false
+
+          });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 export const save_csv = (data) => {
   return (dispatch) => {
     dispatch({
       type: ITEM_IMPORT_ERRORS,
       response: [],
       status: false,
+      import_loading:true
     });
     try {
       axios({
@@ -499,7 +568,6 @@ export const save_csv = (data) => {
           "Content-Type": "multipart/form-data",
           kyrioToken: `${localStorage.getItem("kyrio")}`,
         },
-        timeout: 60 * 60 * 1000,
         // onUploadProgress: function (progressEvent) {
         //   const { loaded, total } = progressEvent;
         //   let percent = Math.floor((loaded * 100) / total);
@@ -531,6 +599,7 @@ export const save_csv = (data) => {
                 ? error.response.data
                 : [],
             status: true,
+            import_loading:false
           });
           // let msg = {
           //   open: true,
@@ -558,6 +627,7 @@ export const save_csv = (data) => {
         object: error,
         error: true,
       };
+
       dispatch({ type: MESSAGE, data: msg });
     }
   };

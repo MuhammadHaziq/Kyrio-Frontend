@@ -41,6 +41,7 @@ const OpenTickets = () => {
     (state) => state.settingReducers.openTicketReducer.store_ticket
   );
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const auth = useSelector((state) => state.auth);
 
   const goBack = () => {
     dispatch(redirect_back_ticket(true));
@@ -50,7 +51,20 @@ const OpenTickets = () => {
     setFadeOpenTicket(true);
     setChecked(false);
   };
-
+  useEffect(() => {
+    if (store.stores_list !== undefined && store.stores_list.length > 0) {
+      const storeObject = store.stores_list.filter((item) => {
+        return item._id === auth.user.stores[0]._id;
+      });
+      const storeId = {
+        id: storeObject[0]._id,
+        name: storeObject[0].title,
+      };
+      setSelectedStoreObject(storeId);
+      setSelectedStoreId(auth.user.stores[0]._id);
+      dispatch(get_store_open_ticket(auth.user.stores[0]._id));
+    }
+  }, [auth && store.stores_list]);
   useEffect(() => {
     if (Object.keys(store_tickets).length > 0) {
       setChecked(store_tickets.checked);
@@ -60,9 +74,9 @@ const OpenTickets = () => {
     }
   }, [store_tickets]);
 
-  useEffect(() => {
-    dispatch(get_store_open_ticket("0"));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(get_store_open_ticket("0"));
+  // }, [dispatch]);
 
   const storeHandleChange = (e) => {
     const storeObject = store.stores_list.filter((item) => {
@@ -255,7 +269,6 @@ const OpenTickets = () => {
                           value={selectedStoreId}
                           onChange={storeHandleChange}
                         >
-                          <option value="0">All Stores</option>
                           {store.stores_list.map((item, index) => {
                             return (
                               <option value={item._id} key={index}>
@@ -318,10 +331,7 @@ const OpenTickets = () => {
                                       >
                                         <CRow>
                                           <CCol sm="12" className="mt-2">
-                                            <CFormGroup
-                                              key={index}
-                                              className="pull-right"
-                                            >
+                                            <CFormGroup key={index}>
                                               <CInputGroup>
                                                 <CInputGroupPrepend>
                                                   <CInputGroupText>

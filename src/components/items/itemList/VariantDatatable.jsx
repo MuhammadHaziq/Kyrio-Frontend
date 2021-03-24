@@ -205,15 +205,7 @@ const VariantDatatable = (props) => {
                     <Barcode item={options} index={index} optionId={item._id} />
                   </td>
                   <td>
-                    <CButton
-                      variant="outline"
-                      className="pull-right"
-                      color="danger"
-                      block={false}
-                      onClick={() => delete_variant_values(item._id, index)}
-                    >
-                      <CIcon name="cil-trash" />
-                    </CButton>
+                    <CIcon name="cil-trash" />
                   </td>
                 </tr>
               ));
@@ -226,6 +218,15 @@ const VariantDatatable = (props) => {
 };
 
 export default VariantDatatable;
+// <CButton
+//   variant="outline"
+//   className="pull-right"
+//   color="danger"
+//   block={false}
+//   onClick={() => delete_variant_values(item._id, index)}
+// >
+// </CButton>
+//
 // {props.item_variants.optionValue.map((item, index) => (
 //   <tr>
 //     <td>{item.variantName}</td>

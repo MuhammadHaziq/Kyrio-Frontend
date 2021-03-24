@@ -6,6 +6,7 @@ import {
   TOGGLE_MODIFIRES_DELETE_SELECT,
   TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
   UPDATE_MODIFIER_ROW_DATA,
+  UPDATE_MODIFER_PROPS_POSITION,
   UPDATE_MODIFER,
 } from "../../constants/ActionTypes";
 
@@ -48,6 +49,12 @@ const modifiresReducer = (state = initialState, action) => {
         modifiers_list,
         redirect_update_modifier: false,
         redirect_modifier: true,
+      };
+    }
+    case UPDATE_MODIFER_PROPS_POSITION: {
+      return {
+        ...state,
+        modifiers_list: action.response,
       };
     }
     case TOGGLE_MODIFIRES_DELETE_SELECT: {

@@ -172,7 +172,7 @@ const VariantDatatable = (props) => {
   console.log(props);
   const delete_variant_values = (id, index) => {
     console.log(id, index);
-    dispatch(delete_item_varient({ id: id, variantIndex: index }));
+    // dispatch(delete_item_varient({ id: id, variantIndex: index }));
   };
 
   return (

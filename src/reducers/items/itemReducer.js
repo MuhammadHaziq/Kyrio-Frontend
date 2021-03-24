@@ -238,7 +238,7 @@ const itemReducer = (state = initialState, action) => {
           if (item._id === action.response.id) {
             return {
               ...item,
-              optionNames: item.optionNames.filter(
+              optionName: item.optionName.filter(
                 (item, index) => index !== action.response.vairantIndex
               ),
               optionValue: item.optionValue.filter(

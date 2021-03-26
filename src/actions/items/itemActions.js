@@ -3,6 +3,7 @@ import {
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  GET_ITEMS_TAXES,
   ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
@@ -292,6 +293,53 @@ export const get_items_store = () => {
   };
 };
 
+export const get_item_taxe = () => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "get",
+        url: `${BaseUrl}items/get_item_taxes`,
+        headers: {
+          kyrioToken: `${localStorage.getItem("kyrio")}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          dispatch({ type: GET_ITEMS_TAXES, response: response.data.taxes });
+        })
+        .catch((error) => {
+          console.log("err", error.response);
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.status === 404
+                  ? error.response.statusText
+                  : error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      console.log("err catch", error);
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.status === 404
+              ? error.response.statusText
+              : error.response.data.message
+            : ERROR_MESSAGE,
+        object: error,
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
+
 export const save_item = (data) => {
   return (dispatch) => {
     try {
@@ -490,8 +538,7 @@ export const validate_csv = (data) => {
       type: ITEM_IMPORT_ERRORS,
       response: [],
       status: false,
-      import_loading:true
-
+      import_loading: true,
     });
     try {
       axios({
@@ -508,7 +555,7 @@ export const validate_csv = (data) => {
             dispatch({
               type: REDIRECT_CONFIRM_UPLOAD,
               response: true,
-              conifrm_message:response.data.message
+              conifrm_message: response.data.message,
             });
             let msg = {
               open: true,
@@ -529,8 +576,7 @@ export const validate_csv = (data) => {
                 ? error.response.data
                 : [],
             status: true,
-            import_loading:false
-
+            import_loading: false,
           });
         });
     } catch (error) {
@@ -557,7 +603,7 @@ export const save_csv = (data) => {
       type: ITEM_IMPORT_ERRORS,
       response: [],
       status: false,
-      import_loading:true
+      import_loading: true,
     });
     try {
       axios({
@@ -599,7 +645,7 @@ export const save_csv = (data) => {
                 ? error.response.data
                 : [],
             status: true,
-            import_loading:false
+            import_loading: false,
           });
           // let msg = {
           //   open: true,

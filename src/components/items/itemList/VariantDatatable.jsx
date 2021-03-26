@@ -172,7 +172,7 @@ const VariantDatatable = (props) => {
   console.log(props);
   const delete_variant_values = (id, index) => {
     console.log(id, index);
-    // dispatch(delete_item_varient({ id: id, variantIndex: index }));
+    dispatch(delete_item_varient({ id: id, variantIndex: index }));
   };
 
   return (
@@ -205,7 +205,15 @@ const VariantDatatable = (props) => {
                     <Barcode item={options} index={index} optionId={item._id} />
                   </td>
                   <td>
-                    <CIcon name="cil-trash" />
+                    <CButton
+                      variant="outline"
+                      className="pull-right"
+                      color="danger"
+                      block={false}
+                      onClick={() => delete_variant_values(item._id, index)}
+                    >
+                      <CIcon name="cil-trash" />
+                    </CButton>
                   </td>
                 </tr>
               ));
@@ -218,14 +226,7 @@ const VariantDatatable = (props) => {
 };
 
 export default VariantDatatable;
-// <CButton
-//   variant="outline"
-//   className="pull-right"
-//   color="danger"
-//   block={false}
-//   onClick={() => delete_variant_values(item._id, index)}
-// >
-// </CButton>
+
 //
 // {props.item_variants.optionValue.map((item, index) => (
 //   <tr>

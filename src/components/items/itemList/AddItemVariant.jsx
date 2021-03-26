@@ -58,19 +58,19 @@ const AddItemVariant = (props) => {
     },
   ]);
   // COmment For Tes
-  // useEffect(() => {
-  //   if (props.variants !== undefined && props.variants.length > 0) {
-  //     setVariantFields(props.variants);
-  //     let errors = [];
-  //     props.variants.map((item) => {
-  //       return errors.push({
-  //         optionName: false,
-  //         optionValue: false,
-  //       });
-  //     });
-  //     setVariantFieldsError(errors);
-  //   }
-  // }, [props]);
+  useEffect(() => {
+    if (props.variants !== undefined && props.variants.length > 0) {
+      setVariantFields(props.variants);
+      let errors = [];
+      props.variants.map((item) => {
+        return errors.push({
+          optionName: false,
+          optionValue: false,
+        });
+      });
+      setVariantFieldsError(errors);
+    }
+  }, [props]);
   // COmment For Tes
 
   // a little function to help us with reordering the result
@@ -241,7 +241,7 @@ const AddItemVariant = (props) => {
     setVariantFields([
       {
         // comment Beacuse It Case Error When
-        // _id: "0",
+        _id: "0",
         optionName: "",
         variantNames: [],
         optionValue: [

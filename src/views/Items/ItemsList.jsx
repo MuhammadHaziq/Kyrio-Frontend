@@ -27,6 +27,7 @@ import {
   delete_item_list,
   redirect_back_items,
   remove_row_data,
+  get_item_taxe
 } from "../../actions/items/itemActions";
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
@@ -380,6 +381,7 @@ const ItemsList = () => {
     dispatch(get_category_list());
     dispatch(get_items_stock());
     dispatch(get_items_store());
+    dispatch(get_item_taxe());
     dispatch(get_stores());
     if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {
       dispatch(get_modifires_list(auth.user.stores[0]._id));

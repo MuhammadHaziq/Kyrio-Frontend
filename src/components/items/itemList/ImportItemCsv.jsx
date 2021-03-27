@@ -13,13 +13,15 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { CSVReader } from "react-papaparse";
-import { save_csv, get_items_list } from "../../../actions/items/itemActions";
+import { save_csv, get_items_list, validate_csv } from "../../../actions/items/itemActions";
 import ShowUploadFileErrors from "./ShowUploadFileErrors";
+import ItemImportConfirm from "./ItemImportConfirm";
 const ImportItem = (props) => {
   const buttonRef = React.createRef();
 
   const [addFile, setAddFile] = useState(null);
   const [uploadFileError, SetUploadFileError] = useState(false);
+  const [uploadFileConfirm, SetUploadFileConfirm] = useState(false);
   const [uploadFieldsError, setUploadErrorFields] = useState({
     sku: [],
     handle: [],
@@ -50,6 +52,11 @@ const ImportItem = (props) => {
       SetUploadFileError(true);
     }
   }, [item.show_item_import_errors]);
+  useEffect(() => {
+    if (item.confirm_upload !== undefined && item.confirm_upload === true) {
+      SetUploadFileConfirm(true);
+    }
+  }, [item.confirm_upload]);
 
   const get_upload_file = (data, fileInfo) => {
     setErrors({
@@ -72,6 +79,22 @@ const ImportItem = (props) => {
       fd.append("csvFile", addFile);
       // dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
       dispatch(save_csv(fd));
+    }
+  };
+  const validate_csv_backend = (e) => {
+    var handle = [];
+    var sku = [];
+    if (typeof addFile === "null" || typeof addFile === "undefined") {
+      setErrors({
+        ...errors,
+        uploadFileError: true,
+      });
+      return false;
+    } else {
+      var fd = new FormData();
+      fd.append("csvFile", addFile);
+      // dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
+      dispatch(validate_csv(fd));
     }
   };
   const papaparseOptions = {
@@ -133,6 +156,17 @@ const ImportItem = (props) => {
         />
       </React.Fragment>
     );
+  } else if (uploadFileConfirm) {
+    return (
+      <React.Fragment>
+        <ItemImportConfirm
+          goBack={props.goBack}
+          message={item.conifrm_message}
+          loading={item.show_import_loading}
+          upload={save_csv_db}
+        />
+      </React.Fragment>
+    );
   } else {
     return (
       <React.Fragment>
@@ -174,7 +208,7 @@ const ImportItem = (props) => {
                       variant="outline"
                       className="btn-pill"
                       color="success"
-                      onClick={save_csv_db}
+                      onClick={validate_csv_backend}
                     >
                       Upload
                     </CButton>

@@ -3,6 +3,7 @@ import {
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  GET_ITEMS_TAXES,
   ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
@@ -24,12 +25,14 @@ import {
   REMOVE_ROW_DATA,
   UPDATE_ITEM_RECORD,
   ITEM_IMPORT_ERRORS,
+  REDIRECT_CONFIRM_UPLOAD,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   item_list: [],
   stock_list: [],
   store_list: [],
+  item_taxes: [],
   item_variants: [],
   variants: [],
   redirect_itemList: false,
@@ -41,6 +44,9 @@ const initialState = {
   total_modifiers: 0,
   orignal_total_modifiers: 0,
   errors: [],
+  confirm_upload: false,
+  conifrm_message: "",
+  show_import_loading: false,
 };
 const itemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -50,6 +56,9 @@ const itemReducer = (state = initialState, action) => {
         redirect_itemList: action.response,
         redirect_update: false,
         show_item_import_errors: false,
+        confirm_upload: false,
+        conifrm_message: "",
+        show_import_loading: false,
       });
     }
 
@@ -62,6 +71,12 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         stock_list: action.response,
       });
+    }
+    case GET_ITEMS_TAXES: {
+      return {
+        ...state,
+        item_taxes: action.response,
+      };
     }
     case GET_ITEM_STORES: {
       let modifiers = 0;
@@ -100,6 +115,15 @@ const itemReducer = (state = initialState, action) => {
       });
     }
 
+    case REDIRECT_CONFIRM_UPLOAD: {
+      return {
+        ...state,
+        confirm_upload: action.response,
+        conifrm_message: action.conifrm_message,
+        show_import_loading: false,
+      };
+    }
+
     case UPDATE_ITEM_RECORD: {
       return Object.assign({}, state, {
         item_list: state.item_list.slice().map((item) => {
@@ -122,6 +146,7 @@ const itemReducer = (state = initialState, action) => {
         show_item_import_errors: false,
       });
     }
+
     case TOGGLE_SELECT_ALL_ITEM_STORES: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
@@ -132,6 +157,7 @@ const itemReducer = (state = initialState, action) => {
         }),
       });
     }
+
     case TOGGLE_SELECT_SINGLE_ITEM_STORES: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
@@ -220,7 +246,7 @@ const itemReducer = (state = initialState, action) => {
           if (item._id === action.response.id) {
             return {
               ...item,
-              optionNames: item.optionNames.filter(
+              variantNames: item.variantNames.filter(
                 (item, index) => index !== action.response.vairantIndex
               ),
               optionValue: item.optionValue.filter(
@@ -399,6 +425,9 @@ const itemReducer = (state = initialState, action) => {
         ...state,
         errors: action.response,
         show_item_import_errors: action.status,
+        confirm_upload: false,
+        conifrm_message: "",
+        show_import_loading: action.import_loading,
       };
     }
     case REMOVE_ROW_DATA: {
@@ -411,6 +440,7 @@ const itemReducer = (state = initialState, action) => {
         redirect_update: false,
         errors: [],
         show_item_import_errors: false,
+        show_import_loading: false,
       });
     }
     default:

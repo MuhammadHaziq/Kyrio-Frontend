@@ -13,7 +13,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import CSVReader from "react-csv-reader";
-import { save_csv, get_items_list } from "../../../actions/items/itemActions";
+import {
+  save_csv,
+  get_items_list,
+  validate_csv,
+} from "../../../actions/items/itemActions";
 import ShowUploadFileErrors from "./ShowUploadFileErrors";
 const ImportItem = (props) => {
   const [addFile, setAddFile] = useState();
@@ -71,25 +75,24 @@ const ImportItem = (props) => {
       });
       return false;
     } else {
-      // addFile.forEach(function (x, index) {
-      //   // console.log(x);
-      //   if (x.Handle == "" || x.Handle == null || x.Handle == undefined) {
-      //     handle.push({ index });
-      //   }
-      //   if (x.SKU == "" || x.SKU == null || x.SKU == undefined) {
-      //     sku.push({ index });
-      //   }
-      // });
-      // if (handle.length > 0 || sku.length > 0) {
-      //   SetUploadFileError(true);
-      //   setUploadErrorFields({
-      //     ...uploadFieldsError,
-      //     sku: sku,
-      //     handle: handle,
-      //   });
-      //   return false;
-      // }
       dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
+    }
+  };
+  const validate_csv_backend = (e) => {
+    var handle = [];
+    var sku = [];
+    if (
+      typeof addFile === "null" ||
+      typeof addFile === "undefined" ||
+      addFile.length === 0
+    ) {
+      setErrors({
+        ...errors,
+        uploadFileError: true,
+      });
+      return false;
+    } else {
+      dispatch(validate_csv({ csvData: JSON.stringify(addFile) }));
     }
   };
   const papaparseOptions = {
@@ -169,7 +172,7 @@ const ImportItem = (props) => {
                       variant="outline"
                       className="btn-pill"
                       color="success"
-                      onClick={save_csv_db}
+                      onClick={validate_csv_backend}
                     >
                       Upload
                     </CButton>

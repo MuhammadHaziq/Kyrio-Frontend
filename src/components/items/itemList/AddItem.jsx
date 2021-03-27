@@ -48,13 +48,14 @@ const AddItem = (props) => {
   const [itemImage, setItemImage] = useState(null);
   const [inventorySwitch, setInventorySwitch] = useState([false, false]);
   const [modifierSwitch, setModifierSwitch] = useState([false, false]);
+  const [taxesSwitch, setTaxesSwitch] = useState([]);
   const [modifiers, setModifiers] = useState([]);
   const [receiptFile, setrReceiptFile] = useState("");
   const [variantModal, setVariantModal] = useState(false);
   const [errors, setErrors] = useState({
     item_name: false,
   });
-
+  const [itemTax, setItemTax] = useState([]);
   const store = useSelector((state) => state.settingReducers.storeReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const item = useSelector((state) => state.items.itemReducer);
@@ -69,6 +70,28 @@ const AddItem = (props) => {
       props.goBack();
     }
   }, [item.redirect_itemList]);
+
+  useEffect(() => {
+    if (
+      item.item_taxes !== undefined &&
+      item.item_taxes !== null &&
+      item.item_taxes.length > 0
+    ) {
+      setItemTax(
+        (item.item_taxes || []).map((item) => {
+          return {
+            ...item,
+            isSelected: true,
+          };
+        })
+      );
+      const taxesSwitch = [];
+      (item.item_taxes || []).map((item) => {
+        taxesSwitch.push(true);
+      });
+      setTaxesSwitch(taxesSwitch);
+    }
+  }, [item.item_taxes]);
 
   useEffect(() => {
     let modifierSwitch = [];
@@ -105,25 +128,30 @@ const AddItem = (props) => {
           title: item.title,
         });
       });
-    let taxes = [];
-    item.store_list
-      .filter((item) => item.isSelected === true)
-      .map((item) => {
-        (item.taxes || []).map((tax) => {
-          return taxes.push({
-            id: tax._id,
-            title: tax.title,
-            type: tax.tax_type.title,
-            value: tax.tax_rate,
-          });
-        });
-      });
+    // let taxes = [];
+    // item.store_list
+    //   .filter((item) => item.isSelected === true)
+    //   .map((item) => {
+    //     (item.taxes || []).map((tax) => {
+    //       return taxes.push({
+    //         id: tax._id,
+    //         title: tax.title,
+    //         type: tax.tax_type.title,
+    //         value: tax.tax_rate,
+    //       });
+    //     });
+    //   });
     const ReturnNumber = (params) => {
       let num = params;
       num = Number.isInteger(num) ? num : num.replace("$", "");
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
+    console.log(
+      (itemTax || []).filter((item) => {
+        return item.isSelected === true;
+      })
+    );
     var formData = new FormData();
     formData.append("name", fields.item_name);
     formData.append("availableForSale", fields.availableForSale);
@@ -155,7 +183,14 @@ const AddItem = (props) => {
     formData.append("sku", fields.sku);
     formData.append("barcode", fields.item_barcode);
     formData.append("modifiers", JSON.stringify(modifier));
-    formData.append("taxes", JSON.stringify(taxes));
+    formData.append(
+      "taxes",
+      JSON.stringify(
+        (itemTax || []).filter((item) => {
+          return item.isSelected === true;
+        })
+      )
+    );
     formData.append(
       "stores",
       JSON.stringify(item.store_list.filter((item) => item.isSelected === true))
@@ -266,6 +301,20 @@ const AddItem = (props) => {
     setModifiers(modifier);
     setModifierSwitch(state);
   };
+  const handleChangeTaxes = (idx) => (e) => {
+    const state = taxesSwitch.map((x, index) => (idx === index ? !x : x));
+    const taxes = (itemTax || []).map((item, index) => {
+      if (idx === index) {
+        return {
+          ...item,
+          isSelected: !item.isSelected,
+        };
+      }
+      return item;
+    });
+    setItemTax(taxes);
+    setTaxesSwitch(state);
+  };
   const toggleVariantModal = () => {
     setVariantModal(!variantModal);
   };
@@ -278,6 +327,8 @@ const AddItem = (props) => {
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
+
+  console.log("taxesSwitch", itemTax);
 
   return (
     <React.Fragment>
@@ -586,6 +637,56 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : item.stores.map((str) => str.name).join(",")}
+                        </p>
+                      </CListGroupItem>
+                    </CListGroup>
+                  </React.Fragment>
+                ))}
+              </CCol>
+            </CCardBody>
+          </CCard>
+        </>
+      ) : (
+        ""
+      )}
+      {/**  Taxes  */}
+      {(itemTax || []).length > 0 ? (
+        <>
+          <CCard>
+            <CCardHeader>
+              <h4>
+                <strong>Taxes</strong>
+              </h4>
+            </CCardHeader>
+
+            <CCardBody>
+              <CCol xs="12" sm="12" md="12">
+                {(itemTax || []).map((item, index) => (
+                  <React.Fragment>
+                    <CListGroup>
+                      <CListGroupItem
+                        key={1}
+                        className="justify-content-between"
+                        style={{
+                          border: "none",
+                        }}
+                      >
+                        <h6>
+                          {item.title} ({item.tax_rate} %)
+                          <CSwitch
+                            className={"mx-1 float-right"}
+                            shape="pill"
+                            color={"success"}
+                            checked={taxesSwitch[index]}
+                            onChange={handleChangeTaxes(index)}
+                          />
+                        </h6>
+                        <p style={{ lineHeight: "normal" }}>
+                          {item.allStores === true
+                            ? "Available in all stores"
+                            : item.stores
+                                .map((str) => str.storeTitle)
+                                .join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>

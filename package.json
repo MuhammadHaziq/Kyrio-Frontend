@@ -58,7 +58,7 @@
     "react-beautiful-dnd": "^13.0.0",
     "react-big-calendar": "^0.30.0",
     "react-bootstrap": "^1.4.0",
-    "react-bootstrap-datetimerangepicker": "^2.0.4",
+    "react-bootstrap-datetimerangepicker-updated": "^2.0.6",
     "react-bootstrap-table": "^4.3.1",
     "react-bootstrap-time-picker": "^2.0.1",
     "react-codemirror2": "^7.2.1",
@@ -95,7 +95,7 @@
   },
   "devDependencies": {
     "mutationobserver-shim": "^0.3.5",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",

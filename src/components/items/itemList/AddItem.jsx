@@ -159,13 +159,13 @@ const AddItem = (props) => {
       "category",
       fields.categoryId !== "0"
         ? JSON.stringify({
-            id: fields.categoryId,
-            name: category.category_list
-              .filter((item) => item._id)
-              .map((item) => {
-                return item.catTitle;
-              })[0],
-          })
+          id: fields.categoryId,
+          name: category.category_list
+            .filter((item) => (item._id) === (fields.categoryId))
+            .map((item) => {
+              return item.catTitle;
+            })[0],
+        })
         : null
     );
     formData.append("soldByType", fields.sold_by);
@@ -329,7 +329,7 @@ const AddItem = (props) => {
     fields.item_name == "";
 
   console.log("taxesSwitch", itemTax);
-
+  console.log(fields.categoryId)
   return (
     <React.Fragment>
       <CCard>
@@ -685,8 +685,8 @@ const AddItem = (props) => {
                           {item.allStores === true
                             ? "Available in all stores"
                             : item.stores
-                                .map((str) => str.storeTitle)
-                                .join(",")}
+                              .map((str) => str.storeTitle)
+                              .join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>

@@ -404,6 +404,7 @@ const ItemsList = () => {
       storeId: defaultStoreId,
     };
     if (defaultStoreId !== undefined) {
+      searchFilterRecords();
       // dispatch(get_items_list(data));
     }
   }, [dispatch, defaultStoreId, pagination]);

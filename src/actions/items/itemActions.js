@@ -572,7 +572,7 @@ export const validate_csv = (data) => {
             type: ITEM_IMPORT_ERRORS,
             response:
               typeof error.response != "undefined" &&
-              typeof error.response.data != "undefined"
+                typeof error.response.data != "undefined"
                 ? error.response.data
                 : [],
             status: true,

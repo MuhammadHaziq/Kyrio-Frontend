@@ -55,6 +55,8 @@ const AddItem = (props) => {
   const [variantModal, setVariantModal] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [modifiers, setModifiers] = useState([]);
+  const [itemTax, setItemTax] = useState([]);
+  const [taxesSwitch, setTaxesSwitch] = useState([]);
 
   const [errors, setErrors] = useState({
     item_name: false,
@@ -75,7 +77,27 @@ const AddItem = (props) => {
       props.goBack();
     }
   }, [item.redirect_itemList]);
-
+  useEffect(() => {
+    if (
+      item.item_taxes !== undefined &&
+      item.item_taxes !== null &&
+      item.item_taxes.length > 0
+    ) {
+      setItemTax(
+        (item.item_taxes || []).map((item) => {
+          return {
+            ...item,
+            isSelected: false,
+          };
+        })
+      );
+      const taxesSwitch = [];
+      (item.item_taxes || []).map((item) => {
+        taxesSwitch.push(true);
+      });
+      setTaxesSwitch(taxesSwitch);
+    }
+  }, [item.item_taxes]);
   useEffect(() => {
     let modifierSwitch = [];
     (modifire.modifiers_list || []).map((item) => {
@@ -87,7 +109,37 @@ const AddItem = (props) => {
 
   useEffect(() => {
     if (props.item_row_data !== undefined && props.item_row_data !== null) {
-      console.log(props.item_row_data);
+      // console.log(props.item_row_data);
+      let setTaxes = [];
+      (item.item_taxes || []).map((str, index) => {
+        let taxExist = (props.item_row_data.taxes || []).filter(
+          (item) => item.id === str.id
+        );
+        if (
+          taxExist !== undefined &&
+          taxExist !== null &&
+          taxExist.length > 0
+        ) {
+          taxExist = taxExist.map((item) => {
+            return {
+              ...item,
+              isSelected: true,
+            };
+          });
+          setTaxes.push(...taxExist);
+        } else {
+          str = { ...str, isSelected: false };
+          setTaxes.push(str);
+        }
+      });
+      setItemTax(setTaxes);
+      const taxesSwitch = [];
+      (setTaxes || []).map((item) => {
+        taxesSwitch.push(
+          item.isSelected !== undefined ? item.isSelected : false
+        );
+      });
+      setTaxesSwitch(taxesSwitch);
       setFields({
         ...fields,
         item_name: props.item_row_data.name,
@@ -109,7 +161,7 @@ const AddItem = (props) => {
       setItemImage(
         props.item_row_data.image !== undefined &&
           props.item_row_data.image !== null &&
-          props.item_row_data !== ""
+          props.item_row_data.image !== ""
           ? `${ImageUrl}media/items/${accountId}/${props.item_row_data.image}`
           : null
       );
@@ -222,7 +274,14 @@ const AddItem = (props) => {
     formData.append("sku", fields.sku);
     formData.append("barcode", fields.item_barcode);
     formData.append("modifiers", JSON.stringify(modifier));
-    formData.append("taxes", JSON.stringify(taxes));
+    formData.append(
+      "taxes",
+      JSON.stringify(
+        (itemTax || []).filter((item) => {
+          return item.isSelected === true;
+        })
+      )
+    );
     formData.append(
       "stores",
       JSON.stringify(item.store_list.filter((item) => item.isSelected === true))
@@ -325,12 +384,25 @@ const AddItem = (props) => {
   const removeSelectedImages = (name) => {
     setItemImage(null);
   };
-
+  const handleChangeTaxes = (idx) => (e) => {
+    const state = taxesSwitch.map((x, index) => (idx === index ? !x : x));
+    const taxes = (itemTax || []).map((item, index) => {
+      if (idx === index) {
+        return {
+          ...item,
+          isSelected: !item.isSelected,
+        };
+      }
+      return item;
+    });
+    setItemTax(taxes);
+    setTaxesSwitch(state);
+  };
   const disable =
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
-
+  console.log("itemTax", itemTax);
   return (
     <React.Fragment>
       <CCard>
@@ -638,6 +710,56 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : item.stores.map((str) => str.name).join(",")}
+                        </p>
+                      </CListGroupItem>
+                    </CListGroup>
+                  </React.Fragment>
+                ))}
+              </CCol>
+            </CCardBody>
+          </CCard>
+        </>
+      ) : (
+        ""
+      )}
+      {/**  Taxes  */}
+      {(itemTax || []).length > 0 ? (
+        <>
+          <CCard>
+            <CCardHeader>
+              <h4>
+                <strong>Taxes</strong>
+              </h4>
+            </CCardHeader>
+
+            <CCardBody>
+              <CCol xs="12" sm="12" md="12">
+                {(itemTax || []).map((item, index) => (
+                  <React.Fragment>
+                    <CListGroup>
+                      <CListGroupItem
+                        key={1}
+                        className="justify-content-between"
+                        style={{
+                          border: "none",
+                        }}
+                      >
+                        <h6>
+                          {item.title} ({item.tax_rate} %)
+                          <CSwitch
+                            className={"mx-1 float-right"}
+                            shape="pill"
+                            color={"success"}
+                            checked={taxesSwitch[index]}
+                            onChange={handleChangeTaxes(index)}
+                          />
+                        </h6>
+                        <p style={{ lineHeight: "normal" }}>
+                          {item.allStores === true
+                            ? "Available in all stores"
+                            : item.stores
+                                .map((str) => str.storeTitle)
+                                .join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>

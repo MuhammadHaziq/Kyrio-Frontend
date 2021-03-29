@@ -6,6 +6,7 @@ import {
   TOGGLE_MODIFIRES_DELETE_SELECT,
   TOGGLE_ALL_MODIFIRES_DELETE_SELECT,
   UPDATE_MODIFIER_ROW_DATA,
+  UPDATE_MODIFER_PROPS_POSITION,
   MESSAGE,
   ERROR_MESSAGE,
   UPDATE_MODIFER,
@@ -186,6 +187,15 @@ export const update_modifire_postion = (data) => {
     }
   };
 };
+
+export const update_modifier_props_postion = (data) => {
+  return dispatch=> {
+    dispatch({
+      type:UPDATE_MODIFER_PROPS_POSITION,
+      response:data
+    })
+  }
+}
 
 export const delete_modifire = (ids) => {
   return (dispatch) => {

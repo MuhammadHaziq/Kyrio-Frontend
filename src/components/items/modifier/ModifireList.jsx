@@ -14,6 +14,7 @@ import {
   toggle_modifire_single_select,
   update_modifire_postion,
   update_row_data,
+  update_modifier_props_postion,
 } from "../../../actions/items/modifiresActions";
 import { connect } from "react-redux";
 import { CIcon } from "@coreui/icons-react";
@@ -63,11 +64,12 @@ const getListStyle = (isDraggingOver) => ({
   // width: 250,
 });
 var that;
+
 class ModifireList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.props.modifiers_list.map((item, index) => ({
+      items: (this.props.modifiers_list || []).map((item, index) => ({
         id: item._id,
         content: item.title,
         options: (item.options || [])
@@ -79,12 +81,27 @@ class ModifireList extends Component {
         position: item.position,
       })),
       checkAll:
-        this.props.modifiers_list.filter((item) => {
+        (this.props.modifiers_list || []).filter((item) => {
           return item.isDelected !== false && item.isDeleted;
         }).length === this.props.modifiers_list.length &&
         this.props.modifiers_list.length > 0
           ? true
           : false,
+      allModifier: this.props.modifiers_list.map((item, index) => ({
+        position: item.position,
+        accountId: item.accountId,
+        created_at: item.created_at,
+        created_by: item.created_by,
+        deleted: item.deleted,
+        deleted_at: item.deleted_at,
+        options: item.options,
+        stores: item.stores,
+        title: item.title,
+        type: item.type,
+        updated_at: item.updated_at,
+        __v: item._v,
+        _id: item._id,
+      })),
     };
     this.onDragEnd = this.onDragEnd.bind(this);
     that = this;
@@ -92,7 +109,7 @@ class ModifireList extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.modifiers_list !== this.props.modifiers_list) {
-      const data = this.props.modifiers_list.map((item, index) => ({
+      const data = (this.props.modifiers_list || []).map((item, index) => ({
         id: item._id,
         content: item.title,
         options: (item.options || [])
@@ -113,6 +130,21 @@ class ModifireList extends Component {
           this.props.modifiers_list.length > 0
             ? true
             : false,
+        allModifier: (this.props.modifiers_list || []).map((item, index) => ({
+          position: item.position,
+          accountId: item.accountId,
+          created_at: item.created_at,
+          created_by: item.created_by,
+          deleted: item.deleted,
+          deleted_at: item.deleted_at,
+          options: item.options,
+          stores: item.stores,
+          title: item.title,
+          type: item.type,
+          updated_at: item.updated_at,
+          __v: item._v,
+          _id: item._id,
+        })),
       });
     }
   }
@@ -127,6 +159,12 @@ class ModifireList extends Component {
       result.source.index,
       result.destination.index
     );
+    const allModifiers = reorder(
+      this.state.allModifier,
+      result.source.index,
+      result.destination.index
+    );
+    console.log(items);
     const data = {
       data: JSON.stringify(
         items.map((item, index) => {
@@ -135,10 +173,17 @@ class ModifireList extends Component {
       ),
     };
     this.props.update_modifire_postion(data);
-
+    this.props.update_modifier_props_postion(allModifiers);
     this.setState({
+      // this.state.items
       ...this.state,
-      items: this.state.items.map((item, index) => {
+      items: items.map((item, index) => {
+        return {
+          ...item,
+          position: index,
+        };
+      }),
+      allModifier: allModifiers.map((item, index) => {
         return {
           ...item,
           position: index,
@@ -185,7 +230,7 @@ class ModifireList extends Component {
                 style={{
                   marginTop: "24px",
                   marginLeft: "29px",
-                  bottom:'12px'
+                  bottom: "12px",
                 }}
               />
             </CFormGroup>
@@ -323,4 +368,5 @@ export default connect(mapStateToProps, {
   toggle_modifire_single_select,
   update_modifire_postion,
   update_row_data,
+  update_modifier_props_postion
 })(ModifireList);

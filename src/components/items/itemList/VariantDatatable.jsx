@@ -226,6 +226,8 @@ const VariantDatatable = (props) => {
 };
 
 export default VariantDatatable;
+
+//
 // {props.item_variants.optionValue.map((item, index) => (
 //   <tr>
 //     <td>{item.variantName}</td>

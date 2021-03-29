@@ -14,7 +14,7 @@ import {
 import { BaseUrl } from "../../constants/baseUrls";
 import axios from "axios";
 import $ from "jquery";
-$.DataTable = require("datatables.net");
+// $.DataTable = require("datatables.net");
 
 export const redirect_back_pos_devices = (status) => {
   return (dispatch) => {

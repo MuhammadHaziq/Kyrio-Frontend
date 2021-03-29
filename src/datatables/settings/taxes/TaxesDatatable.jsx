@@ -84,7 +84,7 @@ const TaxesDatatable = (props) => {
           );
         },
         tax_option: (item) => {
-          const taxOption = item !== undefined ? item.title : item;
+          const taxOption = item !== undefined ? item.tax_option.title : "";
           if (
             taxOption === "Apply the tax to the new items" ||
             taxOption === "Apply the tax to all new and existing items"

@@ -3,6 +3,7 @@ import {
   GET_ITEM_LIST,
   GET_ITEM_STOCK,
   GET_ITEM_STORES,
+  GET_ITEMS_TAXES,
   ITEM_SAVE,
   TOGGLE_ITEM_DELETE_SELECT,
   TOGGLE_ALL_ITEM_DELETE_SELECT,
@@ -31,6 +32,7 @@ const initialState = {
   item_list: [],
   stock_list: [],
   store_list: [],
+  item_taxes: [],
   item_variants: [],
   variants: [],
   redirect_itemList: false,
@@ -69,6 +71,12 @@ const itemReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         stock_list: action.response,
       });
+    }
+    case GET_ITEMS_TAXES: {
+      return {
+        ...state,
+        item_taxes: action.response,
+      };
     }
     case GET_ITEM_STORES: {
       let modifiers = 0;
@@ -238,7 +246,7 @@ const itemReducer = (state = initialState, action) => {
           if (item._id === action.response.id) {
             return {
               ...item,
-              optionNames: item.optionNames.filter(
+              variantNames: item.variantNames.filter(
                 (item, index) => index !== action.response.vairantIndex
               ),
               optionValue: item.optionValue.filter(
@@ -419,7 +427,7 @@ const itemReducer = (state = initialState, action) => {
         show_item_import_errors: action.status,
         confirm_upload: false,
         conifrm_message: "",
-        show_import_loading:action.import_loading
+        show_import_loading: action.import_loading,
       };
     }
     case REMOVE_ROW_DATA: {

@@ -127,7 +127,7 @@ const itemReducer = (state = initialState, action) => {
     case UPDATE_ITEM_RECORD: {
       return Object.assign({}, state, {
         item_list: state.item_list.slice().map((item) => {
-          if (item._id === action.id) {
+          if (item._id === action.response._id) {
             return action.response;
           }
           return item;
@@ -412,7 +412,7 @@ const itemReducer = (state = initialState, action) => {
         item_row_data: action.response,
         item_variants:
           action.response.varients !== null &&
-          action.response.varients !== undefined
+            action.response.varients !== undefined
             ? action.response.varients
             : [],
         store_list: storeList,

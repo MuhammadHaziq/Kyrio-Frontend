@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  CDataTable,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
-} from "@coreui/react";
+import { CDataTable, CInputCheckbox, CFormGroup, CLabel } from "@coreui/react";
 import {
   toggle_discount_single_select,
   toggle_discount_all_select,
@@ -90,14 +85,15 @@ const DiscountDatatable = (props) => {
         value: (item) => {
           return (
             <td>
-              {item.value !== undefined && item.value !== null
+              {item.value !== undefined &&
+              item.value !== null &&
+              item.value !== ""
                 ? item.type.toUpperCase() === "amount".toUpperCase()
-                  ? item.value.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })
-                  : item.value.toFixed(2) + " %"
-                : item.type.toUpperCase() === "amount".toUpperCase() ? "Variable, Σ" : "Variable, %"}
+                  ? Number(item.value).toFixed(2)
+                  : Number(item.value).toFixed(2) + " %"
+                : item.type.toUpperCase() === "amount".toUpperCase()
+                ? "Variable, Σ"
+                : "Variable, %"}
             </td>
           );
         },

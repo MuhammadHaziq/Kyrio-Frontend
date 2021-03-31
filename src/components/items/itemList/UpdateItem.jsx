@@ -145,7 +145,7 @@ const AddItem = (props) => {
         item_name: props.item_row_data.name,
         categoryId:
           props.item_row_data.category !== undefined &&
-            props.item_row_data.category !== null
+          props.item_row_data.category !== null
             ? props.item_row_data.category.id
             : "0",
         sold_by: props.item_row_data.soldByType,
@@ -246,13 +246,13 @@ const AddItem = (props) => {
       "category",
       fields.categoryId !== "0"
         ? JSON.stringify({
-          id: fields.categoryId,
-          name: category.category_list
-            .filter((item) => (item._id) === (fields.categoryId))
-            .map((item) => {
-              return item.catTitle;
-            })[0],
-        })
+            id: fields.categoryId,
+            name: category.category_list
+              .filter((item) => item._id === fields.categoryId)
+              .map((item) => {
+                return item.catTitle;
+              })[0],
+          })
         : null
     );
     formData.append("soldByType", fields.sold_by);
@@ -507,7 +507,6 @@ const AddItem = (props) => {
                     onChange={handleOnChange}
                     decimalScale={2}
                     className="form-control"
-                    prefix={"$"}
                   />
                 </CInputGroup>
               </CFormGroup>
@@ -758,8 +757,8 @@ const AddItem = (props) => {
                           {item.allStores === true
                             ? "Available in all stores"
                             : item.stores
-                              .map((str) => str.storeTitle)
-                              .join(",")}
+                                .map((str) => str.storeTitle)
+                                .join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -786,7 +785,7 @@ const AddItem = (props) => {
             <StoresDatatable
               stores={props.store}
               stock={inventorySwitch[1]}
-            // stores={props.item_row_data.stores}
+              // stores={props.item_row_data.stores}
             />
           </CCol>
         </CCardBody>

@@ -84,7 +84,12 @@ const AddModifier = (props) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
-
+  const ReturnNumber = (params) => {
+    let num = params;
+    num = Number.isInteger(num) ? num : num.replace("$", "");
+    num = Number.isInteger(num) ? num : num.replace(",", "");
+    return num;
+  };
   const submitModifier = () => {
     if (fields.modifier_name === "") {
       setErrors({
@@ -124,11 +129,7 @@ const AddModifier = (props) => {
           modifierFields.map((item) => {
             return {
               name: item.name,
-              price:
-                item.price.split("$")[1] !== undefined ||
-                item.price.split("$")[1] !== null
-                  ? item.price.split("$")[1].replace(",", "")
-                  : item.price.split("$")[1],
+              price: ReturnNumber(item.price),
               position: item.position,
             };
           })
@@ -457,7 +458,6 @@ const AddModifier = (props) => {
                                                 decimalScale={2}
                                                 fixedDecimalScale={true}
                                                 className="form-control"
-                                                prefix={"$"}
                                                 onChange={handleOnChangeModifierField(
                                                   index
                                                 )}

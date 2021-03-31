@@ -108,6 +108,13 @@ const UpdateDiscount = (props) => {
     props.goBack();
   };
 
+  const ReturnNumber = (params) => {
+    let num = params;
+    num = Number.isInteger(num) ? num : num.replace("$", "");
+    num = Number.isInteger(num) ? num : num.replace(",", "");
+    return num;
+  };
+
   const updateDiscount = () => {
     if (storeId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Store");
@@ -129,7 +136,7 @@ const UpdateDiscount = (props) => {
       const data = {
         id: props.update_item_discount._id,
         title: fields.discount_name,
-        value: fields.discount_value,
+        value: ReturnNumber(fields.discount_value),
         type: fields.disocunt_type,
         restricted: restricted_access,
         stores: JSON.stringify(storeData),
@@ -147,16 +154,16 @@ const UpdateDiscount = (props) => {
     });
   };
   const handleOnChangeToggle = (type) => {
-    if(type === "%"){
-      setPercentage(true)
-      setAmount(false)
+    if (type === "%") {
+      setPercentage(true);
+      setAmount(false);
       setFields({
         ...fields,
         disocunt_type: "Percentage",
       });
-    } else if(type === "$"){
-      setPercentage(false)
-      setAmount(true)
+    } else if (type === "$") {
+      setPercentage(false);
+      setAmount(true);
       setFields({
         ...fields,
         disocunt_type: "Amount",
@@ -260,7 +267,9 @@ const UpdateDiscount = (props) => {
                     custom
                     id="percentage"
                     name="percentage"
-                    onChange={() => { handleOnChangeToggle("%") }}
+                    onChange={() => {
+                      handleOnChangeToggle("%");
+                    }}
                     value={"Percentage"}
                     checked={Percentage}
                     checked={fields.disocunt_type === "Percentage"}
@@ -276,7 +285,9 @@ const UpdateDiscount = (props) => {
                     custom
                     id="amount"
                     name="amount"
-                    onChange={() => { handleOnChangeToggle("$") }}
+                    onChange={() => {
+                      handleOnChangeToggle("$");
+                    }}
                     value={"Amount"}
                     checked={fields.disocunt_type === "Amount"}
                   />

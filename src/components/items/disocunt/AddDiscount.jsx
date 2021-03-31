@@ -82,6 +82,13 @@ const AddDiscount = (props) => {
     props.goBack();
   };
 
+  const ReturnNumber = (params) => {
+    let num = params;
+    num = Number.isInteger(num) ? num : num.replace("$", "");
+    num = Number.isInteger(num) ? num : num.replace(",", "");
+    return num;
+  };
+
   const submitDiscount = () => {
     if (storeId.filter((item) => item.isSelected === true).length === 0) {
       alert("Select Store");
@@ -102,7 +109,7 @@ const AddDiscount = (props) => {
 
       const data = {
         title: fields.discount_name,
-        value: fields.discount_value,
+        value: ReturnNumber(fields.discount_value),
         type: fields.disocunt_type,
         restricted: restricted_access,
         stores: JSON.stringify(storeData),
@@ -120,16 +127,16 @@ const AddDiscount = (props) => {
     });
   };
   const handleOnChangeToggle = (type) => {
-    if(type === "%"){
-      setPercentage(true)
-      setAmount(false)
+    if (type === "%") {
+      setPercentage(true);
+      setAmount(false);
       setFields({
         ...fields,
         disocunt_type: "Percentage",
       });
-    } else if(type === "$"){
-      setPercentage(false)
-      setAmount(true)
+    } else if (type === "$") {
+      setPercentage(false);
+      setAmount(true);
       setFields({
         ...fields,
         disocunt_type: "Amount",
@@ -223,7 +230,9 @@ const AddDiscount = (props) => {
                     custom
                     id="percentage"
                     name="percentage"
-                    onChange={() => { handleOnChangeToggle("%") }}
+                    onChange={() => {
+                      handleOnChangeToggle("%");
+                    }}
                     value={"Percentage"}
                     checked={Percentage}
                   />
@@ -238,7 +247,9 @@ const AddDiscount = (props) => {
                     custom
                     id="amount"
                     name="amount"
-                    onChange={() => { handleOnChangeToggle("$") }}
+                    onChange={() => {
+                      handleOnChangeToggle("$");
+                    }}
                     value={"Amount"}
                     checked={Amount}
                   />

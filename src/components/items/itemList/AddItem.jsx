@@ -434,7 +434,6 @@ const AddItem = (props) => {
                     onChange={handleOnChange}
                     decimalScale={2}
                     className="form-control"
-                    prefix={"$"}
                   />
                 </CInputGroup>
               </CFormGroup>

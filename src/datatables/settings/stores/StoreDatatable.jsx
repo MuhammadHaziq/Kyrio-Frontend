@@ -37,6 +37,9 @@ const StoreDatatable = (props) => {
         devices: (item) => {
           return <td>{item.devices || 0}</td>;
         },
+        address: (item) => {
+          return <td>{item.address || ""}</td>;
+        },
       }}
     />
   );

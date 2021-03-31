@@ -98,24 +98,20 @@ const ItemsListDatatable = (props) => {
         price: (item) => {
           return (
             <td>
-              {item.price !== undefined && item.price !== null
-                ? item.price.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.price !== undefined &&
+              item.price !== null &&
+              item.price !== ""
+                ? Number(item.price).toFixed(2)
+                : " 0.00"}
             </td>
           );
         },
         cost: (item) => {
           return (
             <td>
-              {item.cost !== undefined && item.cost !== null
-                ? item.cost.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.cost !== undefined && item.cost !== null && item.cost !== ""
+                ? Number(item.cost).toFixed(2)
+                : " 0.00"}
             </td>
           );
         },
@@ -127,7 +123,9 @@ const ItemsListDatatable = (props) => {
           if (+cost === +price) {
             return <td>{"0 %"}</td>;
           } else {
-            const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
+            const margin = (price - cost) / cost;
+            console.log(margin);
+            // const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
             return <td>{margin.toFixed(2) + " %"}</td>;
           }
         },

@@ -119,7 +119,12 @@ const UpdateModifier = (props) => {
       }
     }
   }, [props, props.modifier_row_data]);
-
+  const ReturnNumber = (params) => {
+    let num = params;
+    num = Number.isInteger(num) ? num : num.replace("$", "");
+    num = Number.isInteger(num) ? num : num.replace(",", "");
+    return num;
+  };
   const updateModifier = () => {
     if (fields.modifier_name === "") {
       setErrors({
@@ -159,11 +164,7 @@ const UpdateModifier = (props) => {
           modifierFields.map((item) => {
             return {
               name: item.name,
-              price:
-                item.price.split("$")[1] !== undefined ||
-                item.price.split("$")[1] !== null
-                  ? item.price.split("$")[1].replace(",", "")
-                  : item.price.split("$")[1],
+              price: ReturnNumber(item.price),
               position: item.position,
             };
           })
@@ -485,7 +486,6 @@ const UpdateModifier = (props) => {
                                                 decimalScale={2}
                                                 fixedDecimalScale={true}
                                                 className="form-control"
-                                                prefix={"$"}
                                                 invalid={
                                                   modifierFieldsError[index]
                                                     .price

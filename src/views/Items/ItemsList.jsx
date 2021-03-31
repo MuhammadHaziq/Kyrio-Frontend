@@ -27,7 +27,7 @@ import {
   delete_item_list,
   redirect_back_items,
   remove_row_data,
-  get_item_taxe
+  get_item_taxe,
 } from "../../actions/items/itemActions";
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
@@ -162,43 +162,64 @@ const ItemsList = () => {
             : ""
           : "",
       varient_1_value:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
-            ? item.varients[0]["optionValue"] !== undefined
-              ? item.varients[0]["optionValue"][0]["variantName"]
+            ? item.varients[0]["optionValue"] !== undefined &&
+              item.varients[0]["optionValue"].length > 0
+              ? item.varients[0]["optionValue"][0]["variantName"] !== undefined
+                ? item.varients[0]["optionValue"][0]["variantName"]
+                : ""
               : ""
             : ""
           : "",
       varient_2_name:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[1] !== null && item.varients[1] !== undefined
             ? item.varients[1]["optionName"]
             : ""
           : "",
       varient_2_value:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[1] !== null && item.varients[1] !== undefined
-            ? item.varients[1]["optionValue"] !== undefined
-              ? item.varients[1]["optionValue"][0]["variantName"]
+            ? item.varients[1]["optionValue"] !== undefined &&
+              item.varients[1]["optionValue"].length > 0
+              ? item.varients[1]["optionValue"][0]["variantName"] !== undefined
+                ? item.varients[1]["optionValue"][0]["variantName"]
+                : ""
               : ""
             : ""
           : "",
       varient_3_name:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[2] !== null && item.varients[2] !== undefined
             ? item.varients[2]["optionName"]
             : ""
           : "",
       varient_3_value:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[2] !== null && item.varients[2] !== undefined
-            ? item.varients[2]["optionValue"] !== undefined
-              ? item.varients[2]["optionValue"][0]["variantName"]
+            ? item.varients[2]["optionValue"] !== undefined &&
+              item.varients[2]["optionValue"].length > 0
+              ? item.varients[2]["optionValue"][0]["variantName"] !== undefined
+                ? item.varients[2]["optionValue"][0]["variantName"]
+                : ""
               : ""
             : ""
           : "",
       price:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["price"]
@@ -206,7 +227,9 @@ const ItemsList = () => {
             : ""
           : item.price,
       cost:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["cost"]
@@ -214,7 +237,9 @@ const ItemsList = () => {
             : ""
           : item.cost,
       barcode:
-        item.varients !== null && item.varients !== undefined
+        item.varients !== null &&
+        item.varients !== undefined &&
+        item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["barcode"]
@@ -228,34 +253,34 @@ const ItemsList = () => {
     var exportStores =
       item.stores !== null && item.stores !== undefined
         ? (item.stores || []).map((stor) => {
-          (store.stores_list || []).map((stoor, storIndex) => {
-            if (stoor._id == stor.id) {
-              csvDownloadData = csvDownloadData.map((it, ky) => {
-                if (arrayIndex == ky) {
-                  return {
-                    ...it,
-                    [`available_for_sale${stor.title}`]: "Y",
-                    [`in_stock${stor.title}`]: stor.inStock,
-                    [`low_stock${stor.title}`]: stor.lowStock,
-                  };
-                }
-                return it;
-              });
-            } else {
-              csvDownloadData = csvDownloadData.map((it, ky) => {
-                if (arrayIndex == ky) {
-                  return {
-                    ...it,
-                    [`available_for_sale${stor.title}`]: "N",
-                    [`in_stock${stor.title}`]: stor.inStock,
-                    [`low_stock${stor.title}`]: stor.lowStock,
-                  };
-                }
-                return it;
-              });
-            }
-          });
-        })
+            (store.stores_list || []).map((stoor, storIndex) => {
+              if (stoor._id == stor.id) {
+                csvDownloadData = csvDownloadData.map((it, ky) => {
+                  if (arrayIndex == ky) {
+                    return {
+                      ...it,
+                      [`available_for_sale${stor.title}`]: "Y",
+                      [`in_stock${stor.title}`]: stor.inStock,
+                      [`low_stock${stor.title}`]: stor.lowStock,
+                    };
+                  }
+                  return it;
+                });
+              } else {
+                csvDownloadData = csvDownloadData.map((it, ky) => {
+                  if (arrayIndex == ky) {
+                    return {
+                      ...it,
+                      [`available_for_sale${stor.title}`]: "N",
+                      [`in_stock${stor.title}`]: stor.inStock,
+                      [`low_stock${stor.title}`]: stor.lowStock,
+                    };
+                  }
+                  return it;
+                });
+              }
+            });
+          })
         : [];
     var exportModifier = (modifire.modifiers_list || []).map(
       (modi, modIndex) => {
@@ -537,7 +562,10 @@ const ItemsList = () => {
         )}
         {importItem ? (
           <CFade timeout={timeout} in={importItem}>
-            <ImportItemCsv goBack={goBack} getItemsOnImport={getItemsOnImport} />
+            <ImportItemCsv
+              goBack={goBack}
+              getItemsOnImport={getItemsOnImport}
+            />
           </CFade>
         ) : (
           ""

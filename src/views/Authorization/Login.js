@@ -48,6 +48,13 @@ const Login = () => {
       setRedirect(true);
     }
   }, [msg]);
+  useEffect(() => {
+    localStorage.removeItem("kyrio");
+    localStorage.removeItem("endDate");
+    localStorage.removeItem("startDate");
+    localStorage.removeItem("persist:primary");
+    // history.push('/login')
+  }, []);
   const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [formState, setFormState] = useState({

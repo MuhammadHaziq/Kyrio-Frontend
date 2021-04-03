@@ -41,7 +41,7 @@ const TheHeaderDropdown = () => {
           <CHeaderNavLink to="/"> Profile</CHeaderNavLink>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem tag='span'> 
+        <CDropdownItem tag='span'>
           <MdLock />
           <CHeaderNavLink to="/login">Lock Account</CHeaderNavLink>
         </CDropdownItem>

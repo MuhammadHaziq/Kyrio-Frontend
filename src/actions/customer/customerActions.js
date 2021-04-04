@@ -12,8 +12,8 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_customer = (status) => {
   return (dispatch) => {
@@ -27,12 +27,10 @@ export const redirect_back_customer = (status) => {
 export const get_customers = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}customers/all`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `customers/all`,
+
       })
         .then((response) => {
           dispatch({ type: GET_CUSTOMERS, response: response.data });
@@ -76,12 +74,10 @@ export const get_customers = (data) => {
 export const get_customers_search = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}customers/${data.search}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `customers/${data.search}`,
+
       })
         .then((response) => {
           dispatch({ type: GET_CUSTOMERS, response: response.data });
@@ -125,13 +121,11 @@ export const get_customers_search = (data) => {
 export const add_new_customer = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}customers/`,
+        url: `customers/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: ADD_NEW_CUSTOMER, response: response.data });
@@ -200,12 +194,10 @@ export const toggle_customer_all_select = (status) => {
 export const delete_customer = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "DELETE",
-        url: `${BaseUrl}customers/delete/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `customers/delete/${ids}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_CUSTOMERS, response: JSON.parse(ids) });
@@ -274,13 +266,11 @@ export const edit_profile_view = (status, customer_view) => {
 export const update_points_balance = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}customers/point_balance`,
+        url: `customers/point_balance`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: UPDATE_POINTS_BALANCE, response: data });
@@ -331,13 +321,11 @@ export const update_points_balance = (data) => {
 export const update_customer = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}customers/`,
+        url: `customers/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: UPDATE_CUSTOMER, response: response.data });

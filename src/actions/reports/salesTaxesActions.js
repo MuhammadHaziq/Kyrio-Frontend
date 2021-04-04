@@ -26,6 +26,7 @@ export const get_tax_sale_summary = () => {
           });
         })
         .catch((error) => {
+          console.log(error)
           let msg = {
             open: true,
             message:

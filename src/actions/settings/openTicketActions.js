@@ -6,8 +6,8 @@ import {
   UPDATE_STORE_OPEN_TICKET,
   REDIRECT_BACK_TICKET,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_ticket = (status) => {
   return (dispatch) => {
@@ -20,13 +20,11 @@ export const redirect_back_ticket = (status) => {
 export const add_new_open_ticket = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}tickets/saveOpenTicket`,
+        url: `tickets/saveOpenTicket`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -83,12 +81,10 @@ export const add_new_open_ticket = (data) => {
 export const get_store_open_ticket = (storeId) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tickets/getStoreTicket/${storeId}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tickets/getStoreTicket/${storeId}`,
+
       })
         .then((response) => {
           console.log(response);
@@ -150,13 +146,11 @@ export const get_store_open_ticket = (storeId) => {
 /*export const add_new_dining_option = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}dining`,
+        url: `dining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -209,13 +203,11 @@ export const get_store_open_ticket = (storeId) => {
 export const update_dining_option = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}dining`,
+        url: `dining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -267,13 +259,11 @@ export const update_dining_option = (data) => {
 export const get_store_dining = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}dining/getStoreDining`,
+        url: `dining/getStoreDining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -329,12 +319,10 @@ export const get_store_dining = (data) => {
 export const delete_open_ticket = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}tickets`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tickets`,
+
         data: data,
       })
         .then((response) => {

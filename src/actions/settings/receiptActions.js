@@ -4,19 +4,16 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const get_receipt = (storeId) => {
   return (dispatch) => {
     console.log(storeId);
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}receipt/${storeId}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `receipt/${storeId}`,
       })
         .then((response) => {
           dispatch({ type: GET_RECEIPT, response: response.data });
@@ -60,14 +57,10 @@ export const get_receipt = (storeId) => {
 export const add_new_receipt = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}receipt`,
+        url: `receipt`,
         data: data,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
       })
         .then((response) => {
           console.log(response);
@@ -98,8 +91,8 @@ export const add_new_receipt = (data) => {
                   ? error.response.status === 404
                     ? error.response.statusText
                     : errors.length > 0
-                    ? errors
-                    : error.response.data.message
+                      ? errors
+                      : error.response.data.message
                   : ERROR_MESSAGE,
               object:
                 typeof error.response != "undefined"

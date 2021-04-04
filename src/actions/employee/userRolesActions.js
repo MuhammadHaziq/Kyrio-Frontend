@@ -16,8 +16,8 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_user_roles = (status) => {
   return (dispatch) => {
@@ -31,12 +31,10 @@ export const redirect_back_user_roles = (status) => {
 export const get_roles_modules = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}roles/get_roles_modules`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `roles/get_roles_modules`,
+
       })
         .then((response) => {
           dispatch({
@@ -44,14 +42,14 @@ export const get_roles_modules = () => {
             response: response.data,
             backofficeModules:
               response.data !== undefined &&
-              response.data !== null &&
-              response.data.length > 0
+                response.data !== null &&
+                response.data.length > 0
                 ? [response.data[0].backofficeModules]
                 : [],
             posModules:
               response.data !== undefined &&
-              response.data !== null &&
-              response.data.length > 0
+                response.data !== null &&
+                response.data.length > 0
                 ? [response.data[0].posModules]
                 : [],
           });
@@ -93,13 +91,11 @@ export const get_roles_modules = () => {
 export const get_user_access_list = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        // url: `${BaseUrl}employee/userAccess`,
-        url: `${BaseUrl}roles/`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        // url: `employee/userAccess`,
+        url: `roles/`,
+
       })
         .then((response) => {
           dispatch({ type: GET_USER_ROLES, response: response.data });
@@ -140,13 +136,11 @@ export const get_user_access_list = () => {
 export const add_new_role = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}roles/create`,
+        url: `roles/create`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -198,13 +192,11 @@ export const add_new_role = (data) => {
 export const update_user_role = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}roles/update`,
+        url: `roles/update`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -290,12 +282,10 @@ export const toggle_pos_module = (id) => {
 export const update_row_data = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}roles/${data.role_id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `roles/${data.role_id}`,
+
       })
         .then((response) => {
           console.log(response.data);
@@ -367,12 +357,10 @@ export const toggle_role_all_select = (status) => {
 export const delete_user_role = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "DELETE",
-        url: `${BaseUrl}roles/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `roles/${ids}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_USER_ROLE, response: JSON.parse(ids) });

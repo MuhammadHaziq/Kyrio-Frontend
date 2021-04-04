@@ -7,18 +7,15 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const get_receipt_summary = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}reports/sale/receipts`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `reports/sale/receipts`,
         data: data
       })
         .then((response) => {
@@ -86,12 +83,10 @@ export const delete_receipt_summary = (ids) => {
       response: JSON.parse(ids),
     });
     // try {
-    //     axios({
+    //     authAxios({
     //         method: "DELETE",
-    //         url: `${BaseUrl}employee/employeeList/${ids}`,
-    //         headers: {
-    //             kyrioToken: `${localStorage.getItem("kyrio")}`,
-    //         },
+    //         url: `employee/employeeList/${ids}`,
+    //        
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_SALES_RECEIPT_SUMMARY, response: JSON.parse(ids) });

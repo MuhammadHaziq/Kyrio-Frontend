@@ -8,8 +8,8 @@ import {
   REDIRECT_BACK_DINING,
   DELETE_DINING_OPTION,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_dining = (status) => {
   return (dispatch) => {
@@ -23,12 +23,10 @@ export const redirect_back_dining = (status) => {
 export const get_dining_options = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}dining`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `dining`,
+
       })
         .then((response) => {
           dispatch({ type: GET_DINING_OPTION, response: response.data });
@@ -73,13 +71,11 @@ export const add_new_dining_option = (data) => {
   return (dispatch) => {
     const store = JSON.parse(data.store);
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}dining`,
+        url: `dining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -138,13 +134,11 @@ export const update_dining_option = (data) => {
   return (dispatch) => {
     const storeId = JSON.parse(data.store);
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}dining/`,
+        url: `dining/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({
@@ -204,13 +198,11 @@ export const update_dining_option = (data) => {
 export const update_dining_availablity = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}dining/update_availabilty`,
+        url: `dining/update_availabilty`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           let msg = {
@@ -262,13 +254,11 @@ export const update_dining_availablity = (data) => {
 export const update_dining_option_postion = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}dining/update_position`,
+        url: `dining/update_position`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           let msg = {
@@ -319,13 +309,11 @@ export const update_dining_option_postion = (data) => {
 export const delete_dining_option = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}dining/${data.id}`,
+        url: `dining/${data.id}`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -378,13 +366,11 @@ export const delete_dining_option = (data) => {
 export const get_store_dining = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}dining/getStoreDining`,
+        url: `dining/getStoreDining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -439,12 +425,10 @@ export const get_store_dining = (data) => {
 export const update_dining_row_data = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}dining/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `dining/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({

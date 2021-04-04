@@ -12,8 +12,8 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_timeCard = (status) => {
   return (dispatch) => {
@@ -27,12 +27,10 @@ export const redirect_back_timeCard = (status) => {
 export const get_timeCards = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/timecard`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/timecard`,
+
       })
         .then((response) => {
           dispatch({ type: GET_TIMECARDS, response: response.data });
@@ -73,12 +71,10 @@ export const get_timeCards = () => {
 export const get_total_time_hours = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/timeCard/totalWorkingHour`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/timeCard/totalWorkingHour`,
+
       })
         .then((response) => {
           dispatch({ type: GET_TOTAL_WORING_HOURS, response: response.data });
@@ -120,12 +116,10 @@ export const get_total_time_hours = () => {
 export const get_timeCard_detail = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/employeeList`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/employeeList`,
+
       })
         .then((response) => {
           dispatch({ type: GET_TIMECARD_DETAIL, response: response.data });
@@ -167,13 +161,11 @@ export const get_timeCard_detail = () => {
 export const add_new_timeCard = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}employee/timecard`,
+        url: `employee/timecard`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: ADD_NEW_TIMECARD, response: response.data });
@@ -242,12 +234,10 @@ export const toggle_timeCard_all_select = (status) => {
 export const delete_timeCard = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "DELETE",
-        url: `${BaseUrl}employee/timecard/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/timecard/${ids}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_TIMECARD, response: JSON.parse(ids) });
@@ -301,12 +291,10 @@ export const delete_timeCard = (ids) => {
 export const update_row_data = (row) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/timecard/row/${row._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/timecard/row/${row._id}`,
+
       })
         .then((response) => {
           dispatch({ type: ROW_DATA_TIMECARD, response: response.data });
@@ -352,13 +340,11 @@ export const update_row_data = (row) => {
 export const update_timeCard = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}employee/timecard`,
+        url: `employee/timecard`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response.data);

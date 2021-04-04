@@ -20,8 +20,8 @@ import {
   UPDATE_ITEM_TAX,
   REMOVE_UPDATE_ROW_DATA,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_taxes = (status) => {
   return (dispatch) => {
@@ -35,13 +35,11 @@ export const redirect_back_taxes = (status) => {
 export const get_tax_dining_options = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}tax/getTaxDining`,
+        url: `tax/getTaxDining`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -86,12 +84,10 @@ export const get_tax_dining_options = (data) => {
 export const get_item_taxes = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tax`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax`,
+
       })
         .then((response) => {
           console.log(response);
@@ -136,12 +132,10 @@ export const get_item_taxes = () => {
 export const get_taxes_type = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tax/taxesType`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax/taxesType`,
+
       })
         .then((response) => {
           console.log(response);
@@ -186,12 +180,10 @@ export const get_taxes_type = (data) => {
 export const get_taxes_option = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tax/taxesOption`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax/taxesOption`,
+
       })
         .then((response) => {
           console.log(response);
@@ -236,12 +228,10 @@ export const get_taxes_option = (data) => {
 export const get_tax_category_list = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tax/categories`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax/categories`,
+
       })
         .then((response) => {
           console.log(response);
@@ -286,13 +276,11 @@ export const get_tax_category_list = (data) => {
 export const get_catgeory_item = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/categories/categoryItem`,
+        url: `items/categories/categoryItem`,
         params: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: GET_CATEGORY_ITEMS, response: response.data });
@@ -336,13 +324,11 @@ export const get_catgeory_item = (data) => {
 export const save_item_taxes = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}tax`,
+        url: `tax`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log("save tax", response);
@@ -396,12 +382,10 @@ export const save_item_taxes = (data) => {
 export const delete_item_taxes = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}tax/${data}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax/${data}`,
+
       })
         .then((response) => {
           dispatch({
@@ -455,13 +439,11 @@ export const delete_item_taxes = (data) => {
 export const get_store_item_taxes = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}tax/getStoreTaxes`,
+        url: `tax/getStoreTaxes`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: GET_ITEM_TAXES, response: response.data });
@@ -506,13 +488,11 @@ export const get_store_item_taxes = (data) => {
 export const update_item_tax = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}tax/`,
+        url: `tax/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: UPDATE_ITEM_TAX, response: response.data });
@@ -610,12 +590,10 @@ export const toggle_select_all = (status) => {
 export const update_row_data_tax = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}tax/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `tax/row/${data._id}`,
+
       })
         .then((response) => {
           console.log(response);
@@ -658,7 +636,7 @@ export const update_row_data_tax = (data) => {
       dispatch({ type: MESSAGE, data: msg });
     }
   };
-  return (dispatch) => {};
+  return (dispatch) => { };
 };
 
 export const remove_row_update_data = () => {

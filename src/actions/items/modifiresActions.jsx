@@ -11,9 +11,7 @@ import {
   ERROR_MESSAGE,
   UPDATE_MODIFER,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
-// import jwt from "jsonwebtoken";
+import authAxios from '../../constants/authAxios'
 
 export const redirect_back_modifier = (status) => {
   return (dispatch) => {
@@ -27,13 +25,11 @@ export const redirect_back_modifier = (status) => {
 export const get_modifires_list = (storeId) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/modifier/${storeId}`,
+        url: `items/modifier/${storeId}`,
         // data: storeId,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: GET_MODIFIRES_LIST, response: response.data });
@@ -77,13 +73,11 @@ export const get_modifires_list = (storeId) => {
 export const add_new_modifier = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}items/modifier/`,
+        url: `items/modifier/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: ADD_NEW_MODIFIER, response: response.data });
@@ -134,13 +128,11 @@ export const add_new_modifier = (data) => {
 export const update_modifire_postion = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}items/modifier/update_position`,
+        url: `items/modifier/update_position`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           let msg = {
@@ -189,10 +181,10 @@ export const update_modifire_postion = (data) => {
 };
 
 export const update_modifier_props_postion = (data) => {
-  return dispatch=> {
+  return dispatch => {
     dispatch({
-      type:UPDATE_MODIFER_PROPS_POSITION,
-      response:data
+      type: UPDATE_MODIFER_PROPS_POSITION,
+      response: data
     })
   }
 }
@@ -200,12 +192,10 @@ export const update_modifier_props_postion = (data) => {
 export const delete_modifire = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}items/modifier/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/modifier/${ids}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_MODIFIRES, response: ids });
@@ -268,12 +258,10 @@ export const update_row_data = (id) => {
   return (dispatch) => {
     console.log("id", id);
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/modifier/row/${id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/modifier/row/${id}`,
+
       })
         .then((response) => {
           dispatch({
@@ -319,12 +307,10 @@ export const update_row_data = (id) => {
 export const update_modifier = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}items/modifier/${data.id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/modifier/${data.id}`,
+
         data: data,
       })
         .then((response) => {

@@ -11,8 +11,8 @@ import {
   REDIRECT_BACK_KITCHEN,
   UPDATE_KITCHEN_PRINTER_REDIRECT_STATES,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_kitchen = (status) => {
   return (dispatch) => {
@@ -26,12 +26,10 @@ export const redirect_back_kitchen = (status) => {
 export const get_kitchen_printers = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}kitchenPrinter`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `kitchenPrinter`,
+
       })
         .then((response) => {
           dispatch({ type: GET_KICTCH_PRINTER, response: response.data });
@@ -75,13 +73,11 @@ export const get_kitchen_printers = () => {
 export const add_new_kitchen_printer = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}kitchenPrinter`,
+        url: `kitchenPrinter`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -135,13 +131,11 @@ export const add_new_kitchen_printer = (data) => {
 export const update_kitchen_printer = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}kitchenPrinter`,
+        url: `kitchenPrinter`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -196,12 +190,10 @@ export const update_kitchen_printer = (data) => {
 export const delete_kitchen_printer = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}kitchenPrinter/${data}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `kitchenPrinter/${data}`,
+
       })
         .then((response) => {
           dispatch({
@@ -255,12 +247,10 @@ export const delete_kitchen_printer = (data) => {
 export const select_update_row = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}kitchenPrinter/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `kitchenPrinter/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({

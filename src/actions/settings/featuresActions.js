@@ -5,19 +5,17 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const get_setting_features = (storeId) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}features`,
+        url: `features`,
         params: { storeId: storeId },
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           if (response.data.status === true) {
@@ -74,13 +72,11 @@ export const get_setting_features = (storeId) => {
 export const toggle_feature_module = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}features`,
+        url: `features`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -110,8 +106,8 @@ export const toggle_feature_module = (data) => {
                   ? error.response.status === 404
                     ? error.response.statusText
                     : errors.length > 0
-                    ? errors
-                    : error.response.data.message
+                      ? errors
+                      : error.response.data.message
                   : ERROR_MESSAGE,
               object:
                 typeof error.response != "undefined"

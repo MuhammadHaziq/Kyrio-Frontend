@@ -5,6 +5,7 @@ export const DARK = "DARK";
 
 // DEFAULT Authorization
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT"
 
 // DEFAULT Message Handler
 export const MESSAGE = "MESSAGE";

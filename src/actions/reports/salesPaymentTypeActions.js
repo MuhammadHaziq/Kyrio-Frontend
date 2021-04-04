@@ -7,17 +7,14 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 export const get_sales_payment_type_summary = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}sales/all`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `sales/all`,
       })
         .then((response) => {
           dispatch({
@@ -84,12 +81,10 @@ export const delete_payment_type_sales_summary = (ids) => {
       response: JSON.parse(ids),
     });
     // try {
-    //     axios({
+    //     authAxios({
     //         method: "DELETE",
-    //         url: `${BaseUrl}employee/employeeList/${ids}`,
-    //         headers: {
-    //             kyrioToken: `${localStorage.getItem("kyrio")}`,
-    //         },
+    //         url: `employee/employeeList/${ids}`,
+    //        
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_PAYMENT_TYPE_SALES_SUMMARY, response: JSON.parse(ids) });

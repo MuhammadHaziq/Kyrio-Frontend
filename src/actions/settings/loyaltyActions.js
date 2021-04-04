@@ -4,18 +4,16 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const get_loyalty = (storeId) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}settingsLoyalty/${storeId}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `settingsLoyalty/${storeId}`,
+
       })
         .then((response) => {
           dispatch({ type: GET_LOYALTY, response: response.data.data });
@@ -59,13 +57,11 @@ export const get_loyalty = (storeId) => {
 export const add_new_loyalty = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}settingsLoyalty`,
+        url: `settingsLoyalty`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -96,8 +92,8 @@ export const add_new_loyalty = (data) => {
                   ? error.response.status === 404
                     ? error.response.statusText
                     : errors.length > 0
-                    ? errors
-                    : error.response.data.message
+                      ? errors
+                      : error.response.data.message
                   : ERROR_MESSAGE,
               object:
                 typeof error.response != "undefined"

@@ -35,9 +35,9 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {item.GrossSales !== "undefined" && item.GrossSales !== null
                 ? item.GrossSales.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -48,9 +48,9 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.Refunds !== "undefined" && item.Refunds !== null
                 ? item.Refunds.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -60,9 +60,9 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.discounts !== "undefined" && item.discounts !== null
                 ? item.discounts.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -72,9 +72,9 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.NetSales !== "undefined" && item.NetSales !== null
                 ? item.NetSales.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -83,11 +83,11 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.CostOfGoods !== "undefined" &&
-              item.CostOfGoods !== null
+                item.CostOfGoods !== null
                 ? item.CostOfGoods.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -96,11 +96,11 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.GrossProfit !== "undefined" &&
-              item.GrossProfit !== null
+                item.GrossProfit !== null
                 ? item.GrossProfit.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -109,7 +109,7 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {item.Margin !== "undefined" && item.Margin !== null
-                ? item.Margin + " %"
+                ? item.Margin
                 : "0.00 %"}
             </td>
           );
@@ -118,11 +118,11 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.GrossProfit !== "undefined" &&
-              item.GrossProfit !== null
+                item.GrossProfit !== null
                 ? item.GrossProfit.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );
@@ -132,9 +132,9 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.Tax !== "undefined" && item.Tax !== null
                 ? item.Tax.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
+                  style: "currency",
+                  currency: "USD",
+                })
                 : "$ 0.00"}
             </td>
           );

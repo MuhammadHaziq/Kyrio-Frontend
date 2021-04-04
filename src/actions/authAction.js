@@ -1,4 +1,4 @@
-import { LOGIN, MESSAGE, ERROR_MESSAGE } from "../constants/ActionTypes";
+import { LOGIN, MESSAGE, ERROR_MESSAGE, LOGOUT } from "../constants/ActionTypes";
 import axios from "axios";
 import { BaseUrl } from "../constants/baseUrls";
 // import jwt from "jsonwebtoken";
@@ -103,3 +103,12 @@ export const signup = (data) => {
     }
   };
 };
+
+export const Logout = () => {
+  return dispatch => {
+    dispatch({
+      type: LOGOUT,
+
+    })
+  }
+}

@@ -1,4 +1,4 @@
-import { LOGIN, TOGGLE_FEATURE_MODULE } from "../constants/ActionTypes";
+import { LOGIN, TOGGLE_FEATURE_MODULE, LOGOUT } from "../constants/ActionTypes";
 
 const initialState = {
   user: {},
@@ -17,12 +17,12 @@ const settingsReducer = (state = initialState, action) => {
             return Object.assign({}, item, {
               enable:
                 data.filter((ite) => ite.featureId === item.featureId).length >
-                0
+                  0
                   ? data
-                      .filter((ite) => ite.featureId === item.featureId)
-                      .map((ite) => {
-                        return ite.enable;
-                      })[0]
+                    .filter((ite) => ite.featureId === item.featureId)
+                    .map((ite) => {
+                      return ite.enable;
+                    })[0]
                   : item.enable,
             });
           }),
@@ -35,10 +35,10 @@ const settingsReducer = (state = initialState, action) => {
                     data.filter((ite) => ite.featureId === item.featureId)
                       .length > 0
                       ? data
-                          .filter((ite) => ite.featureId === item.featureId)
-                          .map((ite) => {
-                            return ite.enable;
-                          })[0]
+                        .filter((ite) => ite.featureId === item.featureId)
+                        .map((ite) => {
+                          return ite.enable;
+                        })[0]
                       : item.enable,
                 });
               }),
@@ -47,6 +47,12 @@ const settingsReducer = (state = initialState, action) => {
       });
     }
 
+    case LOGOUT: {
+      return {
+        ...state,
+        user: {},
+      }
+    }
     default:
       return state;
   }

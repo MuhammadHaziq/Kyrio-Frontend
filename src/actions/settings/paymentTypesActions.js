@@ -11,8 +11,8 @@ import {
   TOGGLE_PAYMENTS_SINGLE_SELECT,
   TOOGLE_PAYMENTS_ALL_SELECT,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_payment = (status) => {
   return (dispatch) => {
@@ -26,12 +26,10 @@ export const redirect_back_payment = (status) => {
 export const get_payment_types = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}paymentTypes`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `paymentTypes`,
+
       })
         .then((response) => {
           dispatch({ type: GET_PAYMENT_TYPES, response: response.data });
@@ -75,13 +73,11 @@ export const get_payment_types = () => {
 export const add_new_payment_type = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}paymentsType`,
+        url: `paymentsType`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -113,8 +109,8 @@ export const add_new_payment_type = (data) => {
                   ? error.response.status === 404
                     ? error.response.statusText
                     : errors.length > 0
-                    ? errors
-                    : error.response.data.message
+                      ? errors
+                      : error.response.data.message
                   : ERROR_MESSAGE,
               object:
                 typeof error.response != "undefined"
@@ -146,13 +142,11 @@ export const add_new_payment_type = (data) => {
 export const get_payments_type = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}paymentsType`,
+        url: `paymentsType`,
         params: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -219,12 +213,10 @@ export const toggle_payments_all_select = (status) => {
 export const delete_payments_type = (id) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}paymentsType/${id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `paymentsType/${id}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_PAYMENTS_TYPE, response: id });
@@ -277,13 +269,11 @@ export const delete_payments_type = (id) => {
 export const update_payment_type = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}paymentsType/${data.id}`,
+        url: `paymentsType/${data.id}`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: UPDATE_PAYMENT_TYPE, response: response.data.data });
@@ -336,12 +326,10 @@ export const update_payment_type = (data) => {
 export const update_row_data = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}paymentsType/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `paymentsType/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({

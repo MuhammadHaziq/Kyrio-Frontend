@@ -9,17 +9,15 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 export const get_sales_summary = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}sales/all`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `sales/all`,
+
       })
         .then((response) => {
           dispatch({ type: GET_SALES_SUMMARY, response: response.data });
@@ -61,12 +59,9 @@ export const get_sales_summary = () => {
 export const get_grap_sales_summary = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}reports/sale/summary`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `reports/sale/summary`,
         data: data,
       })
         .then((response) => {
@@ -136,12 +131,10 @@ export const delete_sales_summary = (ids) => {
   return (dispatch) => {
     dispatch({ type: DELETE_SALES_SUMMARY, response: JSON.parse(ids) });
     // try {
-    //     axios({
+    //     authAxios({
     //         method: "DELETE",
     //         url: `${BaseUrl}employee/employeeList/${ids}`,
-    //         headers: {
-    //             kyrioToken: `${localStorage.getItem("kyrio")}`,
-    //         },
+    //        
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_SALES_SUMMARY, response: JSON.parse(ids) });

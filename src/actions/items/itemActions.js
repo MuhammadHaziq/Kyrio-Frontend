@@ -29,11 +29,8 @@ import {
   ITEM_IMPORT_ERRORS,
   REDIRECT_CONFIRM_UPLOAD,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
-// import jwt from "jsonwebtoken";
-import $ from "jquery";
-// $.DataTable = require("datatables.net");
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_items = (status) => {
   return (dispatch) => {
@@ -46,7 +43,7 @@ export const redirect_back_items = (status) => {
 
 export const get_items_list_server_side = (data) => {
   return (dispatch) => {
-    // const url = `${BaseUrl}items/serverSide`;
+    // const url = `items/serverSide`;
     // $("#itemListServerDatatable").DataTable().destroy().clear();
     // $("#itemListServerDatatable").DataTable({
     //   oLanguage: {
@@ -79,7 +76,7 @@ export const get_items_list_server_side = (data) => {
     //   ajax: {
     //     url: url, // json datasource
     //     headers: {
-    //       kyrioToken: `${localStorage.getItem("kyrio")}`,
+    //      
     //     },
     //     // type: 'post', // method  , by default get
     //     dataType: "json",
@@ -98,10 +95,10 @@ export const get_items_list_server_side = (data) => {
 //     try {
 //       axios({
 //         method: "get",
-//         url: `${BaseUrl}items`,
+//         url: `items`,
 //         params: data,
 //         headers: {
-//           kyrioToken: `${localStorage.getItem("kyrio")}`,
+//          
 //         },
 //       })
 //         .then((response) => {
@@ -153,12 +150,10 @@ export const get_items_list_server_side = (data) => {
 export const get_items_stock = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/stock`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/stock`,
+
       })
         .then((response) => {
           dispatch({ type: GET_ITEM_STOCK, response: response.data });
@@ -202,13 +197,11 @@ export const get_items_stock = () => {
 export const search_item_list = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/search`,
+        url: `items/search`,
         params: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: GET_ITEM_LIST, response: response.data });
@@ -249,12 +242,10 @@ export const search_item_list = (data) => {
 export const get_items_store = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/get_item_stores`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/get_item_stores`,
+
       })
         .then((response) => {
           console.log(response);
@@ -296,12 +287,10 @@ export const get_items_store = () => {
 export const get_item_taxe = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/get_item_taxes`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/get_item_taxes`,
+
       })
         .then((response) => {
           console.log(response);
@@ -343,13 +332,11 @@ export const get_item_taxe = () => {
 export const save_item = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}items/`,
+        url: `items/`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({
@@ -400,13 +387,13 @@ export const save_item = (data) => {
 export const update_item_record = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}items/`,
+        url: `items/`,
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
+
         },
       })
         .then((response) => {
@@ -477,13 +464,11 @@ export const toggle_item_all_select = (status) => {
 export const delete_item_list = (id) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}items/delete`,
+        url: `items/delete`,
         data: { ids: id },
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           // console.log(response);
@@ -541,13 +526,13 @@ export const validate_csv = (data) => {
       import_loading: true,
     });
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}items/validate_csv`,
+        url: `items/validate_csv`,
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
+
         },
       })
         .then((response) => {
@@ -606,13 +591,13 @@ export const save_csv = (data) => {
       import_loading: true,
     });
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}items/save_csv`,
+        url: `items/save_csv`,
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
+
         },
         // onUploadProgress: function (progressEvent) {
         //   const { loaded, total } = progressEvent;
@@ -795,12 +780,10 @@ export const update_row_data = (row) => {
   console.log("row", row);
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/row/${row._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/row/${row._id}`,
+
       })
         .then((response) => {
           dispatch({

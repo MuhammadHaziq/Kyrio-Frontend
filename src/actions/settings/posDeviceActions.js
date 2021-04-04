@@ -11,10 +11,7 @@ import {
   UPDATE_POS_DEVICE,
   UPDATE_POS_DEIVCES_REDIRECT_STATES,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
-import $ from "jquery";
-// $.DataTable = require("datatables.net");
+import authAxios from '../../constants/authAxios'
 
 export const redirect_back_pos_devices = (status) => {
   return (dispatch) => {
@@ -28,12 +25,10 @@ export const redirect_back_pos_devices = (status) => {
 export const get_pos_devices = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}devices`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `devices`,
+
       })
         .then((response) => {
           dispatch({ type: GET_POS_DEVICES, response: response.data });
@@ -77,13 +72,11 @@ export const get_pos_devices = () => {
 export const add_new_pos_device = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}devices`,
+        url: `devices`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -136,13 +129,11 @@ export const add_new_pos_device = (data) => {
 export const get_store_pos_device = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}devices/getStoreDevice`,
+        url: `devices/getStoreDevice`,
         data: { storeId: data },
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({
@@ -190,13 +181,11 @@ export const get_store_pos_device = (data) => {
 export const update_pos_device = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}devices/${data._id}`,
+        url: `devices/${data._id}`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: UPDATE_POS_DEVICE, response: data });
@@ -248,12 +237,10 @@ export const update_pos_device = (data) => {
 export const delete_pos_devices = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}devices/${data}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `devices/${data}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_POS_DEVICES, response: data });
@@ -297,12 +284,10 @@ export const delete_pos_devices = (data) => {
 export const select_row_data_update = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}devices/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `devices/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({

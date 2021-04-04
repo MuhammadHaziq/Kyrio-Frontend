@@ -10,8 +10,8 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_employee = (status) => {
   return (dispatch) => {
@@ -25,12 +25,10 @@ export const redirect_back_employee = (status) => {
 export const get_employee_list = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/employeeList`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/employeeList`,
+
       })
         .then((response) => {
           dispatch({ type: GET_EMPLOYEE_LIST, response: response.data });
@@ -71,12 +69,10 @@ export const get_employee_list = () => {
 export const get_store_employee_list = (storeId) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/employeeList/get_store_employee_list/${storeId}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/employeeList/get_store_employee_list/${storeId}`,
+
       })
         .then((response) => {
           dispatch({ type: GET_EMPLOYEE_LIST, response: response.data });
@@ -120,13 +116,11 @@ export const get_store_employee_list = (storeId) => {
 export const get_employee_search = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/employeeList`,
+        url: `employee/employeeList`,
         params: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: GET_EMPLOYEE_LIST, response: response.data });
@@ -170,13 +164,11 @@ export const get_employee_search = (data) => {
 export const add_new_employee = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "POST",
-        url: `${BaseUrl}employee/employeeList`,
+        url: `employee/employeeList`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: ADD_NEW_EMPLOYEE, response: response.data });
@@ -245,12 +237,10 @@ export const toggle_employee_all_select = (status) => {
 export const delete_employee = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "DELETE",
-        url: `${BaseUrl}employee/employeeList/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/employeeList/${ids}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_EMPLOYEE, response: JSON.parse(ids) });
@@ -304,12 +294,10 @@ export const delete_employee = (ids) => {
 export const update_row_data = (row) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}employee/employeeList/${row._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `employee/employeeList/${row._id}`,
+
       })
         .then((response) => {
           dispatch({ type: ROW_DATA_EMPLOYEE_LIST, response: response.data });
@@ -355,13 +343,11 @@ export const update_row_data = (row) => {
 export const update_employee = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}employee/employeeList`,
+        url: `employee/employeeList`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response.data);

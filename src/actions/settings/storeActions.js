@@ -9,8 +9,8 @@ import {
   UPDATE_STORE,
   DELETE_STORE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_store = (status) => {
   return (dispatch) => {
@@ -24,12 +24,10 @@ export const redirect_back_store = (status) => {
 export const get_stores = () => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}stores`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `stores`,
+
       })
         .then((response) => {
           dispatch({ type: GET_STORES, response: response.data });
@@ -73,13 +71,11 @@ export const get_stores = () => {
 export const add_new_store = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}stores`,
+        url: `stores`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -132,13 +128,11 @@ export const add_new_store = (data) => {
 export const update_store = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "patch",
-        url: `${BaseUrl}stores/${data._id}`,
+        url: `stores/${data._id}`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           console.log(response);
@@ -190,12 +184,10 @@ export const update_store = (data) => {
 export const delete_store = (ids) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}stores/${ids}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `stores/${ids}`,
+
       })
         .then((response) => {
           console.log(response);
@@ -267,12 +259,10 @@ export const delete_store = (ids) => {
 export const get_store_row = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}stores/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `stores/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({

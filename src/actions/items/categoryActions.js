@@ -10,9 +10,8 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
-// import jwt from "jsonwebtoken";
+import authAxios from '../../constants/authAxios'
+
 
 export const redirect_back_category = (status) => {
   return (dispatch) => {
@@ -26,12 +25,10 @@ export const redirect_back_category = (status) => {
 export const get_category_list = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "get",
-        url: `${BaseUrl}items/categories`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/categories`,
+
       })
         .then((response) => {
           dispatch({ type: GET_CATEGORY_LIST, response: response.data });
@@ -75,13 +72,11 @@ export const get_category_list = (data) => {
 export const add_new_category = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "post",
-        url: `${BaseUrl}items/categories`,
+        url: `items/categories`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({ type: ADD_NEW_CATEGORY, response: response.data });
@@ -132,12 +127,10 @@ export const add_new_category = (data) => {
 export const select_row_data_update = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "GET",
-        url: `${BaseUrl}items/categories/row/${data._id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/categories/row/${data._id}`,
+
       })
         .then((response) => {
           dispatch({
@@ -184,13 +177,11 @@ export const select_row_data_update = (data) => {
 export const update_item_category = (data) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "PATCH",
-        url: `${BaseUrl}items/categories/${data.id}`,
+        url: `items/categories/${data.id}`,
         data: data,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+
       })
         .then((response) => {
           dispatch({
@@ -262,12 +253,10 @@ export const toggle_category_all_select = (status) => {
 export const delete_categories = (id) => {
   return (dispatch) => {
     try {
-      axios({
+      authAxios({
         method: "delete",
-        url: `${BaseUrl}items/categories/${id}`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+        url: `items/categories/${id}`,
+
       })
         .then((response) => {
           dispatch({ type: DELETE_CATEGORY, response: JSON.parse(id) });

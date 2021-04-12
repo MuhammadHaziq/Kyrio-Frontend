@@ -31,13 +31,15 @@ import {
   toggle_item_stock,
   set_item_store_values,
 } from "../../../actions/items/itemActions";
+import authAxios from '../../../constants/authAxios'
+
 const AddItem = (props) => {
   const [fields, setFields] = useState({
     item_name: "",
     categoryId: "0",
     sold_by: "Each",
     price: "",
-    cost: 0.0,
+    cost: "",
     sku: "",
     item_barcode: "",
     represent_type: "Color_and_shape",
@@ -45,6 +47,7 @@ const AddItem = (props) => {
     availableForSale: false,
   });
   const [isHovered, setIsHovered] = useState(false);
+  const [autoSKU, setAutoSKU] = useState("");
   const [itemImage, setItemImage] = useState(null);
   const [inventorySwitch, setInventorySwitch] = useState([false, false]);
   const [modifierSwitch, setModifierSwitch] = useState([false, false]);
@@ -62,6 +65,23 @@ const AddItem = (props) => {
   const modifire = useSelector((state) => state.items.modifiresReducer);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    authAxios({
+      method: "get",
+      url: `items/sku`,
+
+    })
+      .then((res) => {
+        setAutoSKU(res.data.sku)
+        setFields({
+          ...fields,
+          sku: res.data.sku,
+        });
+      })
+      .catch((error) => {
+        console.log("err", error.response);
+      });
+  },[])
   useEffect(() => {
     if (
       item.redirect_itemList !== undefined &&
@@ -219,6 +239,7 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
+    formData.append("autoSKU", autoSKU == fields.sku);
     dispatch(save_item(formData));
   };
 
@@ -416,6 +437,7 @@ const AddItem = (props) => {
                     value={fields.price}
                     thousandSeparator={true}
                     onChange={handleOnChange}
+                    decimalScale={2}
                     className="form-control"
                   />
                 </CInputGroup>

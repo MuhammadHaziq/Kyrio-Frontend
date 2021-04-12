@@ -47,25 +47,25 @@ const TotalHoursWorked = React.lazy(() =>
 const routes = [
 
   { path: "/", exact: true, name: "Home", Component: Dashboard },
-  { path: "/reports/sales", name: "Reports / Sales", Component: Dashboard },
+  { path: "/reports/sales", name: "Reports / Sales Summary", Component: Dashboard },
   {
     path: "/reports/goods",
-    name: "Reports / Items",
+    name: "Reports / Sale by Items",
     Component: SalesItem,
   },
   {
     path: "/reports/categories",
-    name: "Reports / Categories",
+    name: "Reports / Sale by Categories",
     Component: Categories,
   },
   {
     path: "/reports/employee",
-    name: "Reports / Employee",
+    name: "Reports / Sale by Employee",
     Component: SalesEmployee,
   },
   {
     path: "/reports/pay-types",
-    name: "Reports / Payment Type",
+    name: "Reports / Sale by Payment Type",
     Component: SalesPaymentType,
   },
   {
@@ -100,30 +100,15 @@ const routes = [
     exact: true,
     Component: Features,
   },
-  {
-    path: "/settings/Features",
-    name: "Features",
-    Component: Features,
-  },
-  {
-    path: "/settings/Features",
-    name: "Features",
-    Component: Features,
-  },
-  {
-    path: "/settings/Features",
-    name: "Features",
-    Component: Features,
-  },
   // { path: "/settings", name: "Settings", Component: Settings },
   // { path: "/settings", name: "Settings", Component: Settings },
   // { path: "/settings", name: "Settings", Component: Settings },
   // { path: "/settings", name: "Settings", Component: Settings },
-  { path: "/items", name: "Item-list", Component: ItemsList },
-  { path: "/categories", name: "Category-list", Component: CategoryList },
-  { path: "/discounts", name: "Discount-list", Component: DiscountList },
-  { path: "/modifiers", name: "Modifire-list", Component: Modifires },
-  { path: "/customers", name: "Customer", Component: Customers },
+  { path: "/items", name: "items / Item-list", exact: true, Component: ItemsList },
+  { path: "/categories", name: "items / Category-list", exact: true, Component: CategoryList },
+  { path: "/discounts", name: "items / Discount-list", exact: true, Component: DiscountList },
+  { path: "/modifiers", name: "items / Modifire-list", exact: true, Component: Modifires },
+  { path: "/customers", name: "items / Customer", exact: true, Component: Customers },
   {
     path: "/employees",
     name: "Employee List",

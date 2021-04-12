@@ -116,24 +116,35 @@ const ItemsListDatatable = (props) => {
           );
         },
         margin: (item) => {
-          const price =
-            item.price !== undefined && item.price !== null ? item.price : 0;
-          const cost =
-            item.cost !== undefined && item.cost !== null ? item.cost : 0;
-          if (+cost === +price && +cost !== 0 && +price !== 0) {
-            return <td>{"0 %"}</td>;
-          } else if (+cost === 0 && +price === 0) {
-            return <td>{"-"}</td>;
-          } else {
-            if (+price === 0) {
-              return <td>{"-"}</td>;
-            }
-            const P = price - cost;
-            const margin = (P / price) * 100;
-            console.log(margin);
-            // const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
-            return <td>{margin.toFixed(2) + " %"}</td>;
+          const price = item.price !== undefined && item.price !== null ? item.price : 0;
+          const cost = item.cost !== undefined && item.cost !== null ? item.cost : 0;
+
+          let margin = "-";
+
+          if( cost == 0 && price !== 0 ){
+            margin = 100
+          } else if( cost !== 0 && price !== 0 ){
+            margin = ((price - cost) / price) * 100
           }
+          if(margin !== "-"){
+            return <td>{margin.toFixed(2) + " %"}</td>; 
+          } else {
+            return <td>{margin}</td>; 
+          }
+          // if (+cost === +price && +cost !== 0 && +price !== 0) {
+          //   return <td>{"0 %"}</td>;
+          // } else if (+cost === 0 && +price === 0) {
+          //   return <td>{"-"}</td>;
+          // } else {
+          //   if (+price === 0) {
+          //     return <td>{"-"}</td>;
+          //   }
+          //   const P = price - cost;
+          //   const margin = (P / price) * 100;
+          //   console.log(margin);
+          //   // const margin = +price === 0 ? +cost * 100 : (+cost / +price) * 100;
+          //   return <td>{margin.toFixed(2) + " %"}</td>;
+          // }
         },
         stockQty: (item) => {
           if (typeof item.stores !== "undefined" && item.stores.length > 0) {

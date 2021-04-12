@@ -164,7 +164,6 @@ class ModifireList extends Component {
       result.source.index,
       result.destination.index
     );
-    console.log(items);
     const data = {
       data: JSON.stringify(
         items.map((item, index) => {
@@ -215,7 +214,6 @@ class ModifireList extends Component {
     this.props.toggle_modifire_single_select(row);
   };
   render() {
-    console.log("items", this.state.items);
     return (
       <React.Fragment>
         <CRow>

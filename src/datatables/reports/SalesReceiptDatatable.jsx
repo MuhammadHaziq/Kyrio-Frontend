@@ -21,9 +21,12 @@ const SalesReceiptDatatable = (props) => {
   };
 
   const clickRow = (item, index, column) => {
-    if (column !== "select") {
-      dispatch(update_row_data(item));
-    }
+    console.log('Row Click', item, index)
+    // const data = {
+    //   "ticket": "This is updated Sale Ticket",
+    //   sale_id: item._id
+    // }
+    dispatch(update_row_data(item, true));
   };
 
   const checkAll = (e, selectAll) => {
@@ -55,8 +58,8 @@ const SalesReceiptDatatable = (props) => {
       sorter
       hover
       pagination
-      // clickableRows
-      // onRowClick={clickRow}
+      clickableRows
+      onRowClick={clickRow}
       scopedSlots={{
         created_at: (item) => {
           return (

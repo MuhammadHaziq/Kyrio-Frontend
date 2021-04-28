@@ -4,12 +4,15 @@ import {
   TOGGLE_SALE_RECEIPT_SUMMARY_ALL_SELECT,
   DELETE_SALES_RECEIPT_SUMMARY,
   ROW_DATA_SALES_RECEIPT_SUMMARY,
+  TOGGLE_RECEIPT_SIDEBAR
 } from "../../constants/ActionTypes";
 
 const initialState = {
   sale_receipt_summary: [],
   redirect_update: false,
   redirect_sale_receipt_summary: true,
+  show_receipt_detail: false,
+  sales_receipt_data: []
 };
 const salesReceiptReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -57,7 +60,19 @@ const salesReceiptReducer = (state = initialState, action) => {
         redirect_sale_receipt_summary: true,
       };
     }
-
+    case ROW_DATA_SALES_RECEIPT_SUMMARY: {
+      return {
+        ...state,
+        show_receipt_detail: action.status,
+        sales_receipt_data: action.response
+      }
+    }
+    case TOGGLE_RECEIPT_SIDEBAR: {
+      return {
+        ...state,
+        show_receipt_detail: action.status
+      }
+    }
     default:
       return { ...state };
   }

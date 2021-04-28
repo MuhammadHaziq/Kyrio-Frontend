@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
-
+import CancelReceipt from './CancelReceipt'
 const SalesReceipts = () => {
   const dispatch = useDispatch();
   const sale_receipt_summary = useSelector((state) => state.reports.salesReceiptReducer.sale_receipt_summary)
@@ -49,7 +49,6 @@ const SalesReceipts = () => {
 
 
   const deleteSalesReceipt = () => {
-    console.log("Delete");
     setShowAlert(!showAlert);
   };
 
@@ -136,6 +135,7 @@ const SalesReceipts = () => {
           </CCard>
         </CCol>
       </CRow>
+      <CancelReceipt />
     </>
   );
 };

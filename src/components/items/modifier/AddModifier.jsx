@@ -11,21 +11,15 @@ import {
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CLink,
   CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
   CListGroup,
-  CListGroupItem,
-  CSwitch,
-  CImg,
+  CListGroupItem
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
-import { MdLocalOffer } from "react-icons/md";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { add_new_modifier } from "../../../actions/items/modifiresActions";
@@ -105,7 +99,6 @@ const AddModifier = (props) => {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
       return false;
     } else if (validateModiferFields.length > 0) {
-      console.log(validateModiferFields);
       const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
         if (item.name.trim() == "" || item.price === "") {
           const data = modifierFieldsError.map((ite, indx) => {
@@ -125,28 +118,24 @@ const AddModifier = (props) => {
     } else {
       const data = {
         title: fields.modifier_name,
-        options: JSON.stringify(
-          modifierFields.map((item) => {
+        options: modifierFields.map((item) => {
             return {
               name: item.name,
               price: ReturnNumber(item.price),
               position: item.position,
             };
-          })
-        ),
-        stores: JSON.stringify(
-          storeId
+          }),
+        stores: storeId
             .filter((item) => item.isSelected === true)
             .map((ite) => {
-              return {
-                id: ite._id,
-                name: ite.title,
-              };
+              return ite._id
+              // return {
+              //   id: ite._id,
+              //   name: ite.title,
+              // };
             })
-        ),
       };
       dispatch(add_new_modifier(data));
-      console.log(data);
     }
   };
 
@@ -532,42 +521,27 @@ const AddModifier = (props) => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          {" "}
-          <h4>
-            Stores
-            <div className="card-footer-actions float-right">
-              <CLink className="card-footer-action" onClick={() => toggle(0)}>
-                <CIcon
-                  name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
-                />
-              </CLink>
-            </div>
-          </h4>
-          <span>
-            <small>
-              {storeId.filter((item) => item.isSelected === false).length === 0
-                ? "Available in all stores"
-                : "Not available in stores"}
-            </small>
-          </span>
-        </CCardFooter>
-      </CCard>
-      <CCollapse show={!collapse[0]}>
         <CCard>
           <CCardHeader>
             <h4>
-              <strong>Stores</strong>
-              <div className="card-header-actions">
-                <CLink className="card-header-action" onClick={() => toggle(0)}>
+              Stores
+              <div className="card-footer-actions float-right">
+                <CLink className="card-footer-action" onClick={() => toggle(0)}>
                   <CIcon
-                    name={
-                      collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
-                    }
+                    name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
                   />
                 </CLink>
               </div>
             </h4>
+            <span>
+              <small>
+                {storeId.filter((item) => item.isSelected === false).length === 0
+                  ? "Available in all stores"
+                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
+              </small>
+            </span>
           </CCardHeader>
+          <CCollapse show={!collapse[0]}>
           <CCardBody>
             <CFormGroup>
               <CCol md="3">
@@ -614,8 +588,11 @@ const AddModifier = (props) => {
               </CCol>
             </CFormGroup>
           </CCardBody>
+          </CCollapse>
         </CCard>
-      </CCollapse>
+        </CCardFooter>
+      </CCard>
+      
       <CRow>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
           <CButton

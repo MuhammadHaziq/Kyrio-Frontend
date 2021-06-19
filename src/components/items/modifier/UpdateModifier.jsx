@@ -11,17 +11,12 @@ import {
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CLink,
   CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
   CListGroup,
-  CListGroupItem,
-  CSwitch,
-  CImg,
+  CListGroupItem
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -83,7 +78,7 @@ const UpdateModifier = (props) => {
       if (props.modifier_row_data !== undefined) {
         (props.modifier_row_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.id) {
+            if (item._id === ite._id) {
               return {
                 ...item,
                 isSelected: true,
@@ -160,25 +155,18 @@ const UpdateModifier = (props) => {
       const data = {
         id: props.modifier_row_data._id,
         title: fields.modifier_name,
-        options: JSON.stringify(
-          modifierFields.map((item) => {
+        options: modifierFields.map((item) => {
             return {
               name: item.name,
               price: ReturnNumber(item.price),
               position: item.position,
             };
-          })
-        ),
-        stores: JSON.stringify(
-          storeId
+          }),
+        stores: storeId
             .filter((item) => item.isSelected === true)
             .map((ite) => {
-              return {
-                id: ite._id,
-                name: ite.title,
-              };
+              return ite._id
             })
-        ),
       };
       dispatch(update_modifier(data));
     }
@@ -576,42 +564,27 @@ const UpdateModifier = (props) => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-          {" "}
-          <h4>
-            Stores
-            <div className="card-footer-actions float-right">
-              <CLink className="card-footer-action" onClick={() => toggle(0)}>
-                <CIcon
-                  name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
-                />
-              </CLink>
-            </div>
-          </h4>
-          <span>
-            <small>
-              {storeId.filter((item) => item.isSelected === false).length === 0
-                ? "Available in all stores"
-                : "Not available in stores"}
-            </small>
-          </span>
-        </CCardFooter>
-      </CCard>
-      <CCollapse show={!collapse[0]}>
-        <CCard>
+          <CCard>
           <CCardHeader>
             <h4>
-              <strong>Stores</strong>
-              <div className="card-header-actions">
-                <CLink className="card-header-action" onClick={() => toggle(0)}>
+              Stores
+              <div className="card-footer-actions float-right">
+                <CLink className="card-footer-action" onClick={() => toggle(0)}>
                   <CIcon
-                    name={
-                      collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
-                    }
+                    name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
                   />
                 </CLink>
               </div>
             </h4>
+            <span>
+              <small>
+                {storeId.filter((item) => item.isSelected === false).length === 0
+                  ? "Available in all stores"
+                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
+              </small>
+            </span>
           </CCardHeader>
+          <CCollapse show={!collapse[0]}>
           <CCardBody>
             <CFormGroup>
               <CCol md="3">
@@ -628,11 +601,9 @@ const UpdateModifier = (props) => {
                     onChange={storeHandleChange}
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    Available in all stores
-                    {/*storeId.filter((item) => item.isSelected !== true)
-                      .length === 0
-                      ? "UnSelect All"
-                      : "Select All"*/}
+                  {storeId.filter((item) => item.isSelected === false).length === 0
+                  ? "Available in all storesssss"
+                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
                   </CLabel>
                 </CFormGroup>
               </CCol>
@@ -658,8 +629,10 @@ const UpdateModifier = (props) => {
               </CCol>
             </CFormGroup>
           </CCardBody>
+          </CCollapse>
         </CCard>
-      </CCollapse>
+        </CCardFooter>
+      </CCard>
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <ConformationAlert

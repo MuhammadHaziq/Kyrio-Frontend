@@ -34,9 +34,9 @@ const Modifires = (props) => {
   const modifire = useSelector((state) => state.items.modifiresReducer);
 
   useEffect(() => {
-    setSelectedStoreId(auth.user.stores[0]._id);
+    setSelectedStoreId(0);
     if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {
-      dispatch(get_modifires_list(auth.user.stores[0]._id));
+      dispatch(get_modifires_list(0));
     }
   }, [auth, dispatch]);
   useEffect(() => {
@@ -79,7 +79,6 @@ const Modifires = (props) => {
         return item._id;
       });
     dispatch(delete_modifire(JSON.stringify(modifire_id)));
-    console.log(modifire_id);
   };
 
   return (

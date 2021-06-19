@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import  { Redirect } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -70,13 +71,21 @@ class DiningOptions extends Component {
       items: [],
       selectedStoreId: "0",
       click_Check: false,
+      redirect: false
     };
 
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
   componentDidMount() {
-    this.props.get_dining_options();
+    let feature = this.props.features.filter(ftr => ftr.feature.name == "Dining options")[0].enable
+    if(!feature){
+      this.setState({
+        redirect: true
+      })
+    } else {
+      this.props.get_dining_options();
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -85,23 +94,25 @@ class DiningOptions extends Component {
       this.props.dining_option_list !== undefined
     ) {
       let result = [];
+      
       this.props.dining_option_list.map((item, index) => {
+        
         return result.push({
           storeId: item.storeId,
           storeName: item.storeName,
           data: item.data.map((ite) =>
-            ite.stores.filter((str) => str.storeId === item.storeId).length > 0
+            ite.stores.filter((str) => str.store._id === item.storeId).length > 0
               ? {
-                  id: ite._id,
+                  _id: ite._id,
                   content: ite.title,
                   isActive: ite.stores
-                    .filter((str) => str.storeId === item.storeId)
+                    .filter((str) => str.store._id === item.storeId)
                     .map((ites) => {
                       return ites.isActive;
                       // ? ites.isActive : false;
                     })[0],
                   position: ite.stores
-                    .filter((str) => str.storeId === item.storeId)
+                    .filter((str) => str.store._id === item.storeId)
                     .map((ites) => {
                       return ites.position;
                       // ? ites.position : ite.stores.length;
@@ -172,11 +183,9 @@ class DiningOptions extends Component {
     );
 
     const data = {
-      data: JSON.stringify(
-        items.map((item, index) => {
-          return { id: item.id, position: index, title: item.content };
-        })
-      ),
+      data: items.map((item, index) => {
+          return { _id: item._id, position: index, title: item.content };
+        }),
       storeId: result.source.droppableId,
     };
 
@@ -189,7 +198,6 @@ class DiningOptions extends Component {
       }
       return item;
     });
-
     this.props.update_dining_option_postion(data);
     this.setState({
       ...this.state,
@@ -241,11 +249,12 @@ class DiningOptions extends Component {
 
   diningHandleCheck = (id, storeId) => {
     let items = this.state.items.slice().map((item) => {
+      
       if (item.storeId === storeId) {
         return {
           ...item,
           data: item.data.map((ite) => {
-            if (ite.id === id) {
+            if (ite._id === id) {
               return {
                 ...ite,
                 isActive: !ite.isActive,
@@ -258,22 +267,22 @@ class DiningOptions extends Component {
       return item;
     });
 
-    const reorderCheck = items
-      .filter((item) => item.storeId === storeId)
-      .map((item) => {
-        return item.data;
-      })[0];
-    reorderCheck.sort(this.compare);
+    // const reorderCheck = items
+    //   .filter((item) => item.storeId === storeId)
+    //   .map((item) => {
+    //     return item.data;
+    //   })[0];
+    // reorderCheck.sort(this.compare);
 
-    items = items.map((item) => {
-      if (item.storeId === storeId) {
-        return {
-          ...item,
-          data: reorderCheck,
-        };
-      }
-      return item;
-    });
+    // items = items.map((item) => {
+    //   if (item.storeId === storeId) {
+    //     return {
+    //       ...item,
+    //       data: reorderCheck,
+    //     };
+    //   }
+    //   return item;
+    // });
 
     this.setState({
       ...this.state,
@@ -281,13 +290,12 @@ class DiningOptions extends Component {
     });
     const data = {
       storeId: storeId,
-      data: JSON.stringify(
+      data: 
         items
           .filter((item) => item.storeId === storeId)
           .map((item) => {
             return item.data;
-          })[0]
-      ),
+          })[0],
     };
     // const data = {
     //   data: JSON.stringify(items),
@@ -312,6 +320,8 @@ class DiningOptions extends Component {
       fadeUpdateDiningOption,
     } = this.state;
     return (
+      <>
+      {this.state.redirect ? <Redirect to="/" /> : 
       <React.Fragment>
         {fadeUpdateDiningOption ? (
           <CFade timeout={timeout} in={fadeUpdateDiningOption}>
@@ -439,12 +449,15 @@ class DiningOptions extends Component {
                                     >
                                       <CListGroup>
                                         {dinings.data.map((item, index) =>
+                                         
                                           item !== "" ? (
+                                            
                                             <Draggable
-                                              key={item.id}
-                                              draggableId={item.id}
+                                              key={item._id}
+                                              draggableId={item._id}
                                               index={index}
                                             >
+                                             
                                               {(provided, snapshot) => (
                                                 <div
                                                   ref={provided.innerRef}
@@ -469,7 +482,7 @@ class DiningOptions extends Component {
                                                         onClick={() =>
                                                           this.dining_row(
                                                             dinings.storeId,
-                                                            item.id
+                                                            item._id
                                                           )
                                                         }
                                                       >
@@ -484,16 +497,16 @@ class DiningOptions extends Component {
                                                         <CInputCheckbox
                                                           name="diningId"
                                                           id={
-                                                            "diningId" + item.id
+                                                            "diningId" + item._id
                                                           }
-                                                          value={item.id}
+                                                          value={item._id}
                                                           checked={
                                                             item.isActive
                                                           }
                                                           onChange={() =>
                                                             this.diningHandleCheck(
-                                                              item.id,
-                                                              dinings.storeId
+                                                              item._id,
+                                                              dinings.storeId,
                                                             )
                                                           }
                                                         />
@@ -529,7 +542,7 @@ class DiningOptions extends Component {
                                               )}
                                             </Draggable>
                                           ) : (
-                                            ""
+                                            "No dining options available"
                                           )
                                         )}
                                       </CListGroup>
@@ -555,6 +568,7 @@ class DiningOptions extends Component {
           ""
         )}
       </React.Fragment>
+    } </>
     );
   }
 }
@@ -567,6 +581,7 @@ const mapStateToProps = (state) => {
     update_data: state.settingReducers.diningOptionReducer.update_data,
     store: state.settingReducers.storeReducer.stores_list,
     darkMode: state.settings.darkMode,
+    features: state.auth.user.features
   };
 };
 

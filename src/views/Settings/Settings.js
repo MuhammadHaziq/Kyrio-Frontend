@@ -43,20 +43,21 @@ const Settings = () => {
   }, [dispatch]);
   const setting = [];
   useEffect(() => {
-    if (settings !== undefined && settings.settingModules) {
-      (settings.settingModules || []).map((item, index) =>
+    if (settings !== undefined && settings) {
+      
+      (settings || []).map((item, index) =>
         index !== 9
           ? item.enable === true
             ? setting.push({
                 _tag: "CSidebarNavItem",
-                name: item.moduleName,
-                moduleName: item.moduleName,
-                to: `${url}/${item.moduleName.replace(/\s/g, "")}`,
+                name: item.module.name,
+                moduleName: item.module.name,
+                to: `${url}/${item.module.name.replace(/\s/g, "")}`,
               })
             : ""
           : setting.push({
               _tag: "CSidebarNavItem",
-              name: item.heading,
+              name: item.module.heading,
               icon: "cil-home",
             })
       );
@@ -106,17 +107,6 @@ const Settings = () => {
                           CSidebarNavItem,
                         }}
                       />
-                      {/*
-                      <h5>
-                        <MdStore style={{ fontSize: "30px" }} />
-                        <strong>&nbsp;Stores</strong>
-                        <br />
-                        <small>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store
-                          &amp; POS settings
-                        </small>
-                      </h5>
-                      */}
                     </CSidebarNav>
                   </CSidebar>
                 </CListGroup>

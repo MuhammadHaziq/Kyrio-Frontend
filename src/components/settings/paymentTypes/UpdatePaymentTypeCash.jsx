@@ -111,7 +111,7 @@ const UpdatePaymentType = (props) => {
 
     const data = {
       name: fields.name,
-      paymentTypes: JSON.stringify(PaymentType),
+      paymentTypes: PaymentType,
       storeId: props.update_data.storeId,
       id: props.update_data._id,
       cashPaymentRound: cashPaymentRound,

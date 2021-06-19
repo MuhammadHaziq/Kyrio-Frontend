@@ -128,7 +128,7 @@ const CategoryList = (props) => {
                               return item.isDeleted === true;
                             })
                             .map((item) => {
-                              return item.catTitle;
+                              return item.title;
                             })
                             .join(",")}) ?`}
                           buttonAction={deleteCategory}

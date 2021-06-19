@@ -1,6 +1,7 @@
 import {
   GET_SETTING_FEATURES,
   UPDATE_SETTING_FEATURES,
+  GET_FEATURE_MODULE,
   TOGGLE_FEATURE_MODULE,
   MESSAGE,
   ERROR_MESSAGE,
@@ -18,20 +19,7 @@ export const get_setting_features = (storeId) => {
 
       })
         .then((response) => {
-          if (response.data.status === true) {
-            dispatch({
-              type: GET_SETTING_FEATURES,
-              response: response.data.data,
-            });
-          } else {
-            let msg = {
-              open: true,
-              message: "Features Not Assigned",
-              object: {},
-              error: false,
-            };
-            dispatch({ type: MESSAGE, data: msg });
-          }
+          dispatch({ type: GET_FEATURE_MODULE, response: response.data.features });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -79,8 +67,8 @@ export const toggle_feature_module = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
-          dispatch({ type: TOGGLE_FEATURE_MODULE, response: data.features });
+          
+          dispatch({ type: TOGGLE_FEATURE_MODULE, response: response.data.features });
           let msg = {
             open: true,
             message: response.data.message,
@@ -92,7 +80,7 @@ export const toggle_feature_module = (data) => {
         .catch((error) => {
           let msg;
           let errors = [];
-          console.log("err", error.response);
+          console.log("err", error.message);
           if (typeof error.response !== "undefined") {
             if (typeof error.response.data.errors !== "undefined") {
               (error.response.data.errors || []).map((item) => {

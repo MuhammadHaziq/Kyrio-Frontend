@@ -1,6 +1,5 @@
 import axios from "axios";
 import { BaseUrl } from './baseUrls'
-import { history } from './history'
 import * as ACTIONS from '../actions/authAction'
 import { store } from '../store'
 

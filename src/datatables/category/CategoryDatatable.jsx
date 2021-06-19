@@ -46,7 +46,7 @@ const CategoryDatatable = (props) => {
           filter: false,
           _style: { width: "5%" },
         },
-        { key: "catTitle", label: "Name", filter: true },
+        { key: "title", label: "Name", filter: true },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -86,14 +86,14 @@ const CategoryDatatable = (props) => {
             </td>
           );
         },
-        catTitle: (item) => {
+        title: (item) => {
           return (
             <td>
               <svg height="40" width="35">
-                <circle cx="15" cy="25" r="15" fill={item.catColor} />
+                <circle cx="15" cy="25" r="15" fill={item.color} />
                 Sorry, your browser does not support inline SVG.
               </svg>
-              {item.catTitle}
+              {item.title}
               <span>
                 <small
                   style={{

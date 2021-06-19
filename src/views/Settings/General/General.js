@@ -30,25 +30,24 @@ import {
 import validator from "validator";
 import { useSelector, useDispatch } from "react-redux";
 import parse from "html-react-parser";
-import { toggle_feature_module } from "../../../actions/settings/featuresActions";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import { toggle_feature_module, get_setting_features } from "../../../actions/settings/featuresActions";
+// import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { setTimeout } from "core-js";
 
 var languages = require("language-list")();
 
 const General = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+
   const [collapsed, setCollapsed] = React.useState([true, true]);
+  const [showFeatures, setShowFeatures] = React.useState(true);
   const [sChecked, setChecked] = React.useState(user.features);
-  const [showAlert, setShowAlert] = useState(false);
   const [language] = useState(languages.getData());
   const [checkPrev, setCheckPrev] = useState([]);
-  const [modelState, setModalState] = useState({
-    button_text: "",
-    heading: "",
-    section: "",
-    index: [],
-  });
+
   const [formState, setFormState] = useState({
     values: {
       email: user.email,
@@ -61,7 +60,52 @@ const General = () => {
       language: false,
     },
   });
-
+ useEffect(()=>{
+  dispatch(get_setting_features());
+ },[])
+  const closeAlert = () => {
+    // setChecked(user.features);
+    dispatch(get_setting_features());
+  }
+  const showAlert = (param) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className='custom-ui'>
+            <h3>{param.heading}</h3>
+            <p>{param.section}</p>
+            <CRow>
+              <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                <CButton
+                  color="secondary"
+                  block
+                  className="btn-pill pull-right"
+                  outline="outline"
+                  onClick={() => { closeAlert(); onClose(); }}
+                >
+                  CANCEL
+                </CButton>
+              </CCol>
+              <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                <CButton
+                  color="danger"
+                  block
+                  className="btn-pill pull-right"
+                  outline="outline"
+                  onClick={() => {
+                    saveAlertFeatures();
+                    onClose();
+                  }}
+                >
+                  DISABLE
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
+        );
+      }
+    });
+  };
   useEffect(() => {
     if (
       user.features !== undefined &&
@@ -71,21 +115,22 @@ const General = () => {
       setCheckPrev([
         user.features.filter(
           (item) =>
-            item.featureName.toUpperCase() ===
+            item.feature.name.toUpperCase() ===
               "Customer displays".toUpperCase() && item.enable === true
         ).length > 0,
 
         user.features.filter(
           (item) =>
-            item.featureName.toUpperCase() === "Dining options".toUpperCase() &&
+            item.feature.name.toUpperCase() === "Dining options".toUpperCase() &&
             item.enable === true
         ).length > 0,
         user.features.filter(
           (item) =>
-            item.featureName.toUpperCase() ===
+            item.feature.name.toUpperCase() ===
               "Kitchen printers".toUpperCase() && item.enable === true
         ).length > 0,
       ]);
+      setChecked(user.features);
     }
   }, [user.features]);
 
@@ -100,10 +145,6 @@ const General = () => {
     }));
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
-
   const handleFeature = (index, enable) => {
     let array = sChecked;
     array[index].enable = !enable;
@@ -113,139 +154,79 @@ const General = () => {
   const handleBlur = (e) => {};
 
   const saveFeatures = () => {
+    let hold = false
+    let settings = (user.settings || []).map((item, index) => {
+      let feature = item.feature !== null ? item.feature._id : null
+      let enable = (sChecked || []).filter(itm => itm.feature._id == feature)
+      enable = enable.length > 0 ? enable[0].enable : item.enable
+      return {
+        feature: feature,
+        enable: enable,
+        _id: item._id,
+        module: item.module._id
+      };
+    })
     const features = (sChecked || []).map((item, index) => {
       return {
-        featureId: item.featureId,
+        featureId: item.feature._id,
         enable: item.enable,
-        feature_id: item._id,
-        feature_name: item.featureName,
+        _id: item._id,
+        name: item.feature.name,
         index: index,
       };
     });
+    // const settings = (sChecked || []).map((item, index) => {
+    //   return {
+    //     featureId: item.feature._id,
+    //     enable: item.enable,
+    //     _id: item._id,
+    //     name: item.feature.name,
+    //     index: index,
+    //   };
+    // });
     const customer_displays =
       features.filter(
         (item) =>
-          item.feature_name.toUpperCase() ===
+          item.name.toUpperCase() ===
             "Customer displays".toUpperCase() && item.enable === false
       ).length > 0;
     const dining_option =
       features.filter(
         (item) =>
-          item.feature_name.toUpperCase() === "Dining options".toUpperCase() &&
+          item.name.toUpperCase() === "Dining options".toUpperCase() &&
           item.enable === false
       ).length > 0;
     const kitchen_printer =
       features.filter(
         (item) =>
-          item.feature_name.toUpperCase() ===
+          item.name.toUpperCase() ===
             "Kitchen printers".toUpperCase() && item.enable === false
       ).length > 0;
+      
     if (
-      customer_displays &&
-      checkPrev[0] === true &&
-      dining_option &&
-      checkPrev[1] === true &&
       kitchen_printer &&
       checkPrev[2] === true
     ) {
-      setModalState({
+      showAlert({
         button_text: "Disbale",
-        heading: "",
+        heading: "Disable kitchen printers",
         section:
-          "Are you sure you want to disable kitchen printers, customer displays and dining options? All settings of the kitchen printers, customer displays and dining options will be lost.",
+          "Are you sure you want to disable kitchen printers? All settings of the kitchen printers will be lost.",
         index: features
           .filter(
-            (item) =>
-              item.feature_name.toUpperCase() ===
-                "Customer displays".toUpperCase() ||
-              item.feature_name.toUpperCase() ===
-                "Dining options".toUpperCase() ||
-              item.feature_name.toUpperCase() ===
+            (item) => item.name.toUpperCase() ===
                 "Kitchen printers".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      setShowAlert(true);
-      // "
-      return false;
+      hold = true
     } else if (
       customer_displays &&
-      checkPrev[0] === true &&
-      dining_option &&
-      checkPrev[1] === true
+      checkPrev[0] === true
     ) {
-      setModalState({
-        button_text: "Disbale",
-        heading: "",
-        section:
-          "Are you sure you want to disable customer displays and dining options? All settings of the customer displays and dining options will be lost.",
-        index: features
-          .filter(
-            (item) =>
-              item.feature_name.toUpperCase() ===
-                "Customer displays".toUpperCase() ||
-              item.feature_name.toUpperCase() === "Dining options".toUpperCase()
-          )
-          .map((item) => {
-            return item.index;
-          }),
-      });
-      setShowAlert(true);
-      return false;
-    } else if (
-      customer_displays &&
-      checkPrev[0] === true &&
-      kitchen_printer &&
-      checkPrev[2] === true
-    ) {
-      setModalState({
-        button_text: "Disbale",
-        heading: "",
-        section:
-          "Are you sure you want to disable kitchen printer and Customer display? All settings of the kitchen printer and dining options will be lost.",
-        index: features
-          .filter(
-            (item) =>
-              item.feature_name.toUpperCase() ===
-                "Customer displays".toUpperCase() ||
-              item.feature_name.toUpperCase() ===
-                "Kitchen printers".toUpperCase()
-          )
-          .map((item) => {
-            return item.index;
-          }),
-      });
-      setShowAlert(true);
-      return false;
-    } else if (
-      dining_option &&
-      checkPrev[1] === true &&
-      kitchen_printer &&
-      checkPrev[2] === true
-    ) {
-      setModalState({
-        button_text: "Disbale",
-        heading: "",
-        section:
-          "Are you sure you want to disable kitchen printer and dining options? All settings of the kitchen printer and dining options will be lost.",
-        index: features
-          .filter(
-            (item) =>
-              item.feature_name.toUpperCase() ===
-                "Dining options".toUpperCase() ||
-              item.feature_name.toUpperCase() ===
-                "Kitchen printers".toUpperCase()
-          )
-          .map((item) => {
-            return item.index;
-          }),
-      });
-      setShowAlert(true);
-      return false;
-    } else if (customer_displays && checkPrev[0] === true) {
-      setModalState({
+      showAlert({
         button_text: "Disbale",
         heading: "Disable customer displays",
         section:
@@ -253,17 +234,19 @@ const General = () => {
         index: features
           .filter(
             (item) =>
-              item.feature_name.toUpperCase() ===
-              "Customer displays".toUpperCase()
+              item.name.toUpperCase() ===
+                "Customer displays".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      setShowAlert(true);
-      return false;
-    } else if (dining_option && checkPrev[1] === true) {
-      setModalState({
+      hold = true
+    } else if (
+      dining_option &&
+      checkPrev[1] === true
+    ) {
+      showAlert({
         button_text: "Disbale",
         heading: "Disable dining options",
         section:
@@ -271,63 +254,50 @@ const General = () => {
         index: features
           .filter(
             (item) =>
-              item.feature_name.toUpperCase() === "Dining options".toUpperCase()
+              item.name.toUpperCase() ===
+                "Dining options".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      setShowAlert(true);
-      return false;
-    } else if (kitchen_printer && checkPrev[2] === true) {
-      setModalState({
-        button_text: "Disbale",
-        heading: "Disable kitchen printer",
-        section:
-          "Are you sure you want to disable kitchen printer? All settings of the kitchen printer will be lost.",
-        index: features
-          .filter(
-            (item) =>
-              item.feature_name.toUpperCase() ===
-              "Kitchen printers".toUpperCase()
-          )
-          .map((item) => {
-            return item.index;
-          }),
-      });
-      setShowAlert(true);
-      return false;
+      hold = true
+    } 
+    if(!hold){
+      const data = {
+        features: features,
+        settings: settings
+      };
+      dispatch(toggle_feature_module(data));
     }
-    const data = {
-      features: JSON.stringify(features),
-    };
-    dispatch(toggle_feature_module(data));
   };
 
   const saveAlertFeatures = () => {
+    let settings = (user.settings || []).map((item, index) => {
+      let feature = item.feature !== null ? item.feature._id : null
+      let enable = (sChecked || []).filter(itm => itm.feature._id == feature)
+      enable = enable.length > 0 ? enable[0].enable : item.enable
+      return {
+        feature: feature,
+        enable: enable,
+        _id: item._id,
+        module: item.module._id
+      };
+    })
     const features = (sChecked || []).map((item, index) => {
       return {
-        featureId: item.featureId,
+        featureId: item.feature._id,
         enable: item.enable,
-        feature_id: item._id,
-        feature_name: item.featureName,
+        _id: item._id,
+        name: item.feature.name,
         index: index,
       };
     });
     const data = {
-      features: JSON.stringify(features),
+      features: features,
+      settings: settings
     };
-    setShowAlert(false);
     dispatch(toggle_feature_module(data));
-  };
-
-  const hideShowAlert = () => {
-    let array = sChecked;
-    modelState.index.map((ite) => {
-      array[ite].enable = !array[ite].enable;
-    });
-    setChecked([...array]);
-    setShowAlert(false);
   };
 
   const handleLanguageChange = (event) => {
@@ -474,9 +444,10 @@ const General = () => {
         </CCardHeader>
         <CCollapse show={collapsed[1]}>
           <CCardBody>
+            {showFeatures ? 
             <CListGroup>
               {/*// user.features */}
-              {(user.features || []).map((itm, index) => {
+              {(sChecked || []).map((itm, index) => {
                 return (
                   <CListGroupItem
                     key={index}
@@ -489,7 +460,7 @@ const General = () => {
                     }}
                   >
                     <h5>
-                      {parse(itm.icon || "")}&nbsp;{itm.featureName || ""}
+                      {parse(itm.feature.icon || "")}&nbsp;{itm.feature.name || ""}
                       <CSwitch
                         className={"mx-1 float-right"}
                         shape="pill"
@@ -501,12 +472,13 @@ const General = () => {
                       />
                     </h5>
                     <p style={{ paddingLeft: "25px", lineHeight: "normal" }}>
-                      {parse(itm.description)}
+                      {parse(itm.feature.description)}
                     </p>
                   </CListGroupItem>
                 );
               })}
             </CListGroup>
+            : "Loading..."}
           </CCardBody>
         </CCollapse>
       </CCard>
@@ -533,19 +505,19 @@ const General = () => {
           </CButton>
         </CCol>
       </CRow>
-      {/*  // <CCol sm xs="12" md="2" lg="2" className="text-center mt-3">
-      //   <ConformationAlert
-      //     button_text={modelState.button_text}
-      //     heading={modelState.heading}
-      //     section={modelState.section}
-      //     buttonAction={saveAlertFeatures}
-      //     show_alert={showAlert}
-      //     hideAlert={hideShowAlert}
-      //     className="btn-pill pull-right"
-      //     outline="outline"
-      //     block="block"
-      //   />
-      // </CCol>*/}
+        {/* <CCol sm xs="12" md="2" lg="2" className="text-center mt-3">
+         <ConformationAlert
+           button_text={modelState.button_text}
+           heading={modelState.heading}
+           section={modelState.section}
+           buttonAction={saveAlertFeatures}
+           show_alert={showAlert}
+           hideAlert={hideShowAlert}
+           className="btn-pill pull-right"
+           outline="outline"
+           block="block"
+         />
+       </CCol> */}
     </div>
   );
 };

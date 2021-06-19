@@ -9,7 +9,6 @@ import authAxios from '../../constants/authAxios'
 
 export const get_receipt = (storeId) => {
   return (dispatch) => {
-    console.log(storeId);
     try {
       authAxios({
         method: "get",

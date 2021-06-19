@@ -78,7 +78,7 @@ const diningOptionReducer = (state = initialState, action) => {
               if (ite._id === action.response.id) {
                 return {
                   ...ite,
-                  stores: JSON.parse(action.response.stores),
+                  stores: action.response.stores,
                 };
               }
               return ite;

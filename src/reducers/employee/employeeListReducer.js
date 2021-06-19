@@ -55,9 +55,9 @@ const employeeListReducer = (state = initialState, action) => {
           if (
             item.role !== undefined &&
             item.role !== null &&
-            item.role["name"] !== undefined &&
-            item.role["name"] !== null &&
-            item.role["name"].toUpperCase() !== "OWNER"
+            item.role["title"] !== undefined &&
+            item.role["title"] !== null &&
+            item.role["title"].toUpperCase() !== "OWNER"
           ) {
             return Object.assign({}, item, {
               isDeleted: action.response,

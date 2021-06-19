@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -23,6 +24,8 @@ import { get_category_list } from "../../../actions/items/categoryActions";
 import { CIcon } from "@coreui/icons-react";
 
 const KitchenPrinter = () => {
+
+  const [redirect, setRedirect] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [fadeKitchenPrinter, setFadeKitchenPrinter] = useState(true);
   const [fadeAddKitchenPrinter, setFadeAddKitchenPrinter] = useState(false);
@@ -38,6 +41,16 @@ const KitchenPrinter = () => {
     (state) => state.settingReducers.kitchenPrinterReducer.update_row
   );
   const category = useSelector((state) => state.items.categoryReducer);
+  
+  const features = useSelector((state) => state.auth.user.features);
+
+  useEffect(() => {
+    let feature = features.filter(ftr => ftr.feature.name == "Kitchen printers")[0].enable
+    if(!feature){
+      setRedirect(true)
+    }
+}, []);
+
   useEffect(() => {
     dispatch(get_kitchen_printers());
     dispatch(get_category_list());
@@ -81,6 +94,8 @@ const KitchenPrinter = () => {
   };
 
   return (
+    <>
+    {redirect ? <Redirect to="/" /> : 
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeUpdateKitchenPrinter ? (
@@ -135,7 +150,7 @@ const KitchenPrinter = () => {
                             heading="Delete Printer Group"
                             section={`Are you sure you want to delete printer group (${kitchenPrinter.kitchen_printers
                               .filter((item) => item.isDeleted === true)
-                              .map((item) => item.name)
+                              .map((item) => item.title)
                               .join(",")})`}
                             buttonAction={delete_printer}
                             show_alert={showAlert}
@@ -165,6 +180,7 @@ const KitchenPrinter = () => {
         )}
       </div>
     </React.Fragment>
+      }</>
   );
 };
 export default KitchenPrinter;

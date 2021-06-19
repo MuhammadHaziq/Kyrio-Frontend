@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import classNames from "classnames";
 import {
   TheContent,
@@ -8,56 +8,57 @@ import {
   TheFooter,
   TheHeader,
 } from "./index";
+import { FEATURES_TOGGLE, ROLES_ACCESS_TOGGLE } from "../SocketEvents"
+import {
+  GET_FEATURE_MODULE,
+  SET_ACCESS_RIGHT_MODULE
+} from "../constants/ActionTypes";
+import io from "socket.io-client";
 
 const TheLayout = () => {
+  const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.settings.darkMode);
+  const user = useSelector((state) => state.auth.user);
 
   const classes = classNames(
     "c-app c-default-layout",
     darkMode && "c-dark-theme"
   );
-  // const removefile = (filename, filetype) => {
-  //   var targetelement =
-  //     filetype == "js" ? "script" : filetype == "css" ? "link" : "none"; //determine element type to create nodelist from
-  //   var targetattr =
-  //     filetype == "js" ? "src" : filetype == "css" ? "href" : "none"; //determine corresponding attribute to test for
-  //   var allsuspects = document.getElementsByTagName(targetelement);
-  //   for (var i = allsuspects.length; i >= 0; i--) {
-  //     //search backwards within nodelist for matching elements to remove
-  //     if (
-  //       allsuspects[i] &&
-  //       allsuspects[i].getAttribute(targetattr) != null &&
-  //       allsuspects[i].getAttribute(targetattr).indexOf(filename) != -1
-  //     )
-  //       allsuspects[i].parentNode.removeChild(allsuspects[i]); //remove element by calling parentNode.removeChild()
-  //   }
-  // };
 
-  // const loadjscssfile = (filename, filetype) => {
-  //   if (filetype == "js") {
-  //     //if filename is a external JavaScript file
-  //     var fileref = document.createElement("script");
-  //     fileref.setAttribute("type", "text/javascript");
-  //     fileref.setAttribute("src", filename);
-  //   } else if (filetype == "css") {
-  //     //if filename is an external CSS file
-  //     var fileref = document.createElement("link");
-  //     fileref.setAttribute("rel", "stylesheet");
-  //     fileref.setAttribute("type", "text/css");
-  //     fileref.setAttribute("href", filename);
-  //   }
-  //   if (typeof fileref != "undefined")
-  //     document.getElementsByTagName("head")[0].appendChild(fileref);
-  // };
-  // useEffect(() => {
-  //   if (darkMode === true) {
-  //     removefile("css/all_datatables_light.css", "css");
-  //     loadjscssfile("css/all_datatables_dark.css", "css");
-  //   } else {
-  //     removefile("css/all_datatables_dark.css", "css");
-  //     loadjscssfile("css/all_datatables_light.css", "css");
-  //   }
-  // }, [darkMode]);
+  useEffect(() => {
+
+    var connectionOptions =  {
+      // "force new connection" : true,
+      "reconnectionAttempts": "Infinity", 
+      "timeout" : 10000,                  
+      "transports" : ["websocket"]
+    };
+    const socketBaseUrl =
+    window.location.protocol +
+    "//" +
+    window.location.hostname +
+    ":" +
+    "3000";
+      let socket = io(socketBaseUrl,connectionOptions);
+      
+        
+      
+      socket.on("connect", () => {
+        socket.emit('create', user.account);
+        socket.on(FEATURES_TOGGLE,(data) => {
+          if(user._id !== data.user){
+            dispatch({ type: GET_FEATURE_MODULE, response: data.backoffice });
+          }
+        });
+        socket.on(ROLES_ACCESS_TOGGLE,(data) => {
+          if(user._id !== data.user){
+            dispatch({ type: SET_ACCESS_RIGHT_MODULE, response: data.backoffice });
+          }
+        });
+      });
+
+  }, []);
+
   return (
     <div className={classes}>
       <TheSidebar />

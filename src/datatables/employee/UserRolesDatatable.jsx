@@ -41,7 +41,7 @@ const UserRolesDatatable = (props) => {
           filter: false,
           _style: { width: "5%" },
         },
-        { key: "roleName", label: "Role", filter: true },
+        { key: "title", label: "Role", filter: true },
         { key: "access", label: "Access", filter: true },
         { key: "NoOfEmployees", label: "Employees", filter: true },
       ]}
@@ -76,8 +76,8 @@ const UserRolesDatatable = (props) => {
                   onChange={(e) => check(e, item)}
                   disabled={
                     item.role_id !== undefined && item.role_id !== null
-                      ? item.roleName !== undefined && item.roleName !== null
-                        ? item.roleName.toUpperCase() == "OWNER"
+                      ? item.title !== undefined && item.title !== null
+                        ? item.title.toUpperCase() == "OWNER"
                         : ""
                       : ""
                   }

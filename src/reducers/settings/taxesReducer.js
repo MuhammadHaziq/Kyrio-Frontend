@@ -161,7 +161,7 @@ const taxesReducer = (state = initialState, action) => {
              *
              */
             if (Array.isArray(action.response) == true) {
-              const ids = new Set(action.response.map((ite) => ite.diningId));
+              const ids = new Set(action.response.map((ite) => ite));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
                   // isSelected: !item.isSelected,
@@ -174,7 +174,7 @@ const taxesReducer = (state = initialState, action) => {
                *
                */
             } else {
-              if (item._id === action.response.diningId) {
+              if (item._id === action.response) {
                 return Object.assign({}, item, {
                   isSelected: !item.isSelected,
                 });
@@ -200,12 +200,15 @@ const taxesReducer = (state = initialState, action) => {
       let status = false;
       return Object.assign({}, state, {
         tax_category_list: state.tax_category_list.map((item) => {
+          console.log(item)
+          console.log(action.response)
           if (action.response.length !== 0) {
             /*
              *  Use For Update Screen
              **/
+            
             if (Array.isArray(action.response) === true) {
-              const ids = new Set(action.response.map((ite) => ite.categoryId));
+              const ids = new Set(action.response.map((ite) => ite));
               if (ids.has(item._id)) {
                 return Object.assign({}, item, {
                   // isSelected: !item.isSelected,
@@ -217,7 +220,7 @@ const taxesReducer = (state = initialState, action) => {
                *End This code use when user update the Categoires
                */
             } else {
-              if (item._id === action.response.categoryId) {
+              if (item._id === action.response._id) {
                 status = !item.isSelected;
                 return Object.assign({}, item, {
                   isSelected: !item.isSelected,
@@ -226,6 +229,7 @@ const taxesReducer = (state = initialState, action) => {
               return item;
             }
           } else {
+            
             return Object.assign({}, item, {
               isSelected: false,
             });

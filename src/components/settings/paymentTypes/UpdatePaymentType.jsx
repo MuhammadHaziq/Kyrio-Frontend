@@ -62,17 +62,17 @@ const UpdatePaymentType = (props) => {
       setPaymentType({
         paymentTypeId:
           props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType.paymentTypeId || "0"
+            ? props.update_data.paymentType._id || "0"
             : "0",
         paymentTypeName:
           props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType.paymentTypeName ||
+            ? props.update_data.paymentType._id ||
               "Select Payment Type"
             : "Select Payment Type",
       });
       setSelectedPaymentId(
         props.update_data.paymentType !== undefined
-          ? props.update_data.paymentType.paymentTypeId || "0"
+          ? props.update_data.paymentType._id || "0"
           : "0"
       );
     }
@@ -102,8 +102,8 @@ const UpdatePaymentType = (props) => {
     } else {
       const data = {
         name: fields.name,
-        paymentTypes: JSON.stringify(PaymentType),
-        storeId: props.update_data.storeId,
+        paymentTypes: PaymentType,
+        storeId: props.update_data.store._id,
         id: props.update_data._id,
       };
       dispatch(update_payment_type(data));

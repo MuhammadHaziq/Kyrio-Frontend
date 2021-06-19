@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom'
 import {
   CRow,
   CCol,
@@ -35,12 +36,14 @@ import "bootstrap-daterangepicker/daterangepicker.css";
 const TimeCards = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const features = useSelector((state) => state.auth.user.features);
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
   const timeCard = useSelector(
     (state) => state.employeeReducers.timeCardReducer
   );
+  const [redirect, setRedirect] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [fadeTimeCard, setFadeTimeCard] = useState(true);
   const [fadeTimeCardUpdate, setTimeCardUpdate] = useState(false);
@@ -67,7 +70,12 @@ const TimeCards = () => {
     checkAll: true,
     checkAllEmployee: true,
   });
-
+  useEffect(() => {
+      let feature = features.filter(ftr => ftr.feature.name == "Time clock")[0].enable
+      if(!feature){
+        setRedirect(true)
+      }
+  }, []);
   // useEffect(() => {
   //   if (store.stores_list.length === 0) {
   //   }
@@ -235,6 +243,8 @@ const TimeCards = () => {
   };
 
   return (
+    <>
+    {redirect ? <Redirect to="/" /> : 
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeTimeCardUpdate ? (
@@ -455,6 +465,8 @@ const TimeCards = () => {
         )}
       </div>
     </React.Fragment>
+        }
+    </>
   );
 };
 

@@ -131,41 +131,44 @@ const AddTax = (props) => {
     storeId
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedStore.push({
-          storeId: item._id,
-          storeTitle: item.title,
-        });
+        // return selectedStore.push({
+        //   storeId: item._id,
+        //   storeTitle: item.title,
+        // });
+        return selectedStore.push(item._id);
       });
     const selectedDining = [];
     taxes.tax_dining_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedDining.push({
-          diningId: item._id,
-          diningTitle: item.title,
-        });
+        // return selectedDining.push({
+        //   diningId: item._id,
+        //   diningTitle: item.title,
+        // });
+        return selectedDining.push(item._id);
       });
     const selectedCategory = [];
     taxes.tax_category_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedCategory.push({
-          categoryId: item._id,
-          categoryTitle: item.catTitle,
-        });
+        // return selectedCategory.push({
+        //   categoryId: item._id,
+        //   categoryTitle: item.catTitle,
+        // });
+        return selectedCategory.push(item._id);
       });
     const selectedCategoryItems = [];
     taxes.category_items
-      .filter((item) => item.isSelected === true)
-      .map((item) => {
-        return selectedCategoryItems.push({
-          itemId: item._id,
-          itemName: item.name,
-          categoryId:
-            item.category !== undefined && item.category !== null
-              ? item.category.id
-              : "0",
-        });
+      .filter((item) => item.isSelected === true).map((item) => {
+        // return selectedCategoryItems.push({
+        //   itemId: item._id,
+        //   itemName: item.name,
+        //   categoryId:
+        //     item.category !== undefined && item.category !== null
+        //       ? item.category.id
+        //       : "0",
+        // });
+        return selectedCategoryItems.push(item._id);
       });
     const types = (taxes.tax_types || []).filter(
       (item) => item._id === taxTypeId
@@ -176,23 +179,16 @@ const AddTax = (props) => {
     const data = {
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
-      tax_type: JSON.stringify({
-        id: types[0] ? types[0]._id : "",
-        title: types[0] ? types[0].title : "",
-      }),
+      tax_type: types[0] ? types[0]._id : "",
       tax_option:
         options.length === 0
-          ? JSON.stringify({ id: "0", title: "-" })
-          : JSON.stringify({
-              id: options[0]._id || "0",
-              title: options[0].title || "-",
-            }),
-      stores: JSON.stringify(selectedStore),
-      dinings: JSON.stringify(selectedDining),
-      categories: JSON.stringify(selectedCategory),
-      items: JSON.stringify(selectedCategoryItems),
+          ? ""
+          : options[0]._id || "0",
+      stores: selectedStore,
+      dinings: selectedDining,
+      categories: typeof selectedCategory[0] !== "undefined" &&  selectedCategory[0] == "0" ? [] : selectedCategory,
+      items: selectedCategoryItems,
     };
-    console.log("sote_name", data);
     dispatch(save_item_taxes(data));
   };
   const handleOnChange = (e) => {

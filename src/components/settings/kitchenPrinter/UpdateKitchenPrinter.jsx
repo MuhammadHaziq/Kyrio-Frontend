@@ -52,7 +52,7 @@ const UpdateKitchenPrinter = (props) => {
       let categories = props.category;
       (props.update_data.categories || []).map((ite) => {
         return (categories = categories.slice().map((item) => {
-          if (item._id === ite.categoryId) {
+          if (item._id === ite._id) {
             return {
               ...item,
               isSelected: true,
@@ -64,9 +64,9 @@ const UpdateKitchenPrinter = (props) => {
 
       setFields({
         ...fields,
-        kitchen_name: props.update_data.name || "",
+        kitchen_name: props.update_data.title || "",
         noCategory:
-          props.update_data.categories.filter((item) => item.categoryId === "0")
+          props.update_data.categories.filter((item) => item._id === "0")
             .length === 1
             ? true
             : false,
@@ -99,22 +99,17 @@ const UpdateKitchenPrinter = (props) => {
       const category = categoryId.filter((item) => item.isSelected === true);
       let categoryData = [];
       category.map((item) => {
-        return categoryData.push({
-          categoryId: item._id,
-          categoryName: item.catTitle,
-        });
+        return categoryData.push(item._id);
+        // return categoryData.push({
+        //   categoryId: item._id,
+        //   categoryName: item.title,
+        // });
       });
-      if (fields.noCategory === true) {
-        categoryData.push({
-          categoryId: "0",
-          categoryName: "No Category",
-        });
-      }
       const data = {
         id: props.update_data._id,
-        name: fields.kitchen_name,
-        categories: JSON.stringify(categoryData),
-        storeId: storeId,
+        title: fields.kitchen_name,
+        categories: categoryData,
+        store: storeId,
       };
       dispatch(update_kitchen_printer(data));
     }
@@ -230,7 +225,7 @@ const UpdateKitchenPrinter = (props) => {
                     variant="custom-checkbox"
                     htmlFor={"categoryId" + item._id}
                   >
-                    {item.catTitle}
+                    {item.title}
                   </CLabel>
                 </CFormGroup>
               ))}

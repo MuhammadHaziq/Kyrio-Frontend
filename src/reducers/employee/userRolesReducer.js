@@ -103,7 +103,7 @@ const userRolesReducer = (state = initialState, action) => {
           return {
             ...item,
             modules: item.modules.map((backOff, backIndex) => {
-              if (backOff.moduleId == action.id) {
+              if (backOff._id == action.id) {
                 return {
                   ...backOff,
                   enable: !backOff.enable,
@@ -123,7 +123,7 @@ const userRolesReducer = (state = initialState, action) => {
         return {
           ...item,
           modules: item.modules.map((pos, backIndex) => {
-            if (pos.moduleId == action.id) {
+            if (pos._id == action.id) {
               return {
                 ...pos,
                 enable: !pos.enable,
@@ -162,11 +162,11 @@ const userRolesReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         user_roles: state.user_roles.map((item) => {
           if (
-            item.roleName !== undefined &&
-            item.roleName !== null &&
-            item.roleName !== undefined &&
-            item.roleName !== null &&
-            item.roleName.toUpperCase() !== "OWNER"
+            item.title !== undefined &&
+            item.title !== null &&
+            item.title !== undefined &&
+            item.title !== null &&
+            item.title.toUpperCase() !== "OWNER"
           ) {
             return Object.assign({}, item, {
               isDeleted: action.status,

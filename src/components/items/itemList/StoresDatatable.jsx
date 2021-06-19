@@ -21,7 +21,7 @@ const Price = (props) => {
     setStorePrice(e.target.value);
   };
   const handleOnBlur = (e) => {
-    dispatch(set_item_store_values("Price", props.item.id, storePrice));
+    dispatch(set_item_store_values("Price", props.item.store._id, storePrice));
   };
   return (
     <NumberFormat
@@ -53,7 +53,7 @@ const InStock = (props) => {
     setStoreStock(e.target.value);
   };
   const handleOnBlur = (e) => {
-    dispatch(set_item_store_values("InStock", props.item.id, storeStock));
+    dispatch(set_item_store_values("InStock", props.item.store._id, storeStock));
   };
   return (
     <NumberFormat
@@ -81,7 +81,7 @@ const LowStock = (props) => {
     setStoreLowStock(e.target.value);
   };
   const handleOnBlur = (e) => {
-    dispatch(set_item_store_values("LowStock", props.item.id, storeLowStock));
+    dispatch(set_item_store_values("LowStock", props.item.store._id, storeLowStock));
   };
   return (
     <NumberFormat
@@ -96,13 +96,14 @@ const LowStock = (props) => {
   );
 };
 const CheckAvailablity = (props) => {
+  console.log(props.item)
   const dispatch = useDispatch();
-  const [storeId, setStoreId] = useState(props.item.id);
+  const [storeId, setStoreId] = useState(props.item.store._id);
   const [isSelected, setIsSelected] = useState(props.item.isSelected);
   useEffect(() => {
     if (props.item !== null && props.item !== undefined) {
       setIsSelected(props.item.isSelected);
-      setStoreId(props.item.id);
+      setStoreId(props.item.store._id);
     }
   }, [props.item]);
 
@@ -185,7 +186,7 @@ const StoresDatatable = (props) => {
                 <td>
                   <CheckAvailablity item={item} />
                 </td>
-                <td>{item.title}</td>
+                <td>{typeof item.store !== "undefined" ? item.store.title : item.title}</td>
                 <td>
                   <Price item={item} />
                 </td>

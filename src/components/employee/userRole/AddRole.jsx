@@ -3,22 +3,16 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCardFooter,
   CCol,
   CInput,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CRow,
   CInvalidFeedback,
   CFormGroup,
   CInputCheckbox,
   CLabel,
-  CLink,
   CCollapse,
-  CSelect,
-  CFormText,
   CSwitch,
   CListGroup,
   CListGroupItem,
@@ -209,10 +203,10 @@ const AddRole = (props) => {
                                       custom
                                       name="pos_module"
                                       id={"pos_module" + index}
-                                      value={item.moduleId}
+                                      value={item._id}
                                       checked={item.enable}
                                       onChange={() =>
-                                        posToggleCheck(item.moduleId)
+                                        posToggleCheck(item._id)
                                       }
                                       style={{
                                         marginLeft: "0px",
@@ -228,7 +222,7 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.moduleName}
+                                      {item.name}
                                       <br />
                                       <small className="mb-1">
                                         {item.description}
@@ -316,10 +310,10 @@ const AddRole = (props) => {
                                       custom
                                       name="kpyo_back"
                                       id={"kpyo_back" + index}
-                                      value={item.moduleId}
+                                      value={item._id}
                                       checked={item.enable}
                                       onChange={() =>
-                                        backOfficeCheck(item.moduleId)
+                                        backOfficeCheck(item._id)
                                       }
                                       style={{
                                         marginLeft: "0px",
@@ -335,7 +329,7 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.moduleName}
+                                      {item.name}
                                       <br />
                                       <small className="mb-1">
                                         {item.description}

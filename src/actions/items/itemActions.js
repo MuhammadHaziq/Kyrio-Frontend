@@ -248,7 +248,6 @@ export const get_items_store = () => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: GET_ITEM_STORES, response: response.data.stores });
         })
         .catch((error) => {
@@ -293,7 +292,6 @@ export const get_item_taxe = () => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: GET_ITEMS_TAXES, response: response.data.taxes });
         })
         .catch((error) => {
@@ -777,7 +775,6 @@ export const delete_item_varient = (data) => {
 };
 
 export const update_row_data = (row) => {
-  console.log("row", row);
   return (dispatch) => {
     try {
       authAxios({
@@ -786,10 +783,20 @@ export const update_row_data = (row) => {
 
       })
         .then((response) => {
-          dispatch({
-            type: UPDATE_ITEM_ROW_DATA,
-            response: response.data,
-          });
+          if(typeof response.data.message !== "undefined"){
+            let msg = {
+              open: true,
+              message: response.data.message,
+              object: {},
+              error: false,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          } else {
+            dispatch({
+              type: UPDATE_ITEM_ROW_DATA,
+              response: response.data,
+            });
+          }
         })
         .catch((error) => {
           console.log("err", error.response);

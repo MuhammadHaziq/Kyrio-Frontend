@@ -83,7 +83,7 @@ const EditEmployee = (props) => {
 
         (props.employee_row_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.id) {
+            if (item._id === ite._id) {
               return {
                 ...item,
                 isSelected: true,
@@ -109,25 +109,25 @@ const EditEmployee = (props) => {
         email: props.employee_row_data.email,
         phone: props.employee_row_data.phone,
         role:
-          props.employee_row_data.role_id !== undefined &&
-          props.employee_row_data.role_id !== undefined
-            ? props.employee_row_data.role_id
+          props.employee_row_data.role !== undefined &&
+          props.employee_row_data.role !== undefined
+            ? props.employee_row_data.role
             : "0",
         roleName:
           props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["name"] !== undefined
-            ? props.employee_row_data.role["name"]
+          props.employee_row_data.role["title"] !== undefined
+            ? props.employee_row_data.role["title"]
             : "",
         sendMail:
-          props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["name"] === "Administrator"
+          props.employee_row_data.role !== undefined 
+          // && props.employee_row_data.role["title"] === "Administrator"
             ? props.employee_row_data.sendMail === undefined
               ? true
               : props.employee_row_data.sendMail
             : true,
         posPin:
-          props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["name"] !== "Administrator"
+          props.employee_row_data.role !== undefined 
+          // && props.employee_row_data.role["title"] !== "Administrator"
             ? props.employee_row_data.posPin === undefined
               ? "0000"
               : props.employee_row_data.posPin
@@ -138,10 +138,10 @@ const EditEmployee = (props) => {
             : false,
         allowBackOffice:
           props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["id"] !== undefined
+          props.employee_row_data.role["_id"] !== undefined
             ? (props.user_roles || [])
                 .filter(
-                  (item) => item.role_id === props.employee_row_data.role["id"]
+                  (item) => item.role_id === props.employee_row_data.role["_id"]
                 )
                 .map((item) => {
                   return item.allowBackoffice;
@@ -149,10 +149,10 @@ const EditEmployee = (props) => {
             : "0",
         pos:
           props.employee_row_data.role !== undefined &&
-          props.employee_row_data.role["id"] !== undefined
+          props.employee_row_data.role["_id"] !== undefined
             ? (props.user_roles || [])
                 .filter(
-                  (item) => item.role_id === props.employee_row_data.role["id"]
+                  (item) => item.role_id === props.employee_row_data.role["_id"]
                 )
                 .map((item) => {
                   return item.allowPOS;
@@ -179,12 +179,12 @@ const EditEmployee = (props) => {
     const { name, value } = e.target;
     if (e.target.name === "role") {
       const allowBackOffice = (props.user_roles || [])
-        .filter((item) => item.role_id === props.employee_row_data.role_id)
+        .filter((item) => item.role_id === props.employee_row_data.role._id)
         .map((item) => {
           return item.allowBackoffice;
         })[0];
       const pos = (props.user_roles || [])
-        .filter((item) => item.role_id === props.employee_row_data.role_id)
+        .filter((item) => item.role_id === props.employee_row_data.role._id)
         .map((item) => {
           return item.allowPOS;
         })[0];
@@ -300,30 +300,27 @@ const EditEmployee = (props) => {
         email: fields.email,
         phone: fields.phone,
         enablePin: fields.enablePin,
-        stores: JSON.stringify(
-          storeId
+        stores: storeId
             .filter((item) => item.isSelected === true)
             .map((item) => {
-              return {
-                id: item._id,
-                name: item.title,
-              };
-            })
-        ),
-        roles: JSON.stringify(
-          props.user_roles
-            .filter((item) => item.role_id === fields.role)
+              // return {
+              //   id: item._id,
+              //   name: item.title,
+              // };
+              return item._id
+            }),
+        role: props.user_roles
+            .filter((item) => item.role_id === fields.role._id)
             .map((item) => {
               return {
-                id: item.role_id,
-                name: item.roleName,
+                _id: item.role_id,
+                title: item.title,
               };
-            })[0]
-        ),
+            })[0],
       };
       if (
         props.user_roles
-          .filter((item) => item.role_id === fields.role)
+          .filter((item) => item.role_id === fields.role._id)
           .map((item) => {
             return item.allowBackoffice;
           })[0] === true
@@ -332,7 +329,7 @@ const EditEmployee = (props) => {
       }
       if (
         props.user_roles
-          .filter((item) => item.role_id === fields.role)
+          .filter((item) => item.role_id === fields.role._id)
           .map((item) => {
             return item.allowPOS;
           })[0] === true
@@ -475,9 +472,9 @@ const EditEmployee = (props) => {
                     </CInputGroupText>
                   </CInputGroupPrepend>
                   {props.employee_row_data.role !== undefined &&
-                  props.employee_row_data.role["name"] !== undefined ? (
-                    props.employee_row_data.role["name"] == "onwer" ||
-                    props.employee_row_data.role["name"] == "Owner" ? (
+                  props.employee_row_data.role["title"] !== undefined ? (
+                    props.employee_row_data.role["title"] == "onwer" ||
+                    props.employee_row_data.role["title"] == "Owner" ? (
                       <CSelect
                         className={
                           errors.role === true
@@ -488,13 +485,13 @@ const EditEmployee = (props) => {
                         size="md"
                         name="role"
                         id="role"
-                        value={fields.role}
+                        value={fields.role._id}
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
                         invalid={errors.role}
                       >
                         <option value={props.employee_row_data.role["id"]}>
-                          {props.employee_row_data.role["name"]}
+                          {props.employee_row_data.role["title"]}
                         </option>
                       </CSelect>
                     ) : (
@@ -508,18 +505,18 @@ const EditEmployee = (props) => {
                         size="md"
                         name="role"
                         id="role"
-                        value={fields.role}
+                        value={fields.role._id}
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
                         invalid={errors.role}
                       >
                         <option value="0">Select Role</option>
                         {(props.user_roles || []).map((item, index) => {
-                          return item.roleName !== "owner" &&
-                            item.roleName !== "Owner" ? (
+                          return item.title !== "owner" &&
+                            item.title !== "Owner" ? (
                             <React.Fragment>
                               <option value={item.role_id} key={index}>
-                                {item.roleName}
+                                {item.title}
                               </option>
                             </React.Fragment>
                           ) : null;
@@ -537,7 +534,7 @@ const EditEmployee = (props) => {
                       size="md"
                       name="role"
                       id="role"
-                      value={fields.role}
+                      value={fields.role._id}
                       onChange={handleOnChange}
                       onBlur={handleOnBlur}
                       invalid={errors.role}
@@ -545,8 +542,8 @@ const EditEmployee = (props) => {
                       <option value="0">Select Role</option>
                       {(props.user_roles || []).map((item, index) => {
                         return (
-                          <option value={item._id} key={index}>
-                            {item.roleName}
+                          <option value={item.role_id} key={index}>
+                            {item.title}
                           </option>
                         );
                       })}

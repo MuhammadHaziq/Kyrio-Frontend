@@ -26,12 +26,9 @@ import TaxDiningOption from "./TaxDiningOption.jsx";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  save_item_taxes,
-  get_tax_category_list,
   get_taxes_type,
   get_taxes_option,
   remove_row_update_data,
-  get_catgeory_item,
   update_item_tax,
   delete_item_taxes,
 } from "../../../actions/settings/taxesActions.js";
@@ -75,7 +72,7 @@ const UpdateTax = (props) => {
       const stores = store.stores_list.slice().map((item) => {
         return {
           ...item,
-          isSelected: true,
+          isSelected: taxes.tax_row_data.stores.filter(store => store._id == item._id) ? true : false,
         };
       });
       setStoreId(stores);
@@ -96,7 +93,7 @@ const UpdateTax = (props) => {
       setTaxType(
         taxes.tax_row_data.tax_type !== undefined &&
           taxes.tax_row_data.tax_type !== null
-          ? taxes.tax_row_data.tax_type.id || ""
+          ? taxes.tax_row_data.tax_type || ""
           : ""
       );
     }
@@ -114,7 +111,7 @@ const UpdateTax = (props) => {
       setTaxOption(
         taxes.tax_row_data.tax_option !== undefined &&
           taxes.tax_row_data.tax_option !== null
-          ? taxes.tax_row_data.tax_option.id || 0
+          ? taxes.tax_row_data.tax_option || 0
           : taxOption
       );
     }
@@ -129,7 +126,7 @@ const UpdateTax = (props) => {
         var stores = store.stores_list;
         (taxes.tax_row_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.storeId) {
+            if (item._id === ite) {
               return {
                 ...item,
                 isSelected: true,
@@ -139,13 +136,13 @@ const UpdateTax = (props) => {
           }));
         });
         setStoreId(stores);
-        const data = {
-          storeId: JSON.stringify(
-            stores
-              .filter((item) => item.isSelected === true)
-              .map((item) => item._id)
-          ),
-        };
+        // const data = {
+        //   storeId: JSON.stringify(
+        //     stores
+        //       .filter((item) => item.isSelected === true)
+        //       .map((item) => item._id)
+        //   ),
+        // };
         // dispatch(get_catgeory_item(data));
       }
 
@@ -179,6 +176,12 @@ const UpdateTax = (props) => {
             : false
         );
       }
+    } 
+    let dine = taxes.tax_row_data.dinings;
+    if(typeof dine !== "undefined"){
+      if(dine.length > 0){
+        setChecked(true)
+      }
     }
   }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
 
@@ -204,41 +207,45 @@ const UpdateTax = (props) => {
     storeId
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedStore.push({
-          storeId: item._id,
-          storeTitle: item.title,
-        });
+        // return selectedStore.push({
+        //   storeId: item._id,
+        //   storeTitle: item.title,
+        // });
+        return selectedStore.push(item._id);
       });
     const selectedDining = [];
     taxes.tax_dining_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedDining.push({
-          diningId: item._id,
-          diningTitle: item.title,
-        });
+        // return selectedDining.push({
+        //   diningId: item._id,
+        //   diningTitle: item.title,
+        // });
+        return selectedDining.push(item._id);
       });
     const selectedCategory = [];
     taxes.tax_category_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedCategory.push({
-          categoryId: item._id,
-          categoryTitle: item.catTitle,
-        });
+        // return selectedCategory.push({
+        //   categoryId: item._id,
+        //   categoryTitle: item.catTitle,
+        // });
+        return selectedCategory.push(item._id);
       });
     const selectedCategoryItems = [];
     taxes.category_items
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return selectedCategoryItems.push({
-          itemId: item._id,
-          itemName: item.name,
-          categoryId:
-            item.category !== undefined && item.category !== null
-              ? item.category.id
-              : "0",
-        });
+        // return selectedCategoryItems.push({
+        //   itemId: item._id,
+        //   itemName: item.name,
+        //   categoryId:
+        //     item.category !== undefined && item.category !== null
+        //       ? item.category.id
+        //       : "0",
+        // });
+        return selectedCategoryItems.push(item._id);
       });
     const types = (taxes.tax_types || []).filter(
       (item) => item._id === taxTypeId
@@ -250,23 +257,28 @@ const UpdateTax = (props) => {
       id: taxes.tax_row_data._id || 0,
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
-      tax_type: JSON.stringify({
-        id: types[0] ? types[0]._id : "",
-        title: types[0] ? types[0].title : "",
-      }),
+      tax_type: types[0] ? types[0]._id : "",
       tax_option:
         options.length === 0
-          ? JSON.stringify({ id: "0", title: "-" })
-          : JSON.stringify({
-              id: options[0]._id || "0",
-              title: options[0].title || "-",
-            }),
-      stores: JSON.stringify(selectedStore),
-      dinings: JSON.stringify(selectedDining),
-      categories: JSON.stringify(selectedCategory),
-      items: JSON.stringify(selectedCategoryItems),
+          ? ""
+          : options[0]._id || "0",
+      // tax_type: JSON.stringify({
+      //   id: types[0] ? types[0]._id : "",
+      //   title: types[0] ? types[0].title : "",
+      // }),
+      // tax_option:
+      //   options.length === 0
+      //     ? JSON.stringify({ id: "0", title: "-" })
+      //     : JSON.stringify({
+      //         id: options[0]._id || "0",
+      //         title: options[0].title || "-",
+      //       }),
+      stores: selectedStore,
+      dinings: selectedDining,
+      categories: typeof selectedCategory[0] !== "undefined" &&  selectedCategory[0] == "0" ? [] : selectedCategory,
+      items: selectedCategoryItems,
     };
-    console.log("sote_name", data);
+    
     dispatch(update_item_tax(data));
   };
   const handleOnChange = (e) => {
@@ -472,7 +484,6 @@ const UpdateTax = (props) => {
                 : `Available In ${
                     storeId.filter((item) => item.isSelected).length
                   } Stores`}{" "}
-              Stores
             </small>
           </span>
           <CCollapse show={collapse[1]}>

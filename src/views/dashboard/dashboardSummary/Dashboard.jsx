@@ -17,8 +17,6 @@ import DashboardFilter from "./DashboardFilter";
 import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
 import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
 
-import io from "socket.io-client";
-
 const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
@@ -155,32 +153,6 @@ const Dashboard = (props) => {
   // End Reducer Functions
   // UseEffects Functions
   useEffect(() => {
-
-  //   var connectionOptions =  {
-  //     // "force new connection" : true,
-  //     "reconnectionAttempts": "Infinity", 
-  //     "timeout" : 10000,                  
-  //     "transports" : ["websocket"]
-  // };
-
-  // let socket = io('http://158.176.135.6:3000',connectionOptions);
-
-  //   socket.on("connect", () => {
-  //     console.log("Connected");
-  //     socket.emit("itemUpdates",{message: "Please update the item"});
-  //   });
-  //   socket.on("announcements", (payload) => {
-  //     console.log(payload);
-  //   });
-  //   socket.on("update", (payload) => {
-  //     console.log(payload);
-  //   });
-  //   socket.on("sale", (payload) => {
-  //     console.log(payload);
-  //   });
-    
-    
-
     dispatch(get_sales_summary());
   }, []);
 

@@ -36,6 +36,7 @@ const TaxDiningOption = (props) => {
     setModalItems(!modalItems);
   };
   const taxes = useSelector((state) => state.settingReducers.taxesReducer);
+  
   useEffect(() => {
     if (Object.keys(taxes.tax_row_data).length > 0) {
       if (
@@ -45,12 +46,13 @@ const TaxDiningOption = (props) => {
         let diningData = [];
         taxes.tax_row_data.dinings.map((ite) => {
           const dining = (taxes.tax_dining_list || []).filter(
-            (item) => item._id === ite.diningId
+            (item) => item._id === ite
           );
-          return diningData.push({
-            diningId: dining[0] ? dining[0]._id : "0",
-            diningName: dining[0] ? dining[0].title : "None",
-          });
+          // return diningData.push({
+          //   diningId: dining[0] ? dining[0]._id : "0",
+          //   diningName: dining[0] ? dining[0].title : "None",
+          // });
+          return diningData.push(dining[0] ? dining[0]._id : "0");
         });
         dispatch(toggle_dinings(diningData));
       }
@@ -62,12 +64,13 @@ const TaxDiningOption = (props) => {
 
         (taxes.tax_row_data.categories || []).map((ite) => {
           const category = (taxes.tax_category_list || []).filter(
-            (item) => item._id === ite.categoryId
+            (item) => item._id === ite
           );
-          return categoryData.push({
-            categoryId: category[0] ? category[0]._id : "0",
-            categoryName: category[0] ? category[0].catTitle : "None",
-          });
+          // return categoryData.push({
+          //   categoryId: category[0] ? category[0]._id : "0",
+          //   categoryName: category[0] ? category[0].catTitle : "None",
+          // });
+          return categoryData.push(category[0] ? category[0]._id : "0");
         });
         dispatch(toggle_category(categoryData));
       }

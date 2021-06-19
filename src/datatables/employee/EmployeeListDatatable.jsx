@@ -77,9 +77,9 @@ const EmployeeListDatatable = (props) => {
                   onChange={(e) => check(e, item)}
                   disabled={
                     item.role !== undefined && item.role !== null
-                      ? item.role["name"] !== undefined &&
-                        item.role["name"] !== null
-                        ? item.role["name"].toUpperCase() == "OWNER"
+                      ? item.role["title"] !== undefined &&
+                        item.role["title"] !== null
+                        ? item.role["title"].toUpperCase() == "OWNER"
                         : ""
                       : ""
                   }
@@ -114,8 +114,8 @@ const EmployeeListDatatable = (props) => {
           return (
             <td>
               {item.role !== undefined
-                ? item.role["name"] !== undefined && item.role["name"] !== null
-                  ? item.role["name"] || "-"
+                ? item.role["title"] !== undefined && item.role["title"] !== null
+                  ? item.role["title"] || "-"
                   : "-"
                 : "-"}
             </td>

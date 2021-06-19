@@ -87,25 +87,24 @@ export const get_store_open_ticket = (storeId) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({
             type: GET_STORE_OPEN_TICKET,
             response: response.data.data,
           });
-          let msg = {
-            open: true,
-            message:
-              typeof response != "undefined"
-                ? response.data.message != "undefined"
-                  ? response.data.message
-                  : "Record Not Found"
-                : "",
-            object: {},
-            error: false,
-          };
-          if (response.data.message !== undefined) {
-            dispatch({ type: MESSAGE, data: msg });
-          }
+          // let msg = {
+          //   open: true,
+          //   message:
+          //     typeof response != "undefined"
+          //       ? response.data.message != "undefined"
+          //         ? response.data.message
+          //         : "Record Not Found"
+          //       : "",
+          //   object: {},
+          //   error: false,
+          // };
+          // if (response.data.message !== undefined) {
+          //   dispatch({ type: MESSAGE, data: msg });
+          // }
         })
         .catch((error) => {
           console.log("err", error.response);

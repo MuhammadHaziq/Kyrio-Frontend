@@ -69,7 +69,7 @@ export const get_dining_options = () => {
 
 export const add_new_dining_option = (data) => {
   return (dispatch) => {
-    const store = JSON.parse(data.store);
+    const store = data.store
     try {
       authAxios({
         method: "post",
@@ -78,7 +78,6 @@ export const add_new_dining_option = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({
             type: ADD_NEW_DINING_OPTION,
             response: response.data,
@@ -316,7 +315,6 @@ export const delete_dining_option = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: DELETE_DINING_OPTION, response: data });
           let msg = {
             open: true,

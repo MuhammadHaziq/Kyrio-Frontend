@@ -41,7 +41,7 @@ const KitchenPrinterDatatable = (props) => {
           filter: false,
           _style: { width: "5%" },
         },
-        { key: "name", label: "Name", filter: false },
+        { key: "title", label: "Name", filter: false },
         { key: "categories", label: "Categories", filter: false },
       ]}
       itemsPerPage={10}
@@ -83,11 +83,13 @@ const KitchenPrinterDatatable = (props) => {
           );
         },
         categories: (item) => {
-          const categoryName = [];
-          item.categories.map((cat) => {
-            return categoryName.push(cat.categoryName);
-          });
-          return <td>{categoryName.join()}</td>;
+          // const categoryName = [];
+          // item.categories.map((cat) => {
+          //   return categoryName.push(cat.title);
+          // });
+          return <td>{item.categories.map(function(cat){
+              return cat.title;
+            }).join(",")}</td>;
         },
       }}
     />

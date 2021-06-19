@@ -109,6 +109,7 @@ const Login = () => {
       let data = {
         email: formState.values.email,
         password: formState.values.password,
+        platform: "backoffice"
       };
       dispatch(login(data));
     }

@@ -165,12 +165,10 @@ class ModifireList extends Component {
       result.destination.index
     );
     const data = {
-      data: JSON.stringify(
-        items.map((item, index) => {
+      modifier: items.map((item, index) => {
           return { id: item.id, position: index, title: item.content };
         })
-      ),
-    };
+      }
     this.props.update_modifire_postion(data);
     this.props.update_modifier_props_postion(allModifiers);
     this.setState({

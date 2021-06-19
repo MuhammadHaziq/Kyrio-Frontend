@@ -61,7 +61,7 @@ const AddPosDevice = (props) => {
         ...errors,
         pos_device_name: validator.isEmpty(fields.pos_device_name),
       });
-    } else if (storeId["storeId"] === 0) {
+    } else if (storeId === 0) {
       setErrors({
         ...errors,
         selectedStoreId: true,
@@ -69,7 +69,7 @@ const AddPosDevice = (props) => {
     } else {
       const data = {
         title: fields.pos_device_name,
-        store: JSON.stringify(storeId),
+        store: storeId,
       };
       dispatch(add_new_pos_device(data));
     }
@@ -104,10 +104,7 @@ const AddPosDevice = (props) => {
         storeName: "Select Store",
       };
     } else {
-      storeData = {
-        storeId: store[0]._id,
-        storeName: store[0].title,
-      };
+      storeData = store[0]._id;
     }
 
     setStoreId(storeData);

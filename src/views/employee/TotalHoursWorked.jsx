@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom'
 import {
   CRow,
   CCol,
@@ -26,12 +27,14 @@ import TotalHoursWorkedDatatable from "../../datatables/employee/TotalHoursWorke
 const TotalHoursWorked = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
+  const features = useSelector((state) => state.auth.user.features);
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
   const timeCard = useSelector(
     (state) => state.employeeReducers.timeCardReducer
   );
+  const [redirect, setRedirect] = useState(false);
   const [storeId, setStoreId] = useState([]);
   const [employeeId, setEmployeeId] = useState([]);
   const [dateRange, setDateRange] = useState({
@@ -53,7 +56,12 @@ const TotalHoursWorked = () => {
     checkAll: true,
     checkAllEmployee: true,
   });
-
+  useEffect(() => {
+      let feature = features.filter(ftr => ftr.feature.name == "Time clock")[0].enable
+      if(!feature){
+        setRedirect(true)
+      }
+  }, []);
   // useEffect(() => {
   //   if (store.stores_list.length === 0) {
   //   }
@@ -185,6 +193,8 @@ const TotalHoursWorked = () => {
   };
 
   return (
+    <>
+    {redirect ? <Redirect to="/" /> : 
     <React.Fragment>
       <CRow className="mb-3">
         <CCol sm="12" md="2" lg="2">
@@ -327,6 +337,8 @@ const TotalHoursWorked = () => {
         </CCol>
       </CRow>
     </React.Fragment>
+    }
+    </>
   );
 };
 

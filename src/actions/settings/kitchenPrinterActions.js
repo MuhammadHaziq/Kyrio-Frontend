@@ -80,7 +80,6 @@ export const add_new_kitchen_printer = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: ADD_NEW_KITCHEN_PRINTER, response: response.data });
 
           let msg = {

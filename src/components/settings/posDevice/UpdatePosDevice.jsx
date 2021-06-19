@@ -39,8 +39,8 @@ const UpdatePosDevice = (props) => {
     selectedStoreId: false,
   });
   const [storeObject, setStore] = useState({
-    storeId: 0,
-    storeName: "Select Store",
+    _id: 0,
+    title: "Select Store",
   });
   const [showAlert, setShowAlert] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState();
@@ -58,10 +58,10 @@ const UpdatePosDevice = (props) => {
         pos_device_name: props.posDevices.title || "",
       });
       setStore({
-        storeId: props.posDevices.store.storeId || "0",
-        storeName: props.posDevices.store.storeName || "Select STore",
+        _id: props.posDevices.store._id || "0",
+        title: props.posDevices.store.title || "Select STore",
       });
-      setSelectedStoreId(props.posDevices.store.storeId || "0");
+      setSelectedStoreId(props.posDevices.store._id || "0");
     }
   }, [props.posDevices]);
   const toggle = (tab) => {
@@ -164,8 +164,8 @@ const UpdatePosDevice = (props) => {
                 value={selectedStoreId}
                 disabled
               >
-                <option value={storeObject.storeId || "0"}>
-                  {storeObject.storeName || "Select Store"}
+                <option value={storeObject._id || "0"}>
+                  {storeObject.title || "Select Store"}
                 </option>
               </CSelect>
             </CFormGroup>

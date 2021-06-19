@@ -212,26 +212,23 @@ const AddEmployee = (props) => {
         phone: fields.phone,
         enablePin: fields.enablePin,
         // role: fields.role,
-        stores: JSON.stringify(
-          storeId
+        stores: storeId
             .filter((item) => item.isSelected === true)
             .map((item) => {
-              return {
-                id: item._id,
-                name: item.title,
-              };
-            })
-        ),
-        roles: JSON.stringify(
-          props.user_roles
+              // return {
+              //   id: item._id,
+              //   name: item.title,
+              // };
+              return item._id
+            }),
+        role: props.user_roles
             .filter((item) => item.role_id === fields.role)
             .map((item) => {
               return {
-                id: item.role_id,
-                name: item.roleName,
+                _id: item.role_id,
+                title: item.title,
               };
-            })[0]
-        ),
+            })[0],
       };
       if (
         props.user_roles
@@ -394,11 +391,11 @@ const AddEmployee = (props) => {
                   >
                     <option value="0">Select Role</option>
                     {(props.user_roles || []).map((item, index) => {
-                      return item.roleName !== "owner" &&
-                        item.roleName !== "Owner" ? (
+                      return item.title !== "owner" &&
+                        item.title !== "Owner" ? (
                         <React.Fragment>
                           <option value={item.role_id} key={index}>
-                            {item.roleName}
+                            {item.title}
                           </option>
                         </React.Fragment>
                       ) : null;

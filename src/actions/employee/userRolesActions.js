@@ -199,7 +199,6 @@ export const update_user_role = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: UPDATE_USER_ROLE, response: response.data });
           let msg = {
             open: true,
@@ -288,7 +287,6 @@ export const update_row_data = (data) => {
 
       })
         .then((response) => {
-          console.log(response.data);
           dispatch({
             type: GET_UPDATE_USER_ROLE,
             response: response.data,
@@ -368,8 +366,8 @@ export const delete_user_role = (ids) => {
             open: true,
             message:
               JSON.parse(ids).length > 1
-                ? "Employees Deleted Successfully"
-                : "Employee Deleted Successfully",
+                ? "Roles Deleted Successfully"
+                : "Role Deleted Successfully",
             object: {},
             error: false,
           };

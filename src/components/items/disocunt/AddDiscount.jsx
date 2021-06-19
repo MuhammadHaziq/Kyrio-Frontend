@@ -11,13 +11,10 @@ import {
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CLink,
   CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
   CListGroup,
   CListGroupItem,
   CSwitch,
@@ -101,10 +98,11 @@ const AddDiscount = (props) => {
       const store = storeId.filter((item) => item.isSelected === true);
       let storeData = [];
       store.map((item) => {
-        return storeData.push({
-          id: item._id,
-          title: item.title,
-        });
+        return storeData.push(item._id);
+        // return storeData.push({
+        //   id: item._id,
+        //   title: item.title,
+        // });
       });
 
       const data = {
@@ -112,11 +110,10 @@ const AddDiscount = (props) => {
         value: ReturnNumber(fields.discount_value),
         type: fields.disocunt_type,
         restricted: restricted_access,
-        stores: JSON.stringify(storeData),
+        stores: storeData,
         // store: JSON.stringify(storeId),
       };
       dispatch(add_new_disocunt(data));
-      console.log(data);
     }
   };
   const handleOnChange = (e) => {

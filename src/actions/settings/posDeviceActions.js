@@ -139,7 +139,7 @@ export const get_store_pos_device = (data) => {
           dispatch({
             type: GET_POS_DEVICES,
             response:
-              Object.keys(response.data).length > 0 ? [response.data] : [],
+              Object.keys(response.data).length > 0 ? [response.data.device] : [],
           });
         })
         .catch((error) => {

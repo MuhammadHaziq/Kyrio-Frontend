@@ -51,8 +51,8 @@ const categoryReducer = (state = initialState, action) => {
         category_list: state.category_list.slice().map((item) => {
           if (item._id === action.response._id) {
             return Object.assign({}, item, {
-              catTitle: action.response.catTitle,
-              catColor: action.response.catColor,
+              title: action.response.title,
+              color: action.response.color,
             });
           }
           return item;

@@ -49,6 +49,7 @@ const AddPaymentMethod = (props) => {
     cvc: "",
   });
   const [country, setSelectCountry] = useState("");
+  const [cvc, setCVC] = useState("");
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -168,11 +169,12 @@ const AddPaymentMethod = (props) => {
                         </CInputGroupPrepend>
                         <CInput
                           type="text"
-                          id="cvv"
+                          id="cvc"
                           placeholder="123"
                           required="required"
                           name="cvc"
-                          onChange={handleOnChange}
+                          value={cvc}
+                          onChange={(e)=> setCVC(e.target.value)}
                         />
                       </CInputGroup>
                     </CFormGroup>

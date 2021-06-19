@@ -20,13 +20,13 @@ const ModalSelectDiningOption = (props) => {
   const diningHandleChange = (e) => {
     const dining = props.dining.filter((item) => item._id == e.target.value);
     let diningData;
-    diningData = {
-      diningId: dining[0]._id,
-      diningName: dining[0].title,
-    };
+    // diningData = {
+    //   diningId: dining[0]._id,
+    //   diningName: dining[0].title,
+    // };
+    diningData = dining[0]._id;
     dispatch(toggle_dinings(diningData));
   };
-
   return (
     <React.Fragment>
       <CModal show={props.show} onClose={props.toggle} closeOnBackdrop={false}>

@@ -1,34 +1,27 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom'
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
 import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import {
-  get_shift_summary,
-  delete_shift_summary,
-} from "../../../actions/reports/salesShiftActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesShiftDatatableNew from "../../../datatables/reports/SalesShiftDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const SalesShift = () => {
   const dispatch = useDispatch();
+  const features = useSelector((state) => state.auth.user.features);
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
 
+  const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
@@ -57,6 +50,10 @@ const SalesShift = () => {
   };
 
   useEffect(() => {
+    let feature = features.filter(ftr => ftr.feature.name == "Shifts")[0].enable
+    if(!feature){
+      setRedirect(true)
+    }
     return () => {
       setLoading(false);
       dispatch(unmount_filter());
@@ -65,18 +62,19 @@ const SalesShift = () => {
 
   useEffect(() => {
     if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
+      // console.log(changeInFilter, "PrevchangeInFilter");
+      // console.log(filterComponent, "vchangeInFilter");
     }
   }, [filterComponent, changeInFilter]);
 
   const deleteSalesShift = () => {
-    console.log("Delete");
     setShowAlert(!showAlert);
   };
 
   return (
     <>
+      {redirect ? <Redirect to="/" /> : 
+      <>
       <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
       <CRow>
         <CCol>
@@ -135,6 +133,7 @@ const SalesShift = () => {
           </CCard>
         </CCol>
       </CRow>
+      </>}
     </>
   );
 };

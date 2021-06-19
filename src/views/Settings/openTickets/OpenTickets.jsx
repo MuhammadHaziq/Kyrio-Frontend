@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import  { Redirect } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -28,10 +29,12 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import validator from "validator";
 
 const OpenTickets = () => {
+
+  const [redirect, setRedirect] = useState(false);
   const [fadeOpenTicket, setFadeOpenTicket] = useState(true);
   const [timeout] = useState(300);
   const [sChecked, setChecked] = useState(false);
-  const [selectedStoreId, setSelectedStoreId] = useState("");
+  const [selectedStoreId, setSelectedStoreId] = useState("0");
   const [selectedStoreObject, setSelectedStoreObject] = useState({});
   const [items, setItems] = useState([]);
   const [values, setValues] = useState([]);
@@ -73,7 +76,12 @@ const OpenTickets = () => {
       setErrors(store_tickets.errors);
     }
   }, [store_tickets]);
-
+  useEffect(() => {
+    let feature = auth.user.features.filter(ftr => ftr.feature.name == "Open tickets")[0].enable
+    if(!feature){
+      setRedirect(true)
+    }
+}, []);
   // useEffect(() => {
   //   dispatch(get_store_open_ticket("0"));
   // }, [dispatch]);
@@ -225,7 +233,7 @@ const OpenTickets = () => {
   const saveOpenTicket = () => {
     const sendData = {
       ticket_name: values,
-      store: selectedStoreObject,
+      store: selectedStoreId,
     };
     dispatch(add_new_open_ticket(sendData));
   };
@@ -239,15 +247,15 @@ const OpenTickets = () => {
       ticket_name: (item || []).map((item) => {
         return item.value;
       }),
-      store: selectedStoreObject,
+      store: selectedStoreId,
       selectItemId: selectItemId,
       index: index,
     };
-    console.log(data);
     dispatch(delete_open_ticket(data));
   };
-  console.log(items);
   return (
+    <>
+    {redirect ? <Redirect to="/" /> : 
     <React.Fragment>
       <div className="animated fadeIn">
         <CFade timeout={timeout} in={fadeOpenTicket}>
@@ -269,6 +277,7 @@ const OpenTickets = () => {
                           value={selectedStoreId}
                           onChange={storeHandleChange}
                         >
+                          <option value="0">Select Store</option>
                           {store.stores_list.map((item, index) => {
                             return (
                               <option value={item._id} key={index}>
@@ -428,6 +437,7 @@ const OpenTickets = () => {
         </CFade>
       </div>
     </React.Fragment>
+  }</>
   );
 };
 export default OpenTickets;

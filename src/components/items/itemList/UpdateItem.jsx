@@ -65,7 +65,7 @@ const AddItem = (props) => {
   const modifire = useSelector((state) => state.items.modifiresReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const item = useSelector((state) => state.items.itemReducer);
-  const accountId = useSelector((state) => state.auth.user.accountId);
+  const account = useSelector((state) => state.auth.user.account);
 
   const dispatch = useDispatch();
 
@@ -113,7 +113,7 @@ const AddItem = (props) => {
       let setTaxes = [];
       (item.item_taxes || []).map((str, index) => {
         let taxExist = (props.item_row_data.taxes || []).filter(
-          (item) => item.id === str.id
+          (item) => item._id === str._id
         );
         if (
           taxExist !== undefined &&
@@ -146,7 +146,7 @@ const AddItem = (props) => {
         categoryId:
           props.item_row_data.category !== undefined &&
           props.item_row_data.category !== null
-            ? props.item_row_data.category.id
+            ? props.item_row_data.category._id
             : "0",
         sold_by: props.item_row_data.soldByType,
         price: props.item_row_data.price,
@@ -162,7 +162,7 @@ const AddItem = (props) => {
         props.item_row_data.image !== undefined &&
           props.item_row_data.image !== null &&
           props.item_row_data.image !== ""
-          ? `${ImageUrl}media/items/${accountId}/${props.item_row_data.image}`
+          ? `${ImageUrl}media/items/${account}/${props.item_row_data.image}`
           : null
       );
       setInventorySwitch([
@@ -171,14 +171,16 @@ const AddItem = (props) => {
       ]);
       let selectedModifier = modifire.modifiers_list;
       selectedModifier = selectedModifier.map((item) => {
-        if (
-          props.item_row_data.modifiers.filter((ite) => ite.id === item._id)
-            .length > 0
-        ) {
-          return {
-            ...item,
-            isSelected: true,
-          };
+        if(typeof props.item_row_data.modifiers !== "undefined"){
+          if (
+            props.item_row_data.modifiers.filter((ite) => ite._id === item._id)
+              .length > 0
+          ) {
+            return {
+              ...item,
+              isSelected: true,
+            };
+          }
         }
         return item;
       });
@@ -209,22 +211,24 @@ const AddItem = (props) => {
     modifiers
       .filter((ite) => ite.isSelected === true)
       .map((item) => {
-        return modifier.push({
-          id: item._id,
-          title: item.title,
-        });
+        return modifier.push(item._id)
+        // return modifier.push({
+        //   id: item._id,
+        //   title: item.title,
+        // });
       });
     let taxes = [];
     item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
         return (item.taxes || []).map((tax) => {
-          taxes.push({
-            id: tax._id,
-            title: typeof tax.title == "undefined" ? "" : tax.title,
-            type: typeof tax.tax_type == "undefined" ? "" : tax.tax_type.title,
-            value: typeof tax.tax_rate == "undefined" ? null : tax.tax_rate,
-          });
+          taxes.push(tax._id)
+          // taxes.push({
+          //   id: tax._id,
+          //   title: typeof tax.title == "undefined" ? "" : tax.title,
+          //   type: typeof tax.tax_type == "undefined" ? "" : tax.tax_type.title,
+          //   value: typeof tax.tax_rate == "undefined" ? null : tax.tax_rate,
+          // });
         });
       });
     const ReturnNumber = (params) => {
@@ -236,7 +240,6 @@ const AddItem = (props) => {
       num = Number.isInteger(num) ? num : num.toString().replace(",", "");
       return num;
     };
-    console.log("item.item_variants", item.item_variants);
     var formData = new FormData();
     formData.append("item_id", props.item_row_data._id);
     formData.append("name", fields.item_name);
@@ -245,15 +248,7 @@ const AddItem = (props) => {
     formData.append(
       "category",
       fields.categoryId !== "0"
-        ? JSON.stringify({
-            id: fields.categoryId,
-            name: category.category_list
-              .filter((item) => item._id === fields.categoryId)
-              .map((item) => {
-                return item.catTitle;
-              })[0],
-          })
-        : null
+        ? fields.categoryId : null
     );
     formData.append("soldByType", fields.sold_by);
     formData.append(
@@ -279,6 +274,8 @@ const AddItem = (props) => {
       JSON.stringify(
         (itemTax || []).filter((item) => {
           return item.isSelected === true;
+        }).map((item) => {
+          return item._id
         })
       )
     );
@@ -402,7 +399,7 @@ const AddItem = (props) => {
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
-  console.log("itemTax", itemTax);
+
   return (
     <React.Fragment>
       <CCard>
@@ -440,7 +437,7 @@ const AddItem = (props) => {
                 >
                   <option value="0">No Category</option>
                   {(category.category_list || []).map((item) => {
-                    return <option value={item._id}>{item.catTitle}</option>;
+                    return <option value={item._id}>{item.title}</option>;
                   })}
                 </CSelect>
               </CFormGroup>
@@ -545,9 +542,6 @@ const AddItem = (props) => {
                     invalid={errors.item_barcode}
                     onBlur={handleOnBlur}
                   />
-                  {/*  <CInvalidFeedback>
-                    {errors.item_barcode === true ? "Please Enter Barcode" : ""}
-                  </CInvalidFeedback>*/}
                 </CInputGroup>
               </CFormGroup>
             </CCol>
@@ -708,7 +702,7 @@ const AddItem = (props) => {
                         <p style={{ lineHeight: "normal" }}>
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : item.stores.map((str) => str.name).join(",")}
+                            : "Available in " + item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -754,11 +748,9 @@ const AddItem = (props) => {
                           />
                         </h6>
                         <p style={{ lineHeight: "normal" }}>
-                          {item.allStores === true
+                          {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : item.stores
-                                .map((str) => str.storeTitle)
-                                .join(",")}
+                            : "Available in " + item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -878,7 +870,7 @@ const AddItem = (props) => {
                     <>
                       <div onClick={() => removeSelectedImages("itemImage")}>
                         <i
-                          class="fa fa-times"
+                          className="fa fa-times"
                           aria-hidden="true"
                           style={{
                             display: "block",

@@ -143,50 +143,25 @@ const AddItem = (props) => {
     modifiers
       .filter((ite) => ite.isSelected === true)
       .map((item) => {
-        return modifier.push({
-          id: item._id,
-          title: item.title,
-        });
+        return modifier.push(item._id)
+        // return modifier.push({
+        //   id: item._id,
+        //   title: item.title,
+        // });
       });
-    // let taxes = [];
-    // item.store_list
-    //   .filter((item) => item.isSelected === true)
-    //   .map((item) => {
-    //     (item.taxes || []).map((tax) => {
-    //       return taxes.push({
-    //         id: tax._id,
-    //         title: tax.title,
-    //         type: tax.tax_type.title,
-    //         value: tax.tax_rate,
-    //       });
-    //     });
-    //   });
     const ReturnNumber = (params) => {
       let num = params;
       num = Number.isInteger(num) ? num : num.replace("$", "");
       num = Number.isInteger(num) ? num : num.replace(",", "");
       return num;
     };
-    console.log(
-      (itemTax || []).filter((item) => {
-        return item.isSelected === true;
-      })
-    );
     var formData = new FormData();
     formData.append("name", fields.item_name);
     formData.append("availableForSale", fields.availableForSale);
     formData.append(
       "category",
       fields.categoryId !== "0"
-        ? JSON.stringify({
-          id: fields.categoryId,
-          name: category.category_list
-            .filter((item) => (item._id) === (fields.categoryId))
-            .map((item) => {
-              return item.catTitle;
-            })[0],
-        })
-        : null
+        ? fields.categoryId : null
     );
     formData.append("soldByType", fields.sold_by);
     formData.append(
@@ -208,6 +183,8 @@ const AddItem = (props) => {
       JSON.stringify(
         (itemTax || []).filter((item) => {
           return item.isSelected === true;
+        }).map((item) => {
+          return item._id
         })
       )
     );
@@ -348,9 +325,6 @@ const AddItem = (props) => {
     fields.item_name == undefined ||
     fields.item_name == null ||
     fields.item_name == "";
-
-  console.log("taxesSwitch", itemTax);
-  console.log(fields.categoryId)
   return (
     <React.Fragment>
       <CCard>
@@ -388,7 +362,7 @@ const AddItem = (props) => {
                 >
                   <option value="0">No Category</option>
                   {(category.category_list || []).map((item) => {
-                    return <option value={item._id}>{item.catTitle}</option>;
+                    return <option value={item._id}>{item.title}</option>;
                   })}
                 </CSelect>
               </CFormGroup>
@@ -657,7 +631,7 @@ const AddItem = (props) => {
                         <p style={{ lineHeight: "normal" }}>
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : item.stores.map((str) => str.name).join(",")}
+                            : "Available in " + item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -703,11 +677,9 @@ const AddItem = (props) => {
                           />
                         </h6>
                         <p style={{ lineHeight: "normal" }}>
-                          {item.allStores === true
+                          {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : item.stores
-                              .map((str) => str.storeTitle)
-                              .join(",")}
+                            : "Available in " + item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -823,7 +795,7 @@ const AddItem = (props) => {
                     <>
                       <div onClick={() => removeSelectedImages("itemImage")}>
                         <i
-                          class="fa fa-times"
+                          className="fa fa-times"
                           aria-hidden="true"
                           style={{
                             display: "block",

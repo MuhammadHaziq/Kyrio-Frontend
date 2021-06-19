@@ -52,8 +52,8 @@ const AddCategory = (props) => {
     }
 
     const data = {
-      catTitle: fields.category_name,
-      catColor: fields.color,
+      title: fields.category_name,
+      color: fields.color,
     };
     dispatch(add_new_category(data));
   };
@@ -161,6 +161,7 @@ const AddCategory = (props) => {
                 variant="outline"
                 className="btn-pill pull-right"
                 color="danger"
+                onClick={goBack}
               >
                 BACK
               </CButton>

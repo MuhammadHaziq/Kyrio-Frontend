@@ -42,7 +42,7 @@ export const get_tax_dining_options = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: GET_DINING_TAX, response: response.data });
         })
         .catch((error) => {
@@ -90,7 +90,7 @@ export const get_item_taxes = () => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: GET_ITEM_TAXES, response: response.data });
         })
         .catch((error) => {
@@ -138,7 +138,7 @@ export const get_taxes_type = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: GET_TAXES_TYPE, response: response.data });
         })
         .catch((error) => {
@@ -186,7 +186,7 @@ export const get_taxes_option = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: GET_TAXES_OPTION, response: response.data });
         })
         .catch((error) => {
@@ -234,7 +234,7 @@ export const get_tax_category_list = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({ type: GET_CATEGORY_TAX, response: response.data });
         })
         .catch((error) => {
@@ -498,7 +498,7 @@ export const update_item_tax = (data) => {
           dispatch({ type: UPDATE_ITEM_TAX, response: response.data });
           let msg = {
             open: true,
-            message: "Tax Deleted Successfully",
+            message: "Tax Updated Successfully",
             object: {},
             error: false,
           };
@@ -596,7 +596,7 @@ export const update_row_data_tax = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           dispatch({
             type: UPDATE_ROW_DATA_TAX,
             response: response.data,

@@ -34,7 +34,7 @@ import {
 
 const Settings = () => {
   let { path, url } = useRouteMatch();
-  const settings = useSelector((state) => state.auth.user.roleData.settings);
+  const settings = useSelector((state) => state.auth.user.settings);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -64,19 +64,18 @@ const Settings = () => {
                       </small>
                     </h5>
                   </CListGroupItem>
-                  {(settings.settingModules || []).map((item, index) =>
+                  {(settings || []).map((item, index) =>
                     index !== 9 ? (
                       item.enable === true ? (
                         <Link
-                          key={index}
-                          to={`${url}/${item.moduleName.replace(/\s/g, "")}`}
+                          key={item._id}
+                          to={`${url}/${item.module.name.replace(/\s/g, "")}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           <CListGroupItem
                             style={{ paddingLeft: "40px" }}
-                            key={index}
                           >
-                            {item.moduleName}
+                            {item.module.name}
                           </CListGroupItem>
                         </Link>
                       ) : (

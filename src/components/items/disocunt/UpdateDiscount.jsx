@@ -11,13 +11,10 @@ import {
   CLabel,
   CRow,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CLink,
   CInputCheckbox,
   CInvalidFeedback,
   CCardFooter,
-  CInputRadio,
   CListGroup,
   CListGroupItem,
   CSwitch,
@@ -69,7 +66,7 @@ const UpdateDiscount = (props) => {
       if (props.update_item_discount !== undefined) {
         (props.update_item_discount.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.id) {
+            if (item._id === ite._id) {
               return {
                 ...item,
                 isSelected: true,
@@ -110,8 +107,8 @@ const UpdateDiscount = (props) => {
 
   const ReturnNumber = (params) => {
     let num = params;
-    num = Number.isInteger(num) ? num : num.replace("$", "");
-    num = Number.isInteger(num) ? num : num.replace(",", "");
+    num = Number.isInteger(num) ? num : num !== null ? num.replace("$", "") : num;
+    num = Number.isInteger(num) ? num : num !== null ? num.replace(",", "") : num; 
     return num;
   };
 
@@ -127,10 +124,11 @@ const UpdateDiscount = (props) => {
       const store = storeId.filter((item) => item.isSelected === true);
       let storeData = [];
       store.map((item) => {
-        return storeData.push({
-          id: item._id,
-          title: item.title,
-        });
+        return storeData.push(item._id);
+        // return storeData.push({
+        //   id: item._id,
+        //   title: item.title,
+        // });
       });
 
       const data = {
@@ -139,11 +137,10 @@ const UpdateDiscount = (props) => {
         value: ReturnNumber(fields.discount_value),
         type: fields.disocunt_type,
         restricted: restricted_access,
-        stores: JSON.stringify(storeData),
+        stores: storeData,
         // store: JSON.stringify(storeId),
       };
       dispatch(update_item_discount(data));
-      console.log(data);
     }
   };
   const handleOnChange = (e) => {

@@ -49,7 +49,7 @@ const UpdateDiningOption = (props) => {
       if (props.update_data !== undefined) {
         (props.update_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.storeId) {
+            if (item._id === ite.store._id) {
               return {
                 ...item,
                 isSelected: ite.isActive,
@@ -115,7 +115,6 @@ const UpdateDiningOption = (props) => {
         id: props.update_data._id,
         propStoreId: propStoreId,
       };
-      console.log(data);
       dispatch(update_dining_option(data));
     }
   };
@@ -181,17 +180,13 @@ const UpdateDiningOption = (props) => {
           return item._id;
         })
     );
-    console.log(storeIds);
     const data = {
       id: props.update_data._id,
       checkAll: fields.checkAll,
-      stores: JSON.stringify(
-        props.update_data.stores.filter((item) => {
-          return storeIds.has(item.storeId);
+      stores: props.update_data.stores.filter((item) => {
+          return storeIds.has(item.store._id);
         })
-      ),
     };
-    console.log("delete", data);
     dispatch(delete_dining_option(data));
   };
   const hideAlert = () => {

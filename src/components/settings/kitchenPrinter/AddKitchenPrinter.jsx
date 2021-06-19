@@ -75,23 +75,17 @@ const AddKitchenPrinter = (props) => {
       const category = categoryId.filter((item) => item.isSelected === true);
       let categoryData = [];
       category.map((item) => {
-        return categoryData.push({
-          categoryId: item._id,
-          categoryName: item.catTitle,
-        });
+        return categoryData.push(item._id)
+        // return categoryData.push({
+        //   categoryId: item._id,
+        //   categoryName: item.title,
+        // });
       });
-      if (fields.noCategory === true) {
-        categoryData.push({
-          categoryId: "0",
-          categoryName: "No Category",
-        });
-      }
       const data = {
-        name: fields.kitchen_name,
-        categories: JSON.stringify(categoryData),
-        storeId: storeId,
+        title: fields.kitchen_name,
+        categories: categoryData,
+        store: storeId,
       };
-      console.log(data);
       dispatch(add_new_kitchen_printer(data));
     }
   };
@@ -198,7 +192,7 @@ const AddKitchenPrinter = (props) => {
                     variant="custom-checkbox"
                     htmlFor={"categoryId" + item._id}
                   >
-                    {item.catTitle}
+                    {item.title}
                   </CLabel>
                 </CFormGroup>
               ))}

@@ -139,7 +139,6 @@ const AddItemVariant = (props) => {
     //     })
     //   ),
     // };
-    // console.log("data", data)
     dispatch(
       save_item_variants(
         items.map((item, index) => {
@@ -265,7 +264,6 @@ const AddItemVariant = (props) => {
   };
 
   // const onDelete = (i) => {
-  //   console.log(i);
   //
   //   let variants = this.state.variantFields.slice(0);
   //   variants.splice(i, 1);
@@ -305,8 +303,6 @@ const AddItemVariant = (props) => {
     setVariantFields(variants);
     dispatch(delete_item_varient_option(idx));
   };
-  console.log(variantFields);
-  console.log(props);
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
   return (
     <React.Fragment>

@@ -161,7 +161,7 @@ const itemReducer = (state = initialState, action) => {
     case TOGGLE_SELECT_SINGLE_ITEM_STORES: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
-          if (item.id === action.response) {
+          if (item.store._id === action.response) {
             return {
               ...item,
               isSelected: !item.isSelected,
@@ -190,7 +190,7 @@ const itemReducer = (state = initialState, action) => {
       } else {
         return Object.assign({}, state, {
           store_list: state.store_list.slice().map((item) => {
-            if (item.id === action.id) {
+            if (item.store._id === action.id) {
               return {
                 ...item,
                 price: action.value,
@@ -204,7 +204,7 @@ const itemReducer = (state = initialState, action) => {
     case SET_ITEM_STORE_IN_STOCK: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
-          if (item.id === action.id) {
+          if (item.store._id === action.id) {
             return {
               ...item,
               inStock: action.value,
@@ -217,7 +217,7 @@ const itemReducer = (state = initialState, action) => {
     case SET_ITEM_STORE_LOW_STOCK: {
       return Object.assign({}, state, {
         store_list: state.store_list.slice().map((item) => {
-          if (item.id === action.id) {
+          if (item.store._id === action.id) {
             return {
               ...item,
               lowStock: action.value,
@@ -392,16 +392,17 @@ const itemReducer = (state = initialState, action) => {
 
     case UPDATE_ITEM_ROW_DATA: {
       let filterStore = [];
+
       const storeList = state.store_list.slice().map((item) => {
         filterStore = action.response.stores.filter(
-          (ite) => ite.id === item.id
+          (ite) => ite.store._id === item.store._id
         )[0];
         if (
           filterStore !== undefined &&
           filterStore !== null &&
           Object.keys(filterStore).length > 0
         ) {
-          if (item.id === filterStore.id) {
+          if (item.store._id === filterStore.store._id) {
             return { ...filterStore, isSelected: true };
           }
           return { ...item, isSelected: false };

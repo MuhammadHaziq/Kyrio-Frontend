@@ -50,9 +50,8 @@ const Taxes = () => {
 
     if (storeIds.length > 0) {
       const data = {
-        storeId: JSON.stringify(storeIds),
+        stores: storeIds,
       };
-      console.log(data);
       dispatch(get_tax_dining_options(data));
       dispatch(get_catgeory_item(data));
       dispatch(get_tax_category_list());

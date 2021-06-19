@@ -86,7 +86,7 @@ const AddDiningOption = (props) => {
 
       const data = {
         title: fields.dining_name,
-        store: JSON.stringify(storeData),
+        store: storeData,
         isSelected: true,
         // store: JSON.stringify(storeId),
       };

@@ -42,7 +42,7 @@ const PosDeviceDatatable = (props) => {
           _style: { width: "5%" },
         },
         { key: "title", label: "Name", filter: false },
-        { key: "storeName", label: "Store", filter: false },
+        { key: "store", label: "Store", filter: false },
         { key: "udid", label: "UDID", filter: false },
         { key: "status", label: "Status", filter: false },
       ]}
@@ -84,8 +84,8 @@ const PosDeviceDatatable = (props) => {
             </td>
           );
         },
-        storeName: (item) => {
-          return <td>{item.store.storeName}</td>;
+        store: (item) => {
+          return <td>{item.store.title}</td>;
         },
         udid: (item) => {
           return (

@@ -39,8 +39,7 @@ const Settings = () => {
   // featuresReducer
   const [activeTab, setActiveTab] = useState(0);
   const [storeId, setStoreId] = useState();
-  const features = useSelector((state) => state.auth.user.roleData.features);
-  // const features = useSelector((state) => state.auth.user.roleData.features);
+  const features = useSelector((state) => state.auth.user.features);
   const auth = useSelector((state) => state.auth);
   const kitchenPrinter = useSelector(
     (state) => state.settingReducers.kitchenPrinterReducer
@@ -50,7 +49,7 @@ const Settings = () => {
   //   (state) => state.settingReducers.featuresReducer.setting_features
   // )
   const settings = useSelector((state) => state.auth.user.settings);
-  console.log("settings", settings);
+  
   useEffect(() => {
     setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
   }, [auth]);
@@ -100,7 +99,7 @@ const Settings = () => {
                         </small>
                       </h5>
                     </CListGroupItem>
-                    {(settings.settingModules || []).map((item, index) =>
+                    {(settings || []).map((item, index) =>
                       index !== 9 ? (
                         item.enable === true ? (
                           <CListGroupItem

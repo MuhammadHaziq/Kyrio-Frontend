@@ -74,15 +74,15 @@ const EditUserRole = (props) => {
   useEffect(() => {
     if (props.user_role_row_data !== undefined) {
       setRoleName(
-        props.user_role_row_data.roleName !== undefined &&
-          props.user_role_row_data.roleName !== null
-          ? props.user_role_row_data.roleName
+        props.user_role_row_data.title !== undefined &&
+          props.user_role_row_data.title !== null
+          ? props.user_role_row_data.title
           : ""
       );
       setRoleNameOrg(
-        props.user_role_row_data.roleName !== undefined &&
-          props.user_role_row_data.roleName !== null
-          ? props.user_role_row_data.roleName
+        props.user_role_row_data.title !== undefined &&
+          props.user_role_row_data.title !== null
+          ? props.user_role_row_data.title
           : ""
       );
       setBackOffice(
@@ -330,10 +330,10 @@ const EditUserRole = (props) => {
                                       fontWeight: 400,
                                     }}
                                   >
-                                    {item.moduleName}
+                                    {item.posModule.name}
                                     <br />
                                     <small className="mb-1">
-                                      {item.description}
+                                      {item.posModule.description}
                                     </small>
                                   </CLabel>
                                 </CFormGroup>
@@ -438,10 +438,10 @@ const EditUserRole = (props) => {
                                         fontWeight: 400,
                                       }}
                                     >
-                                      {item.moduleName}
+                                      {item.backoffice.name}
                                       <br />
                                       <small className="mb-1">
-                                        {item.description}
+                                        {item.backoffice.description}
                                       </small>
                                     </CLabel>
                                   </CFormGroup>

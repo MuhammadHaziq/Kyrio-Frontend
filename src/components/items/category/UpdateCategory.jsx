@@ -49,15 +49,12 @@ const UpdateCategory = (props) => {
       Object.keys(category.update_item_category).length > 0
     ) {
       setFields({
-        category_name: category.update_item_category.catTitle || "",
-        color: category.update_item_category.catColor || "",
+        category_name: category.update_item_category.title || "",
+        color: category.update_item_category.color || "",
       });
     }
   }, [category.update_item_category]);
 
-  const goBack = () => {
-    props.goBack();
-  };
 
   const updateCategory = () => {
     if (fields.category_name === "") {
@@ -70,8 +67,8 @@ const UpdateCategory = (props) => {
 
     const data = {
       id: props.update_item_category._id,
-      catTitle: fields.category_name,
-      catColor: fields.color,
+      title: fields.category_name,
+      color: fields.color,
     };
     dispatch(update_item_category(data));
   };
@@ -113,7 +110,9 @@ const UpdateCategory = (props) => {
     const data = [props.update_item_category._id];
     dispatch(delete_categories(JSON.stringify(data)));
   };
-
+  const goBack = () => {
+    props.goBack();
+  };
   return (
     <React.Fragment>
       <CCard>

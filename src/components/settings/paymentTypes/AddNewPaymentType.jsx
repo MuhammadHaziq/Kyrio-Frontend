@@ -76,7 +76,7 @@ const AddNewPaymentType = (props) => {
     } else {
       const data = {
         name: fields.name,
-        paymentTypes: JSON.stringify(PaymentType),
+        paymentTypes: PaymentType,
         storeId: storeId,
       };
       dispatch(add_new_payment_type(data));

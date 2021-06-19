@@ -57,42 +57,19 @@ const Receipt = (props) => {
   const receiptData = useSelector(
     (state) => state.settingReducers.receiptReducer.receipt_data
   );
-  useEffect(() => {
-    setSelectedStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
-  }, [auth]);
 
   useEffect(() => {
-    setChecked([false, false]);
-    setFadeReceipt(true);
-    setTimeOut(300);
-    setSelectedLanguage("");
-    setValues({
-      header: "",
-      footer: "",
-    });
-    setrReceiptFile("");
-    setPrintedReceiptFile("");
-    setReceiptImage(null);
-    setPrintedReceiptImage(null);
-    setIsHovered(false);
-    setPrintedReceiptHover(false);
-    if (
-      selectedStoreId !== undefined &&
-      selectedStoreId !== null &&
-      selectedStoreId !== "" &&
-      selectedStoreId !== "0"
-    ) {
-      dispatch(get_receipt(selectedStoreId));
-    }
-  }, [dispatch, selectedStoreId]);
-
+    setSelectedStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "0");
+    dispatch(get_receipt(auth.user.stores[0]._id));
+    
+  },[])
   useEffect(() => {
     if (
       receiptData !== undefined &&
       receiptData !== null &&
       Object.keys(receiptData).length > 0
     ) {
-      setSelectedStoreId(receiptData.storeId);
+      setSelectedStoreId(receiptData.store);
       setSelectedLanguage(receiptData.language);
       setValues({
         header: receiptData.header || "",
@@ -116,6 +93,25 @@ const Receipt = (props) => {
 
   const storeHandleChange = (e) => {
     setSelectedStoreId(e.target.value);
+    if (selectedStoreId !== e.target.value && e.target.value !== "0") {
+      setChecked([false, false]);
+      setFadeReceipt(true);
+      setTimeOut(300);
+      setSelectedLanguage("");
+      setValues({
+        header: "",
+        footer: "",
+      });
+      setrReceiptFile("");
+      setPrintedReceiptFile("");
+      setReceiptImage(null);
+      setPrintedReceiptImage(null);
+      setIsHovered(false);
+      setPrintedReceiptHover(false);
+
+      dispatch(get_receipt(e.target.value));
+    }
+
   };
   const goBack = () => {
     setFadeReceipt(true);
@@ -148,7 +144,7 @@ const Receipt = (props) => {
   };
 
   const uploadPrintedReceiptImage = (e) => {
-    console.log(e.target.files);
+    
     if (
       e.target.files !== undefined &&
       e.target.files !== null &&
@@ -210,7 +206,7 @@ const Receipt = (props) => {
   };
 
   const removeSelectedImages = (name) => {
-    console.log(name);
+    
     if (name === "printedReceiptImage") {
       setPrintedReceiptImage(null);
     } else {
@@ -228,16 +224,16 @@ const Receipt = (props) => {
       let data = new FormData();
 
       data.append("receiptImage", receiptFile);
-      data.append("receiptImagePath", receiptImage);
+      // data.append("receiptImagePath", receiptImage);
       data.append("printedReceiptImage", printedReceiptFile);
-      data.append("printedReceiptImagePath", printedReceiptImage);
+      // data.append("printedReceiptImagePath", printedReceiptImage);
       data.append("footer", values.footer);
       data.append("header", values.header);
       data.append("show_customer_info", checked[0]);
       data.append("show_comments", checked[1]);
       data.append("language", selectedLanguage);
       data.append("storeId", selectedStoreId);
-      console.log(...data);
+      // console.log(...data);
       dispatch(add_new_receipt(data));
     }
   };
@@ -282,7 +278,7 @@ const Receipt = (props) => {
                   </CCol>
                   <CCol
                     xs="6"
-                    lg="2"
+                    lg="4"
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                   >
@@ -294,12 +290,12 @@ const Receipt = (props) => {
                           onClick={() => removeSelectedImages("receiptImage")}
                         >
                           <i
-                            class="fa fa-times"
+                            className="fa fa-times"
                             aria-hidden="true"
                             style={{
                               display: "block",
                               position: "inherit",
-                              float: "right",
+                              float: "left",
                             }}
                           ></i>
                         </div>
@@ -339,7 +335,7 @@ const Receipt = (props) => {
                   </CCol>
                   <CCol
                     xs="6"
-                    lg="2"
+                    lg="4"
                     onMouseEnter={() => setPrintedReceiptHover(true)}
                     onMouseLeave={() => setPrintedReceiptHover(false)}
                   >
@@ -352,12 +348,12 @@ const Receipt = (props) => {
                           }
                         >
                           <i
-                            class="fa fa-times"
+                            className="fa fa-times"
                             aria-hidden="true"
                             style={{
                               display: "block",
                               position: "inherit",
-                              float: "right",
+                              float: "left",
                             }}
                           ></i>
                         </div>

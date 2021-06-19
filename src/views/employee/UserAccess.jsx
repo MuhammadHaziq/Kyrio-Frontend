@@ -53,7 +53,6 @@ const TimeCards = () => {
       .map((item) => {
         return item.role_id;
       });
-    console.log(roleId);
     // delete_user_role
     dispatch(delete_user_role(JSON.stringify(roleId)));
     setShowAlert(!showAlert);

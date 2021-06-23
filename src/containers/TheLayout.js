@@ -41,8 +41,6 @@ const TheLayout = () => {
     "3002";
       let socket = io(socketBaseUrl,connectionOptions);
       
-        
-      
       socket.on("connect", () => {
         socket.emit('create', user.account);
         socket.on(FEATURES_TOGGLE,(data) => {

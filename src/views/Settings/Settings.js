@@ -9,8 +9,7 @@ import {
   CSidebar,
   CSidebarNav,
   CSidebarNavDivider,
-  CSidebarNavItem,
-  CListGroupItem,
+  CSidebarNavItem
 } from "@coreui/react";
 import { Redirect } from "react-router-dom";
 import { MdSettings, MdStore } from "react-icons/md";
@@ -34,6 +33,11 @@ import { HashRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 const Settings = () => {
   let { url } = useRouteMatch();
   const settings = useSelector((state) => state.auth.user.settings);
+  const modules = useSelector((state) => state.auth.user.roleData.allowBackoffice.modules);
+  const roleTitle = useSelector((state) => state.auth.user.roleData.title);
+  
+  const [settingCk, setSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name !== "Manage POS devices").length > 0);
+  const [editSettingCk, setEditSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings").length > 0);
   const [show, setShow] = useState(true);
   const [settingBar, setSettingBar] = useState([]);
 
@@ -44,26 +48,99 @@ const Settings = () => {
   const setting = [];
   useEffect(() => {
     if (settings !== undefined && settings) {
-      
-      (settings || []).map((item, index) =>
-        index !== 9
-          ? item.enable === true
-            ? setting.push({
+      // mod.backoffice.isMenu && mod.backoffice.isChild
+      if(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name !== "Manage POS devices").length > 0){
+        setSettingCk(true)
+      } else {
+        setSettingCk(false)
+      }
+      if(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings").length > 0){
+        setEditSettingCk(true)
+      } else {
+        setEditSettingCk(false)
+      }
+      let storePOSCheck = modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Manage POS devices").length > 0
+      let settingCheck = modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable)
+      let editSettingCheck = modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings")
+      if(settingCheck.length > 0 || editSettingCheck.length > 0){
+        let generalSettings    = modules.find(mod=> mod.backoffice.name == "Edit general settings").enable
+        let mngBilling         = modules.find(mod=> mod.backoffice.name == "Manage billing").enable
+        let mngPaymentTypes    = modules.find(mod=> mod.backoffice.name == "Manage payment types").enable
+        let mngLoyaltyProgram  = modules.find(mod=> mod.backoffice.name == "Manage loyalty program").enable
+        let mngTaxes           = modules.find(mod=> mod.backoffice.name == "Manage taxes").enable
+        let mngDiningOptions   = modules.find(mod=> mod.backoffice.name == "Manage dining options").enable
+        let mngKitchenPrinters = modules.find(mod=> mod.backoffice.name == "Manage kitchen printers").enable
+        let mngPOSDevices      = modules.find(mod=> mod.backoffice.name == "Manage POS devices").enable
+
+        if(!generalSettings){
+          settings.find(st => st.module.name === "Features").enable = false
+          settings.find(st => st.module.name === "Receipt").enable = false
+          settings.find(st => st.module.name === "Open tickets").enable = false
+        } else {
+          settings.find(st => st.module.name === "Features").enable = true
+          settings.find(st => st.module.name === "Receipt").enable = true
+          settings.find(st => st.module.name === "Open tickets").enable = true
+        }
+        if(!mngBilling){
+          settings.find(st => st.module.name === "Billing & subscriptions").enable = false
+        } else {
+          settings.find(st => st.module.name === "Billing & subscriptions").enable = true
+        }
+        if(!mngPaymentTypes){
+          settings.find(st => st.module.name === "Payment types").enable = false
+        } else {
+          settings.find(st => st.module.name === "Payment types").enable = true
+        }
+        if(!mngLoyaltyProgram){
+          settings.find(st => st.module.name === "Loyalty").enable = false
+        } else {
+          settings.find(st => st.module.name === "Loyalty").enable = true
+        }
+        if(!mngTaxes){
+          settings.find(st => st.module.name === "Taxes").enable = false
+        } else {
+          settings.find(st => st.module.name === "Taxes").enable = true
+        }
+        if(!mngDiningOptions){
+          settings.find(st => st.module.name === "Dining options").enable = false
+        } else {
+          settings.find(st => st.module.name === "Dining options").enable = true
+        }
+        if(!mngKitchenPrinters){
+          settings.find(st => st.module.name === "Kitchen printers").enable = false
+        } else {
+          settings.find(st => st.module.name === "Kitchen printers").enable = true
+        }
+        if(!mngPOSDevices){
+          settings.find(st => st.module.name === "POS devices").enable = false
+        } else {
+          settings.find(st => st.module.name === "POS devices").enable = true
+        }
+        if(roleTitle !== "Owner"){
+          settings.find(st => st.module.name === "Stores").enable = false
+        } else {
+          settings.find(st => st.module.name === "Stores").enable = true
+        }
+        (settings || []).map((item, index) => {
+          return index !== 9
+            ? item.enable === true
+              ? setting.push({
+                  _tag: "CSidebarNavItem",
+                  name: item.module.name,
+                  moduleName: item.module.name,
+                  to: `${url}/${item.module.name.replace(/\s/g, "")}`,
+                })
+              : ""
+            : storePOSCheck || roleTitle === "Owner" ? setting.push({
                 _tag: "CSidebarNavItem",
-                name: item.module.name,
-                moduleName: item.module.name,
-                to: `${url}/${item.module.name.replace(/\s/g, "")}`,
-              })
-            : ""
-          : setting.push({
-              _tag: "CSidebarNavItem",
-              name: item.module.heading,
-              icon: "cil-home",
-            })
-      );
-      setSettingBar(setting);
+                name: <>{item.module.heading}<br/>{item.module.span}</>,
+                icon:  <MdStore style={{ fontSize: "30px", margin: "5px" }} />,
+              }) : ""
+            });
+        setSettingBar(setting);
+      }
     }
-  }, [settings]);
+  }, [settings,modules]);
 
   return !LoginCheck() ? (
     <Redirect exact to="/login" />
@@ -83,7 +160,8 @@ const Settings = () => {
                     onShowChange={() => setShow(!show)}
                     style={{ width: "100%" }}
                   >
-                    <h5>
+                    {settingCk || editSettingCk ?
+                    (<h5>
                       <MdSettings style={{ fontSize: "30px", margin: "5px" }} />
                       {/* <strong>&nbsp;{t('Settings.settings')}</strong> */}
                       <strong>&nbsp;Settings</strong>
@@ -96,7 +174,7 @@ const Settings = () => {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System
                         settings
                       </small>
-                    </h5>
+                    </h5>) : ""}
 
                     <CSidebarNav>
                       <CCreateElement

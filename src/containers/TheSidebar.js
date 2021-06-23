@@ -138,16 +138,10 @@ const TheSidebar = () => {
               }
             } else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
               let nav = _nav.filter((itm) => itm.moduleName === "Edit general settings");
-              
-              // if(mod.backoffice.name === "Manage billing"){
                 if(routes.filter(itm => itm.name == "Settings").length <= 0){
                   nav.push(_nav.filter(itm => itm.name == "Settings")[0])
                   routes.push(nav[0]);
                 }
-              // }
-              
-              
-
             }
           }
         }

@@ -199,7 +199,7 @@ const AddEmployee = (props) => {
         role: true,
       });
       return false;
-    } else if(fields.enablePin && fields.posPin === "0000"){
+    } else if(fields.pos && fields.enablePin && fields.posPin === "0000"){
       setErrors({
         ...errors,
         posPin: true,

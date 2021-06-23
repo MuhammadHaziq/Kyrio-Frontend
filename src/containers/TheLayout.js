@@ -38,7 +38,7 @@ const TheLayout = () => {
     "//" +
     window.location.hostname +
     ":" +
-    "3000";
+    "3002";
       let socket = io(socketBaseUrl,connectionOptions);
       
         

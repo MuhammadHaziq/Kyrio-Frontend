@@ -52,7 +52,9 @@ const TheLayout = () => {
         });
         socket.on(ROLES_ACCESS_TOGGLE,(data) => {
           if(user._id !== data.user){
-            dispatch({ type: SET_ACCESS_RIGHT_MODULE, response: data.backoffice });
+            if(user.role_id == data.backoffice._id){
+              dispatch({ type: SET_ACCESS_RIGHT_MODULE, response: data.backoffice }); 
+            }
           }
         });
       });

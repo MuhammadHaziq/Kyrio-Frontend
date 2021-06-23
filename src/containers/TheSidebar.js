@@ -50,7 +50,7 @@ const TheSidebar = () => {
 
               if (nav.length > 0) {
                 
-                // Check Bacoffice Module Is Enabled Or Not For Reports
+                // Check Bacoffice Module Is Enabled Or Not For Reports also check if shift Feature is enabled or not
                 // Shifts Feature Done
                 if(nav[0].name === "Reports"){
                   
@@ -58,7 +58,7 @@ const TheSidebar = () => {
                   if(!mod[0].enable){
                     nav.splice(1, 1);
                   } else if(nav.filter(itm => itm.name == "Reports").length <= 0) {
-                    nav.push(_nav[0])
+                    nav.push(_nav.filter(itm => itm.name == "Reports")[0])
                   }
                   let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
                   
@@ -79,7 +79,7 @@ const TheSidebar = () => {
                   if(!mod[0].enable){
                     nav.splice(1, 1);
                   } else if(nav.filter(itm => itm.name == "Items").length <= 0) {
-                    nav.push(_nav[0])
+                    nav.push(_nav.filter(itm => itm.name == "Items")[0])
                   }
                 }
                 if(nav[0].name === "Inventory"){ 
@@ -87,13 +87,21 @@ const TheSidebar = () => {
                   if(!mod[0].enable){
                     nav.splice(1, 1);
                   } else if(nav.filter(itm => itm.name == "Inventory").length <= 0) {
-                    nav.push(_nav[0])
+                    nav.push(_nav.filter(itm => itm.name == "Inventory")[0])
                   }
                 }
                 // #END#
 
-                // Employees Features
+                // Check Bacoffice Module Is Enabled Or Not For Employees also check Features is enabled or not
                 if(nav[0].name === "Employees"){
+                  
+                  let mod = module.filter(itm => itm.backoffice.name === "Manage employees")
+                  if(!mod[0].enable){
+                    nav.splice(1, 1);
+                  } else if(nav.filter(itm => itm.name == "Employees").length <= 0) {
+                    nav.push(_nav.filter(itm => itm.name == "Employees")[0])
+                  }
+
                   let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
                   if(!timeClok[0].enable){
                     nav[0]._children.splice(2, 2);
@@ -112,134 +120,35 @@ const TheSidebar = () => {
                 }
                 // #END#
 
+                // Check Bacoffice Module Is Enabled Or Not For Customers
+                if(nav[0].name === "Customers"){ 
+                  let mod = module.filter(itm => itm.backoffice.name === "Manage customers")
+                  if(!mod[0].enable){
+                    nav.splice(1, 1);
+                  } else if(nav.filter(itm => itm.name == "Customers").length <= 0) {
+                    nav.push(_nav.filter(itm => itm.name == "Customers")[0])
+                  }
+                }
+                // #END#
+
                 routes.push(nav[0]);
                 if (nav.length > 1) {
                   routes.push(nav[1]);
                 }
               }
-            } 
-            // else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
-            //   console.log("Inside Child")
-            //   if (!settingCheck) {
-            //     console.log("Inside Child settingCheck")
-            //     if (!settings[0].enable) {
-            //       console.log("Inside Child !settings[0].enable")
-            //       let nav = _nav.filter(
-            //         (itm) => itm.moduleName === "Edit general settings"
-            //       );
-            //       if (nav.length > 0) {
-            //         console.log("Inside Child nav.length > 0")
+            } else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
+              let nav = _nav.filter((itm) => itm.moduleName === "Edit general settings");
+              
+              // if(mod.backoffice.name === "Manage billing"){
+                if(routes.filter(itm => itm.name == "Settings").length <= 0){
+                  nav.push(_nav.filter(itm => itm.name == "Settings")[0])
+                  routes.push(nav[0]);
+                }
+              // }
+              
+              
 
-            //         // Check Bacoffice Module Is Enabled Or Not For Reports
-            //         if(nav[0].name === "Reports"){ 
-            //           let mod = module.filter(itm => itm.backoffice.name === "View sales report")
-            //           if(!mod[0].enable){
-            //             nav.splice(1, 1);
-            //           } else if(nav.filter(itm => itm.name == "Reports").length <= 0) {
-            //             nav.push({
-            //               _tag: "CSidebarNavDropdown",
-            //               name: "Reports",
-            //               moduleName: "View sales report",
-            //               to: "/reports",
-            //               icon: "cil-chart-pie",
-            //               _children: [
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales summary",
-            //                   to: "/reports/sales",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales by item",
-            //                   to: "/reports/goods",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales by category",
-            //                   to: "/reports/categories",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales by employee",
-            //                   to: "/reports/employee",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales by payment type",
-            //                   to: "/reports/pay-types",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Receipts",
-            //                   to: "/reports/average",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Sales by modifier",
-            //                   to: "/reports/modifiers",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Discounts",
-            //                   to: "/reports/discounts",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Taxes",
-            //                   to: "/reports/tax",
-            //                 },
-            //                 {
-            //                   _tag: "CSidebarNavItem",
-            //                   name: "Shifts",
-            //                   to: "/reports/shift",
-            //                 },
-            //               ],
-            //             })
-            //           }
-            //         }
-            //         // #END#
-
-            //          // Employees Features
-            //           if(nav[0].name === "Employees"){
-            //             let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
-            //             if(!timeClok[0].enable){
-            //               nav[0]._children.splice(2, 2);
-            //             } else if(nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0){
-            //               nav[0]._children.push({
-            //                 _tag: "CSidebarNavItem",
-            //                 name: "Timecards",
-            //                 to: "/employees/timecard",
-            //               },
-            //               {
-            //                 _tag: "CSidebarNavItem",
-            //                 name: "Total hours worked",
-            //                 to: "/employees/total-hour-worked",
-            //               })
-            //             }
-            //           }
-            //         // #END#
-
-            //         // Shifts Feature Done
-            //           if(nav[0].name === "Reports"){
-            //             let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
-                        
-            //             if(!shift[0].enable){
-            //               nav[0]._children.splice(9, 1);
-            //             } else if(nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0){
-            //               nav[0]._children.push({
-            //                 _tag: "CSidebarNavItem",
-            //                 name: "Shifts",
-            //                 to: "/reports/shift",
-            //               })
-            //             }
-            //           }
-            //         // #END#
-            //         routes.push(nav[0]);
-            //         settingCheck = true;
-            //       }
-            //     }
-            //   }
-            // }
+            }
           }
         }
         setNavigation(routes);

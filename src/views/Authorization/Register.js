@@ -192,6 +192,7 @@ const Register = () => {
         businessName: formState.values.businessName,
         country: formState.values.country,
         terms: terms,
+        platform: "backoffice"
       };
       dispatch(signup(data));
     }

@@ -1,15 +1,15 @@
 // API URLs
-const LocalUrl = "http://localhost:3000/kyrio/v1/";
-const LiveUrl = "http://158.176.135.6:3000/kyrio/v1/";
+const LocalUrl = "http://localhost:3002/kyrio/v1/";
+const LiveUrl = "http://158.176.135.6:3002/kyrio/v1/";
 // Image URLs
-const ImageLocalUrl = "http://localhost:3000/";
-const ImageLiveUrl = "http://158.176.135.6:3000/";
+const ImageLocalUrl = "http://localhost:3002/";
+const ImageLiveUrl = "http://158.176.135.6:3002/";
 export const imageBaseUrl =
   window.location.protocol +
   "//" +
   window.location.hostname +
   ":" +
-  "3000" +
+  "3002" +
   "/";
 let Base_Url = "";
 let Image_Url = "";

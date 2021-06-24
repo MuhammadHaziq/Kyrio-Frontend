@@ -56,7 +56,8 @@ const TheSidebar = () => {
                   
                   let mod = module.filter(itm => itm.backoffice.name === "View sales report")
                   if(!mod[0].enable){
-                    nav.splice(1, 1);
+                    
+                    nav.splice(nav.findIndex(e => e.name === "Reports"),1);
                   } else if(nav.filter(itm => itm.name == "Reports").length <= 0) {
                     nav.push(_nav.filter(itm => itm.name == "Reports")[0])
                   }
@@ -77,7 +78,7 @@ const TheSidebar = () => {
                 if(nav[0].name === "Items"){ 
                   let mod = module.filter(itm => itm.backoffice.name === "Items")
                   if(!mod[0].enable){
-                    nav.splice(1, 1);
+                    nav.splice(nav.findIndex(e => e.name === "Items"),1);
                   } else if(nav.filter(itm => itm.name == "Items").length <= 0) {
                     nav.push(_nav.filter(itm => itm.name == "Items")[0])
                   }
@@ -85,7 +86,7 @@ const TheSidebar = () => {
                 if(nav[0].name === "Inventory"){ 
                   let mod = module.filter(itm => itm.backoffice.name === "Items")
                   if(!mod[0].enable){
-                    nav.splice(1, 1);
+                    nav.splice(nav.findIndex(e => e.name === "Inventory"),1);
                   } else if(nav.filter(itm => itm.name == "Inventory").length <= 0) {
                     nav.push(_nav.filter(itm => itm.name == "Inventory")[0])
                   }
@@ -97,14 +98,15 @@ const TheSidebar = () => {
                   
                   let mod = module.filter(itm => itm.backoffice.name === "Manage employees")
                   if(!mod[0].enable){
-                    nav.splice(1, 1);
+                    nav.splice(nav.findIndex(e => e.name === "Employees"),1);
                   } else if(nav.filter(itm => itm.name == "Employees").length <= 0) {
                     nav.push(_nav.filter(itm => itm.name == "Employees")[0])
                   }
 
                   let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
                   if(!timeClok[0].enable){
-                    nav[0]._children.splice(2, 2);
+                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Timecards"), 1);
+                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Total hours worked"), 1);
                   } else if(nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0){
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
@@ -124,7 +126,7 @@ const TheSidebar = () => {
                 if(nav[0].name === "Customers"){ 
                   let mod = module.filter(itm => itm.backoffice.name === "Manage customers")
                   if(!mod[0].enable){
-                    nav.splice(1, 1);
+                    nav.splice(nav.findIndex(e => e.name === "Customers"),1);
                   } else if(nav.filter(itm => itm.name == "Customers").length <= 0) {
                     nav.push(_nav.filter(itm => itm.name == "Customers")[0])
                   }

@@ -37,11 +37,7 @@ const TheSidebar = () => {
       } else {
         let module = user.roleData.allowBackoffice.modules || [];
         
-        // let settings = module.filter(
-        //   (itm) => itm.backoffice.name === "Edit general settings"
-        // );
         let routes = [];
-        // let settingCheck = false;
 
         for (const mod of module) {
           if (mod.enable) {
@@ -50,22 +46,15 @@ const TheSidebar = () => {
 
               if (nav.length > 0) {
                 
-                // Check Bacoffice Module Is Enabled Or Not For Reports also check if shift Feature is enabled or not
-                // Shifts Feature Done
+                if(nav.filter(itm => itm.moduleName ==  mod.backoffice.name).length <= 0){
+                  nav.push(_nav.filter(itm => itm.moduleName ==  mod.backoffice.name))
+                }
                 if(nav[0].name === "Reports"){
+                let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
                   
-                  let mod = module.filter(itm => itm.backoffice.name === "View sales report")
-                  if(!mod[0].enable){
-                    
-                    nav.splice(nav.findIndex(e => e.name === "Reports"),1);
-                  } else if(nav.filter(itm => itm.name == "Reports").length <= 0) {
-                    nav.push(_nav.filter(itm => itm.name == "Reports")[0])
-                  }
-                  let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
-                  
-                  if(!shift[0].enable && mod[0].enable){
-                    nav[0]._children.splice(9, 1);
-                  } else if(nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0 && mod[0].enable){
+                  if(!shift[0].enable){
+                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Shifts"), 1);
+                  } else if(nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0){
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
                       name: "Shifts",
@@ -73,40 +62,10 @@ const TheSidebar = () => {
                     })
                   }
                 }
-                // #END#
-                // Check Bacoffice Module Is Enabled Or Not For Items & Inventory
-                if(nav[0].name === "Items"){ 
-                  let mod = module.filter(itm => itm.backoffice.name === "Items")
-                  if(!mod[0].enable){
-                    nav.splice(nav.findIndex(e => e.name === "Items"),1);
-                  } else if(nav.filter(itm => itm.name == "Items").length <= 0) {
-                    nav.push(_nav.filter(itm => itm.name == "Items")[0])
-                  }
-                }
-                if(nav[0].name === "Inventory"){ 
-                  let mod = module.filter(itm => itm.backoffice.name === "Items")
-                  if(!mod[0].enable){
-                    nav.splice(nav.findIndex(e => e.name === "Inventory"),1);
-                  } else if(nav.filter(itm => itm.name == "Inventory").length <= 0) {
-                    nav.push(_nav.filter(itm => itm.name == "Inventory")[0])
-                  }
-                }
-                // #END#
-
-                // Check Bacoffice Module Is Enabled Or Not For Employees also check Features is enabled or not
                 if(nav[0].name === "Employees"){
-                  
-                  let mod = module.filter(itm => itm.backoffice.name === "Manage employees")
-                  if(!mod[0].enable){
-                    nav.splice(nav.findIndex(e => e.name === "Employees"),1);
-                  } else if(nav.filter(itm => itm.name == "Employees").length <= 0) {
-                    nav.push(_nav.filter(itm => itm.name == "Employees")[0])
-                  }
-
                   let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
                   if(!timeClok[0].enable){
-                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Timecards"), 1);
-                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Total hours worked"), 1);
+                    nav[0]._children.splice(2, 2);
                   } else if(nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0){
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
@@ -120,18 +79,6 @@ const TheSidebar = () => {
                     })
                   }
                 }
-                // #END#
-
-                // Check Bacoffice Module Is Enabled Or Not For Customers
-                if(nav[0].name === "Customers"){ 
-                  let mod = module.filter(itm => itm.backoffice.name === "Manage customers")
-                  if(!mod[0].enable){
-                    nav.splice(nav.findIndex(e => e.name === "Customers"),1);
-                  } else if(nav.filter(itm => itm.name == "Customers").length <= 0) {
-                    nav.push(_nav.filter(itm => itm.name == "Customers")[0])
-                  }
-                }
-                // #END#
 
                 routes.push(nav[0]);
                 if (nav.length > 1) {
@@ -145,6 +92,11 @@ const TheSidebar = () => {
                   routes.push(nav[0]);
                 }
             }
+          } else {
+              let nav = _nav.filter((itm) => itm.moduleName === mod.backoffice.name);
+              if (nav.length > 0) {
+                  nav.splice(nav.findIndex(e => e.moduleName === mod.backoffice.name),1);
+              }
           }
         }
         setNavigation(routes);

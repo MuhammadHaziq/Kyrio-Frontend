@@ -41,7 +41,7 @@ const ItemsListDatatable = (props) => {
       items={props.itemList}
       fields={[
         { key: "select", label: "Select", filter: false },
-        { key: "name", label: "Name", filter: true },
+        { key: "title", label: "Name", filter: true },
         { key: "categoryName", label: "Category", filter: true },
         { key: "price", label: "Price", filter: true },
         { key: "cost", label: "Cost", filter: true },

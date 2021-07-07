@@ -309,12 +309,12 @@ export const update_modifier = (data) => {
     try {
       authAxios({
         method: "patch",
-        url: `items/modifier/${data.id}`,
+        url: `items/modifier`,
 
         data: data,
       })
         .then((response) => {
-          dispatch({ type: UPDATE_MODIFER, response: response.data.data });
+          dispatch({ type: UPDATE_MODIFER, response: response.data });
           let msg = {
             open: true,
             message: response.data.message,

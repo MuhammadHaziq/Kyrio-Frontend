@@ -144,11 +144,11 @@ const ItemsList = () => {
     maxLength = Math.max(maxLength, maxValue);
     csvDownloadData.push({
       handle:
-        item.name !== null && item.name !== undefined
-          ? item.name.trim().replace(/\s+/g, "-").toLowerCase()
+        item.title !== null && item.title !== undefined
+          ? item.title.trim().replace(/\s+/g, "-").toLowerCase()
           : "",
       name:
-        item.name !== null && item.name !== undefined ? item.name.trim() : "",
+        item.title !== null && item.title !== undefined ? item.title.trim() : "",
       category:
         item.category !== null && item.category !== undefined
           ? item.category["name"]
@@ -312,7 +312,7 @@ const ItemsList = () => {
     if (item.varients !== null && item.varients !== undefined) {
       for (var j = 1; j < maxLength; j++) {
         csvDownloadData.push({
-          handle: item.name.trim().replace(/\s+/g, "-").toLowerCase(),
+          handle: item.title.trim().replace(/\s+/g, "-").toLowerCase(),
           sku:
             item.varients[0] !== null && item.varients[0] !== undefined
               ? item.varients[0]["optionValue"] !== undefined
@@ -548,6 +548,7 @@ const ItemsList = () => {
               goBack={goBack}
               store={item.store_list}
               item_row_data={item.item_row_data}
+              key={"addItem"+0}
             />
           </CFade>
         ) : (
@@ -555,7 +556,7 @@ const ItemsList = () => {
         )}
         {fadeAddItem ? (
           <CFade timeout={timeout} in={fadeAddItem}>
-            <AddItem goBack={goBack} store={item.store_list} />
+            <AddItem goBack={goBack} store={item.store_list} key={"addItem"+1} />
           </CFade>
         ) : (
           ""

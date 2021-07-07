@@ -142,7 +142,7 @@ const AddItem = (props) => {
       setTaxesSwitch(taxesSwitch);
       setFields({
         ...fields,
-        item_name: props.item_row_data.name,
+        item_name: props.item_row_data.title,
         categoryId:
           props.item_row_data.category !== undefined &&
           props.item_row_data.category !== null
@@ -242,7 +242,7 @@ const AddItem = (props) => {
     };
     var formData = new FormData();
     formData.append("item_id", props.item_row_data._id);
-    formData.append("name", fields.item_name);
+    formData.append("title", fields.item_name);
     formData.append("imageName", ImageName);
     formData.append("availableForSale", fields.availableForSale);
     formData.append(

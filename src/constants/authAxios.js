@@ -14,9 +14,9 @@ authAxios.interceptors.request.use(
     config => {
         const token = (localStorage.getItem('kyrio')) !== undefined && (localStorage.getItem('kyrio')) !== null ? localStorage.getItem('kyrio') : '';
         if (token) {
-            config.headers['kyrioToken'] = token;
+            config.headers['kyriotoken'] = token;
         } else {
-            delete axios.defaults.headers.common["kyrioToken"];
+            delete axios.defaults.headers.common["kyriotoken"];
 
         }
         return config;

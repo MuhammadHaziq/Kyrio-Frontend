@@ -799,7 +799,7 @@ export const update_row_data = (row) => {
           }
         })
         .catch((error) => {
-          console.log("err", error.response);
+          console.log("err", error.message);
           let msg = {
             open: true,
             message:

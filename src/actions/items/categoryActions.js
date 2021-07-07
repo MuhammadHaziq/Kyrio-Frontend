@@ -179,14 +179,15 @@ export const update_item_category = (data) => {
     try {
       authAxios({
         method: "PATCH",
-        url: `items/categories/${data.id}`,
+        // url: `items/categories/${data.id}`,
+        url: `items/categories`,
         data: data,
 
       })
         .then((response) => {
           dispatch({
             type: UPDATE_ITEM_CATEGORY,
-            response: response.data.data,
+            response: response.data,
           });
           let msg = {
             open: true,

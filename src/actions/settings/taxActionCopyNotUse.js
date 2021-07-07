@@ -230,7 +230,6 @@ export const toggle_category = (data) => {
 
 export const toggle_category_item = (categoryItems, category) => {
   return (dispatch) => {
-    console.log(categoryItems);
     dispatch({
       type: CATEGORY_ITEMS_SELECT_STATUS,
       category: category,

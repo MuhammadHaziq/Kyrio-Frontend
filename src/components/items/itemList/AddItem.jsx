@@ -156,7 +156,7 @@ const AddItem = (props) => {
       return num;
     };
     var formData = new FormData();
-    formData.append("name", fields.item_name);
+    formData.append("title", fields.item_name);
     formData.append("availableForSale", fields.availableForSale);
     formData.append(
       "category",
@@ -198,6 +198,7 @@ const AddItem = (props) => {
         item.item_variants.map((item) => {
           return {
             optionName: item.optionName,
+            variantNames: item.variantNames,
             optionValue: (item.optionValue || []).map((ite) => {
               return {
                 ...ite,

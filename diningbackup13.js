@@ -421,7 +421,7 @@ class DiningOptions extends Component {
                                         {dinings.data.map((item, index) => (
                                           <Draggable
                                             key={item.id}
-                                            draggableId={item.id}
+                                            draggableId={"draggableID"+item.id}
                                             index={index}
                                           >
                                             {(provided, snapshot) => (

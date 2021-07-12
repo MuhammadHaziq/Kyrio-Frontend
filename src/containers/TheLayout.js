@@ -8,7 +8,7 @@ import {
   TheFooter,
   TheHeader,
 } from "./index";
-import { FEATURES_TOGGLE, ROLES_ACCESS_TOGGLE } from "../SocketEvents"
+import { FEATURES_TOGGLE, ROLES_ACCESS_TOGGLE, ITEM_INSERT } from "../SocketEvents"
 import {
   GET_FEATURE_MODULE,
   SET_ACCESS_RIGHT_MODULE
@@ -55,6 +55,9 @@ const TheLayout = () => {
             }
           }
         });
+        // socket.on(ITEM_INSERT,(data) => {
+        //   console.log(data)
+        // });
       });
 
   }, []);

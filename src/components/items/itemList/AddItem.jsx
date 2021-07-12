@@ -213,7 +213,7 @@ const AddItem = (props) => {
     formData.append("repoOnPos", fields.represent_type);
     formData.append(
       "itemColor",
-      fields.represent_type === "Color_and_shape" ? fields.color : ""
+      fields.represent_type === "Color_and_shape" ? fields.color : "image"
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);

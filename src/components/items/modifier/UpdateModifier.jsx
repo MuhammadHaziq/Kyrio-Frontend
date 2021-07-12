@@ -410,7 +410,7 @@ const UpdateModifier = (props) => {
                           {modifierFields.map((item, index) => (
                             <Draggable
                               key={item._id}
-                              draggableId={item._id}
+                              draggableId={"draggableID"+item._id}
                               index={index}
                             >
                               {(provided, snapshot) => (

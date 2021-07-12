@@ -1,8 +1,11 @@
-export default [
+import React from 'react'
+import CIcon from '@coreui/icons-react'
+
+const _nav = [
   {
     _tag: "CSidebarNavDropdown",
     name: "Reports",
-    moduleName: "View sales report",
+    module: "View sales report",
     to: "/reports",
     icon: "cil-chart-pie",
     _children: [
@@ -61,7 +64,7 @@ export default [
   {
     _tag: "CSidebarNavDropdown",
     name: "Items",
-    moduleName: "Items",
+    module: "Items",
     to: "/items",
     icon: "cil-basket",
     _children: [
@@ -90,14 +93,14 @@ export default [
   {
     _tag: "CSidebarNavItem",
     name: "Inventory",
-    moduleName: "Items",
+    module: "Items",
     to: "/inventory",
     icon: "cil-cursor",
   },
   {
     _tag: "CSidebarNavDropdown",
     name: "Employees",
-    moduleName: "Manage employees",
+    module: "Manage employees",
     to: "/employees",
     icon: "cil-credit-card",
     _children: [
@@ -126,14 +129,14 @@ export default [
   {
     _tag: "CSidebarNavItem",
     name: "Customers",
-    moduleName: "Manage customers",
+    module: "Manage customers",
     to: "/customers",
     icon: "cil-people",
   },
   {
     _tag: "CSidebarNavItem",
     name: "Settings",
-    moduleName: "Edit general settings",
+    module: "Edit general settings",
     //  ["Edit general settings","Manage billing","Manage payment types","Manage loyalty program","Manage taxes","Manage kitchen printers","Manage dining options","Manage POS devices"],
     to: "/settings",
     icon: "cil-settings",
@@ -141,7 +144,7 @@ export default [
   {
     _tag: "CSidebarNavDropdown",
     name: "Help",
-    moduleName: "Access to live chat support",
+    module: "Access to live chat support",
     to: "/help",
     icon: "cil-speech",
     _children: [
@@ -163,3 +166,5 @@ export default [
     ],
   },
 ];
+
+export default _nav

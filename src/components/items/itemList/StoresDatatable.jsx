@@ -96,7 +96,6 @@ const LowStock = (props) => {
   );
 };
 const CheckAvailablity = (props) => {
-  console.log(props.item)
   const dispatch = useDispatch();
   const [storeId, setStoreId] = useState(props.item.store._id);
   const [isSelected, setIsSelected] = useState(props.item.isSelected);

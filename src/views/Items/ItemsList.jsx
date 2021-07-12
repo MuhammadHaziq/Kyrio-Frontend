@@ -497,7 +497,7 @@ const ItemsList = () => {
       .map((item) => {
         return item._id;
       });
-    dispatch(delete_item_list(JSON.stringify(item_id)));
+    dispatch(delete_item_list(item_id));
     setShowAlert(!showAlert);
   };
 

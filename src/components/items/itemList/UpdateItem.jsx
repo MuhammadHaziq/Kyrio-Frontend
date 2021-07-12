@@ -41,6 +41,7 @@ const AddItem = (props) => {
     price: "",
     cost: 0.0,
     sku: "",
+    autoSKU: false,
     item_barcode: "",
     represent_type: "Color_and_shape",
     color: "#E0E0E0",
@@ -154,6 +155,7 @@ const AddItem = (props) => {
         represent_type: props.item_row_data.repoOnPos,
         color: props.item_row_data.color,
         sku: props.item_row_data.sku || "",
+        autoSKU: props.item_row_data.autoSKU || false,
         item_barcode: props.item_row_data.barcode || "",
         availableForSale: props.item_row_data.availableForSale,
       });
@@ -291,6 +293,8 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
+    formData.append("autoSKU", props.item_row_data.sku == fields.sku && fields.autoSKU);
+    
     dispatch(update_item_record(formData));
   };
 

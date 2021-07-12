@@ -470,7 +470,7 @@ export const delete_item_list = (id) => {
       })
         .then((response) => {
           // console.log(response);
-          dispatch({ type: DELETE_ITEM_LIST, response: JSON.parse(id) });
+          dispatch({ type: DELETE_ITEM_LIST, response: id });
           let msg = {
             open: true,
             message: "Item Deleted Successfully",

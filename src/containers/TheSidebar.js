@@ -42,18 +42,21 @@ const TheSidebar = () => {
         for (const mod of module) {
           if (mod.enable) {
             if (mod.backoffice.isMenu && !mod.backoffice.isChild) {
-              let nav = _nav.filter((itm) => itm.moduleName === mod.backoffice.name);
+              let nav = _nav.filter((itm) => itm.module === mod.backoffice.name);
 
               if (nav.length > 0) {
                 
-                if(nav.filter(itm => itm.moduleName ==  mod.backoffice.name).length <= 0){
-                  nav.push(_nav.filter(itm => itm.moduleName ==  mod.backoffice.name))
+                if(nav.filter(itm => itm.module ==  mod.backoffice.name).length <= 0){
+                  nav.push(_nav.filter(itm => itm.module ==  mod.backoffice.name))
                 }
                 if(nav[0].name === "Reports"){
                 let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
-                  
                   if(!shift[0].enable){
-                    nav[0]._children.splice(nav[0]._children.findIndex(e => e.name === "Shifts"), 1);
+                    let index = nav[0]._children.findIndex(e => e.name === "Shifts")
+                    if(index >= 0){
+                      nav[0]._children.splice(index, 1);
+                    }
+                    
                   } else if(nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0){
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
@@ -65,7 +68,14 @@ const TheSidebar = () => {
                 if(nav[0].name === "Employees"){
                   let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
                   if(!timeClok[0].enable){
-                    nav[0]._children.splice(2, 2);
+                    let index = nav[0]._children.findIndex(e => e.name === "Timecards")
+                    if(index >= 0){
+                      nav[0]._children.splice(index, 1);
+                    }
+                    index = nav[0]._children.findIndex(e => e.name === "Total hours worked")
+                    if(index >= 0){
+                      nav[0]._children.splice(index, 1);
+                    }
                   } else if(nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0){
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
@@ -86,16 +96,16 @@ const TheSidebar = () => {
                 }
               }
             } else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
-              let nav = _nav.filter((itm) => itm.moduleName === "Edit general settings");
+              let nav = _nav.filter((itm) => itm.module === "Edit general settings");
                 if(routes.filter(itm => itm.name == "Settings").length <= 0){
                   nav.push(_nav.filter(itm => itm.name == "Settings")[0])
                   routes.push(nav[0]);
                 }
             }
           } else {
-              let nav = _nav.filter((itm) => itm.moduleName === mod.backoffice.name);
+              let nav = _nav.filter((itm) => itm.module === mod.backoffice.name);
               if (nav.length > 0) {
-                  nav.splice(nav.findIndex(e => e.moduleName === mod.backoffice.name),1);
+                  nav.splice(nav.findIndex(e => e.module === mod.backoffice.name),1);
               }
           }
         }

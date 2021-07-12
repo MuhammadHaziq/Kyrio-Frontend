@@ -71,7 +71,7 @@ const Settings = () => {
         let mngDiningOptions   = modules.find(mod=> mod.backoffice.name == "Manage dining options").enable
         let mngKitchenPrinters = modules.find(mod=> mod.backoffice.name == "Manage kitchen printers").enable
         let mngPOSDevices      = modules.find(mod=> mod.backoffice.name == "Manage POS devices").enable
-
+        
         if(!generalSettings){
           settings.find(st => st.module.name === "Features").enable = false
           settings.find(st => st.module.name === "Receipt").enable = false
@@ -79,7 +79,11 @@ const Settings = () => {
         } else {
           settings.find(st => st.module.name === "Features").enable = true
           settings.find(st => st.module.name === "Receipt").enable = true
-          settings.find(st => st.module.name === "Open tickets").enable = true
+          if(settings.find(st => st.module.name === "Open tickets").enable){
+            settings.find(st => st.module.name === "Open tickets").enable = true
+          } else {
+            settings.find(st => st.module.name === "Open tickets").enable = false
+          }
         }
         if(!mngBilling){
           settings.find(st => st.module.name === "Billing & subscriptions").enable = false
@@ -104,12 +108,21 @@ const Settings = () => {
         if(!mngDiningOptions){
           settings.find(st => st.module.name === "Dining options").enable = false
         } else {
-          settings.find(st => st.module.name === "Dining options").enable = true
+          console.log(settings.find(st => st.module.name === "Dining options").enable)
+          if(settings.find(st => st.module.name === "Dining options").enable){
+             settings.find(st => st.module.name === "Dining options").enable = true
+          } else {
+             settings.find(st => st.module.name === "Dining options").enable = false
+          }
         }
         if(!mngKitchenPrinters){
           settings.find(st => st.module.name === "Kitchen printers").enable = false
         } else {
-          settings.find(st => st.module.name === "Kitchen printers").enable = true
+          if(settings.find(st => st.module.name === "Kitchen printers").enable){
+            settings.find(st => st.module.name === "Kitchen printers").enable = true
+          } else {
+            settings.find(st => st.module.name === "Kitchen printers").enable = false
+          }
         }
         if(!mngPOSDevices){
           settings.find(st => st.module.name === "POS devices").enable = false
@@ -121,13 +134,14 @@ const Settings = () => {
         } else {
           settings.find(st => st.module.name === "Stores").enable = true
         }
+        
         (settings || []).map((item, index) => {
           return index !== 9
             ? item.enable === true
               ? setting.push({
                   _tag: "CSidebarNavItem",
                   name: item.module.name,
-                  moduleName: item.module.name,
+                  module: item.module.name,
                   to: `${url}/${item.module.name.replace(/\s/g, "")}`,
                 })
               : ""

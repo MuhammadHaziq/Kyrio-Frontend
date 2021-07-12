@@ -314,7 +314,7 @@ class DiningOptions extends Component {
                                   {this.state.items.map((item, index) => (
                                     <Draggable
                                       key={item.id}
-                                      draggableId={item.id}
+                                      draggableId={"draggableID"+item.id}
                                       index={index}
                                     >
                                       {(provided, snapshot) => (

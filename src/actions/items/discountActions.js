@@ -173,25 +173,24 @@ export const update_item_discount = (data) => {
     try {
       authAxios({
         method: "PATCH",
-        url: `items/discount/${data.id}`,
+        url: `items/discount`,
         data: data,
 
       })
         .then((response) => {
           dispatch({
             type: UPDATE_ITEM_DISCOUNT,
-            response: response.data.data,
+            response: response.data,
           });
           let msg = {
             open: true,
-            message: response.data.message,
+            message: "Discount updated!",
             object: {},
             error: false,
           };
           dispatch({ type: MESSAGE, data: msg });
         })
         .catch((error) => {
-          console.log("err", error.response);
           let msg = {
             open: true,
             message:

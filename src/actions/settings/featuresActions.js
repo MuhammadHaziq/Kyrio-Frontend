@@ -19,7 +19,7 @@ export const get_setting_features = (storeId) => {
 
       })
         .then((response) => {
-          dispatch({ type: GET_FEATURE_MODULE, response: response.data.features });
+          dispatch({ type: GET_FEATURE_MODULE, response: response.data });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -68,7 +68,7 @@ export const toggle_feature_module = (data) => {
       })
         .then((response) => {
           
-          dispatch({ type: TOGGLE_FEATURE_MODULE, response: response.data.features });
+          dispatch({ type: TOGGLE_FEATURE_MODULE, response: response.data });
           let msg = {
             open: true,
             message: response.data.message,

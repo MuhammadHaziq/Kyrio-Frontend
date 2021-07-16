@@ -75,7 +75,7 @@ const AddNewPaymentType = (props) => {
       });
     } else {
       const data = {
-        name: fields.name,
+        title: fields.name,
         paymentTypes: PaymentType,
         storeId: storeId,
       };
@@ -168,7 +168,7 @@ const AddNewPaymentType = (props) => {
             </CFormGroup>
             <CFormGroup row="row">
               <CCol md="12">
-                <CLabel htmlFor="name">Name</CLabel>
+                <CLabel htmlFor="name">Title</CLabel>
                 <CInputGroup>
                   <CInputGroupPrepend>
                     <CInputGroupText>
@@ -178,7 +178,7 @@ const AddNewPaymentType = (props) => {
                   <CInput
                     id="name"
                     name="name"
-                    placeholder="Name"
+                    placeholder="Title"
                     onChange={handleOnChange}
                     invalid={errors.name}
                     onBlur={handleOnBlur}

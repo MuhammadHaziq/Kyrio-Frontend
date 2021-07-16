@@ -112,7 +112,7 @@ const AddRole = (props) => {
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
-        <CCol md="6" lg="6" xl="6">
+        <CCol md="12" lg="6" xl="6">
           <CCard>
             <CCardBody className="p-2">
               <CRow>
@@ -222,7 +222,7 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.name}
+                                      {item.title}
                                       <br />
                                       <small className="mb-1">
                                         {item.description}
@@ -329,7 +329,7 @@ const AddRole = (props) => {
                                         // color: "rgba(0,0,0,0.87)",
                                       }}
                                     >
-                                      {item.name}
+                                      {item.title}
                                       <br />
                                       <small className="mb-1">
                                         {item.description}

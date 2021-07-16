@@ -41,7 +41,7 @@ const PaymentTypesDatatableNew = (props) => {
           filter: false,
           _style: { width: "5%" },
         },
-        { key: "name", label: "Name", filter: false },
+        { key: "title", label: "Title", filter: false },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -72,7 +72,7 @@ const PaymentTypesDatatableNew = (props) => {
                   id={`checkbox${item._id}`}
                   checked={item.isDeleted}
                   onChange={(e) => check(e, item)}
-                  disabled={item.name.toUpperCase() === "Cash".toUpperCase()}
+                  disabled={item.title.toUpperCase() === "Cash".toUpperCase()}
                 />
                 <CLabel
                   variant="custom-checkbox"

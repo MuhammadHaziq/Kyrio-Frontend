@@ -50,7 +50,7 @@ const SalesShift = () => {
   };
 
   useEffect(() => {
-    let feature = features.filter(ftr => ftr.feature.name == "Shifts")[0].enable
+    let feature = features.filter(ftr => ftr.feature.title == "Shifts")[0].enable
     if(!feature){
       setRedirect(true)
     }

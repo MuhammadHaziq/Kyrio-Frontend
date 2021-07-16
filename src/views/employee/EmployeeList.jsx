@@ -8,16 +8,13 @@ import {
   CFormGroup,
   CCardHeader,
   CCardBody,
-  CCollapse,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
   CInput,
-  CLink,
   CButton,
   CFade,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
 import EmployeeListDatatable from "../../datatables/employee/EmployeeListDatatable.jsx";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddEmployee from "../../components/employee/employeeList/AddEmployee.jsx";

@@ -77,7 +77,7 @@ const OpenTickets = () => {
     }
   }, [store_tickets]);
   useEffect(() => {
-    let feature = auth.user.features.filter(ftr => ftr.feature.name == "Open tickets")[0].enable
+    let feature = auth.user.features.filter(ftr => ftr.feature.title == "Open tickets")[0].enable
     if(!feature){
       setRedirect(true)
     }

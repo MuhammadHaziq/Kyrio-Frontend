@@ -49,11 +49,14 @@ const PaymentTypes = () => {
     setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
   }, [auth]);
 
+  // useEffect(() => {
+  //   if (payment_types.length === 0 || payment_types === undefined) {
+  //     dispatch(get_payment_types());
+  //   }
+  // }, [dispatch, payment_types]);
   useEffect(() => {
-    if (payment_types.length === 0 || payment_types === undefined) {
       dispatch(get_payment_types());
-    }
-  }, [dispatch, payment_types]);
+  }, []);
   useEffect(() => {
     if (storeId !== "" && typeof storeId !== "undefined") {
       const data = {
@@ -99,7 +102,7 @@ const PaymentTypes = () => {
     <React.Fragment>
       <div className="animated fadeIn">
         {fadeUpdatePaymentTypes ? (
-          row_data.name.toUpperCase() === "Cash".toUpperCase() ? (
+          row_data.title.toUpperCase() === "Cash".toUpperCase() ? (
             <CFade timeout={timeout} in={fadeUpdatePaymentTypes}>
               <UpdatePaymentTypeCash
                 goBack={goBack}

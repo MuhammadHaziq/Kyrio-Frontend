@@ -115,18 +115,18 @@ const General = () => {
       setCheckPrev([
         user.features.filter(
           (item) =>
-            item.feature.name.toUpperCase() ===
+            item.feature.title.toUpperCase() ===
               "Customer displays".toUpperCase() && item.enable === true
         ).length > 0,
 
         user.features.filter(
           (item) =>
-            item.feature.name.toUpperCase() === "Dining options".toUpperCase() &&
+            item.feature.title.toUpperCase() === "Dining options".toUpperCase() &&
             item.enable === true
         ).length > 0,
         user.features.filter(
           (item) =>
-            item.feature.name.toUpperCase() ===
+            item.feature.title.toUpperCase() ===
               "Kitchen printers".toUpperCase() && item.enable === true
         ).length > 0,
       ]);
@@ -171,7 +171,7 @@ const General = () => {
         featureId: item.feature._id,
         enable: item.enable,
         _id: item._id,
-        name: item.feature.name,
+        name: item.feature.title,
         index: index,
       };
     });
@@ -180,7 +180,7 @@ const General = () => {
     //     featureId: item.feature._id,
     //     enable: item.enable,
     //     _id: item._id,
-    //     name: item.feature.name,
+    //     name: item.feature.title,
     //     index: index,
     //   };
     // });
@@ -289,7 +289,7 @@ const General = () => {
         featureId: item.feature._id,
         enable: item.enable,
         _id: item._id,
-        name: item.feature.name,
+        name: item.feature.title,
         index: index,
       };
     });
@@ -460,7 +460,7 @@ const General = () => {
                     }}
                   >
                     <h5>
-                      {parse(itm.feature.icon || "")}&nbsp;{itm.feature.name || ""}
+                      {parse(itm.feature.icon || "")}&nbsp;{itm.feature.title || ""}
                       <CSwitch
                         className={"mx-1 float-right"}
                         shape="pill"

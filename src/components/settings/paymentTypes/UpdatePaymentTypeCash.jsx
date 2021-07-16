@@ -70,22 +70,22 @@ const UpdatePaymentType = (props) => {
       Object.keys(props.update_data).length > 0
     ) {
       setFields({
-        name: props.update_data.name,
+        name: props.update_data.title,
       });
       setPaymentType({
         paymentTypeId:
-          props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType.paymentTypeId || "0"
+          props.update_data.paymentMethod !== undefined
+            ? props.update_data.paymentMethod._id || "0"
             : "0",
         paymentTypeName:
-          props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType.paymentTypeName ||
+          props.update_data.paymentMethod !== undefined
+            ? props.update_data.paymentMethod.title ||
               "Select Payment Type"
             : "Select Payment Type",
       });
       setSelectedPaymentId(
-        props.update_data.paymentType !== undefined
-          ? props.update_data.paymentType.paymentTypeId || "0"
+        props.update_data.paymentMethod !== undefined
+          ? props.update_data.paymentMethod._id || "0"
           : "0"
       );
       setCashPaymentRound(
@@ -110,13 +110,12 @@ const UpdatePaymentType = (props) => {
     e.preventDefault();
 
     const data = {
-      name: fields.name,
+      title: fields.name,
       paymentTypes: PaymentType,
-      storeId: props.update_data.storeId,
+      storeId: props.update_data.store._id,
       id: props.update_data._id,
       cashPaymentRound: cashPaymentRound,
     };
-    console.log(data);
     dispatch(update_payment_type(data));
   };
   const handleOnChange = (e) => {

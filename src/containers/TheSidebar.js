@@ -42,15 +42,15 @@ const TheSidebar = () => {
         for (const mod of module) {
           if (mod.enable) {
             if (mod.backoffice.isMenu && !mod.backoffice.isChild) {
-              let nav = _nav.filter((itm) => itm.module === mod.backoffice.name);
+              let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
 
               if (nav.length > 0) {
                 
-                if(nav.filter(itm => itm.module ==  mod.backoffice.name).length <= 0){
-                  nav.push(_nav.filter(itm => itm.module ==  mod.backoffice.name))
+                if(nav.filter(itm => itm.module ==  mod.backoffice.title).length <= 0){
+                  nav.push(_nav.filter(itm => itm.module ==  mod.backoffice.title))
                 }
                 if(nav[0].name === "Reports"){
-                let shift = user.features.filter(ftr => ftr.feature.name === "Shifts")
+                let shift = user.features.filter(ftr => ftr.feature.title === "Shifts")
                   if(!shift[0].enable){
                     let index = nav[0]._children.findIndex(e => e.name === "Shifts")
                     if(index >= 0){
@@ -66,7 +66,7 @@ const TheSidebar = () => {
                   }
                 }
                 if(nav[0].name === "Employees"){
-                  let timeClok = user.features.filter(ftr => ftr.feature.name === "Time clock")
+                  let timeClok = user.features.filter(ftr => ftr.feature.title === "Time clock")
                   if(!timeClok[0].enable){
                     let index = nav[0]._children.findIndex(e => e.name === "Timecards")
                     if(index >= 0){
@@ -103,9 +103,9 @@ const TheSidebar = () => {
                 }
             }
           } else {
-              let nav = _nav.filter((itm) => itm.module === mod.backoffice.name);
+              let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
               if (nav.length > 0) {
-                  nav.splice(nav.findIndex(e => e.module === mod.backoffice.name),1);
+                  nav.splice(nav.findIndex(e => e.module === mod.backoffice.title),1);
               }
           }
         }

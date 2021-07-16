@@ -71,7 +71,7 @@ const TimeCards = () => {
     checkAllEmployee: true,
   });
   useEffect(() => {
-      let feature = features.filter(ftr => ftr.feature.name == "Time clock")[0].enable
+      let feature = features.filter(ftr => ftr.feature.title == "Time clock")[0].enable
       if(!feature){
         setRedirect(true)
       }

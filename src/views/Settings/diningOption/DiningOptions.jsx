@@ -78,7 +78,7 @@ class DiningOptions extends Component {
   }
 
   componentDidMount() {
-    let feature = this.props.features.filter(ftr => ftr.feature.name == "Dining options")[0].enable
+    let feature = this.props.features.filter(ftr => ftr.feature.title == "Dining options")[0].enable
     if(!feature){
       this.setState({
         redirect: true

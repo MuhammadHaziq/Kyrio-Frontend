@@ -36,8 +36,8 @@ const Settings = () => {
   const modules = useSelector((state) => state.auth.user.roleData.allowBackoffice.modules);
   const roleTitle = useSelector((state) => state.auth.user.roleData.title);
   
-  const [settingCk, setSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name !== "Manage POS devices").length > 0);
-  const [editSettingCk, setEditSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings").length > 0);
+  const [settingCk, setSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.title !== "Manage POS devices").length > 0);
+  const [editSettingCk, setEditSettingCk] = useState(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.title === "Edit general settings").length > 0);
   const [show, setShow] = useState(true);
   const [settingBar, setSettingBar] = useState([]);
 
@@ -49,90 +49,89 @@ const Settings = () => {
   useEffect(() => {
     if (settings !== undefined && settings) {
       // mod.backoffice.isMenu && mod.backoffice.isChild
-      if(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name !== "Manage POS devices").length > 0){
+      if(modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.title !== "Manage POS devices").length > 0){
         setSettingCk(true)
       } else {
         setSettingCk(false)
       }
-      if(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings").length > 0){
+      if(modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.title === "Edit general settings").length > 0){
         setEditSettingCk(true)
       } else {
         setEditSettingCk(false)
       }
-      let storePOSCheck = modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Manage POS devices").length > 0
+      let storePOSCheck = modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable && mod.backoffice.title === "Manage POS devices").length > 0
       let settingCheck = modules.filter(mod => mod.backoffice.isMenu && mod.backoffice.isChild && mod.enable)
-      let editSettingCheck = modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.name === "Edit general settings")
+      let editSettingCheck = modules.filter(mod => mod.backoffice.isMenu && !mod.backoffice.isChild && mod.enable && mod.backoffice.title === "Edit general settings")
       if(settingCheck.length > 0 || editSettingCheck.length > 0){
-        let generalSettings    = modules.find(mod=> mod.backoffice.name == "Edit general settings").enable
-        let mngBilling         = modules.find(mod=> mod.backoffice.name == "Manage billing").enable
-        let mngPaymentTypes    = modules.find(mod=> mod.backoffice.name == "Manage payment types").enable
-        let mngLoyaltyProgram  = modules.find(mod=> mod.backoffice.name == "Manage loyalty program").enable
-        let mngTaxes           = modules.find(mod=> mod.backoffice.name == "Manage taxes").enable
-        let mngDiningOptions   = modules.find(mod=> mod.backoffice.name == "Manage dining options").enable
-        let mngKitchenPrinters = modules.find(mod=> mod.backoffice.name == "Manage kitchen printers").enable
-        let mngPOSDevices      = modules.find(mod=> mod.backoffice.name == "Manage POS devices").enable
+        let generalSettings    = modules.find(mod=> mod.backoffice.title == "Edit general settings").enable
+        let mngBilling         = modules.find(mod=> mod.backoffice.title == "Manage billing").enable
+        let mngPaymentTypes    = modules.find(mod=> mod.backoffice.title == "Manage payment types").enable
+        let mngLoyaltyProgram  = modules.find(mod=> mod.backoffice.title == "Manage loyalty program").enable
+        let mngTaxes           = modules.find(mod=> mod.backoffice.title == "Manage taxes").enable
+        let mngDiningOptions   = modules.find(mod=> mod.backoffice.title == "Manage dining options").enable
+        let mngKitchenPrinters = modules.find(mod=> mod.backoffice.title == "Manage kitchen printers").enable
+        let mngPOSDevices      = modules.find(mod=> mod.backoffice.title == "Manage POS devices").enable
         
         if(!generalSettings){
-          settings.find(st => st.module.name === "Features").enable = false
-          settings.find(st => st.module.name === "Receipt").enable = false
-          settings.find(st => st.module.name === "Open tickets").enable = false
+          settings.find(st => st.module.title === "Features").enable = false
+          settings.find(st => st.module.title === "Receipt").enable = false
+          settings.find(st => st.module.title === "Open tickets").enable = false
         } else {
-          settings.find(st => st.module.name === "Features").enable = true
-          settings.find(st => st.module.name === "Receipt").enable = true
-          if(settings.find(st => st.module.name === "Open tickets").enable){
-            settings.find(st => st.module.name === "Open tickets").enable = true
+          settings.find(st => st.module.title === "Features").enable = true
+          settings.find(st => st.module.title === "Receipt").enable = true
+          if(settings.find(st => st.module.title === "Open tickets").enable){
+            settings.find(st => st.module.title === "Open tickets").enable = true
           } else {
-            settings.find(st => st.module.name === "Open tickets").enable = false
+            settings.find(st => st.module.title === "Open tickets").enable = false
           }
         }
         if(!mngBilling){
-          settings.find(st => st.module.name === "Billing & subscriptions").enable = false
+          settings.find(st => st.module.title === "Billing & subscriptions").enable = false
         } else {
-          settings.find(st => st.module.name === "Billing & subscriptions").enable = true
+          settings.find(st => st.module.title === "Billing & subscriptions").enable = true
         }
         if(!mngPaymentTypes){
-          settings.find(st => st.module.name === "Payment types").enable = false
+          settings.find(st => st.module.title === "Payment types").enable = false
         } else {
-          settings.find(st => st.module.name === "Payment types").enable = true
+          settings.find(st => st.module.title === "Payment types").enable = true
         }
         if(!mngLoyaltyProgram){
-          settings.find(st => st.module.name === "Loyalty").enable = false
+          settings.find(st => st.module.title === "Loyalty").enable = false
         } else {
-          settings.find(st => st.module.name === "Loyalty").enable = true
+          settings.find(st => st.module.title === "Loyalty").enable = true
         }
         if(!mngTaxes){
-          settings.find(st => st.module.name === "Taxes").enable = false
+          settings.find(st => st.module.title === "Taxes").enable = false
         } else {
-          settings.find(st => st.module.name === "Taxes").enable = true
+          settings.find(st => st.module.title === "Taxes").enable = true
         }
         if(!mngDiningOptions){
-          settings.find(st => st.module.name === "Dining options").enable = false
+          settings.find(st => st.module.title === "Dining options").enable = false
         } else {
-          console.log(settings.find(st => st.module.name === "Dining options").enable)
-          if(settings.find(st => st.module.name === "Dining options").enable){
-             settings.find(st => st.module.name === "Dining options").enable = true
+          if(settings.find(st => st.module.title === "Dining options").enable){
+             settings.find(st => st.module.title === "Dining options").enable = true
           } else {
-             settings.find(st => st.module.name === "Dining options").enable = false
+             settings.find(st => st.module.title === "Dining options").enable = false
           }
         }
         if(!mngKitchenPrinters){
-          settings.find(st => st.module.name === "Kitchen printers").enable = false
+          settings.find(st => st.module.title === "Kitchen printers").enable = false
         } else {
-          if(settings.find(st => st.module.name === "Kitchen printers").enable){
-            settings.find(st => st.module.name === "Kitchen printers").enable = true
+          if(settings.find(st => st.module.title === "Kitchen printers").enable){
+            settings.find(st => st.module.title === "Kitchen printers").enable = true
           } else {
-            settings.find(st => st.module.name === "Kitchen printers").enable = false
+            settings.find(st => st.module.title === "Kitchen printers").enable = false
           }
         }
         if(!mngPOSDevices){
-          settings.find(st => st.module.name === "POS devices").enable = false
+          settings.find(st => st.module.title === "POS devices").enable = false
         } else {
-          settings.find(st => st.module.name === "POS devices").enable = true
+          settings.find(st => st.module.title === "POS devices").enable = true
         }
         if(roleTitle !== "Owner"){
-          settings.find(st => st.module.name === "Stores").enable = false
+          settings.find(st => st.module.title === "Stores").enable = false
         } else {
-          settings.find(st => st.module.name === "Stores").enable = true
+          settings.find(st => st.module.title === "Stores").enable = true
         }
         
         (settings || []).map((item, index) => {
@@ -140,9 +139,9 @@ const Settings = () => {
             ? item.enable === true
               ? setting.push({
                   _tag: "CSidebarNavItem",
-                  name: item.module.name,
-                  module: item.module.name,
-                  to: `${url}/${item.module.name.replace(/\s/g, "")}`,
+                  name: item.module.title,
+                  module: item.module.title,
+                  to: `${url}/${item.module.title.replace(/\s/g, "")}`,
                 })
               : ""
             : storePOSCheck || roleTitle === "Owner" ? setting.push({

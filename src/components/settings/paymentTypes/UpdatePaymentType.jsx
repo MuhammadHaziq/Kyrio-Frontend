@@ -50,29 +50,30 @@ const UpdatePaymentType = (props) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
   };
-
   useEffect(() => {
     if (
       props.update_data !== undefined &&
       Object.keys(props.update_data).length > 0
     ) {
+      
       setFields({
-        name: props.update_data.name,
+        name: props.update_data.title,
       });
+     
       setPaymentType({
         paymentTypeId:
-          props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType._id || "0"
+          props.update_data.paymentMethod !== undefined
+            ? props.update_data.paymentMethod._id || "0"
             : "0",
-        paymentTypeName:
-          props.update_data.paymentType !== undefined
-            ? props.update_data.paymentType._id ||
+        paymentMethodName:
+          props.update_data.paymentMethod !== undefined
+            ? props.update_data.paymentMethod.title ||
               "Select Payment Type"
             : "Select Payment Type",
       });
       setSelectedPaymentId(
-        props.update_data.paymentType !== undefined
-          ? props.update_data.paymentType._id || "0"
+        props.update_data.paymentMethod !== undefined
+          ? props.update_data.paymentMethod._id || "0"
           : "0"
       );
     }
@@ -101,7 +102,7 @@ const UpdatePaymentType = (props) => {
       });
     } else {
       const data = {
-        name: fields.name,
+        title: fields.name,
         paymentTypes: PaymentType,
         storeId: props.update_data.store._id,
         id: props.update_data._id,
@@ -211,7 +212,7 @@ const UpdatePaymentType = (props) => {
             </CFormGroup>
             <CFormGroup row="row">
               <CCol md="12">
-                <CLabel htmlFor="name">Name</CLabel>
+                <CLabel htmlFor="name">Title</CLabel>
                 <CInputGroup>
                   <CInputGroupPrepend>
                     <CInputGroupText>
@@ -221,7 +222,7 @@ const UpdatePaymentType = (props) => {
                   <CInput
                     id="name"
                     name="name"
-                    placeholder="Name"
+                    placeholder="Title"
                     onChange={handleOnChange}
                     invalid={errors.name}
                     onBlur={handleOnBlur}

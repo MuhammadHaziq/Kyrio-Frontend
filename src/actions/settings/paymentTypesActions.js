@@ -149,7 +149,6 @@ export const get_payments_type = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({
             type: GET_PAYMENTS_TYPE,
             response: response.data,
@@ -267,11 +266,12 @@ export const delete_payments_type = (id) => {
 };
 
 export const update_payment_type = (data) => {
+  
   return (dispatch) => {
     try {
       authAxios({
         method: "patch",
-        url: `paymentsType/${data.id}`,
+        url: `paymentsType`,
         data: data,
 
       })

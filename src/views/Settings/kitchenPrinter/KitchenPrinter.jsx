@@ -45,7 +45,7 @@ const KitchenPrinter = () => {
   const features = useSelector((state) => state.auth.user.features);
 
   useEffect(() => {
-    let feature = features.filter(ftr => ftr.feature.name == "Kitchen printers")[0].enable
+    let feature = features.filter(ftr => ftr.feature.title == "Kitchen printers")[0].enable
     if(!feature){
       setRedirect(true)
     }

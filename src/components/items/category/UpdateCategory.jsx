@@ -96,14 +96,14 @@ const UpdateCategory = (props) => {
   };
 
   const colors = [
-    { id: 0, color: "rgb(224, 224, 224)" },
-    { id: 1, color: "rgb(244, 67, 54)" },
-    { id: 2, color: "rgb(233, 30, 99)" },
-    { id: 3, color: "rgb(255, 152, 0)" },
-    { id: 4, color: "rgb(205, 220, 57)" },
-    { id: 5, color: "rgb(76, 175, 80)" },
-    { id: 6, color: "rgb(33, 150, 243)" },
-    { id: 7, color: "rgb(156, 39, 176)" },
+    { id: 0, color: "#e0e0e0" },
+    { id: 1, color: "#f44336" },
+    { id: 2, color: "#e91e63" },
+    { id: 3, color: "#ff9800" },
+    { id: 4, color: "#cddc39" },
+    { id: 5, color: "#4caf50" },
+    { id: 6, color: "#2196f3" },
+    { id: 7, color: "#9c27b0" },
   ];
 
   const delete_category = () => {

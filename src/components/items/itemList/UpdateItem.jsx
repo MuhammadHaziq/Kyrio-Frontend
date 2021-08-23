@@ -379,7 +379,7 @@ const AddItem = (props) => {
 
   const delete_category = () => {
     const data = [props.item_row_data._id];
-    dispatch(delete_item_list(JSON.stringify(data)));
+    dispatch(delete_item_list(data));
   };
 
   const removeSelectedImages = (name) => {

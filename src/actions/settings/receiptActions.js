@@ -67,7 +67,7 @@ export const add_new_receipt = (data) => {
 
           let msg = {
             open: true,
-            message: `Save Successfully`,
+            message: `Receipt settings updated`,
             object: {},
             error: false,
           };
@@ -76,7 +76,6 @@ export const add_new_receipt = (data) => {
         .catch((error) => {
           let msg;
           let errors = [];
-          console.log("err", error.response);
           if (typeof error.response !== "undefined") {
             if (typeof error.response.data.errors !== "undefined") {
               (error.response.data.errors || []).map((item) => {

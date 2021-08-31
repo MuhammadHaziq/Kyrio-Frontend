@@ -44,6 +44,7 @@ const AddItem = (props) => {
     autoSKU: false,
     item_barcode: "",
     represent_type: "Color_and_shape",
+    image: "",
     color: "#E0E0E0",
     availableForSale: false,
   });
@@ -156,6 +157,7 @@ const AddItem = (props) => {
         color: props.item_row_data.color,
         sku: props.item_row_data.sku || "",
         autoSKU: props.item_row_data.autoSKU || false,
+        image: props.item_row_data.image || false,
         item_barcode: props.item_row_data.barcode || "",
         availableForSale: props.item_row_data.availableForSale,
       });
@@ -291,7 +293,7 @@ const AddItem = (props) => {
       "itemColor",
       fields.represent_type === "Color_and_shape" ? fields.color : ""
     );
-    formData.append("image", receiptFile);
+    formData.append("image", receiptFile == "" ? fields.image : receiptFile);
     formData.append("stockQty", stockQty);
     formData.append("autoSKU", props.item_row_data.sku == fields.sku && fields.autoSKU);
     

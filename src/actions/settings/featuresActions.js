@@ -71,7 +71,7 @@ export const toggle_feature_module = (data) => {
           dispatch({ type: TOGGLE_FEATURE_MODULE, response: response.data });
           let msg = {
             open: true,
-            message: response.data.message,
+            message: "Feature settings changed",
             object: {},
             error: false,
           };

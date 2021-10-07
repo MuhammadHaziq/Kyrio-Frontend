@@ -80,14 +80,14 @@ const ModalSelectItemsTax = (props) => {
       );
       
       const cat = props.category.find(itm => itm._id === id)
-      if(taxes.tax_row_data.items.length > 0){
+      if(taxes?.tax_row_data?.items?.length > 0){
         category_items.map(itm => {
           const check = taxes.tax_row_data.items.includes(itm._id)
           if(cat.isSelected){
             itm.isSelected = check
           }
         })
-      } else if(taxes.tax_row_data.categories.length > 0){
+      } else if(taxes?.tax_row_data?.categories?.length > 0){
         category_items.map(itm => {
             itm.isSelected = true
         })
@@ -128,21 +128,21 @@ const ModalSelectItemsTax = (props) => {
     }
   };
   const getCount = (item) => {
-    const category_items2 = taxes.category_items.filter((item) =>
+    const category_items2 = taxes?.category_items.filter((item) =>
         item.category !== null && item.category !== undefined
           ? item.category._id === item._id
           : item._id === item._id
       );
       
       const cat = props.category.find(itm => itm._id === item._id)
-      if(taxes.tax_row_data.items.length > 0){
+      if(taxes?.tax_row_data?.items?.length > 0){
         category_items2.map(itm => {
-          const check = taxes.tax_row_data.items.includes(itm._id)
+          const check = taxes?.tax_row_data?.items.includes(itm._id)
           if(cat.isSelected){
             itm.isSelected = check
           }
         })
-      } else if(taxes.tax_row_data.categories.length > 0){
+      } else if(taxes?.tax_row_data?.categories?.length > 0){
         category_items2.map(itm => {
             itm.isSelected = true
         })

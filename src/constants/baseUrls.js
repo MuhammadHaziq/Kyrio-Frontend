@@ -4,6 +4,7 @@ const LiveUrl = "http://158.176.135.6:3002/kyrio/v1/";
 // Image URLs
 const ImageLocalUrl = "http://localhost:3002/";
 const ImageLiveUrl = "http://158.176.135.6:3002/";
+
 export const imageBaseUrl =
   window.location.protocol +
   "//" +
@@ -20,7 +21,16 @@ if (window.location.hostname == "localhost") {
 } else if (window.location.hostname == "158.176.135.6") {
   Base_Url = LiveUrl
   Image_Url = ImageLiveUrl
-}
+ } 
+//  else {
+  // Office IP
+  // Base_Url = "http://192.168.18.32:3002/kyrio/v1/"
+  // Image_Url = "http://192.168.18.32:3002/"
+  // Home IP
+  // Base_Url = "http://192.168.10.7:3002/kyrio/v1/"
+  // Image_Url = "http://192.168.10.7:3002/"
+// }
+
 export const BaseUrl = Base_Url;
 export const ImageUrl = Image_Url;
 

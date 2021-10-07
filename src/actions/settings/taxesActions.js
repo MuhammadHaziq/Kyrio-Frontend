@@ -551,6 +551,7 @@ export const toggle_dinings = (data) => {
 };
 
 export const toggle_category = (data) => {
+  
   return (dispatch) => {
     dispatch({
       type: CATEGORY_SELECT_STATUS,

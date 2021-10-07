@@ -1,115 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CDataTable,
-  CCardBody,
   CInputCheckbox,
   CFormGroup,
   CLabel,
 } from "@coreui/react";
-import {
-  toggle_sales_category_summary_single_select,
-  toggle_sales_category_summary_all_select,
-  update_row_data,
-} from "../../actions/reports/salesCategoryActions";
-import { useDispatch } from "react-redux";
 
 const SalesCategoryDatatable = (props) => {
-  const dispatch = useDispatch();
+  
+  const [fields, setFields] = useState([]);
 
-  const [selected, setSelected] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const check = (e, item) => {
-    dispatch(toggle_sales_category_summary_single_select(item));
-  };
-
-  const clickRow = (item, index, column) => {
-    if (column !== "select") {
-      dispatch(update_row_data(item));
+  useEffect(() => {
+    if(props.columns.length > 0){
+      setFields(props.columns.filter(itm => itm.isShow))
     }
-  };
-
-  const checkAll = (e, selectAll) => {
-    setSelectAll(!selectAll);
-    dispatch(toggle_sales_category_summary_all_select(!selectAll));
-  };
+  },[props.columns])
+  
   return (
     <CDataTable
       items={props.category_sales_summary}
-      fields={[
-        {
-          key: "select",
-          label: "Select",
-          filter: false,
-          _style: { width: "5%" },
-        },
-        { key: "category", label: "Category", filter: true },
-        { key: "ItemsSold", label: "Items sold", filter: true },
-        { key: "GrossSales", label: "Gross sales", filter: true },
-        { key: "ItemsRefunded", label: "Items refunded", filter: true },
-        { key: "Refunds", label: "Refunds", filter: true },
-        { key: "discounts", label: "Discount", filter: true },
-        { key: "NetSales", label: "Net sales", filter: true },
-        { key: "CostOfGoods", label: "Cost of goods", filter: true },
-        { key: "GrossProfit", label: "Gross profit", filter: true },
-        { key: "Margin", label: "Margin", filter: true },
-      ]}
+      fields={fields}
       itemsPerPage={10}
       columnFilter
       sorter
       hover
+      outlined
       pagination
       // clickableRows
       // onRowClick={clickRow}
-      columnHeaderSlot={{
-        select: [
-          <CFormGroup variant="custom-checkbox">
-            <CInputCheckbox
-              custom
-              id={`checkbox`}
-              onClick={(e) => checkAll(e, selectAll)}
-            />
-            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
-          </CFormGroup>,
-        ],
-      }}
       scopedSlots={{
-        select: (item) => {
-          return (
-            <td>
-              <CFormGroup variant="custom-checkbox">
-                <CInputCheckbox
-                  custom
-                  id={`checkbox${item._id}`}
-                  checked={item.isDeleted}
-                  onChange={(e) => check(e, item)}
-                  disabled={
-                    item.role !== undefined && item.role !== null
-                      ? item.role["title"] !== undefined &&
-                        item.role["title"] !== null
-                        ? item.role["title"].toUpperCase() == "OWNER"
-                        : ""
-                      : ""
-                  }
-                />
-                <CLabel
-                  variant="custom-checkbox"
-                  htmlFor={`checkbox${item._id}`}
-                />
-              </CFormGroup>
-            </td>
-          );
+        category: (item) => {
+          return <td style={{ borderRight: "1px solid #d8dbe0" }}>{item.category}</td>
         },
         ItemsSold: (item) => {
           return (
             <td>
               {typeof item.ItemsSold !== "undefined" &&
-                item.ItemsSold !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.ItemsSold))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+                item.ItemsSold !== null ? item.ItemsSold : "0"}
             </td>
           );
         },

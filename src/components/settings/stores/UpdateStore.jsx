@@ -121,8 +121,8 @@ const UpdateStore = (props) => {
   };
 
   const delete_str = () => {
-    const data = [props.update_store_data._id];
-    dispatch(delete_store(JSON.stringify(data)));
+    const data = props.update_store_data._id;
+    dispatch(delete_store(data));
   };
 
   const hideAlert = () => {

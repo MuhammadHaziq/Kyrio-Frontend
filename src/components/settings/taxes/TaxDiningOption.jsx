@@ -48,10 +48,6 @@ const TaxDiningOption = (props) => {
           const dining = (taxes.tax_dining_list || []).filter(
             (item) => item._id === ite
           );
-          // return diningData.push({
-          //   diningId: dining[0] ? dining[0]._id : "0",
-          //   diningName: dining[0] ? dining[0].title : "None",
-          // });
           return diningData.push(dining[0] ? dining[0]._id : "0");
         });
         dispatch(toggle_dinings(diningData));
@@ -66,10 +62,6 @@ const TaxDiningOption = (props) => {
           const category = (taxes.tax_category_list || []).filter(
             (item) => item._id === ite
           );
-          // return categoryData.push({
-          //   categoryId: category[0] ? category[0]._id : "0",
-          //   categoryName: category[0] ? category[0].catTitle : "None",
-          // });
           return categoryData.push(category[0] ? category[0]._id : "0");
         });
         dispatch(toggle_category(categoryData));
@@ -129,7 +121,7 @@ const TaxDiningOption = (props) => {
                 variant="ghost"
                 color="primary"
                 size="sm"
-                onClick={() => setModalItems(!modalItems)}
+                onClick={() => setModalItems(true)}
               >
                 {taxes.tax_category_list.filter(
                   (item) => item.isSelected === true

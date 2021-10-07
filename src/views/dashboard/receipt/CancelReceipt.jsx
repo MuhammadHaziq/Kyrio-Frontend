@@ -1,3 +1,4 @@
+import "./index.css"
 import React, { useEffect, useState } from 'react'
 import {
     CNav,
@@ -12,28 +13,133 @@ import {
     CCardBody,
     CRow,
     CCol,
+    CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { toggle_receipt_sideBar, cancel_receipt } from "../../../actions/reports/salesReceiptActions"
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment'
+import { confirmAlert } from "react-confirm-alert";
+import authAxios from '../../../constants/authAxios'
+
 const CancelReceipt = props => {
     const show = useSelector(state => state.reports.salesReceiptReducer.show_receipt_detail)
     const sales_receipt_data = useSelector(state => state.reports.salesReceiptReducer.sales_receipt_data)
+    
     const dispatch = useDispatch()
     const closeReceiptDetail = () => {
         dispatch(toggle_receipt_sideBar(false))
     }
-    console.log('sales_receipt_data', sales_receipt_data)
-    const cancelReceipt = () => {
+
+    // useEffect(() => {
+    //     if(refund_status){
+    //         const no = (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].receipt_number : ''
+    //         showAlert({
+    //             button_text: "Disbale",
+    //             heading: "Cancel receipt",
+    //             section:
+    //               "Unable to cancel receipt that was fully or partially refunded. Please cancel refund receipt first: "+no,
+    //           });
+    //     }
+    // },[refund_status])
+
+    const cancelReceiptFunc = () => {
+        const type = sales_receipt_data?.[0]?.receipt_type
+        if(type === "REFUND"){
+            showAlert({
+                button_text: "Disbale",
+                heading: "Cancel receipt",
+                section:
+                  "Receipt will not be accounted in reports. Are you sure you want to continue?",
+              });
+        } else if(type === "SALE"){
+            const data = {
+                receipt_number: (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].receipt_number : ''
+            }
+            // dispatch(check_if_refunded(data))
+            authAxios({
+                method: "GET",
+                url: `sales/check/${data.receipt_number}`
+        
+              }).then(res => {
+                if(res.data.refund){
+                    showAlert({
+                        button_text: "Disbale",
+                        heading: "Cancel receipt",
+                        section:
+                          "Unable to cancel receipt that was fully or partially refunded. Please cancel refund receipt first: "+data.receipt_number,
+                        refund: true
+                      });
+                } else {
+                    showAlert({
+                        button_text: "Disbale",
+                        heading: "Cancel receipt",
+                        section: <div>
+                            <ul>
+                                <li>Receipt will not be accounted in reports</li>
+                                <li>Items will be returned to stock</li>
+                            </ul>
+                            Are you sure you want to continue?
+                        </div>,
+                         refund: false
+                      });
+                }
+              }).catch(err => {
+                  console.log(err.message)
+              })
+        }
+        
+    }
+    const cancelReceiptConfirm = () => {
         const data = {
             receipt_number: (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].receipt_number : '',
             storeId: (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].store !== undefined && (sales_receipt_data || [])[0].store !== null ? (sales_receipt_data || [])[0].store._id || '' : '' : '',
             cancelled_at: new Date()
         }
-        console.log(data)
-        // dispatch(cancel_receipt(data))
+        dispatch(cancel_receipt(data))
     }
+
+    const showAlert = (param) => {
+        confirmAlert({
+          customUI: ({ onClose }) => {
+            return (
+              <div className='custom-ui'>
+                <h3>{param.heading}</h3>
+                <p>{param.section}</p>
+                <CRow>
+                  <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                    <CButton
+                      color="secondary"
+                      block
+                      className="btn-pill pull-right"
+                      outline="outline"
+                      onClick={() => { onClose(); }}
+                    >
+                    {param.refund ? "OK" : "No"}
+                    </CButton>
+                  </CCol>
+                  {param.refund ? "" :
+                  <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                    <CButton
+                      color="danger"
+                      block
+                      className="btn-pill pull-right"
+                      outline="outline"
+                      onClick={() => {
+                        cancelReceiptConfirm();
+                        onClose();
+                      }}
+                    >
+                      Yes
+                    </CButton>
+                  </CCol>
+                    }
+                </CRow>
+              </div>
+            );
+          }
+        });
+    };
     return (
         <CSidebar
             aside
@@ -44,30 +150,37 @@ const CancelReceipt = props => {
             onShowChange={closeReceiptDetail}
         >
 
-            <CNav variant='tabs' className='nav-underline nav-underline-primary ml-auto'>
+            <CNav variant='tabs' className='nav-underline nav-underline-primary ml-auto' >
                 <CNavItem>
                     <CSidebarClose onClick={closeReceiptDetail} style={{ left: '0' }} />
                 </CNavItem>
+                
                 <CNavItem>
                     <CDropdown
                         inNav
                         className="c-header-nav-item mx-2"
                     >
-                        <CDropdownToggle className="c-header-nav-link" caret={false}>
+                        
+                        <CDropdownToggle  caret={false}>
+                        {sales_receipt_data?.[0]?.cancelled_at ? "" :
                             <CIcon name="cil-options" />
+                        }
                         </CDropdownToggle>
+                        {sales_receipt_data?.[0]?.cancelled_at ? "" :
                         <CDropdownMenu placement="bottom-end" className="pt-0">
-                            <CDropdownItem onClick={cancelReceipt}><CIcon name="cil-basket" className="mr-2" /> Cancel Receipt</CDropdownItem>
+                            <CDropdownItem onClick={cancelReceiptFunc}><CIcon name="cil-basket" className="mr-2" /> Cancel Receipt</CDropdownItem>
                         </CDropdownMenu>
+                        }
                     </CDropdown>
                 </CNavItem>
+                
             </CNav>
             {(sales_receipt_data || []).map((item, index) => (
                 <CCard>
                     <CCardBody>
                         <CRow className="p-3">
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
-                                <h2>{item.total_price !== undefined && item.total_price !== null ? item.total_price || '' : ''}</h2>
+                                <h2>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</h2>
                                 <h6>Total</h6>
                             </CCol>
                         </CRow>
@@ -93,7 +206,7 @@ const CancelReceipt = props => {
                                         <span>{ite.quantity} x {ite.price}</span>
                                     </CCol>
                                     <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                        <h6><b>{ite.total_price}</b></h6>
+                                        <h6><b>{parseFloat(ite.total_price,2)}</b></h6>
                                     </CCol>
                                     {(ite.taxes || []).length > 0 ? (<React.Fragment> <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                         <p>Included In Price 10% (included)</p>
@@ -118,14 +231,14 @@ const CancelReceipt = props => {
                                 <h6><b>Total</b></h6>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <h6><b>{item.total_price !== undefined && item.total_price !== null ? item.total_price || '' : ''}</b></h6>
+                                <h6><b>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</b></h6>
                             </CCol>
                             <br />
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                 <p>Card</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{item.total_price !== undefined && item.total_price !== null ? item.total_price || '' : ''}</p>
+                                <p>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</p>
                             </CCol>
                         </CRow>
                         <hr />

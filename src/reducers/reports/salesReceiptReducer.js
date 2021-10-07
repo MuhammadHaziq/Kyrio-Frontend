@@ -4,7 +4,8 @@ import {
   TOGGLE_SALE_RECEIPT_SUMMARY_ALL_SELECT,
   DELETE_SALES_RECEIPT_SUMMARY,
   ROW_DATA_SALES_RECEIPT_SUMMARY,
-  TOGGLE_RECEIPT_SIDEBAR
+  TOGGLE_RECEIPT_SIDEBAR,
+  CANCEL_RECEIPT
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -71,6 +72,24 @@ const salesReceiptReducer = (state = initialState, action) => {
       return {
         ...state,
         show_receipt_detail: action.status
+      }
+    }
+    case CANCEL_RECEIPT: {
+      let salesItem = {
+        receipts: state.sale_receipt_summary.receipts.map((item) => {
+            if(item._id === action.data._id){
+              item = action.data
+            }
+            return item
+          }),
+        totalReceipts: state.sale_receipt_summary.totalReceipts,
+        totalRefunds: state.sale_receipt_summary.totalRefunds,
+        totalSales: state.sale_receipt_summary.totalSales
+      }
+      return {
+        ...state,
+        sales_receipt_data: [action.data],
+        sale_receipt_summary: salesItem
       }
     }
     default:

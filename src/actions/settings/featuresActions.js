@@ -107,7 +107,7 @@ export const toggle_feature_module = (data) => {
           }
         });
     } catch (error) {
-      console.log("err catch", error);
+      
       let msg = {
         open: true,
         message:

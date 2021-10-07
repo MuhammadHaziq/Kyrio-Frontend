@@ -200,8 +200,6 @@ const taxesReducer = (state = initialState, action) => {
       let status = false;
       return Object.assign({}, state, {
         tax_category_list: state.tax_category_list.map((item) => {
-          console.log(item)
-          console.log(action.response)
           if (action.response.length !== 0) {
             /*
              *  Use For Update Screen
@@ -244,7 +242,7 @@ const taxesReducer = (state = initialState, action) => {
               // const ids= action.response.map(item=> {return item.itemId  || []})
               const ids = new Set(state.tax_row_data.items || []).map(
                 (item) => {
-                  return item.itemId;
+                  return item._id;
                 }
               );
               if (ids.has(item._id)) {
@@ -259,7 +257,7 @@ const taxesReducer = (state = initialState, action) => {
                */
             } else {
               if (item.category !== undefined && item.category !== null) {
-                if (item.category.id === action.response.categoryId) {
+                if (item.category._id === action.response._id) {
                   return Object.assign({}, item, {
                     isSelected: status,
                   });
@@ -301,7 +299,7 @@ const taxesReducer = (state = initialState, action) => {
         (item) =>
           item.category !== undefined &&
           item.category !== null &&
-          item.category.id === action.category.categoryId &&
+          item.category._id === action.category.categoryId &&
           item.isSelected === true
       );
       tax_category_list = state.tax_category_list.slice().map((item) => {

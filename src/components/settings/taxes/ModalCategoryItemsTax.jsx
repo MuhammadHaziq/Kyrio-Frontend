@@ -39,20 +39,20 @@ const ModalCategoryItemsTax = (props) => {
     let category_item;
     category_item = {
       itemId: category[0]._id,
-      itemName: category[0].name,
+      itemName: category[0].title,
       categoryId:
         category[0].category !== undefined && category[0].category !== null
-          ? category[0].category.id
+          ? category[0].category._id
           : "0",
     };
     const categoryData = {
       categoryId:
         category[0].category !== undefined && category[0].category !== null
-          ? category[0].category.id
+          ? category[0].category._id
           : "0",
       categoryName:
         category[0].category !== undefined && category[0].category !== null
-          ? category[0].category.name
+          ? category[0].category.title
           : "No Category",
     };
     dispatch(toggle_category_item(category_item, categoryData));
@@ -79,7 +79,7 @@ const ModalCategoryItemsTax = (props) => {
                       variant="custom-checkbox"
                       htmlFor={"itemId" + item._id}
                     >
-                      {item.name}
+                      {item.title}
                     </CLabel>
                   </CFormGroup>
                 </CListGroupItem>

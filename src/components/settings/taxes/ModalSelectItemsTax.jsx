@@ -44,7 +44,7 @@ const ModalSelectItemsTax = (props) => {
     let categoryData;
     categoryData = {
       _id: category[0]._id,
-      catTitle: category[0].catTitle,
+      title: category[0].title,
     };
     dispatch(toggle_category(categoryData));
   };
@@ -58,13 +58,9 @@ const ModalSelectItemsTax = (props) => {
     setStoreId(auth.user.stores[0]._id);
   }, [auth]);
   const getCategoryItems = (id) => {
-    const data = {
-      storeId: storeId,
-      categoryFilter: id,
-    };
+    
     setCategoryId(id);
-    setFadeCategory(true);
-    setFadeItems(false);
+    
     // if (id != categoryId) {
     // const category_items =[]
     if (id === "0") {
@@ -72,16 +68,38 @@ const ModalSelectItemsTax = (props) => {
         (item) =>
           item.category === null ||
           item.category === undefined ||
-          item.category["id"] === id
+          item.category.length === 0
       );
       setCategoryItems(category_items);
     } else {
+      
       const category_items = taxes.category_items.filter((item) =>
         item.category !== null && item.category !== undefined
-          ? item.category["id"] === id
+          ? item.category._id === id
           : item._id === id
       );
+      
+      const cat = props.category.find(itm => itm._id === id)
+      if(taxes.tax_row_data.items.length > 0){
+        category_items.map(itm => {
+          const check = taxes.tax_row_data.items.includes(itm._id)
+          if(cat.isSelected){
+            itm.isSelected = check
+          }
+        })
+      } else if(taxes.tax_row_data.categories.length > 0){
+        category_items.map(itm => {
+            itm.isSelected = true
+        })
+      } else {
+        category_items.map(itm => {
+            itm.isSelected = cat.isSelected
+        })
+      }
       setCategoryItems(category_items);
+
+      setFadeCategory(true);
+      setFadeItems(false);
     }
 
     // dispatch(filter_category_item(data))
@@ -99,7 +117,7 @@ const ModalSelectItemsTax = (props) => {
     const value = e.target.value !== "" ? e.target.value.toUpperCase() : "";
     if (value.trim() !== "") {
       const category_items = taxes.category_items.filter((element) =>
-        element.name.toUpperCase().includes(value)
+        element.category.title.toUpperCase().includes(value)
       );
       setFadeCategory(true);
       setFadeItems(false);
@@ -109,6 +127,47 @@ const ModalSelectItemsTax = (props) => {
       setFadeItems(true);
     }
   };
+  const getCount = (item) => {
+    const category_items2 = taxes.category_items.filter((item) =>
+        item.category !== null && item.category !== undefined
+          ? item.category._id === item._id
+          : item._id === item._id
+      );
+      
+      const cat = props.category.find(itm => itm._id === item._id)
+      if(taxes.tax_row_data.items.length > 0){
+        category_items2.map(itm => {
+          const check = taxes.tax_row_data.items.includes(itm._id)
+          if(cat.isSelected){
+            itm.isSelected = check
+          }
+        })
+      } else if(taxes.tax_row_data.categories.length > 0){
+        category_items2.map(itm => {
+            itm.isSelected = true
+        })
+      } else {
+        category_items2.map(itm => {
+            itm.isSelected = cat.isSelected
+        })
+      }
+    const check = taxes.tax_category_list.filter(
+      (ite) =>
+        ite.isSelected == true && item._id === ite._id
+    ).length;
+    let count = 0;
+    if(check === 1){
+      count = category_items2.filter(itm => itm?.isSelected && itm.category._id === item._id).length 
+    }
+    console.log(category_items2)
+    if(count > 1) {
+      return count+" items selected";
+    } else if(count > 0){
+      return count+" item selected";
+    } else if(count === 0){
+      return "No items selected";
+    }
+  }
   return (
     <React.Fragment>
       <CModal
@@ -168,7 +227,7 @@ const ModalSelectItemsTax = (props) => {
                             variant="custom-checkbox"
                             htmlFor={"categoryId" + item._id}
                           >
-                            {item.catTitle}
+                            {item.title}
                           </CLabel>
                         </CFormGroup>
                         <CIcon
@@ -179,9 +238,10 @@ const ModalSelectItemsTax = (props) => {
                         />
                         <div
                           style={{
-                            color: "rgba(0,0,0,0.54)",
+                            color: "#ffffff",
                             marginTop: "-2px",
                             marginLeft: "25px",
+                            fontSize: "10px"
                           }}
                         >
                           {taxes.tax_category_list.filter(
@@ -189,10 +249,7 @@ const ModalSelectItemsTax = (props) => {
                               ite.isSelected === true && ite._id === item._id
                           ).length === 0
                             ? " No items selected"
-                            : taxes.tax_category_list.filter(
-                                (ite) =>
-                                  ite.isSelected == true && item._id === ite._id
-                              ).length + " items are selected"}
+                            : getCount(item)}
                         </div>
                       </CListGroupItem>
                     ))}

@@ -14,7 +14,7 @@ import MainChartExample from "../charts/MainChartExample.js";
 import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
-import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
+// import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
 import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
 
 const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
@@ -143,18 +143,18 @@ const Dashboard = (props) => {
 
   // States
   // Reducer Functions
-  const store = useSelector((state) => state.settingReducers.storeReducer);
-  const employee = useSelector(
-    (state) => state.employeeReducers.employeeListReducer
-  );
+  // const store = useSelector((state) => state.settingReducers.storeReducer);
+  // const employee = useSelector(
+  //   (state) => state.employeeReducers.employeeListReducer
+  // );
   const salesSummary = useSelector(
     (state) => state.reports.salesSummaryReducer
   );
   // End Reducer Functions
   // UseEffects Functions
-  useEffect(() => {
-    dispatch(get_sales_summary());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(get_sales_summary());
+  // }, []);
 
   useEffect(() => {
     if (typeof salesSummary.sales_graph_data !== "undefined") {
@@ -247,7 +247,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.GrossSales !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.GrossSales !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.GrossSales)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossSales,2)
           : 0
         : 0
       : 0;
@@ -258,7 +258,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.Refunds !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.Refunds !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.Refunds)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.Refunds,2)
           : 0
         : 0
       : 0;
@@ -269,7 +269,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.discounts !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.discounts !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.discounts)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.discounts,2)
           : 0
         : 0
       : 0;
@@ -280,7 +280,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.NetSales !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.NetSales !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.NetSales)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.NetSales,2)
           : 0
         : 0
       : 0;
@@ -291,7 +291,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.CostOfGoods)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods,2)
           : 0
         : 0
       : 0;
@@ -302,7 +302,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.GrossProfit !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.GrossProfit !== null
-          ? parseInt(salesSummary.sales_graph_data.SalesTotal.GrossProfit)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossProfit,2)
           : 0
         : 0
       : 0;

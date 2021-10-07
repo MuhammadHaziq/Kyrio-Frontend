@@ -20,8 +20,8 @@ import {
 import { CIcon } from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
 import {
-  get_items_list,
-  get_items_stock,
+  // get_items_list,
+  // get_items_stock,
   search_item_list,
   get_items_store,
   delete_item_list,
@@ -404,7 +404,7 @@ const ItemsList = () => {
   useEffect(() => {
     // dispatch(get_items_list());
     dispatch(get_category_list());
-    dispatch(get_items_stock());
+    // dispatch(get_items_stock());
     dispatch(get_items_store());
     dispatch(get_item_taxe());
     dispatch(get_stores());

@@ -53,6 +53,7 @@ const TimeCardDatatable = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
       clickableRows
       onRowClick={clickRow}

@@ -43,12 +43,6 @@ const SalesEmployeeDatatable = (props) => {
         <CDataTable
             items={props.sales_by_employee_detail}
             fields={[
-                {
-                    key: "select",
-                    label: "Select",
-                    filter: false,
-                    _style: { width: "5%" },
-                },
                 { key: "Name", label: "Name", filter: true },
                 { key: "GrossSales", label: "Gross sales", filter: true },
                 { key: "Refunds", label: "Refunds", filter: true },
@@ -61,47 +55,10 @@ const SalesEmployeeDatatable = (props) => {
             sorter
             hover
             pagination
+            outlined
             // clickableRows
             // onRowClick={clickRow}
-            columnHeaderSlot={{
-                select: [
-                    <CFormGroup variant="custom-checkbox">
-                        <CInputCheckbox
-                            custom
-                            id={`checkbox`}
-                            onClick={(e) => checkAll(e, selectAll)}
-                        />
-                        <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
-                    </CFormGroup>,
-                ],
-            }}
             scopedSlots={{
-                select: (item) => {
-                    return (
-                        <td>
-                            <CFormGroup variant="custom-checkbox">
-                                <CInputCheckbox
-                                    custom
-                                    id={`checkbox${item._id}`}
-                                    checked={item.isDeleted}
-                                    onChange={(e) => check(e, item)}
-                                    disabled={
-                                        item.role !== undefined && item.role !== null
-                                            ? item.role["title"] !== undefined &&
-                                                item.role["title"] !== null
-                                                ? item.role["title"].toUpperCase() == "OWNER"
-                                                : ""
-                                            : ""
-                                    }
-                                />
-                                <CLabel
-                                    variant="custom-checkbox"
-                                    htmlFor={`checkbox${item._id}`}
-                                />
-                            </CFormGroup>
-                        </td>
-                    );
-                },
                 GrossSales: (item) => {
                     return (
                         <td>

@@ -51,6 +51,7 @@ const SalesTaxDatatableNew = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
     />
   );

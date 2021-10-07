@@ -90,7 +90,7 @@ const SalesEmployee = () => {
                     </svg>
                     Export
                   </CButton>
-                  {true ? (
+                  {/* {true ? (
                     <React.Fragment>
                       <ConformationAlert
                         button_text="Delete"
@@ -107,7 +107,7 @@ const SalesEmployee = () => {
                     </React.Fragment>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </CCol>
               </CRow>
             </CCardHeader>

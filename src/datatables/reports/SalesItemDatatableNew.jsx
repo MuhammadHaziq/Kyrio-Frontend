@@ -1,115 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  CDataTable,
-  CCardBody,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
+  CDataTable
 } from "@coreui/react";
-import {
-  toggle_item_sale_single_select,
-  toggle_item_sale_all_select,
-  update_row_data,
-} from "../../actions/reports/salesItemActions";
-import { useDispatch } from "react-redux";
-import dateFormat from "dateformat";
 
 const SalesItemDatatableNew = (props) => {
-  const dispatch = useDispatch();
 
-  const [selected, setSelected] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [fields, setFields] = useState([]);
 
-  const check = (e, item) => {
-    dispatch(toggle_item_sale_single_select(item));
-  };
-
-  const clickRow = (item, index, column) => {
-    if (column !== "select") {
-      dispatch(update_row_data(item));
+  useEffect(() => {
+    if(props.columns.length > 0){
+      setFields(props.columns.filter(itm => itm.isShow))
     }
-  };
-
-  const checkAll = (e, selectAll) => {
-    setSelectAll(!selectAll);
-    dispatch(toggle_item_sale_all_select(!selectAll));
-  };
+  },[props.columns])
+  
   return (
     <CDataTable
       items={props.item_sale_summary}
-      fields={[
-        {
-          key: "select",
-          label: "Select",
-          filter: false,
-          _style: { width: "5%" },
-        },
-        { key: "item", label: "Item", filter: true },
-        { key: "sku", label: "SKU", filter: true },
-        { key: "category", label: "Category", filter: true },
-        { key: "item_sold", label: "Items sold", filter: true },
-        { key: "gross_sale", label: "Gross sales", filter: true },
-        { key: "item_refunded", label: "Items refunded", filter: true },
-        { key: "refund", label: "Refunds", filter: true },
-        { key: "discount", label: "Discount", filter: true },
-        { key: "net_sales", label: "Net sales", filter: true },
-        { key: "cost_of_good", label: "Cost of goods", filter: true },
-        { key: "gross_profit", label: "Gross profit", filter: true },
-        { key: "margin", label: "Margin", filter: true },
-        { key: "taxes", label: "Taxes", filter: true },
-      ]}
+      fields={fields}
       itemsPerPage={10}
       columnFilter
       sorter
       hover
+      outlined
       pagination
+      // border={true}
+      outlined={true}
+      responsive={true}
       // clickableRows
       // onRowClick={clickRow}
-      columnHeaderSlot={{
-        select: [
-          <CFormGroup variant="custom-checkbox">
-            <CInputCheckbox
-              custom
-              id={`checkbox`}
-              onClick={(e) => checkAll(e, selectAll)}
-            />
-            <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
-          </CFormGroup>,
-        ],
-      }}
       scopedSlots={{
-        select: (item) => {
-          return (
-            <td>
-              <CFormGroup variant="custom-checkbox">
-                <CInputCheckbox
-                  custom
-                  id={`checkbox${item._id}`}
-                  checked={item.isDeleted}
-                  onChange={(e) => check(e, item)}
-                  disabled={
-                    item.role !== undefined && item.role !== null
-                      ? item.role["title"] !== undefined &&
-                        item.role["title"] !== null
-                        ? item.role["title"].toUpperCase() == "OWNER"
-                        : ""
-                      : ""
-                  }
-                />
-                <CLabel
-                  variant="custom-checkbox"
-                  htmlFor={`checkbox${item._id}`}
-                />
-              </CFormGroup>
-            </td>
-          );
+        name: (item) => {
+          return <td style={{ borderRight: "1px solid #d8dbe0" }}>{item.name}</td>
         },
-        gross_sale: (item) => {
+        GrossProfit: (item) => {
           return (
             <td>
-              {item.total_after_discount !== "undefined" &&
-              item.total_after_discount !== null
-                ? item.total_after_discount.toLocaleString("en-US", {
+              {item.GrossProfit !== "undefined" &&
+              item.GrossProfit !== null
+                ? item.GrossProfit.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -117,20 +45,12 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        margin: (item) => {
-          if (+item.cash_received === +item.total_price) {
-            return <td>{"0 %"}</td>;
-          } else {
-            const margin = (+item.cash_received / +item.total_price) * 100;
-            return <td>{margin.toFixed(2) + " %"} </td>;
-          }
-        },
-        refund_amount: (item) => {
+        CostOfGoods: (item) => {
           return (
             <td>
-              {typeof item.refund_amount !== "undefined" &&
-              item.refund_amount !== null
-                ? item.refund_amount.toLocaleString("en-US", {
+              {item.CostOfGoods !== "undefined" &&
+              item.CostOfGoods !== null
+                ? item.CostOfGoods.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -138,12 +58,12 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        total_discount: (item) => {
+        NetSales: (item) => {
           return (
             <td>
-              {typeof item.total_discount !== "undefined" &&
-              item.total_discount !== null
-                ? item.total_discount.toLocaleString("en-US", {
+              {item.NetSales !== "undefined" &&
+              item.NetSales !== null
+                ? item.NetSales.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -151,12 +71,12 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        total_price: (item) => {
+        discounts: (item) => {
           return (
             <td>
-              {typeof item.total_price !== "undefined" &&
-              item.total_price !== null
-                ? item.total_price.toLocaleString("en-US", {
+              {item.discounts !== "undefined" &&
+              item.discounts !== null
+                ? item.discounts.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -164,12 +84,12 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        total_after_discount: (item) => {
+        Refunds: (item) => {
           return (
             <td>
-              {typeof item.total_after_discount !== "undefined" &&
-              item.total_after_discount !== null
-                ? item.total_after_discount.toLocaleString("en-US", {
+              {item.Refunds !== "undefined" &&
+              item.Refunds !== null
+                ? item.Refunds.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -177,12 +97,12 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        total_after_discount: (item) => {
+        GrossSales: (item) => {
           return (
             <td>
-              {typeof item.total_after_discount !== "undefined" &&
-              item.total_after_discount !== null
-                ? item.total_after_discount.toLocaleString("en-US", {
+              {item.GrossSales !== "undefined" &&
+              item.GrossSales !== null
+                ? item.GrossSales.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })
@@ -190,18 +110,9 @@ const SalesItemDatatableNew = (props) => {
             </td>
           );
         },
-        total_tax: (item) => {
-          return (
-            <td>
-              {typeof item.total_tax !== "undefined" && item.total_tax !== null
-                ? item.total_tax.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
-            </td>
-          );
-        },
+        Margin: (item) => {
+            return <td>{item.Margin + " %"} </td>;
+        }
       }}
     />
   );

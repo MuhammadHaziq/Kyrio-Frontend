@@ -39,6 +39,8 @@ const TheLayout = () => {
     window.location.hostname +
     ":" +
     "3002";
+    // const socketBaseUrl = "http://192.168.18.32:3002" // Ofice IP
+    // const socketBaseUrl = "http://192.168.10.7:3002" // Home IP
       let socket = io(socketBaseUrl,connectionOptions);
       
       socket.on("connect", () => {

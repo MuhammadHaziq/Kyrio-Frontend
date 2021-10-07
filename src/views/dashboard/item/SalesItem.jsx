@@ -18,49 +18,52 @@ import {
   CLabel,
 } from "@coreui/react";
 // import CIcon from "@coreui/icons-react";
-// import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
+import dateformat from "dateformat";
+// import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-// import {
-//   get_item_sale_summary,
-//   delete_item_sale,
-// } from "../../../actions/reports/salesItemActions";
+import {
+  get_item_sale_summary
+} from "../../../actions/reports/salesItemActions";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { useSelector, useDispatch } from "react-redux";
 // import moment from "moment";
 import SalesItemDatatableNew from "../../../datatables/reports/SalesItemDatatableNew";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 // import { getStyle, hexToRgba } from "@coreui/utils/src";
-import $ from "jquery";
+// import $ from "jquery";
 
 const SalesItem = () => {
-  $(".dropdown-menu a").on("click", function (event) {
-    console.log("Event", event);
-    // event.stopPropagation();
+  // $(".dropdown-menu a").on("click", function (event) {
+  //   console.log("Event", event);
+  //   // event.stopPropagation();
+  
+  const item_sales_summary = useSelector((state) => state.reports.salesItemReducer.item_sales_summary);
+  //   // $(this).parent().toggleClass("open");
+  // });
 
-    // $(this).parent().toggleClass("open");
-  });
   const dispatch = useDispatch();
   const filterComponent = useSelector(
     (state) => state.dashBoard.filterComponentReducer
   );
 
   const [columns, setColumns] = useState([
-    { name: "item", title: "Item", isHidden: false },
-    { name: "category", title: "Category", isHidden: false },
-    { name: "item_sold", title: "Items sold", isHidden: false },
-    { name: "sku", title: "SKU", isHidden: true },
-    { name: "gross_sale", title: "Gross sales", isHidden: false },
-    { name: "item_refunded", title: "Items refunded", isHidden: false },
-    { name: "refund", title: "Refunds", isHidden: true },
-    { name: "discount", title: "Discounts", isHidden: true },
-    { name: "net_sale", title: "Net Sales", isHidden: true },
-    { name: "cost_of_good", title: "Cost of goods", isHidden: true },
-    { name: "gross_profit", title: "Gross profit", isHidden: false },
-    { name: "margin", title: "Margin", isHidden: true },
-    { name: "taxes", title: "Taxes", isHidden: true },
+    { key: "name", label: "Item", filter: true, isShow: true, disabled: true },
+    { key: "sku", label: "SKU", filter: true, isShow: true, disabled: false },
+    { key: "category", label: "Category", filter: true, isShow: true, disabled: false },
+    { key: "ItemsSold", label: "Items sold", filter: true, isShow: true, disabled: false },
+    { key: "GrossSales", label: "Gross sales", filter: true, isShow: true, disabled: false },
+    { key: "ItemsRefunded", label: "Items refunded", filter: true, isShow: true, disabled: false },
+    { key: "Refunds", label: "Refunds", filter: true, isShow: true, disabled: false },
+    { key: "discounts", label: "Discounts", filter: true, isShow: true, disabled: false },
+    { key: "NetSales", label: "Net Sales", filter: true, isShow: true, disabled: false },
+    { key: "CostOfGoods", label: "Cost of goods", filter: true, isShow: true, disabled: false },
+    { key: "GrossProfit", label: "Gross profit", filter: true, isShow: true, disabled: false },
+    { key: "Margin", label: "Margin", filter: true, isShow: true, disabled: false },
+    { key: "taxes", label: "Taxes", filter: true, isShow: false, disabled: false },
   ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [filterReset, setFilterReset] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: true },
     { days: 1, name: "Days", disable: true },
@@ -95,33 +98,38 @@ const SalesItem = () => {
 
   useEffect(() => {
     if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
     }
   }, [filterComponent, changeInFilter]);
 
   const deleteSalesItem = () => {
-    console.log("Delete");
     setShowAlert(!showAlert);
   };
 
-  const handleOnChangeCheck = (title) => {
-    setColumns(
-      columns.slice().map((item) => {
-        if (item.title.trim() === title.trim()) {
-          return {
-            ...item,
-            isHidden: !item.isHidden,
-          };
-        }
-        return item;
-      })
-    );
+  const handleOnChangeCheck = (itm) => {
+    if(!itm.disabled){
+      setColumns(
+        columns.slice().map((item) => {
+          if (item.key.trim() === itm.key.trim()) {
+            return {
+              ...item,
+              isShow: !item.isShow,
+            };
+          }
+          return item;
+        })
+      );
+    }
   };
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")}  />
+      {/* <FilterComponent handleOnChangeSales={() => console.log("No Function")}  /> */}
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_item_sale_summary}
+      />
       <CRow>
         <CCol>
           <CCard>
@@ -152,24 +160,6 @@ const SalesItem = () => {
                     </svg>
                     Export
                   </CButton>
-                  {true ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesItem}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
                 </CCol>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
@@ -188,7 +178,7 @@ const SalesItem = () => {
                           return (
                             <React.Fragment>
                               <CDropdownItem
-                                onClick={() => handleOnChangeCheck(item.title)}
+                                onClick={() => handleOnChangeCheck(item)}
                               >
                                 <CFormGroup variant="custom-checkbox" inline>
                                   <CInputCheckbox
@@ -196,13 +186,14 @@ const SalesItem = () => {
                                     name="datatableColumn"
                                     id={"datatableColumn" + index}
                                     value={index}
-                                    checked={!item.isHidden}
+                                    checked={item.isShow}
+                                    disabled={item.disabled}
                                   />
                                   <CLabel
                                     variant="custom-checkbox"
                                     id={"datatableColumn" + index}
                                   >
-                                    {item.title}
+                                    {item.label}
                                   </CLabel>
                                 </CFormGroup>
                               </CDropdownItem>
@@ -216,7 +207,9 @@ const SalesItem = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesItemDatatableNew item_sale_summary={[]} columns={columns} />
+              {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
+              <SalesItemDatatableNew item_sale_summary={item_sales_summary.itemsReport} columns={columns} />
+              : <SalesItemDatatableNew item_sale_summary={[]} columns={columns} />}
             </CCardBody>
           </CCard>
         </CCol>

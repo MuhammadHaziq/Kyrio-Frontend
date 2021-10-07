@@ -7,7 +7,7 @@ import {
   toggle_receipt_summary_all_select,
   update_row_data,
 } from "../../actions/reports/salesReceiptActions";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import dateFormat from "dateformat";
 
 const SalesReceiptDatatable = (props) => {
@@ -57,10 +57,15 @@ const SalesReceiptDatatable = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
+      outlined
       clickableRows
       onRowClick={clickRow}
       scopedSlots={{
+        receipt_type: (item) => {
+          return <td>{item.receipt_type} {item.cancelled_at ? "(cancelled)" : ""}</td>
+        },
         created_at: (item) => {
           return (
             <td>
@@ -82,7 +87,7 @@ const SalesReceiptDatatable = (props) => {
           return (
             <td>
               {typeof item.customer !== "undefined" &&
-                item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '' : ''}
+                item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '—' : '—'}
             </td>
           );
         },

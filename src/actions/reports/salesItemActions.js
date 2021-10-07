@@ -9,13 +9,13 @@ import {
 } from "../../constants/ActionTypes";
 import authAxios from '../../constants/authAxios'
 
-export const get_item_sale_summary = () => {
+export const get_item_sale_summary = (data) => {
   return (dispatch) => {
     try {
       authAxios({
-        method: "GET",
-        url: `sales/all`,
-
+        method: "POST",
+        url: `reports/sale/item`,
+        data: data
       })
         .then((response) => {
           dispatch({

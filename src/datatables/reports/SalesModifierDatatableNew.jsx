@@ -57,6 +57,7 @@ const SalesModifierDatatableNew = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
     />
   );

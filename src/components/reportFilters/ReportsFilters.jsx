@@ -15,13 +15,8 @@ import {
 } from "@coreui/react";
 import { get_employee_list } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
-import {
-  get_grap_sales_summary,
-  change_days,
-} from "../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import dateFormat from "dateformat";
 import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-bootstrap-time-picker";
@@ -32,8 +27,6 @@ import {
   MdAvTimer,
 } from "react-icons/md";
 import {
-  change_in_date_time,
-  change_in_time,
   stores_change,
   employee_change,
 } from "../../actions/dashboard/filterComponentActions";
@@ -47,9 +40,9 @@ const ReportsFilters = (props) => {
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
-  const salesSummary = useSelector(
-    (state) => state.reports.salesSummaryReducer
-  );
+  // const salesSummary = useSelector(
+  //   (state) => state.reports.salesSummaryReducer
+  // );
   // End Reducer Functions
   const [fields, setFields] = useState({
     checkAll: true,
@@ -66,8 +59,8 @@ const ReportsFilters = (props) => {
     endTime: "0",
   });
 
-  const [startDate, setStartDate] = useState(localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment())
-  const [endDate, setEndDate] = useState(localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment())
+  const [startDate, ] = useState(localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment())
+  const [endDate, ] = useState(localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment())
   const [dateRange, setDateRange] = useState({
     startDate: startDate,
     endDate: endDate,
@@ -130,7 +123,7 @@ const ReportsFilters = (props) => {
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
         i++;
       }
-      console.log("sasa", a);
+      // console.log("sasa", a);
       // props.setFilter("Hours");
       setDays(a);
       setDates(daysDates);
@@ -399,7 +392,6 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-      console.log("get_grap_sales_summary1", data);
       dispatch(props.get_filter_record(data));
     }
   }, [
@@ -436,7 +428,6 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-      console.log("get_grap_sales_summary2", data);
       dispatch(props.get_filter_record(data));
     }
   }, [Days]);
@@ -465,7 +456,6 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-      console.log("get_grap_sales_summary3", data);
 
       dispatch(props.get_filter_record(data));
     }
@@ -586,7 +576,6 @@ const ReportsFilters = (props) => {
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
-    console.log("get_grap_sales_summary4", data);
 
     dispatch(props.get_filter_record(data));
   };
@@ -648,8 +637,8 @@ const ReportsFilters = (props) => {
     dispatch(props.get_filter_record(data));
   };
 
-  let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
-  let end = dateFormat(dateRange.endDate, "yyyy-mm-dd");
+  let start = dateformat(dateRange.startDate, "yyyy-mm-dd");
+  let end = dateformat(dateRange.endDate, "yyyy-mm-dd");
   let label = start + " - " + end;
   if (start === end) {
     label = start;

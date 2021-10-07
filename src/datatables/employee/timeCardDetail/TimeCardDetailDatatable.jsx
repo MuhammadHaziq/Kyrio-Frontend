@@ -22,6 +22,7 @@ const TimeCardDetailDatatable = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
       scopedSlots={{
         clockIn: (item) => {

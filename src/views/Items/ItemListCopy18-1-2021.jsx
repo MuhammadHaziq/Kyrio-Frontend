@@ -19,10 +19,10 @@ import {
 } from "@coreui/react";
 import { CIcon } from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
-import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable.jsx";
+// import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable.jsx";
 import {
   get_items_list,
-  get_items_stock,
+  // get_items_stock,
   search_item_list,
   get_items_store,
   delete_item_list,
@@ -153,7 +153,7 @@ const ItemsList = () => {
   useEffect(() => {
     // dispatch(get_items_list());
     dispatch(get_category_list());
-    dispatch(get_items_stock());
+    // dispatch(get_items_stock());
     dispatch(get_items_store());
     dispatch(get_stores());
     if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {

@@ -25,6 +25,7 @@ const SalesSummaryDatatableNew = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
       scopedSlots={{
         Date: (item) => {

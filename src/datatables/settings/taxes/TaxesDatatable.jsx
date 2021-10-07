@@ -49,6 +49,7 @@ const TaxesDatatable = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
       clickableRows
       onRowClick={clickRow}

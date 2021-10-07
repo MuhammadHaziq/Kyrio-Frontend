@@ -56,10 +56,6 @@ const UpdateTax = (props) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(get_tax_category_list());
-  // }, [dispatch]);
-
   useEffect(() => {
     if (taxes.tax_types === undefined || taxes.tax_types.length === 0) {
       dispatch(get_taxes_type());
@@ -87,8 +83,6 @@ const UpdateTax = (props) => {
 
   useEffect(() => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
-      // setTaxOption(0);
-      // setTaxType(taxes.tax_types[0]._id || "");
 
       setTaxType(
         taxes.tax_row_data.tax_type !== undefined &&
@@ -136,14 +130,6 @@ const UpdateTax = (props) => {
           }));
         });
         setStoreId(stores);
-        // const data = {
-        //   storeId: JSON.stringify(
-        //     stores
-        //       .filter((item) => item.isSelected === true)
-        //       .map((item) => item._id)
-        //   ),
-        // };
-        // dispatch(get_catgeory_item(data));
       }
 
       setFields({
@@ -169,12 +155,11 @@ const UpdateTax = (props) => {
         taxes.tax_row_data !== undefined &&
         Object.keys(taxes.tax_row_data).length > 0
       ) {
-        setChecked(
-          taxes.tax_row_data.items.length > 0 ||
+        const check = taxes.tax_row_data.items.length > 0 ||
             taxes.tax_row_data.categories.length > 0
             ? true
             : false
-        );
+        setChecked(check);
       }
     } 
     let dine = taxes.tax_row_data.dinings;
@@ -183,7 +168,16 @@ const UpdateTax = (props) => {
         setChecked(true)
       }
     }
-  }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
+    if(taxes.tax_row_data){
+      if(typeof taxes.tax_row_data.items !== "undefined"){
+        taxes.category_items.map(itm => {
+            const check = taxes.tax_row_data.items.includes(itm._id)
+            itm.isSelected = check
+        })
+      }
+    }
+  // }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
+  }, [taxes.tax_row_data]);
 
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
@@ -207,44 +201,24 @@ const UpdateTax = (props) => {
     storeId
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        // return selectedStore.push({
-        //   storeId: item._id,
-        //   storeTitle: item.title,
-        // });
         return selectedStore.push(item._id);
       });
     const selectedDining = [];
     taxes.tax_dining_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        // return selectedDining.push({
-        //   diningId: item._id,
-        //   diningTitle: item.title,
-        // });
         return selectedDining.push(item._id);
       });
     const selectedCategory = [];
     taxes.tax_category_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        // return selectedCategory.push({
-        //   categoryId: item._id,
-        //   categoryTitle: item.catTitle,
-        // });
         return selectedCategory.push(item._id);
       });
     const selectedCategoryItems = [];
     taxes.category_items
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        // return selectedCategoryItems.push({
-        //   itemId: item._id,
-        //   itemName: item.name,
-        //   categoryId:
-        //     item.category !== undefined && item.category !== null
-        //       ? item.category.id
-        //       : "0",
-        // });
         return selectedCategoryItems.push(item._id);
       });
     const types = (taxes.tax_types || []).filter(
@@ -262,17 +236,6 @@ const UpdateTax = (props) => {
         options.length === 0
           ? ""
           : options[0]._id || "0",
-      // tax_type: JSON.stringify({
-      //   id: types[0] ? types[0]._id : "",
-      //   title: types[0] ? types[0].title : "",
-      // }),
-      // tax_option:
-      //   options.length === 0
-      //     ? JSON.stringify({ id: "0", title: "-" })
-      //     : JSON.stringify({
-      //         id: options[0]._id || "0",
-      //         title: options[0].title || "-",
-      //       }),
       stores: selectedStore,
       dinings: selectedDining,
       categories: typeof selectedCategory[0] !== "undefined" &&  selectedCategory[0] == "0" ? [] : selectedCategory,

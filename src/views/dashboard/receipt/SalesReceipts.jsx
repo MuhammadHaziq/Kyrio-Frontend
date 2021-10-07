@@ -108,7 +108,7 @@ const SalesReceipts = () => {
                     </svg>
                     Export
                   </CButton>
-                  {user._id === user.owner_id ? (
+                  {/* {user._id === user.owner_id ? (
                     <React.Fragment>
                       <ConformationAlert
                         button_text="Delete"
@@ -125,7 +125,7 @@ const SalesReceipts = () => {
                     </React.Fragment>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </CCol>
               </CRow>
             </CCardHeader>

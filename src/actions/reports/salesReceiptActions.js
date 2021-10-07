@@ -5,8 +5,9 @@ import {
   DELETE_SALES_RECEIPT_SUMMARY,
   ROW_DATA_SALES_RECEIPT_SUMMARY,
   TOGGLE_RECEIPT_SIDEBAR,
+  CANCEL_RECEIPT,
   MESSAGE,
-  ERROR_MESSAGE,
+  ERROR_MESSAGE
 } from "../../constants/ActionTypes";
 import authAxios from '../../constants/authAxios'
 
@@ -83,107 +84,12 @@ export const delete_receipt_summary = (ids) => {
       type: DELETE_SALES_RECEIPT_SUMMARY,
       response: JSON.parse(ids),
     });
-    // try {
-    //     authAxios({
-    //         method: "DELETE",
-    //         url: `employee/employeeList/${ids}`,
-    //        
-    //     })
-    //         .then((response) => {
-    //             dispatch({ type: DELETE_SALES_RECEIPT_SUMMARY, response: JSON.parse(ids) });
-    //             let msg = {
-    //                 open: true,
-    //                 message:
-    //                     JSON.parse(ids).length > 1
-    //                         ? "Sales Deleted Successfully"
-    //                         : "Sale Deleted Successfully",
-    //                 object: {},
-    //                 error: false,
-    //             };
-    //             dispatch({ type: MESSAGE, data: msg });
-    //         })
-    //         .catch((error) => {
-    //             console.log("err", error.response);
-    //             let msg = {
-    //                 open: true,
-    //                 message:
-    //                     typeof error.response != "undefined"
-    //                         ? error.response.status === 404
-    //                             ? error.response.statusText
-    //                             : error.response.data.message
-    //                         : ERROR_MESSAGE,
-    //                 object:
-    //                     typeof error.response != "undefined"
-    //                         ? error.response.data || {}
-    //                         : {},
-    //                 error: true,
-    //             };
-    //             dispatch({ type: MESSAGE, data: msg });
-    //         });
-    // } catch (error) {
-    //     console.log("err catch", error);
-    //     let msg = {
-    //         open: true,
-    //         message:
-    //             typeof error.response != "undefined"
-    //                 ? error.response.status === 404
-    //                     ? error.response.statusText
-    //                     : error.response.data.message
-    //                 : ERROR_MESSAGE,
-    //         object: {},
-    //         error: true,
-    //     };
-    //     dispatch({ type: MESSAGE, data: msg });
-    // }
   };
 };
 
 export const update_row_data = (data, status) => {
   return (dispatch) => {
-    // try {
     dispatch({ type: ROW_DATA_SALES_RECEIPT_SUMMARY, response: [data], status: status });
-    //   authAxios({
-    //     method: "GET",
-    //     url: `sales/`,
-    //     data: data
-
-    //   })
-    //     .then((response) => {
-    //       dispatch({ type: ROW_DATA_SALES_RECEIPT_SUMMARY, response: response.data, status: status });
-    //     })
-    //     .catch((error) => {
-    //       console.log("err", error.response);
-    //       let msg = {
-    //         open: true,
-    //         message:
-    //           typeof error.response != "undefined"
-    //             ? error.response.status === 404
-    //               ? error.response.statusText
-    //               : error.response.data.message
-    //             : ERROR_MESSAGE,
-    //         object:
-    //           typeof error.response != "undefined"
-    //             ? error.response.data || {}
-    //             : {},
-    //         error: true,
-    //       };
-    //       dispatch({ type: MESSAGE, data: msg });
-    //     });
-    // } catch (error) {
-    //   console.log("err catch", error);
-    //   let msg = {
-    //     open: true,
-    //     message:
-    //       typeof error.response != "undefined"
-    //         ? error.response.status === 404
-    //           ? error.response.statusText
-    //           : error.response.data.message
-    //         : ERROR_MESSAGE,
-    //     object: {},
-    //     error: true,
-    //   };
-    //   dispatch({ type: MESSAGE, data: msg });
-    // }
   };
 };
 export const toggle_receipt_sideBar = (status) => {
@@ -204,10 +110,15 @@ export const cancel_receipt = (data) => {
 
       })
         .then((response) => {
+          
+          dispatch({
+            type: CANCEL_RECEIPT,
+            data: response.data
+          })
           if (response.data.message !== undefined && response.data.message !== null) {
             let msg = {
               open: true,
-              message: response.data.message || 'Record Updated Sccuessfully',
+              message: response.data.message || '',
               object: {},
               error: false,
             };
@@ -215,6 +126,7 @@ export const cancel_receipt = (data) => {
           }
         })
         .catch((error) => {
+          console.log(error)
           let msg = {
             open: true,
             message:
@@ -234,7 +146,7 @@ export const cancel_receipt = (data) => {
     } catch (error) {
       console.log("err catch", error);
       let msg = {
-        open: true,
+        open: false,
         message:
           typeof error.response != "undefined"
             ? error.response.status === 404

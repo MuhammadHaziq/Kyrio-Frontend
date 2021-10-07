@@ -17,11 +17,9 @@ import {
   CFormGroup,
   CLabel,
 } from "@coreui/react";
-import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_category_summary,
-  delete_sales_summary,
+  get_sales_category_summary
 } from "../../../actions/reports/salesCategoryActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
@@ -32,17 +30,16 @@ const Categories = () => {
 
   const category_sales_summary = useSelector((state) => state.reports.salesCategoryReducer.category_sales_summary)
   const [columns, setColumns] = useState([
-    { name: "item_sold", title: "Item Sold", isHidden: false },
-    { name: "gross_sales", title: "Gross Sales", isHidden: false },
-    { name: "item_refund", title: "Item Refund", isHidden: false },
-    { name: "refunds", title: "Refunds", isHidden: false },
-    { name: "total_price", title: "Total Price", isHidden: false },
-    { name: "discount", title: "Discount", isHidden: false },
-    { name: "net_sales", title: "Net Sales", isHidden: false },
-    { name: "cost_of_good", title: "Cost Of Good", isHidden: false },
-    { name: "gross_profit", title: "Gross Profit", isHidden: false },
-    { name: "margin", title: "Margin", isHidden: false },
-    { name: "taxes", title: "Taxes", isHidden: true },
+    { key: "category",      label: "Category",       filter: true, isShow: true,  disabled: true },
+    { key: "ItemsSold",     label: "Items sold",     filter: true, isShow: true,  disabled: false },
+    { key: "GrossSales",    label: "Gross sales",    filter: true, isShow: true,  disabled: false },
+    { key: "ItemsRefunded", label: "Items refunded", filter: true, isShow: true,  disabled: false },
+    { key: "Refunds",       label: "Refunds",        filter: true, isShow: true,  disabled: false },
+    { key: "discounts",     label: "Discount",       filter: true, isShow: true,  disabled: false },
+    { key: "NetSales",      label: "Net sales",      filter: true, isShow: true,  disabled: false },
+    { key: "CostOfGoods",   label: "Cost of goods",  filter: true, isShow: true,  disabled: false },
+    { key: "GrossProfit",   label: "Gross profit",   filter: true, isShow: true,  disabled: false },
+    { key: "Margin",        label: "Margin",         filter: true, isShow: false, disabled: true },
   ]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
@@ -53,22 +50,7 @@ const Categories = () => {
     { days: 365, name: "Years", disable: true, active: false },
   ]);
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [filterReset, setFilterReset] = useState(false);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
 
   useEffect(() => {
     return () => {
@@ -77,23 +59,20 @@ const Categories = () => {
     };
   }, []);
 
-  const deleteSalesCategory = () => {
-    console.log("Delete");
-    setShowAlert(!showAlert);
-  };
-
-  const handleOnChangeCheck = (title) => {
-    setColumns(
-      columns.slice().map((item) => {
-        if (item.title.trim() === title.trim()) {
-          return {
-            ...item,
-            isHidden: !item.isHidden,
-          };
-        }
-        return item;
-      })
-    );
+  const handleOnChangeCheck = (itm) => {
+    if(!itm.disabled){
+      setColumns(
+        columns.slice().map((item) => {
+          if (item.key.trim() === itm.key.trim()) {
+            return {
+              ...item,
+              isShow: !item.isShow,
+            };
+          }
+          return item;
+        })
+      );
+    }
   };
 
   return (
@@ -134,24 +113,6 @@ const Categories = () => {
                     </svg>
                     Export
                   </CButton>
-                  {true ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesCategory}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
                 </CCol>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
@@ -170,7 +131,7 @@ const Categories = () => {
                           return (
                             <React.Fragment>
                               <CDropdownItem
-                                onClick={() => handleOnChangeCheck(item.title)}
+                                onClick={() => handleOnChangeCheck(item)}
                               >
                                 <CFormGroup variant="custom-checkbox" inline>
                                   <CInputCheckbox
@@ -178,13 +139,14 @@ const Categories = () => {
                                     name="datatableColumn"
                                     id={"datatableColumn" + index}
                                     value={index}
-                                    checked={!item.isHidden}
+                                    disabled={item.disabled}
+                                    checked={item.isShow}
                                   />
                                   <CLabel
                                     variant="custom-checkbox"
                                     id={"datatableColumn" + index}
                                   >
-                                    {item.title}
+                                    {item.label}
                                   </CLabel>
                                 </CFormGroup>
                               </CDropdownItem>

@@ -25,6 +25,7 @@ import moment from "moment";
 import SalesSummaryDatatable from "../../datatables/sales/SalesSummaryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
+import { filterDatesAction, filterDaysAction } from "../../components/reportFilters/FilterFunction"
 
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
@@ -80,243 +81,25 @@ const Dashboard = () => {
   };
 
   const days = (from, to) => {
-    var d = from,
-      a = [],
-      i = 0;
-    var daysDates = [];
-    const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
-    var time = moment(to).toDate(); // This will return a copy of the Date that the moment uses
-    time.setHours(0);
-    time.setMinutes(0);
-    time.setSeconds(0);
-    time.setMilliseconds(0);
-    const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
-    const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
-    if (getNatural(daysDiff) > 0) {
-      const dateGape =
-        daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-      while (i < getNatural(dateGape)) {
-        daysDates.push(dateformat(d, "mmm dd yyyy"));
-        a.push(dateformat(d, "mmm dd"));
-        d = moment(d, "DD-MM-YYYY").add(diff, "days");
-        i++;
-      }
-      if (i === getNatural(daysDiff)) {
-        // include last day
-        daysDates.push(dateformat(d, "mmm dd yyyy"));
-        a.push(dateformat(d, "mmm dd"));
-      }
-      setFilter("Days");
-    } else if (getNatural(daysDiff) === 0) {
-      const totalHours = 24;
-      var i = 1;
-      while (i <= totalHours) {
-        daysDates.push(moment(time).format("LT"));
-        a.push(moment(time).format("LT"));
-        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
-        i++;
-      }
-      setFilter("Hours");
-    }
-    setDays(a);
-    setDates(daysDates);
+    const result = await filterDaysAction(from, to)
+    setFilter(result.filter);
+    setDays(result.days);
+    setDates(result.dates);
   };
 
   const days_filter = (from, to, filterName) => {
-    var d = from,
-      a = [],
-      i = 0;
-    var daysDates = [];
-    const daysDiff = moment.duration(moment(to).diff(moment(from))).asDays();
-    var time = moment(to).toDate(); // This will return a copy of the Date that the moment uses
-    time.setHours(0);
-    time.setMinutes(0);
-    time.setSeconds(0);
-    time.setMilliseconds(0);
-    const monthDiff = moment.duration(moment(to).diff(moment(from))).asMonths();
-    const diff = getNatural(monthDiff) === 0 ? 1 : getNatural(monthDiff);
-    if (getNatural(daysDiff) === 0 && filterName === "Hours") {
-      const totalHours = 24;
-      var i = 1;
-      while (i <= totalHours) {
-        daysDates.push(moment(time).format("LT"));
-        a.push(moment(time).format("LT"));
-        time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
-        i++;
-      }
-      setFilter("Hours");
-      setDays(a);
-      setDates(daysDates);
-    } else if (getNatural(daysDiff) > 1 && filterName === "Days") {
-      const dateGape =
-        daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-      while (i < getNatural(dateGape)) {
-        daysDates.push(dateformat(d, "mmm dd yyyy"));
-        a.push(dateformat(d, "mmm dd"));
-        d = moment(d, "DD-MM-YYYY").add(diff, "days");
-        i++;
-      }
-      if (i === getNatural(daysDiff)) {
-        // include last day
-        daysDates.push(dateformat(d, "mmm dd yyyy"));
-        a.push(dateformat(d, "mmm dd"));
-      }
-      setDays(a);
-      setFilter("Days");
-      setDates(daysDates);
-    } else if (getNatural(daysDiff) >= 7 && filterName === "Weeks") {
-      let j = 0;
-      let weeks = [];
-      let weekDays = [];
-      while (j <= daysDiff) {
-        let currentDay = moment(d).day();
-        if (j === 0) {
-          currentDay = moment(d).day();
-        }
-        let weekRange = "";
-        let weekRangeDays = "";
-        weekRangeDays = dateformat(d, "mmm dd yyyy");
-        weekRange = dateformat(d, "mmm dd");
-        if (currentDay === 7) {
-          weekRangeDays =
-            dateformat(d, "mmm dd yyyy") + " - " + dateformat(d, "mmm dd yyyy");
-          weekRange = dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
-          weekDays.push(weekRangeDays);
-          weeks.push(weekRange);
-          ++j;
-        } else {
-          for (; currentDay <= 7; currentDay++) {
-            const startDate = dateformat(d, "dd-mm-yyyy");
-            const endDate = dateformat(to, "dd-mm-yyyy");
-            if (
-              moment(startDate, "DD-MM-YYYY").isSame(
-                moment(endDate, "DD-MM-YYYY")
-              )
-            ) {
-              weekRangeDays += " - " + dateformat(d, "mmm dd yyyy");
-              weekRange += " - " + dateformat(d, "mmm dd");
-              weekDays.push(weekRangeDays);
-              weeks.push(weekRange);
-              return;
-            } else if (currentDay === 6) {
-              weekRangeDays += " - " + dateformat(d, "mmm dd yyyy");
-              weekRange += " - " + dateformat(d, "mmm dd");
-              weekDays.push(weekRangeDays);
-              weeks.push(weekRange);
-            }
-            d = moment(d, "DD-MM-YYYY").add(1, "days");
-            ++j;
-          }
-        }
-        setDays(weeks);
-        setDates(weekDays);
-      }
-    } else if (getNatural(daysDiff) >= 28 && filterName === "Months") {
-      let monthValues = [];
-      let monthDates = [];
-      // &&
-      // moment(startDate).isSame(endDate, "year")
-      while (moment(to).isAfter(d, "month")) {
-        const startDate = dateformat(d, "yyyy-mm-dd");
-        monthValues.push(dateformat(startDate, "mmm"));
-        monthDates.push(dateformat(startDate, "mmm yyyy"));
-        d = moment(d, "DD-MM-YYYY").add(1, "M");
-      }
-      if (moment(d).isSame(to, "month")) {
-        const startDate = dateformat(d, "yyyy-mm-dd");
-        monthValues.push(dateformat(startDate, "mmm"));
-        monthDates.push(dateformat(startDate, "mmm yyyy"));
-      }
-      setDays(monthValues);
-      setDates(monthDates);
-    } else if (getNatural(daysDiff) >= 118 && filterName === "Quaters") {
-      const totalQuater = Math.floor(to.diff(d, "months") / 3);
-      let j = 0;
-      let quaters = [];
-      let quatersDates = [];
-      while (j <= totalQuater) {
-        let currentQuater = moment(d).month() + 1;
-        if (j === 0) {
-          currentQuater = moment(d).month() + 1;
-        }
-        let quaterRange = "";
-        let quaterRangeDate = "";
-        quaterRange = dateformat(d, "mmm dd");
-        quaterRangeDate = dateformat(d, "mmm dd yyyy");
-        if (
-          (currentQuater === 3 ||
-            currentQuater === 6 ||
-            currentQuater === 9 ||
-            currentQuater === 12) &&
-          j === 0
-        ) {
-          quaterRange =
-            moment(d).format("MMM-DD") +
-            " - " +
-            moment(d).endOf("month").format("MMM-DD");
-          quaterRangeDate =
-            moment(d).format("MMM DD YYYY") +
-            " - " +
-            moment(d).endOf("month").format("MMM DD YYYY");
-          // dateformat(d, "mmm dd") + " - " + dateformat(d, "mmm dd");
-          quaters.push(quaterRange);
-          quatersDates.push(quaterRangeDate);
-          d = moment(d, "DD-MM-YYYY").add(1, "M");
-          ++j;
-        } else {
-          quaterRangeDate = moment(d).format("MMM DD YYYY");
-          quaterRange = moment(d).format("MMM-DD");
-          // dateformat(d, "mmm dd");
-          if (
-            moment(d).month() + 1 === 2 ||
-            moment(d).month() + 1 === 5 ||
-            moment(d).month() + 1 === 8 ||
-            moment(d).month() + 1 === 11
-          ) {
-            d = moment(d, "DD-MM-YYYY").add(1, "M");
-          } else {
-            d = moment(d, "DD-MM-YYYY").add(2, "M");
-          }
-          //
-          quaterRangeDate =
-            quaterRangeDate +
-            " - " +
-            moment(d).endOf("month").format("MMM DD YYYY");
-          quaterRange =
-            quaterRange + " - " + moment(d).endOf("month").format("MMM-DD");
-          // dateformat(d, "mmm dd");
-          quatersDates.push(quaterRangeDate);
-          quaters.push(quaterRange);
-          d = moment(d, "DD-MM-YYYY").add(1, "M");
-          ++j;
-        }
-      }
-      setDays(quaters);
-      setDates(quatersDates);
-    } else if (getNatural(daysDiff) >= 365 && filterName === "Years") {
-      let endYear = moment(to).year();
-      let startYear = moment(from).year();
-      let years = [];
-      let yearsDate = [];
-      while (startYear <= endYear) {
-        const yearRange = dateformat(d, "yyyy");
-        years.push(yearRange);
-        yearsDate.push(yearRange);
-        d = moment(d, "DD-MM-YYYY").add(1, "Y");
-        startYear = startYear + 1;
-      }
-      setDays(years);
-      setDates(yearsDate);
-    }
+    const result = await filterDatesAction(from, to, filterName)
+    setFilter(result.filter);
+    setDays(result.days);
+    setDates(result.dates);
   };
 
   useEffect(() => {
-    dispatch(get_sales_summary());
+    // dispatch(get_sales_summary());
     return () => {
       setDays([]);
       setLoading(false);
       setFilter("");
-      setSalesFilter("Gross Sales");
       dispatch(unmount_filter());
     };
   }, []);
@@ -325,39 +108,7 @@ const Dashboard = () => {
     if (prevDays !== Days && prevDays !== undefined) {
       setSales([
         {
-          data: [
-            1,
-            2,
-            3,
-            4,
-            5,
-            62,
-            21,
-            142,
-            43,
-            1,
-            123,
-            123,
-            123,
-            14,
-            213,
-            3,
-            421,
-            123,
-            124,
-            123,
-            123,
-            412,
-            2312,
-            1412,
-            132,
-            24,
-            3435,
-            23,
-            12433,
-            123,
-            53,
-          ],
+          data: [],
           label: "Gross sales",
           backgroundColor: hexToRgba(brandSuccess, 10),
           borderColor: brandSuccess,
@@ -365,39 +116,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            6757,
-            5,
-            62,
-            21,
-            142,
-            43,
-            1,
-            123,
-            123,
-            23,
-            14,
-            4545,
-            3,
-            131,
-            643,
-            124,
-            123,
-            12351,
-            843,
-            786,
-            1412,
-            132,
-            24,
-            511,
-            23,
-            9867,
-            123,
-            42,
-          ],
+          data: [],
           label: "Refunds",
           backgroundColor: hexToRgba(brandDanger, 10),
           borderColor: brandDanger,
@@ -405,39 +124,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            32,
-            3141,
-            57,
-            55,
-            6241,
-            4123,
-            0,
-            85,
-            1,
-            767,
-            3453,
-            23,
-            341,
-            4545,
-            453,
-            2234,
-            453,
-            9866,
-            876,
-            542,
-            24,
-            23,
-            14243,
-            2435,
-            3454,
-            764,
-            456,
-            4,
-            234,
-            87,
-          ],
+          data: [],
           label: "Discounts",
           backgroundColor: hexToRgba(brandWarning, 10),
           borderColor: brandWarning,
@@ -445,39 +132,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            67,
-            5213,
-            5223,
-            211,
-            200,
-            67,
-            34,
-            1256,
-            634,
-            23,
-            598,
-            235,
-            0,
-            4223,
-            3456,
-            123,
-            345,
-            875,
-            56,
-            45,
-            2356,
-            234,
-            634,
-            4562,
-            4563,
-            0,
-            653,
-            234,
-          ],
+          data: [],
           label: "Net Sales",
           backgroundColor: hexToRgba(brandInfo, 10),
           borderColor: brandInfo,
@@ -485,39 +140,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            757,
-            534,
-            4242,
-            2126,
-            0,
-            5844,
-            56,
-            12433,
-            1223,
-            23,
-            675,
-            7674,
-            234,
-            2368,
-            2346,
-            345,
-            123,
-            3466,
-            45,
-            56,
-            23624,
-            345,
-            234,
-            2432,
-            4325,
-            234,
-            546,
-            345,
-          ],
+          data: [],
           label: "Gross profit",
           backgroundColor: hexToRgba(brandPrimary, 10),
           borderColor: brandPrimary,
@@ -527,39 +150,7 @@ const Dashboard = () => {
       ]);
       setOrginalSale([
         {
-          data: [
-            1,
-            2,
-            3,
-            4,
-            5,
-            62,
-            21,
-            142,
-            43,
-            1,
-            123,
-            123,
-            123,
-            14,
-            213,
-            3,
-            421,
-            123,
-            124,
-            123,
-            123,
-            412,
-            2312,
-            1412,
-            132,
-            24,
-            3435,
-            23,
-            12433,
-            123,
-            53,
-          ],
+          data: [],
           label: "Gross sales",
           backgroundColor: hexToRgba(brandSuccess, 10),
           borderColor: brandSuccess,
@@ -567,39 +158,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            6757,
-            5,
-            62,
-            21,
-            142,
-            43,
-            1,
-            123,
-            123,
-            23,
-            14,
-            4545,
-            3,
-            131,
-            643,
-            124,
-            123,
-            12351,
-            843,
-            786,
-            1412,
-            132,
-            24,
-            511,
-            23,
-            9867,
-            123,
-            42,
-          ],
+          data: [],
           label: "Refunds",
           backgroundColor: hexToRgba(brandDanger, 10),
           borderColor: brandDanger,
@@ -607,39 +166,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            32,
-            3141,
-            57,
-            55,
-            6241,
-            4123,
-            0,
-            85,
-            1,
-            767,
-            3453,
-            23,
-            341,
-            4545,
-            453,
-            2234,
-            453,
-            9866,
-            876,
-            542,
-            24,
-            23,
-            14243,
-            2435,
-            3454,
-            764,
-            456,
-            4,
-            234,
-            87,
-          ],
+          data: [],
           label: "Discounts",
           backgroundColor: hexToRgba(brandWarning, 10),
           borderColor: brandWarning,
@@ -647,39 +174,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            67,
-            5213,
-            5223,
-            211,
-            200,
-            67,
-            34,
-            1256,
-            634,
-            23,
-            598,
-            235,
-            0,
-            4223,
-            3456,
-            123,
-            345,
-            875,
-            56,
-            45,
-            2356,
-            234,
-            634,
-            4562,
-            4563,
-            0,
-            653,
-            234,
-          ],
+          data: [],
           label: "Net Sales",
           backgroundColor: hexToRgba(brandInfo, 10),
           borderColor: brandInfo,
@@ -687,39 +182,7 @@ const Dashboard = () => {
           borderWidth: 2,
         },
         {
-          data: [
-            1,
-            344,
-            3,
-            757,
-            534,
-            4242,
-            2126,
-            0,
-            5844,
-            56,
-            12433,
-            1223,
-            23,
-            675,
-            7674,
-            234,
-            2368,
-            2346,
-            345,
-            123,
-            3466,
-            45,
-            56,
-            23624,
-            345,
-            234,
-            2432,
-            4325,
-            234,
-            546,
-            345,
-          ],
+          data: [],
           label: "Gross profit",
           backgroundColor: hexToRgba(brandPrimary, 10),
           borderColor: brandPrimary,
@@ -825,7 +288,6 @@ const Dashboard = () => {
         matches: daysDates,
       };
       dispatch(get_grap_sales_summary(data));
-      console.log("data", data);
     }
   }, [
     filterComponent.filterStores,
@@ -859,7 +321,6 @@ const Dashboard = () => {
         matches: daysDates,
       };
       dispatch(get_grap_sales_summary(data));
-      console.log("data", data);
     }
     // daysDates
   }, [
@@ -947,9 +408,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <FilterComponent
+      {/* <FilterComponent
         handleOnChangeSales={() => handleOnChangeSales("All Sales")}
-      />
+      /> */}
 
       <CCard>
         <CCardHeader>

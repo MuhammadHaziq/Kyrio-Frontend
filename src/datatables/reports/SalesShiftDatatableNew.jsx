@@ -61,6 +61,7 @@ const SalesShiftDatatableNew = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
     />
   );

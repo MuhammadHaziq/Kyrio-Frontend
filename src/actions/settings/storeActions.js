@@ -190,15 +190,7 @@ export const delete_store = (ids) => {
 
       })
         .then((response) => {
-          console.log(response);
           let ids = [];
-          // let msg = {
-          //   open: true,
-          //   message: response.data.message,
-          //   object: {},
-          //   error: false,
-          // };
-          // dispatch({ type: MESSAGE, data: msg });
           if (response.data.message.length > 0) {
             response.data.message.map((item) => {
               let msg = {

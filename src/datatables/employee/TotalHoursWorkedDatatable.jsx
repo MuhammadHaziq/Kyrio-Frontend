@@ -19,6 +19,7 @@ const TotalHoursWorkedDatatable = (props) => {
       columnFilter
       sorter
       hover
+      outlined
       pagination
     />
   );

@@ -69,7 +69,7 @@ const AddPosDevice = (props) => {
     } else {
       const data = {
         title: fields.pos_device_name,
-        store: storeId,
+        store: storeId.storeId,
       };
       dispatch(add_new_pos_device(data));
     }

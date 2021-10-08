@@ -332,30 +332,6 @@ const ReportsFilters = (props) => {
 
       days_filter(dateRange.startDate, dateRange.endDate, filter);
 
-      // props.setDaysFilter(
-      //   props.daysFilter.map((item) => {
-      //     if (parseInt(item.days) <= getNatural(timeDiff)) {
-      //       return {
-      //         ...item,
-      //         disable:
-      //           getNatural(timeDiff) == 0
-      //             ? false
-      //             : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0
-      //             ? true
-      //             : false,
-      //         active: item.name === filter ? true : false,
-      //       };
-      //     } else {
-      //       return {
-      //         ...item,
-      //         disable: true,
-      //         active: false,
-      //       };
-      //     }
-      //   })
-      // );
-      // props.setFilter(filter);
-      //
     }
   }, [
     (dateRange.startDate !== prevStartDate &&
@@ -374,6 +350,7 @@ const ReportsFilters = (props) => {
       employeeId.length > 0 &&
       props.resetFilter === false
     ) {
+      days_filter(startDate, endDate, props.filter)
       const data = {
         startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
         endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
@@ -433,6 +410,7 @@ const ReportsFilters = (props) => {
   }, [Days]);
 
   useEffect(() => {
+    
     if (
       Days !== undefined &&
       Days.length > 0 &&

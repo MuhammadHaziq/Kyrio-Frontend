@@ -157,9 +157,9 @@ const ModalSelectItemsTax = (props) => {
     ).length;
     let count = 0;
     if(check === 1){
-      count = category_items2.filter(itm => itm?.isSelected && itm.category._id === item._id).length 
+      count = category_items2.filter(itm => itm?.isSelected && itm?.category?._id === item?._id)?.length 
     }
-    console.log(category_items2)
+    
     if(count > 1) {
       return count+" items selected";
     } else if(count > 0){

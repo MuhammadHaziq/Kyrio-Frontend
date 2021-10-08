@@ -89,7 +89,7 @@ const DashboardFilter = (props) => {
     }, [data]);
     return ref.current;
   };
-
+  
   var prevStartTime = usePrevious(timeRange.startTime);
   var prevEndTime = usePrevious(timeRange.endTime);
 
@@ -370,25 +370,26 @@ const DashboardFilter = (props) => {
       employeeId.length > 0 &&
       props.resetFilter === false
     ) {
-      const data = {
-        startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
-        endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
-        stores: storeId
-          .filter((item) => item.isSelected === true)
-          .map((item) => {
-            return item._id;
-          }),
-        employees: employeeId
-          .filter((item) => item.isSelected === true)
-          .map((item) => {
-            return item._id;
-          }),
-        divider: "Hours",
-        graph: Days,
-        // need this formate with year to match with date filter exactly
-        matches: daysDates,
-      };
-      dispatch(get_grap_sales_summary(data));
+      days_filter(startDate, endDate, props.filter)
+      // const data = {
+      //   startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
+      //   endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
+      //   stores: storeId
+      //     .filter((item) => item.isSelected === true)
+      //     .map((item) => {
+      //       return item._id;
+      //     }),
+      //   employees: employeeId
+      //     .filter((item) => item.isSelected === true)
+      //     .map((item) => {
+      //       return item._id;
+      //     }),
+      //   divider: "Hours",
+      //   graph: Days,
+      //   // need this formate with year to match with date filter exactly
+      //   matches: daysDates,
+      // };
+      // dispatch(get_grap_sales_summary(data));
     }
   }, [
     storeId !== undefined &&

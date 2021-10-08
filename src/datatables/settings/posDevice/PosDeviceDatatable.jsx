@@ -86,7 +86,7 @@ const PosDeviceDatatable = (props) => {
           );
         },
         store: (item) => {
-          return <td>{item.store.title}</td>;
+          return <td>{item?.store?.title}</td>;
         },
         udid: (item) => {
           return (

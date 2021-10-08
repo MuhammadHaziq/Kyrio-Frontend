@@ -66,10 +66,15 @@ const AddPosDevice = (props) => {
         ...errors,
         selectedStoreId: true,
       });
+    } else if(storeId?.storeId === 0){
+      setErrors({
+        ...errors,
+        selectedStoreId: true,
+      });
     } else {
       const data = {
         title: fields.pos_device_name,
-        store: storeId.storeId,
+        store: storeId?.storeId == undefined ? storeId : storeId?.storeId,
       };
       dispatch(add_new_pos_device(data));
     }

@@ -20,12 +20,7 @@ const SalesReceiptDatatable = (props) => {
     dispatch(toggle_receipt_summary_single_select(item));
   };
 
-  const clickRow = (item, index, column) => {
-    console.log('Row Click', item, index)
-    // const data = {
-    //   "ticket": "This is updated Sale Ticket",
-    //   sale_id: item._id
-    // }
+  const clickRow = (item) => {
     dispatch(update_row_data(item, true));
   };
 

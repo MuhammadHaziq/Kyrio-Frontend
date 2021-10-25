@@ -30,19 +30,7 @@ const CancelReceipt = props => {
     const closeReceiptDetail = () => {
         dispatch(toggle_receipt_sideBar(false))
     }
-
-    // useEffect(() => {
-    //     if(refund_status){
-    //         const no = (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].receipt_number : ''
-    //         showAlert({
-    //             button_text: "Disbale",
-    //             heading: "Cancel receipt",
-    //             section:
-    //               "Unable to cancel receipt that was fully or partially refunded. Please cancel refund receipt first: "+no,
-    //           });
-    //     }
-    // },[refund_status])
-
+    
     const cancelReceiptFunc = () => {
         const type = sales_receipt_data?.[0]?.receipt_type
         if(type === "REFUND"){

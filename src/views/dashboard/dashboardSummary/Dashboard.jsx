@@ -387,8 +387,8 @@ const Dashboard = (props) => {
                 Gross Sales
               </div>
               <strong>
-                {formatter.format(grossSales)} (
-                {grossSales === "0" || grossSales === 0 ? 0 : grossSales / 100})
+                {formatter.format(grossSales)} 
+                {/* ({grossSales === "0" || grossSales === 0 ? 0 : parseInt(grossSales / 100)}) */}
               </strong>
               <CProgress
                 className="progress-xs mt-2"

@@ -8,7 +8,7 @@ import {
   CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";

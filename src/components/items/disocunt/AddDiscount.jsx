@@ -19,7 +19,7 @@ import {
   CListGroupItem,
   CSwitch,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_disocunt } from "../../../actions/items/discountActions";

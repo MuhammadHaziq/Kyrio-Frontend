@@ -13,7 +13,7 @@ import {
   CListGroupItem,
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { toggle_category_item } from "../../../actions/settings/taxesActions.js";
 const ModalCategoryItemsTax = (props) => {
   const dispatch = useDispatch();

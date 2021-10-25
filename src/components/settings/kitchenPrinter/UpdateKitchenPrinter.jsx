@@ -17,7 +17,7 @@ import {
   CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import {
   update_kitchen_printer,
   delete_kitchen_printer,

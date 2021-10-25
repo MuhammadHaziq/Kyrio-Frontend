@@ -19,7 +19,7 @@ import {
 } from "@coreui/react";
 import { FaRegCreditCard, FaCalendarAlt, FaLock } from "react-icons/fa";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import Select from "react-select";
 const BusniessDetail = (props) => {
   const [collapse, setCollapse] = useState([true, true]);

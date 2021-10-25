@@ -14,7 +14,7 @@ import {
   CInvalidFeedback,
   CFormText,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";

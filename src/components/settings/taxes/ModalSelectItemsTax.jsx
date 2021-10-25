@@ -17,7 +17,7 @@ import {
   CInput,
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import {
   toggle_category,
   get_catgeory_item,

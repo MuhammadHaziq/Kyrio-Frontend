@@ -21,7 +21,7 @@ import {
   CSwitch,
   CInvalidFeedback,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import TaxDiningOption from "./TaxDiningOption.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import {

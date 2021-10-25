@@ -10,7 +10,7 @@ import {
   CCollapse,
 } from "@coreui/react";
 import StoreDatatable from "../../../datatables/settings/stores/StoreDatatable";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddStore from "../../../components/settings/stores/AddStore";
 import UpdateStore from "../../../components/settings/stores/UpdateStore";

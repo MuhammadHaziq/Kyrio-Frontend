@@ -18,7 +18,7 @@ import {
   CListGroup,
   CListGroupItem
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";

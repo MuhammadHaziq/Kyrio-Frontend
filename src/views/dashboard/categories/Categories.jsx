@@ -25,6 +25,9 @@ import { useSelector, useDispatch } from "react-redux";
 import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
+
 const Categories = () => {
   const dispatch = useDispatch();
 
@@ -39,7 +42,7 @@ const Categories = () => {
     { key: "NetSales",      label: "Net sales",      filter: true, isShow: true,  disabled: false },
     { key: "CostOfGoods",   label: "Cost of goods",  filter: true, isShow: true,  disabled: false },
     { key: "GrossProfit",   label: "Gross profit",   filter: true, isShow: true,  disabled: false },
-    { key: "Margin",        label: "Margin",         filter: true, isShow: false, disabled: true },
+    { key: "Margin",        label: "Margin",         filter: true, isShow: true,  disabled: false },
   ]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
@@ -88,7 +91,53 @@ const Categories = () => {
           <CCard>
             <CCardHeader>
               <CRow>
+              {typeof category_sales_summary !== "undefined" && category_sales_summary.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                <CSVLink data={category_sales_summary.length > 0 ? category_sales_summary.map(itm => {
+                    return {
+                      ["Category"]: itm.category,
+                      ["No. of Items Sold"]: itm.ItemsSold,
+                      ["Gross Sales"]: itm.GrossSales,
+                      ["Total Items Refunded"]: itm.ItemsRefunded,
+                      ["Refunds"]: itm.Refunds,
+                      ["Discounts"]: itm.discounts,
+                      ["Net Sales"]: itm.NetSales,
+                      ["Cost of Goods"]: itm.CostOfGoods,
+                      ["Gross Profit"]: itm.GrossProfit,
+                      ["Margin"]: itm.Margin+"%"
+                    }
+                  }) : []}
+                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
+                  target="_blank"
+                  >
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                      className="c-icon c-icon-sm "
+                      role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      <polygon
+                        fill="var(--ci-primary-color, currentColor)"
+                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                        className="ci-primary"
+                      ></polygon>
+                    </svg>
+                    Export
+                  </CButton>
+                  </CSVLink>
+                </CCol>
+                : ""}
+                {/* <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     color="success"
                     className="btn-square"
@@ -113,7 +162,7 @@ const Categories = () => {
                     </svg>
                     Export
                   </CButton>
-                </CCol>
+                </CCol> */}
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
                     xs="12"

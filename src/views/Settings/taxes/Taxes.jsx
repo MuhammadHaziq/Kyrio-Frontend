@@ -12,7 +12,7 @@ import {
   CSelect,
 } from "@coreui/react";
 import TaxesDatatable from "../../../datatables/settings/taxes/TaxesDatatable";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import AddTax from "../../../components/settings/taxes/AddTax";
 import UpdateTax from "../../../components/settings/taxes/UpdateTax";

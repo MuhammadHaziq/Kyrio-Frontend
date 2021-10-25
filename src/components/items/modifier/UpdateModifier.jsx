@@ -18,7 +18,7 @@ import {
   CListGroup,
   CListGroupItem
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -157,6 +157,7 @@ const UpdateModifier = (props) => {
         title: fields.modifier_name,
         options: modifierFields.map((item) => {
             return {
+              _id: item._id,
               name: item.name,
               price: ReturnNumber(item.price),
               position: item.position,

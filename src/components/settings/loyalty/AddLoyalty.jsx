@@ -15,7 +15,7 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import validator from "validator";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_loyalty } from "../../../actions/settings/loyaltyActions.js";
 import { useDispatch, useSelector } from "react-redux";

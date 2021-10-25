@@ -36,7 +36,7 @@ import {
 } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import NumberFormat from "react-number-format";
 import { add_new_employee } from "../../../actions/employee/employeeListActions";
 import validator from "validator";

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {
   CDataTable,
-  CCardBody,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
+  CTable,
+  CTableHead,
+  CTableRow,
+  CTableHeaderCell
 } from "@coreui/react";
+import Table from 'react-bootstrap/Table'
 import {
   toggle_payment_type_sales_summary_single_select,
   toggle_payment_type_sales_summary_all_select,
@@ -34,24 +35,26 @@ const SalesPaymentTypeDatatableNew = (props) => {
     setSelectAll(!selectAll);
     dispatch(toggle_payment_type_sales_summary_all_select(!selectAll));
   };
+  
   return (
+    <>
     <CDataTable
       items={props.sales_by_paymentType_detail}
       fields={[
-        { key: "payment_type", label: "Payment type", filter: true },
+        { key: "PaymentType", label: "Payment type", filter: true },
         {
-          key: "payment_transaction",
+          key: "ItemsSold",
           label: "Payment transactions",
           filter: true,
         },
-        { key: "payment_amount", label: "Payment amount", filter: true },
+        { key: "GrossSales", label: "Payment amount", filter: true },
         {
-          key: "refund_transaction",
+          key: "ItemsRefunded",
           label: "Refund transactions",
           filter: true,
         },
-        { key: "refund_amount", label: "Refund amount", filter: true },
-        { key: "net_amount", label: "Net amount", filter: true },
+        { key: "Refunds", label: "Refund amount", filter: true },
+        { key: "NetSales", label: "Net amount", filter: true },
       ]}
       itemsPerPage={10}
       columnFilter
@@ -59,9 +62,10 @@ const SalesPaymentTypeDatatableNew = (props) => {
       hover
       outlined
       pagination
-      // clickableRows
-      // onRowClick={clickRow}
+      underTableSlot={""}
     />
+   
+    </>
   );
 };
 

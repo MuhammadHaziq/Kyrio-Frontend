@@ -12,7 +12,7 @@ import {
   CSelect,
 } from "@coreui/react";
 import PosDeviceDatatable from "../../../datatables/settings/posDevice/PosDeviceDatatable";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   get_pos_devices,

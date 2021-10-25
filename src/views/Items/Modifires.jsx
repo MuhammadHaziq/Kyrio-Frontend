@@ -10,7 +10,7 @@ import {
   CButton,
   CFade,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
 import {

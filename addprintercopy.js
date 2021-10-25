@@ -17,7 +17,7 @@ import {
   CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { add_new_kitchen_printer } from "../../../actions/settings/kitchenPrinterActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";

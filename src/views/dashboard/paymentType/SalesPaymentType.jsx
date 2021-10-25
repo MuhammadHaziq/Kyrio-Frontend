@@ -1,60 +1,37 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
-  CRow,
+  CRow
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_payment_type_summary,
-  delete_payment_type_sales_summary,
+  get_sales_payment_type_summary
 } from "../../../actions/reports/salesPaymentTypeActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesPaymentTypeDatatableNew from "../../../datatables/reports/SalesPaymentTypeDatatableNew";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
 
 const SalesPaymentType = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
+  const paymentType_sales_summary = useSelector((state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary)
 
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [filterReset, setFilterReset] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
-    { days: 0, name: "Hours", disable: true },
-    { days: 1, name: "Days", disable: true },
-    { days: 6, name: "Weeks", disable: true },
-    { days: 28, name: "Months", disable: true },
-    { days: 120, name: "Quaters", disable: true },
-    { days: 365, name: "Years", disable: true },
+    { days: 0, name: "Hours", disable: false, active: true },
+    { days: 1, name: "Days", disable: true, active: false },
+    { days: 6, name: "Weeks", disable: true, active: false },
+    { days: 28, name: "Months", disable: true, active: false },
+    { days: 120, name: "Quaters", disable: true, active: false },
+    { days: 365, name: "Years", disable: true, active: false },
   ]);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
-
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
 
   useEffect(() => {
     return () => {
@@ -63,74 +40,67 @@ const SalesPaymentType = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
-    }
-  }, [filterComponent, changeInFilter]);
-
-  const deleteSalesPaymentType = () => {
-    console.log("Delete");
-    setShowAlert(!showAlert);
-  };
-
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      {/* <FilterComponent handleOnChangeSales={() => console.log("No Function")} /> */}
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_sales_payment_type_summary}
+      />
       <CRow>
         <CCol>
           <CCard>
             <CCardHeader>
               <CRow>
+              {typeof paymentType_sales_summary !== "undefined" && paymentType_sales_summary.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton
-                    color="success"
-                    className="btn-square"
-                    variant="outline"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm"
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
+                  <CSVLink data={paymentType_sales_summary.length > 0 ? paymentType_sales_summary.map(itm => {
+                      return {
+                        ["Payment type"]: itm.PaymentType,
+                        ["Payment transactions"]: itm.ItemsSold,
+                        ["Payment amount"]: itm.GrossSales,
+                        ["Refund transactions"]: itm.ItemsRefunded,
+                        ["Refund amount"]: itm.Refunds,
+                        ["Net amount"]: itm.NetSales
+                      }
+                    }) : []}
+                    filename={"SalesByItem"+dateformat(new Date)+".csv"}
+                    target="_blank"
                     >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
-                  </CButton>
-                  {true ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesPaymentType}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
+                    
+                    <CButton
+                      color="success"
+                      className="btn-square"
+                      variant="outline"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="c-icon c-icon-sm"
+                        role="img"
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        <polygon
+                          fill="var(--ci-primary-color, currentColor)"
+                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                          className="ci-primary"
+                        ></polygon>
+                      </svg>
+                      Export
+                    </CButton>
+                    </CSVLink>
                 </CCol>
+                : ""}
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesPaymentTypeDatatableNew sales_by_paymentType_detail={[]} />
+              <SalesPaymentTypeDatatableNew sales_by_paymentType_detail={paymentType_sales_summary} />
             </CCardBody>
           </CCard>
         </CCol>

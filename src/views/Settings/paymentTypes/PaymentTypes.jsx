@@ -20,7 +20,7 @@ import {
   delete_payments_type,
   get_payment_types,
 } from "../../../actions/settings/paymentTypesActions";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 
 const PaymentTypes = () => {
   const [showAlert, setShowAlert] = useState(false);

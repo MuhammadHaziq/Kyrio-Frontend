@@ -83,7 +83,7 @@ export const add_new_modifier = (data) => {
           dispatch({ type: ADD_NEW_MODIFIER, response: response.data });
           let msg = {
             open: true,
-            message: "Modifier Added Successfully",
+            message: "Modifier created",
             object: {},
             error: false,
           };
@@ -256,7 +256,6 @@ export const toggle_modifire_all_select = (status) => {
 
 export const update_row_data = (id) => {
   return (dispatch) => {
-    console.log("id", id);
     try {
       authAxios({
         method: "get",
@@ -321,7 +320,7 @@ export const update_modifier = (data) => {
             object: {},
             error: false,
           };
-          dispatch({ type: MESSAGE, data: msg });
+          dispatch({ type: MESSAGE, data: 'Modifier edited' });
         })
         .catch((error) => {
           console.log("err", error.response);

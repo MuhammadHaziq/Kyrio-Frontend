@@ -21,7 +21,7 @@ import {
 } from "../../../actions/settings/kitchenPrinterActions";
 import { get_category_list } from "../../../actions/items/categoryActions";
 
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 
 const KitchenPrinter = () => {
 

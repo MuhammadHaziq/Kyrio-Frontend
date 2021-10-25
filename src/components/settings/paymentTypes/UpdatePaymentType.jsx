@@ -18,7 +18,7 @@ import {
   CSelect,
   CInvalidFeedback,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import {
   update_payment_type,
   delete_payments_type,

@@ -20,6 +20,9 @@ import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatat
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import CancelReceipt from './CancelReceipt'
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
+
 const SalesReceipts = () => {
   const dispatch = useDispatch();
   const sale_receipt_summary = useSelector((state) => state.reports.salesReceiptReducer.sale_receipt_summary)
@@ -83,7 +86,56 @@ const SalesReceipts = () => {
           <CCard>
             <CCardHeader>
               <CRow>
+              {typeof sale_receipt_summary.receipts !== "undefined" && sale_receipt_summary.receipts.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                <CSVLink data={sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
+                    return {
+                      ["Receipt no."]: item.receipt_number,
+                      ["Date"]:typeof item.created_at !== "undefined" &&
+                      item.created_at !== null ? dateformat(item.created_at, 'yyyy-mm-dd')// '$100.00'
+                      : '-',
+                      ["Store"]: typeof item.store !== "undefined" &&
+                      item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name : '' : '',
+                      ["Employee"]: typeof item.user !== "undefined" &&
+                      item.user !== null ? item.user.name !== undefined && item.user.name !== null ? item.user.name : '' : '',
+                      ["Customer"]: typeof item.customer !== "undefined" &&
+                      item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '—' : '—',
+                      ["Type"]: item.receipt_type,
+                      ["Total"]: typeof item.total_price !== "undefined" &&
+                      item.total_price !== null ? item.total_price : ""
+                    }
+                  }) : []}
+                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
+                  target="_blank"
+                  >
+                  <CButton
+                    color="success"
+                    className="btn-square"
+                    variant="outline"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                      className="c-icon c-icon-sm "
+                      role="img"
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      <polygon
+                        fill="var(--ci-primary-color, currentColor)"
+                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                        className="ci-primary"
+                      ></polygon>
+                    </svg>
+                    Export
+                  </CButton>
+                  </CSVLink>
+                </CCol>
+                : ""}
+                {/* <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CButton
                     color="success"
                     className="btn-square"
@@ -108,25 +160,7 @@ const SalesReceipts = () => {
                     </svg>
                     Export
                   </CButton>
-                  {/* {user._id === user.owner_id ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesReceipt}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )} */}
-                </CCol>
+                </CCol> */}
               </CRow>
             </CCardHeader>
             <CCardBody>

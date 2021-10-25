@@ -18,7 +18,7 @@ import {
   CSelect,
   CInvalidFeedback,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import {
   update_pos_device,
   delete_pos_devices,

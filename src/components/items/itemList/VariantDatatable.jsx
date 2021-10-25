@@ -16,7 +16,7 @@ import {
   update_variants_table_values,
   delete_item_varient,
 } from "../../../actions/items/itemActions";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useDispatch } from "react-redux";
 import NumberFormat from "react-number-format";
 const Price = (props) => {

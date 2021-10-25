@@ -44,7 +44,7 @@ import {
 } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import NumberFormat from "react-number-format";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css

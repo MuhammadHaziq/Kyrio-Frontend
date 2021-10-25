@@ -18,7 +18,7 @@ import {
   CSelect,
   CInvalidFeedback,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";

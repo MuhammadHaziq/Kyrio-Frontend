@@ -17,7 +17,7 @@ import {
   CInputGroupText,
   CInputGroupAppend,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   add_new_open_ticket,

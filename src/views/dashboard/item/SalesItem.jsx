@@ -28,6 +28,7 @@ import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { useSelector, useDispatch } from "react-redux";
 // import moment from "moment";
 import SalesItemDatatableNew from "../../../datatables/reports/SalesItemDatatableNew";
+import { CSVLink } from "react-csv";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 // import { getStyle, hexToRgba } from "@coreui/utils/src";
 // import $ from "jquery";
@@ -135,7 +136,27 @@ const SalesItem = () => {
           <CCard>
             <CCardHeader>
               <CRow>
+              {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                <CSVLink data={item_sales_summary.itemsReport.length > 0 ? item_sales_summary.itemsReport.map(itm => {
+                    return {
+                      ["Name"]: itm.name,
+                      ["SKU"]: itm.sku,
+                      ["Category"]: itm.category,
+                      ["No. of Items Sold"]: itm.ItemsSold,
+                      ["Gross Sales"]: itm.GrossSales,
+                      ["Total Items Refunded"]: itm.ItemsRefunded,
+                      ["Refunds"]: itm.Refunds,
+                      ["Discounts"]: itm.discounts,
+                      ["Net Sales"]: itm.NetSales,
+                      ["Cost of Goods"]: itm.CostOfGoods,
+                      ["Gross Profit"]: itm.GrossProfit,
+                      ["Margin"]: itm.Margin+"%"
+                    }
+                  }) : []}
+                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
+                  target="_blank"
+                  >
                   <CButton
                     color="success"
                     className="btn-square"
@@ -160,7 +181,9 @@ const SalesItem = () => {
                     </svg>
                     Export
                   </CButton>
+                  </CSVLink>
                 </CCol>
+                : ""}
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
                     xs="12"

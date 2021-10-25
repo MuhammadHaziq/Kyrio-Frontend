@@ -17,7 +17,7 @@ import {
   update_modifier_props_postion,
 } from "../../../actions/items/modifiresActions";
 import { connect } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 
 // a little function to help us with reordering the result
 const reorder = (data, startIndex, endIndex) => {
@@ -200,11 +200,9 @@ class ModifireList extends Component {
   };
 
   get_row_data = (id) => {
-    console.log(id);
     this.props.update_row_data(id);
   };
   modifireCheckHandle = (id) => {
-    console.log(id);
     const row = this.props.modifiers_list.filter((item) => {
       return item._id === id;
     })[0];

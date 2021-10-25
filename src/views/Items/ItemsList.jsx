@@ -17,7 +17,7 @@ import {
   CButton,
   CFade,
 } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
 import {
   // get_items_list,

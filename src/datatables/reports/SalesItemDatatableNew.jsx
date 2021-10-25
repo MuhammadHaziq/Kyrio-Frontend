@@ -3,6 +3,7 @@ import {
   CDataTable
 } from "@coreui/react";
 
+
 const SalesItemDatatableNew = (props) => {
 
   const [fields, setFields] = useState([]);
@@ -13,6 +14,7 @@ const SalesItemDatatableNew = (props) => {
     }
   },[props.columns])
   
+
   return (
     <CDataTable
       items={props.item_sale_summary}
@@ -23,6 +25,7 @@ const SalesItemDatatableNew = (props) => {
       hover
       outlined
       pagination
+      
       // border={true}
       outlined={true}
       responsive={true}

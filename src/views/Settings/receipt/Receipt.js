@@ -17,7 +17,7 @@ import {
   CInvalidFeedback,
 } from "@coreui/react";
 import { useSelector, useDispatch } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import {
   add_new_receipt,
   get_receipt,

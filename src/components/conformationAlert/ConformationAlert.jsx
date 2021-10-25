@@ -2,7 +2,7 @@ import React from "react";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { CButton } from "@coreui/react";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 
 const ConformationAlert = (props) => {
   const submit = () => {

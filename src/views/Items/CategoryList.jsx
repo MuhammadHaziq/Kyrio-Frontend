@@ -14,7 +14,7 @@ import {
   redirect_back_category,
 } from "../../actions/items/categoryActions";
 import { useSelector, useDispatch } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import CategoryDatatable from "../../datatables/category/CategoryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCategory from "../../components/items/category/AddCategory";

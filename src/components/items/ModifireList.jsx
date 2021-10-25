@@ -15,7 +15,7 @@ import {
   update_modifire_postion,
 } from "../../actions/items/modifiresActions";
 import { connect } from "react-redux";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 
 // a little function to help us with reordering the result
 const reorder = (data, startIndex, endIndex) => {
@@ -84,6 +84,7 @@ class ModifireList extends Component {
     }
   }
   onDragEnd(result) {
+    console.log(result)
     // dropped outside the list
     if (!result.destination) {
       return;

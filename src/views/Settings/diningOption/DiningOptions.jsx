@@ -25,7 +25,7 @@ import {
   update_dining_option_postion,
   update_dining_availablity,
 } from "../../../actions/settings/diningOptionActions";
-import { CIcon } from "@coreui/icons-react";
+import CIcon from "@coreui/icons-react";
 import { connect } from "react-redux";
 import AddDiningOption from "../../../components/settings/diningOption/AddDiningOption";
 import UpdateDiningOption from "../../../components/settings/diningOption/UpdateDiningOption";

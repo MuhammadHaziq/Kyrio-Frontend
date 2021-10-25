@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { MESSAGE } from "./constants/ActionTypes";
 import { CToaster, CAlert } from "@coreui/react";
 import "./scss/style.scss";
@@ -59,7 +59,7 @@ const App = () => {
   //   ? require("./assets/css/all_datatables_dark.css")
   //   : require("./assets/css/all_datatables_light.css")}
   return (
-    <BrowserRouter>
+    <HashRouter>
       <React.Suspense fallback={loading}>
         {msg.open ? (
           <MessageHandler
@@ -103,7 +103,7 @@ const App = () => {
           />
         </Switch>
       </React.Suspense>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 

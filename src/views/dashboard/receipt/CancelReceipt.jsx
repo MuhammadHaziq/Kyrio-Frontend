@@ -230,7 +230,7 @@ const CancelReceipt = props => {
                             </CCol>
                             <br />
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                <p>Card</p>
+                                <p>{item.payment_method}</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                 <p>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</p>

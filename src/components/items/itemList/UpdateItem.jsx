@@ -555,7 +555,7 @@ const AddItem = (props) => {
         </CCardBody>
       </CCard>
       {/**  Variants  */}
-      <CCard>
+      {/* <CCard>
         <CCardHeader>
           <h4>
             <strong>Variants</strong>
@@ -621,7 +621,7 @@ const AddItem = (props) => {
             ""
           )}
         </CCardBody>
-      </CCard>
+      </CCard> */}
       {/**  Inventory  */}
       <CCard>
         <CCardHeader>
@@ -633,7 +633,7 @@ const AddItem = (props) => {
         <CCardBody>
           <CCol xs="12" sm="12" md="12">
             <CListGroup>
-              <CListGroupItem
+              {/* <CListGroupItem
                 key={0}
                 className="justify-content-between"
                 style={{
@@ -650,7 +650,7 @@ const AddItem = (props) => {
                     onChange={handleChangeInventory(0)}
                   />
                 </h6>
-              </CListGroupItem>
+              </CListGroupItem> */}
               <CListGroupItem
                 key={1}
                 className="justify-content-between"

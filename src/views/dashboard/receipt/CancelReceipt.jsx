@@ -169,7 +169,7 @@ const CancelReceipt = props => {
                     <CCardBody>
                         <CRow className="p-3">
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
-                                <h2>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</h2>
+                                <h2>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</h2>
                                 <h6>Total</h6>
                             </CCol>
                         </CRow>
@@ -177,7 +177,7 @@ const CancelReceipt = props => {
                         <CRow>
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
                                 <h6>Cashier: {item.cashier !== undefined && item.cashier !== null ? item.cashier.name !== undefined && item.cashier.name !== null ? item.cashier.name || '' : '' : ''}</h6>
-                                <h6>POS:{item.store !== undefined && item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name || '' : '' : ''}</h6>
+                                <h6>POS: {item.store !== undefined && item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name || '' : '' : ''}</h6>
                             </CCol>
                         </CRow>
                         <hr />
@@ -188,20 +188,21 @@ const CancelReceipt = props => {
                         </CRow>
                         <hr />
                         <CRow>
-                            {(item.items || []).map((ite, iteIndex) => (
+                            {(item.items || []).map((ite) => (
                                 <React.Fragment>
                                     <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
                                         <h6><b>{ite.name}</b></h6>
-                                        <span>{ite.quantity} x {ite.price}</span><br/>
-                                        {ite.modifiers.map(mod => {
-                                            return mod.options.map(op => {
+                                        <span>{ite.quantity} x {parseFloat(ite.price).toFixed(2)}</span><br/>
+                                        {(ite.modifiers || []).map(mod => {
+                                            return (mod.options || []).map(op => {
                                                 return <><span>+ {op.option_name} ({op.price})</span><br/></>
                                             })
                                         })}
+                                        <span><i>{ite.comment}</i></span>
                                         <br/>
                                     </CCol>
                                     <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                        <h6><b>{parseFloat(ite.total_price,2)}</b></h6>
+                                        <h6><b>{parseFloat(ite.total_price).toFixed(2)}</b></h6>
                                     </CCol>
                                     {(ite.taxes || []).length > 0 ? (<React.Fragment> <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                         <p>Included In Price 10% (included)</p>
@@ -222,24 +223,39 @@ const CancelReceipt = props => {
                         </CRow>
                         <hr />
                         <CRow>
+                        {(item.items || []).map((ite, index) => (
+                            (ite.discounts || []).map(dis => {
+                                return <>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
+                                    <p>{dis.title}</p>
+                                </CCol>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
+                                    <p>{dis.type == 'Percentage' ? "-"+parseFloat((dis.value/100)*ite.total_price).toFixed(2) : "-"+dis.value}</p>
+                                </CCol>
+                                </>
+                            })
+                        ))}
+                        </CRow>
+                        <hr />
+                        <CRow>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                 <h6><b>Total</b></h6>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <h6><b>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</b></h6>
+                                <h6><b>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</b></h6>
                             </CCol>
                             <br />
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                 <p>{item.payment_method}</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0,2)}</p>
+                                <p>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</p>
                             </CCol>
                         </CRow>
                         <hr />
                         <CRow>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                <h6><b>{moment(new Date()).format('MMMM Do YYYY, h:mm a')}</b></h6>
+                                <h6><b>{moment(item.sale_timestamp).format('MMM Do YYYY, h:mm a')}</b></h6>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                 <h6><b>{item.receipt_number !== undefined && item.receipt_number !== null ? item.receipt_number || '' : ''}</b></h6>

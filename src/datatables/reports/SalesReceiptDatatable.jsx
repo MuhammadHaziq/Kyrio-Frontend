@@ -64,8 +64,8 @@ const SalesReceiptDatatable = (props) => {
         created_at: (item) => {
           return (
             <td>
-              {typeof item.created_at !== "undefined" &&
-                item.created_at !== null ? dateFormat(item.created_at, 'yyyy-mm-dd')// '$100.00'
+              {typeof item.sale_timestamp !== "undefined" &&
+                item.sale_timestamp !== null ? dateFormat(item.sale_timestamp, 'yyyy-mm-dd')// '$100.00'
                 : '-'}
             </td>
           );

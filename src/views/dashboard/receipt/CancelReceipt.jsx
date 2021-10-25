@@ -136,9 +136,10 @@ const CancelReceipt = props => {
             unfoldable
             show={show}
             onShowChange={closeReceiptDetail}
+            
         >
 
-            <CNav variant='tabs' className='nav-underline nav-underline-primary ml-auto' >
+            <CNav variant='tabs' className='nav-underline nav-underline-primary ml-auto ' >
                 <CNavItem>
                     <CSidebarClose onClick={closeReceiptDetail} style={{ left: '0' }} />
                 </CNavItem>
@@ -164,7 +165,7 @@ const CancelReceipt = props => {
                 
             </CNav>
             {(sales_receipt_data || []).map((item, index) => (
-                <CCard>
+                <CCard style={{ overflowX: "hidden", overflowY: "scroll"}}>
                     <CCardBody>
                         <CRow className="p-3">
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
@@ -189,16 +190,17 @@ const CancelReceipt = props => {
                         <CRow>
                             {(item.items || []).map((ite, iteIndex) => (
                                 <React.Fragment>
-                                    <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
+                                    <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
                                         <h6><b>{ite.name}</b></h6>
-                                        <span>{ite.quantity} x {ite.price}</span>
+                                        <span>{ite.quantity} x {ite.price}</span><br/>
                                         {ite.modifiers.map(mod => {
-                                            mod.options.map(op => {
-                                                <span>{op.option_name} ({op.price})</span>
+                                            return mod.options.map(op => {
+                                                return <><span>+ {op.option_name} ({op.price})</span><br/></>
                                             })
                                         })}
+                                        <br/>
                                     </CCol>
-                                    <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
+                                    <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
                                         <h6><b>{parseFloat(ite.total_price,2)}</b></h6>
                                     </CCol>
                                     {(ite.taxes || []).length > 0 ? (<React.Fragment> <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>

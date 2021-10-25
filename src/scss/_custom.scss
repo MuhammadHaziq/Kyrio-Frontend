@@ -1,1 +1,19 @@
 // Here you can add other styles
+html, body {
+    overflow-x:hidden;
+}
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 5px; /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+     
+    // @apply bg-gray-300;
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background: gray;
+}

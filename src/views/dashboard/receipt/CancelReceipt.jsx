@@ -30,7 +30,7 @@ const CancelReceipt = props => {
     const closeReceiptDetail = () => {
         dispatch(toggle_receipt_sideBar(false))
     }
-    
+
     const cancelReceiptFunc = () => {
         const type = sales_receipt_data?.[0]?.receipt_type
         if(type === "REFUND"){
@@ -192,6 +192,11 @@ const CancelReceipt = props => {
                                     <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                         <h6><b>{ite.name}</b></h6>
                                         <span>{ite.quantity} x {ite.price}</span>
+                                        {ite.modifiers.map(mod => {
+                                            mod.options.map(op => {
+                                                <span>{op.option_name} ({op.price})</span>
+                                            })
+                                        })}
                                     </CCol>
                                     <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                         <h6><b>{parseFloat(ite.total_price,2)}</b></h6>

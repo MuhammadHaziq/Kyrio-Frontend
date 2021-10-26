@@ -204,19 +204,6 @@ const CancelReceipt = props => {
                                     <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
                                         <h6><b>{parseFloat(ite.total_price).toFixed(2)}</b></h6>
                                     </CCol>
-                                    {(ite.taxes || []).length > 0 ? (<React.Fragment> <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                        <p>Included In Price 10% (included)</p>
-                                    </CCol>
-                                        <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                            <p>20</p>
-                                        </CCol>
-                                        <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                            <p>Added In Price 10%</p>
-                                        </CCol>
-                                        <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                            <p>20</p>
-                                        </CCol></React.Fragment>) : null}
-
                                 </React.Fragment>
                             ))}
 
@@ -231,6 +218,20 @@ const CancelReceipt = props => {
                                 </CCol>
                                 <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                     <p>{dis.type == 'Percentage' ? "-"+parseFloat((dis.value/100)*ite.total_price).toFixed(2) : "-"+dis.value}</p>
+                                </CCol>
+                                </>
+                            })
+                        ))}
+                        </CRow>
+                        <CRow>
+                        {(item.items || []).map((ite, index) => (
+                            (ite.taxes || []).map(tax => {
+                                return <>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
+                                    <p>{tax.title} {tax.tax_rate}%</p>
+                                </CCol>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
+                                    <p>{parseInt((tax.tax_rate/100)*ite.total_price)}</p>
                                 </CCol>
                                 </>
                             })

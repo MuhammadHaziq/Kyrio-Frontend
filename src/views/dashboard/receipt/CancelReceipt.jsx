@@ -129,6 +129,34 @@ const CancelReceipt = props => {
           }
         });
     };
+    const ShowTaxes = ({ items }) => {
+        const taxes = []
+        items.map(ite => ite.taxes.map(tax => taxes.push({
+            _id: tax._id,
+            title: tax.title +" "+ tax.tax_rate + "%",
+            price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
+        })))
+        let group = groupBy(taxes,'_id')
+        let keys = Object.keys(group)
+        
+        let taxesData = []
+        for(const key of keys){
+            taxesData.push({ 
+                title: group[key][0].title,
+                price: parseFloat(sumBy(group[key],'price')).toFixed(2)
+            })
+        }
+        return (taxesData || []).map(tax => {
+                return <>
+                <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                    <p>{tax.title}</p>
+                </CCol>
+                <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                    <p>{tax.price}</p>
+                </CCol>
+                </>
+            })
+    }
     return (
         <CSidebar
             aside
@@ -219,18 +247,7 @@ const CancelReceipt = props => {
                             </CCol>
                         </CRow>
                         <CRow>
-                        {(item.items || []).map((ite, index) => (
-                            (ite.taxes || []).map(tax => {
-                                return <>
-                                <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                                    <p>{tax.title} {tax.tax_rate}%</p>
-                                </CCol>
-                                <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                    <p>{parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)}</p>
-                                </CCol>
-                                </>
-                            })
-                        ))}
+                            <ShowTaxes items={item.items}/>
                         </CRow>
                         <CRow>
                         {(item.items || []).map((ite, index) => (

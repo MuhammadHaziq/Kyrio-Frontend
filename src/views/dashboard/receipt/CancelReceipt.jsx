@@ -20,6 +20,7 @@ import { toggle_receipt_sideBar, cancel_receipt } from "../../../actions/reports
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment'
 import { confirmAlert } from "react-confirm-alert";
+import { groupBy, sumBy } from 'lodash';
 import authAxios from '../../../constants/authAxios'
 
 const CancelReceipt = props => {
@@ -209,6 +210,14 @@ const CancelReceipt = props => {
 
                         </CRow>
                         <hr />
+                        <CRow>
+                            <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                                <h6><b>Subtotal</b></h6>
+                            </CCol>
+                            <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                                <h6><b>{parseFloat(sumBy(item.items,'total_price')).toFixed(2)}</b></h6>
+                            </CCol>
+                        </CRow>
                         <CRow>
                         {(item.items || []).map((ite, index) => (
                             (ite.taxes || []).map(tax => {

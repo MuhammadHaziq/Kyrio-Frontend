@@ -195,7 +195,7 @@ const CancelReceipt = props => {
                                         <span>{ite.quantity} x {parseFloat(ite.price).toFixed(2)}</span><br/>
                                         {(ite.modifiers || []).map(mod => {
                                             return (mod.options || []).map(op => {
-                                                return <><span>+ {op.option_name} ({op.price})</span><br/></>
+                                                return <><span>+ {op.option_name} ({parseFloat(op.price*ite.quantity).toFixed(2)})</span><br/></>
                                             })
                                         })}
                                         <span><i>{ite.comment}</i></span>

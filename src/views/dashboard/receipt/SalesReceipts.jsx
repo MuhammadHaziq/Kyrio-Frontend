@@ -3,6 +3,7 @@ import {
   CButton,
   CDropdown,
   CDropdownToggle,
+  CDropdownHeader,
   CDropdownMenu,
   CDropdownItem,
   CCard,
@@ -23,7 +24,7 @@ import ConformationAlert from "../../../components/conformationAlert/Conformatio
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import CancelReceipt from './CancelReceipt'
 import dateformat from "dateformat";
-import { CSVLink } from "react-csv";
+import { CSVLink, CSVDownload } from "react-csv";
 
 const SalesReceipts = () => {
   const dispatch = useDispatch();
@@ -56,34 +57,72 @@ const SalesReceipts = () => {
   const deleteSalesReceipt = () => {
     setShowAlert(!showAlert);
   };
-  const exportReceipts = () => {
-    // <h6><b>{ite.name}</b></h6>
-    // <span>{ite.quantity} x {parseFloat(ite.price).toFixed(2)}</span><br/>
-    return sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
+  const ExportCSVReceipts = () => {
+    return <CSVLink data={sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
       return {
         ["Date"]: moment(item.sale_timestamp).format('MM/DD/YYYY h:mm a'),
         ["Receipt number"]: item.receipt_number,
         ["Receipt type"]: item.receipt_type,
-        ["Gross sales"]: item.sub_total,
-        ["Discounts"]: item.total_discount,
-        ["Net Sales"]: item.total_price,
-        ["Taxes"]: item.total_tax,
-        ["Total collected"]: item.total_price,
-        ["Cost of Goods"]: item.cost_of_goods,
-        ["Gross profit"]: parseFloat(item.total_price) - parseFloat(item.cost_of_goods),
+        ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
+        ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
+        ["Net Sales"]: parseFloat(item.sub_total - item.total_discount).toFixed(2),
+        ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
+        ["Total collected"]: parseFloat(item.total_price).toFixed(2),
+        ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
+        ["Gross profit"]: parseFloat(item.total_price - item.cost_of_goods).toFixed(2),
         ["Payment type"]: item.payment_method,
-        ["Discription"]: item.items.map((ite,index) => {
-          return index == item.items.length - 1 ? ite.quantity + " X " + ite.name : ite.quantity + " X " + ite.name + ","
-        }),
-        ["Dining option"]: item.dining_option.name,
+        ["Discription"]: item.items.map( ite => { return " "+ite.quantity + " X " + ite.name }),
+        ["Dining option"]: typeof item.dining_option !== "undefined" ? item.dining_option.name : '',
         ["POS"]: item.device.name,
         ["Cashier name"]: item.cashier.name,
         ["Customer name"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.name : '',
         ["Customer contact"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.email : '',
-        ["Status"]: item.open ? 'Closed' : 'Open'
+        ["Status"]: item.open ? 'Open' : 'Closed'
       }
-    }) : []
-  };
+    }) : []}
+    filename={"Receipts"+dateformat(new Date)+".csv"}
+    >
+      <h6>Receipts</h6>
+    </CSVLink>
+  }
+  const ExportCSVReceiptsByItem = () => {
+    const csvData = []
+    if(sale_receipt_summary.receipts.length > 0){
+      sale_receipt_summary.receipts.map(sale => { 
+        sale.items.map(item => {
+          let modifiers = []
+          item.modifiers.map(mod => mod.options.map(op => modifiers.push(op.option_name)))
+          csvData.push({
+            ["Date"]: moment(sale.sale_timestamp).format('MM/DD/YYYY h:mm a'),
+            ["Receipt number"]: sale.receipt_number,
+            ["Receipt type"]: sale.receipt_type,
+            ["Category"]: '',
+            ["SKU"]: '',
+            ["Item"]: item.name,
+            ["Modifiers applied"]: modifiers,
+            ["Quantity"]: item.quantity,
+            ["Gross sales"]: parseFloat((item.price * item.quantity)+item.total_modifiers).toFixed(2),
+            ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
+            ["Net Sales"]: parseFloat(item.total_price - item.total_discount).toFixed(2),
+            ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
+            ["Cost of Goods"]: parseFloat(item.quantity * item.cost).toFixed(2),
+            ["Gross profit"]: parseFloat(item.total_price - (item.cost * item.quantity)).toFixed(2),
+            ["Dining option"]: typeof sale.dining_option !== "undefined" ? sale.dining_option.name : '',
+            ["POS"]: sale.device.name,
+            ["Cashier name"]: sale.cashier.name,
+            ["Customer name"]: typeof sale.customer !== "undefined" && sale.customer !== null ? sale.customer.name : '',
+            ["Customer contact"]: typeof sale.customer !== "undefined" && sale.customer !== null ? sale.customer.email : '',
+            ["Status"]: sale.open ? 'Open' : 'Closed'
+          })
+        })
+      })
+    }
+    return <CSVLink data={csvData}
+    filename={"ReceiptsByItem"+dateformat(new Date)+".csv"}
+    >
+     <h6>Receipts by item</h6>
+    </CSVLink>
+  }
 
   return (
     <>
@@ -116,70 +155,20 @@ const SalesReceipts = () => {
           <CCard>
             <CCardHeader>
               <CRow>
-              <CDropdown>
-                <CDropdownToggle color="secondary">Export</CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem href="#">Receipts</CDropdownItem>
-                  <CDropdownItem href="#">Receipts by item</CDropdownItem>
-                  <CDropdownItem href="#">Something else here</CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
-              {typeof sale_receipt_summary.receipts !== "undefined" && sale_receipt_summary.receipts.length > 0 ?
-                <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                <CSVLink data={sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
-                    return {
-                      ["Date"]: moment(item.sale_timestamp).format('MM/DD/YYYY h:mm a'),
-                      ["Receipt number"]: item.receipt_number,
-                      ["Receipt type"]: item.receipt_type,
-                      ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
-                      ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
-                      ["Net Sales"]: parseFloat(item.total_price).toFixed(2),
-                      ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
-                      ["Total collected"]: parseFloat(item.total_price).toFixed(2),
-                      ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
-                      ["Gross profit"]: parseFloat(item.total_price - item.cost_of_goods).toFixed(2),
-                      ["Payment type"]: item.payment_method,
-                      ["Discription"]: item.items.map((ite,index) => {
-                        return index == item.items.length - 1 ? ite.quantity + " X " + ite.name : ite.quantity + " X " + ite.name + ","
-                      }),
-                      ["Dining option"]: item.dining_option.name,
-                      ["POS"]: item.device.name,
-                      ["Cashier name"]: item.cashier.name,
-                      ["Customer name"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.name : '',
-                      ["Customer contact"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.email : '',
-                      ["Status"]: item.open ? 'Open' : 'Closed'
-                    }
-                  }) : []}
-                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                  <CButton
-                    color="success"
-                    className="btn-square"
-                    variant="outline"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm "
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
-                  </CButton>
-                  </CSVLink>
+              <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                {typeof sale_receipt_summary.receipts !== "undefined" && sale_receipt_summary.receipts.length > 0 ?
+                  <>
+                  
+                    <CDropdown>
+                      <CDropdownToggle color="secondary">Export</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownHeader><ExportCSVReceipts /></CDropdownHeader>
+                        <CDropdownHeader><ExportCSVReceiptsByItem /></CDropdownHeader>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </>
+                  : ""}
                 </CCol>
-                : ""}
               </CRow>
             </CCardHeader>
             <CCardBody>

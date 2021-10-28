@@ -307,7 +307,7 @@ const CancelReceipt = props => {
                         <hr />
                         <CRow>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                <h6><b>{moment(item.sale_timestamp).format('MMM Do YYYY, h:mm a')}</b></h6>
+                                <h6><b>{moment(item.sale_timestamp).format('MMM Do YYYY, h:mm A')}</b></h6>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                 <h6><b>{item.receipt_number !== undefined && item.receipt_number !== null ? item.receipt_number || '' : ''}</b></h6>

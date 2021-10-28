@@ -16,6 +16,7 @@ import {
   delete_receipt_summary,
 } from "../../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
+import moment from 'moment'
 import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
@@ -54,6 +55,34 @@ const SalesReceipts = () => {
   const deleteSalesReceipt = () => {
     setShowAlert(!showAlert);
   };
+  const exportReceipts = () => {
+    // <h6><b>{ite.name}</b></h6>
+    // <span>{ite.quantity} x {parseFloat(ite.price).toFixed(2)}</span><br/>
+    return sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
+      return {
+        ["Date"]: moment(item.sale_timestamp).format('MM/DD/YYYY h:mm a'),
+        ["Receipt number"]: item.receipt_number,
+        ["Receipt type"]: item.receipt_type,
+        ["Gross sales"]: item.sub_total,
+        ["Discounts"]: item.total_discount,
+        ["Net Sales"]: item.total_price,
+        ["Taxes"]: item.total_tax,
+        ["Total collected"]: item.total_price,
+        ["Cost of Goods"]: item.cost_of_goods,
+        ["Gross profit"]: parseFloat(item.total_price) - parseFloat(item.cost_of_goods),
+        ["Payment type"]: item.payment_method,
+        ["Discription"]: item.items.map((ite,index) => {
+          return index == item.items.length - 1 ? ite.quantity + " X " + ite.name : ite.quantity + " X " + ite.name + ","
+        }),
+        ["Dining option"]: item.dining_option.name,
+        ["POS"]: item.device.name,
+        ["Cashier name"]: item.cashier.name,
+        ["Customer name"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.name : '',
+        ["Customer contact"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.email : '',
+        ["Status"]: item.open ? 'Closed' : 'Open'
+      }
+    }) : []
+  };
 
   return (
     <>
@@ -88,23 +117,7 @@ const SalesReceipts = () => {
               <CRow>
               {typeof sale_receipt_summary.receipts !== "undefined" && sale_receipt_summary.receipts.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                <CSVLink data={sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
-                    return {
-                      ["Receipt no."]: item.receipt_number,
-                      ["Date"]:typeof item.created_at !== "undefined" &&
-                      item.created_at !== null ? dateformat(item.created_at, 'yyyy-mm-dd')// '$100.00'
-                      : '-',
-                      ["Store"]: typeof item.store !== "undefined" &&
-                      item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name : '' : '',
-                      ["Employee"]: typeof item.user !== "undefined" &&
-                      item.user !== null ? item.user.name !== undefined && item.user.name !== null ? item.user.name : '' : '',
-                      ["Customer"]: typeof item.customer !== "undefined" &&
-                      item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name : '—' : '—',
-                      ["Type"]: item.receipt_type,
-                      ["Total"]: typeof item.total_price !== "undefined" &&
-                      item.total_price !== null ? item.total_price : ""
-                    }
-                  }) : []}
+                <CSVLink data={exportReceipts}
                   filename={"SalesByItem"+dateformat(new Date)+".csv"}
                   target="_blank"
                   >
@@ -135,32 +148,6 @@ const SalesReceipts = () => {
                   </CSVLink>
                 </CCol>
                 : ""}
-                {/* <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton
-                    color="success"
-                    className="btn-square"
-                    variant="outline"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm"
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
-                  </CButton>
-                </CCol> */}
               </CRow>
             </CCardHeader>
             <CCardBody>

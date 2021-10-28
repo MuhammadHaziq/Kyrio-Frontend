@@ -197,7 +197,6 @@ const CancelReceipt = props => {
                         inNav
                         className="c-header-nav-item mx-2"
                     >
-                        
                         <CDropdownToggle  caret={false}>
                         {sales_receipt_data?.[0]?.cancelled_at ? "" :
                             <CIcon name="cil-options" />

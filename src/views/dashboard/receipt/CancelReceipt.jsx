@@ -134,29 +134,48 @@ const CancelReceipt = props => {
         items.map(ite => ite.taxes.map(tax => taxes.push({
             _id: tax._id,
             title: tax.title +" "+ tax.tax_rate + "%",
+            type: tax.tax_type == 'Included in the price' ? '(included)' : '',
             price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
         })))
         let group = groupBy(taxes,'_id')
         let keys = Object.keys(group)
         
-        let taxesData = []
-        for(const key of keys){
-            taxesData.push({ 
-                title: group[key][0].title,
-                price: parseFloat(sumBy(group[key],'price')).toFixed(2)
-            })
-        }
-        return (taxesData || []).map(tax => {
-                return <>
+        return keys.map(key => {
+            return <>
                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                    <p>{tax.title}</p>
+                    <p>{group[key][0].title} <span style={{color: 'gray'}}>{group[key][0].type}</span></p>
                 </CCol>
                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                    <p>{tax.price}</p>
+                    <p>{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
                 </CCol>
                 </>
-            })
+        })
     }
+    const ShowDiscounts = ({ items }) => {
+        const discounts = []
+        items.map(ite => ite.discounts.map(dis => discounts.push({
+            _id: dis._id,
+            title: dis.title,
+            percent: dis.type == 'Percentage' ? dis.value+"%" : '',
+            type: dis.type,
+            price: dis.type == 'Percentage' ? parseFloat((dis.value/100)*ite.total_price).toFixed(2) : parseFloat(dis.value).toFixed(2)
+        })))
+        
+        let group = groupBy(discounts,'_id')
+        let keys = Object.keys(group)
+        
+        return keys.map(key => {
+            return <>
+                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                     <p>{group[key][0].title} {group[key][0].percent}</p>
+                 </CCol>
+                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                     <p>-{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
+                 </CCol>
+                 </>
+        })
+    }
+    
     return (
         <CSidebar
             aside
@@ -228,14 +247,18 @@ const CancelReceipt = props => {
                                             })
                                         })}
                                         <span><i>{ite.comment}</i></span>
-                                        <br/>
+                                        <br/><br/>
                                     </CCol>
                                     <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
                                         <h6><b>{parseFloat(ite.total_price).toFixed(2)}</b></h6>
                                     </CCol>
                                 </React.Fragment>
                             ))}
-
+                            
+                        </CRow>
+                        <hr />
+                        <CRow>
+                            <ShowDiscounts items={item.items } />
                         </CRow>
                         <hr />
                         <CRow>
@@ -243,25 +266,11 @@ const CancelReceipt = props => {
                                 <h6><b>Subtotal</b></h6>
                             </CCol>
                             <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                <h6><b>{parseFloat(sumBy(item.items,'total_price')).toFixed(2)}</b></h6>
+                                <h6><b>{parseFloat(sumBy(item.items,'total_price') - parseFloat(item.total_discount)).toFixed(2)}</b></h6>
                             </CCol>
                         </CRow>
                         <CRow>
                             <ShowTaxes items={item.items}/>
-                        </CRow>
-                        <CRow>
-                        {(item.items || []).map((ite, index) => (
-                            (ite.discounts || []).map(dis => {
-                                return <>
-                                <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                                    <p>{dis.title}</p>
-                                </CCol>
-                                <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                    <p>{dis.type == 'Percentage' ? "-"+parseFloat((dis.value/100)*ite.total_price).toFixed(2) : "-"+dis.value}</p>
-                                </CCol>
-                                </>
-                            })
-                        ))}
                         </CRow>
                         <hr />
                         <CRow>
@@ -276,8 +285,18 @@ const CancelReceipt = props => {
                                 <p>{item.payment_method}</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</p>
+                                <p>{parseFloat(item.cash_received !== undefined && item.cash_received !== null ? item.cash_received || 0 : 0).toFixed(2)}</p>
                             </CCol>
+                            
+                            {item?.cash_return > 0 ? <>
+                            <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
+                                <p>Change</p>
+                            </CCol>
+                            <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
+                                <p>{parseFloat(item.cash_return !== undefined && item.cash_return !== null ? item.cash_return || 0 : 0).toFixed(2)}</p>
+                            </CCol>
+                            </>
+                            : ""}
                         </CRow>
                         <hr />
                         <CRow>

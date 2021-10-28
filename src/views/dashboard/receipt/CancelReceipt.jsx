@@ -230,6 +230,13 @@ const CancelReceipt = props => {
                         <hr />
                         <CRow>
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
+                                <h6>Customer: {item.customer !== undefined && item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? item.customer.name || '' : '' : ''}</h6>
+                                <h6>{item.customer !== undefined && item.customer !== null ? item.customer.email !== undefined && item.customer.email !== null ? item.customer.email || '' : '' : ''}</h6>
+                            </CCol>
+                        </CRow>
+                        <hr />
+                        <CRow>
+                            <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
                                 <h6><b>{item.dining_option !== undefined && item.dining_option !== null ? item.dining_option.name !== undefined && item.dining_option.name !== null ? item.dining_option.name || '' : '' : ''}</b></h6>
                             </CCol>
                         </CRow>

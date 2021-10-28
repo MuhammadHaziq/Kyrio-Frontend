@@ -8,7 +8,7 @@ import {
   update_row_data,
 } from "../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
-import dateFormat from "dateformat";
+import moment from 'moment'
 
 const SalesReceiptDatatable = (props) => {
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const SalesReceiptDatatable = (props) => {
           return (
             <td>
               {typeof item.sale_timestamp !== "undefined" &&
-                item.sale_timestamp !== null ? dateFormat(item.sale_timestamp, 'yyyy-mm-dd')// '$100.00'
+                item.sale_timestamp !== null ? moment(item.sale_timestamp).format('MMM D, YYYY h:mm A')
                 : '-'}
             </td>
           );

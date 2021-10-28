@@ -156,12 +156,20 @@ const UpdateModifier = (props) => {
         id: props.modifier_row_data._id,
         title: fields.modifier_name,
         options: modifierFields.map((item) => {
-            return {
-              _id: item._id,
-              name: item.name,
-              price: ReturnNumber(item.price),
-              position: item.position,
-            };
+            if(item._id == "0"){
+              return {
+                name: item.name,
+                price: ReturnNumber(item.price),
+                position: item.position,
+              };
+            } else {
+              return {
+                _id: item._id,
+                name: item.name,
+                price: ReturnNumber(item.price),
+                position: item.position,
+              };
+            }
           }),
         stores: storeId
             .filter((item) => item.isSelected === true)
@@ -312,7 +320,7 @@ const UpdateModifier = (props) => {
       setModifierFields([
         ...modifierFields,
         {
-          _id: modifierFields.length.toString(),
+          _id: "0",
           name: "",
           price: "$0.0",
           position: modifierFields.length,

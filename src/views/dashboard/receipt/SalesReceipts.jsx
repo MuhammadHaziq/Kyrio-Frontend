@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
@@ -115,9 +116,40 @@ const SalesReceipts = () => {
           <CCard>
             <CCardHeader>
               <CRow>
+              <CDropdown>
+                <CDropdownToggle color="secondary">Export</CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem href="#">Receipts</CDropdownItem>
+                  <CDropdownItem href="#">Receipts by item</CDropdownItem>
+                  <CDropdownItem href="#">Something else here</CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
               {typeof sale_receipt_summary.receipts !== "undefined" && sale_receipt_summary.receipts.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                <CSVLink data={exportReceipts}
+                <CSVLink data={sale_receipt_summary.receipts.length > 0 ? sale_receipt_summary.receipts.map(item => {
+                    return {
+                      ["Date"]: moment(item.sale_timestamp).format('MM/DD/YYYY h:mm a'),
+                      ["Receipt number"]: item.receipt_number,
+                      ["Receipt type"]: item.receipt_type,
+                      ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
+                      ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
+                      ["Net Sales"]: parseFloat(item.total_price).toFixed(2),
+                      ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
+                      ["Total collected"]: parseFloat(item.total_price).toFixed(2),
+                      ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
+                      ["Gross profit"]: parseFloat(item.total_price - item.cost_of_goods).toFixed(2),
+                      ["Payment type"]: item.payment_method,
+                      ["Discription"]: item.items.map((ite,index) => {
+                        return index == item.items.length - 1 ? ite.quantity + " X " + ite.name : ite.quantity + " X " + ite.name + ","
+                      }),
+                      ["Dining option"]: item.dining_option.name,
+                      ["POS"]: item.device.name,
+                      ["Cashier name"]: item.cashier.name,
+                      ["Customer name"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.name : '',
+                      ["Customer contact"]: typeof item.customer !== "undefined" && item.customer !== null ? item.customer.email : '',
+                      ["Status"]: item.open ? 'Open' : 'Closed'
+                    }
+                  }) : []}
                   filename={"SalesByItem"+dateformat(new Date)+".csv"}
                   target="_blank"
                   >

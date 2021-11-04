@@ -20,6 +20,7 @@ const StoreDatatable = (props) => {
 
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.stores}
       fields={[
         { key: "title", label: "Name", filter: false },

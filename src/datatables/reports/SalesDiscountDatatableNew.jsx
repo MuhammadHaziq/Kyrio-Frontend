@@ -36,15 +36,16 @@ const SalesModifierDatatableNew = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.sale_discount_summary}
       fields={[
-        { key: "name", label: "Name", filter: true },
+        { key: "title", label: "Name", filter: true },
         {
-          key: "discount_applied",
+          key: "applied",
           label: "Discounts applied",
           filter: true,
         },
-        { key: "amount_discount", label: "Amount discounted", filter: true },
+        { key: "total", label: "Amount discounted", filter: true },
       ]}
       itemsPerPage={10}
       columnFilter

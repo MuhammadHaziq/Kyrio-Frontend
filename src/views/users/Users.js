@@ -34,6 +34,7 @@ const Users = () => {
           </CCardHeader>
           <CCardBody>
           <CDataTable
+   itemsPerPageSelect
             items={usersData}
             fields={[
               { key: 'name', _classes: 'font-weight-bold' },

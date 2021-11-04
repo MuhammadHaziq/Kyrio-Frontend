@@ -33,6 +33,7 @@ const PaymentTypesDatatableNew = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.payments}
       fields={[
         {

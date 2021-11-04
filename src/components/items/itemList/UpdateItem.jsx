@@ -955,7 +955,7 @@ const AddItem = (props) => {
             onClick={updateItem}
             disabled={disable}
           >
-            Update
+            UPDATE
           </CButton>
         </CCol>
       </CRow>

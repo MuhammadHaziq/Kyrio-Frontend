@@ -598,14 +598,6 @@ const ItemsList = () => {
                     </CButton>
                     {item.item_list.filter((item) => item.isDeleted === true)
                       .length > 0 ? (
-                      /*section={`Are you sure you want to delete the item (${item.item_list
-                          .filter((item) => {
-                            return item.isDeleted === true;
-                          })
-                          .map((item) => {
-                            return item.name;
-                          })
-                          .join(",")}) ?`}*/
                       <React.Fragment>
                         <ConformationAlert
                           button_text="Delete"
@@ -623,23 +615,21 @@ const ItemsList = () => {
                     ) : (
                       <React.Fragment>
                         <CButton
-                          color="default"
+                          color="secondary"
                           className="ml-2 btn-square"
-                          variant="outline"
                           onClick={importList}
                         >
-                          <b>Import</b>
+                          <b>IMPORT</b>
                         </CButton>
                         <CSVLink
-                          color="default"
+                          color="secondary"
                           data={csvDownloadData}
                           headers={headers}
                           filename={"export_items.csv"}
                           className="ml-2 btn-square"
-                          variant="outline"
                           style={{ color: "#3c4b64", textDecoration: "none" }}
                         >
-                          <b>Export</b>
+                          <b>EXPORT</b>
                         </CSVLink>
                       </React.Fragment>
                     )}

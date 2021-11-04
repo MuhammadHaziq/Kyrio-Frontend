@@ -33,6 +33,7 @@ const PosDeviceDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.pos_devices}
       fields={[
         {

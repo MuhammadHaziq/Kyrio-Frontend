@@ -135,7 +135,8 @@ const CancelReceipt = props => {
             _id: tax._id,
             title: tax.title +" "+ tax.tax_rate + "%",
             type: tax.tax_type == 'Included in the price' ? '(included)' : '',
-            price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
+            // price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
+            price: parseFloat(tax.tax_total).toFixed(2)
         })))
         let group = groupBy(taxes,'_id')
         let keys = Object.keys(group)
@@ -151,15 +152,40 @@ const CancelReceipt = props => {
                 </>
         })
     }
-    const ShowDiscounts = ({ items }) => {
+    const ShowPercentDiscounts = ({ items }) => {
         const discounts = []
         items.map(ite => ite.discounts.map(dis => discounts.push({
             _id: dis._id,
             title: dis.title,
             percent: dis.type == 'Percentage' ? dis.value+"%" : '',
             type: dis.type,
-            price: dis.type == 'Percentage' ? parseFloat((dis.value/100)*ite.total_price).toFixed(2) : parseFloat(dis.value).toFixed(2)
+            // price: dis.type == 'Percentage' ? parseFloat((dis.value/100)*ite.total_price).toFixed(2) : parseFloat(dis.value).toFixed(2)
+            price: parseFloat(dis.discount_total).toFixed(2)
         })))
+        
+        let group = groupBy(discounts,'_id')
+        let keys = Object.keys(group)
+        
+        return keys.map(key => {
+            return <>
+                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                     <p>{group[key][0].title} {group[key][0].percent}</p>
+                 </CCol>
+                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                     <p>-{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
+                 </CCol>
+                 </>
+        })
+    }
+    const ShowAmountDiscounts = ({ receipt }) => {
+        const discounts = []
+        receipt.discounts.map(ite => discounts.push({
+            _id: ite._id,
+            title: ite.title,
+            percent: ite.type == 'Percentage' ? ite.value+"%" : '',
+            type: ite.type,
+            price: parseFloat(ite.value).toFixed(2)
+        }))
         
         let group = groupBy(discounts,'_id')
         let keys = Object.keys(group)
@@ -267,7 +293,8 @@ const CancelReceipt = props => {
                         </CRow>
                         {item.total_discount > 0 ? <hr /> : ""}
                         <CRow>
-                            <ShowDiscounts items={item.items } />
+                            <ShowAmountDiscounts receipt={item} />
+                            <ShowPercentDiscounts items={item.items} />
                         </CRow>
                         <hr />
                         <CRow>

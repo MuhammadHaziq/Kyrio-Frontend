@@ -33,6 +33,7 @@ const UserRolesDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.user_roles}
       fields={[
         {

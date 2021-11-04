@@ -9,12 +9,13 @@ import {
 } from "../../constants/ActionTypes";
 import authAxios from '../../constants/authAxios'
 
-export const get_discount_summary = () => {
+export const get_discount_summary = (data) => {
   return (dispatch) => {
     try {
       authAxios({
-        method: "GET",
-        url: `sales/all`,
+        method: "POST",
+        url: `reports/sale/discounts`,
+        data: data
       })
         .then((response) => {
           dispatch({

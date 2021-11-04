@@ -9,6 +9,7 @@ const SalesSummaryDatatableNew = (props) => {
 
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.sales_summary}
       fields={[
         { key: "Date", label: "Date", filter: true },

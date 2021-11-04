@@ -33,6 +33,7 @@ const KitchenPrinterDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.kitchen_printer_list}
       fields={[
         {

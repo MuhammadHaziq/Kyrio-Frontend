@@ -8,16 +8,16 @@ import {
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
-import axios from "axios";
-export const get_tax_sale_summary = () => {
+import authAxios from '../../constants/authAxios'
+
+export const get_tax_sale_summary = (data) => {
   return (dispatch) => {
     try {
-      axios({
-        method: "GET",
-        url: `${BaseUrl}sales/all`,
-        headers: {
-          kyrioToken: `${localStorage.getItem("kyrio")}`,
-        },
+      authAxios({
+        method: "POST",
+        url: 'reports/sale/taxes',
+        data: data
+        
       })
         .then((response) => {
           dispatch({
@@ -85,12 +85,9 @@ export const delete_tax_sale = (ids) => {
       response: JSON.parse(ids),
     });
     // try {
-    //     axios({
+    //     authAxios({
     //         method: "DELETE",
-    //         url: `${BaseUrl}employee/employeeList/${ids}`,
-    //         headers: {
-    //             kyrioToken: `${localStorage.getItem("kyrio")}`,
-    //         },
+    //         url: `employee/employeeList/${ids}`,
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_TAXES_SALES, response: JSON.parse(ids) });

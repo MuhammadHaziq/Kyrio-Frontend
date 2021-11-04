@@ -1,64 +1,148 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  CDataTable,
-  CCardBody,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
+  CDataTable
 } from "@coreui/react";
-import {
-  toggle_modifier_category_summary_single_select,
-  toggle_modifier_category_summary_all_select,
-  update_row_data,
-} from "../../actions/reports/salesModifierActions";
-import { useDispatch } from "react-redux";
-import dateFormat from "dateformat";
+import ModifierIcon from '../../assets/icons/modifierIcon.svg'
 
 const SalesModifierDatatableNew = (props) => {
-  const dispatch = useDispatch();
+  
+  const [fields, setFields] = useState([]);
+  const [fieldLength, setFieldLength] = useState(0);
 
-  const [selected, setSelected] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const check = (e, item) => {
-    dispatch(toggle_modifier_category_summary_single_select(item));
-  };
-
-  const clickRow = (item, index, column) => {
-    if (column !== "select") {
-      dispatch(update_row_data(item));
+  useEffect(() => {
+    if(props.columns.length > 0){
+      let result = props.columns.filter(itm => itm.isShow);
+      setFieldLength(100/result.length)
+      setFields(result)
     }
-  };
-
-  const checkAll = (e, selectAll) => {
-    setSelectAll(!selectAll);
-    dispatch(toggle_modifier_category_summary_all_select(!selectAll));
-  };
+  },[props.columns])
+  
   return (
     <CDataTable
+      itemsPerPageSelect
       items={props.sale_modifier_summary}
-      fields={[
-        { key: "modifier", label: "Modifier", filter: true },
-        {
-          key: "quantity_sold",
-          label: "Quantity Sold",
-          filter: true,
-        },
-        { key: "gross_sales", label: "Gross Sales", filter: true },
-        {
-          key: "quantity_refunded",
-          label: "Quantity Refunded",
-          filter: true,
-        },
-        { key: "refunds", label: "Refunds", filter: true },
-        { key: "net_sales", label: "Net sales", filter: true },
-      ]}
+      fields={fields}
       itemsPerPage={10}
       columnFilter
       sorter
       hover
       outlined
       pagination
+      scopedSlots = {{
+        'Modifier': (item)=>(
+          <td style={{ borderRight: "1px solid #d8dbe0", width: fieldLength+"%" }}>
+            <strong>
+            <img
+          src={ModifierIcon}
+          className="c-sidebar-brand-full"
+          alt="kyrio POS"
+          style={{ width: "40px", height: "40px" }}
+          />&nbsp;&nbsp;
+              {item.Modifier}</strong>
+          </td>
+        ),
+        'quantitySold': (item)=>(
+          <td>
+            <strong>{item.quantitySold}</strong>
+          </td>
+        ),
+        'grossSales': (item)=>(
+          <td>
+            <strong>{item.grossSales}</strong>
+          </td>
+        ),
+        'refundQuantitySold': (item)=>(
+          <td>
+            <strong>{item.refundQuantitySold}</strong>
+          </td>
+        ),
+        'refundGrossSales': (item)=>(
+          <td>
+            <strong>{item.refundGrossSales}</strong>
+          </td>
+        ),
+        'net_sales': (item)=>(
+          <td>
+            <strong>{parseFloat(item.grossSales - item.refundGrossSales).toFixed(2)}</strong>
+          </td>
+        ),
+        'details':
+            (item, index)=>{
+              return (
+                <table style={{width: "100%"}}>
+                  <tbody>
+                    {item.options.map((op) => {
+                        return (<tr>
+                          {fields.find(item => item.key == "Modifier")?.isShow ? 
+                          <td style={{ width: fieldLength+"%", borderRight: "1px solid #d8dbe0", paddingLeft: "6%" }}><span>{op.Option}</span></td>
+                          : "" }
+                          {fields.find(item => item.key == "quantitySold")?.isShow ? 
+                          <td style={{ width: fieldLength+"%" }}>{op.quantitySold}</td>
+                          : "" }
+                          {fields.find(item => item.key == "grossSales")?.isShow ? 
+                          <td style={{ width: "16%" }}>{op.grossSales}</td>
+                          : "" }
+                          {fields.find(item => item.key == "refundQuantitySold")?.isShow ? 
+                          <td style={{ width: fieldLength+"%" }}>{op.refundQuantitySold}</td>
+                          : "" }
+                          {fields.find(item => item.key == "refundGrossSales")?.isShow ? 
+                          <td style={{ width: fieldLength+"%" }}>{op.refundGrossSales}</td>
+                          : "" }
+                          {fields.find(item => item.key == "net_sales")?.isShow ? 
+                          <td style={{ width: fieldLength+"%" }}>{parseFloat(op.grossSales - op.refundGrossSales).toFixed(2)}</td>
+                          : "" }
+                          </tr>
+                        )
+                    })}
+                    
+                  </tbody>
+                  </table>
+                // <CDataTable
+                // itemsPerPageSelect
+                // items={item.options}
+                // fields={[
+                //   { key: "Option", label: "Option", filter: true },
+                //   {
+                //     key: "quantitySold",
+                //     label: "Quantity Sold",
+                //     filter: true,
+                //   },
+                //   { key: "grossSales", label: "Gross Sales", filter: true },
+                //   {
+                //     key: "refundQuantitySold",
+                //     label: "Quantity Refunded",
+                //     filter: true,
+                //   },
+                //   { key: "refundGrossSales", label: "Refunds", filter: true },
+                //   { key: "net_sales", label: "Net sales", filter: true },
+                // ]}
+                // addTableClasses={"hideDetailMenu"}
+                // size="lg"
+                // header={false}
+                // columnFilter={false}
+                // responsive={true}
+                // sorter={false}
+                // hover={false}
+                // outlined={false}
+                // pagination={false}
+                // />
+              // <CCollapse show={true}>
+              //   <CCardBody>
+              //     <h4>
+              //       {item.username}
+              //     </h4>
+              //     <p className="text-muted">User since: {item.registered}</p>
+              //     <CButton size="sm" color="info">
+              //       User Settings
+              //     </CButton>
+              //     <CButton size="sm" color="danger" className="ml-1">
+              //       Delete
+              //     </CButton>
+              //   </CCardBody>
+              // </CCollapse>
+            )
+          }
+      }}
     />
   );
 };

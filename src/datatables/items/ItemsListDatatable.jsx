@@ -38,6 +38,7 @@ const ItemsListDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.itemList}
       fields={[
         { key: "select", label: "Select", filter: false },

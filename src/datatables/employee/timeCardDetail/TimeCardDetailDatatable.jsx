@@ -11,6 +11,7 @@ import dateFormat from "dateformat";
 const TimeCardDetailDatatable = (props) => {
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.timeCard_detail}
       fields={[
         { key: "created_at", label: "Date", filter: true },

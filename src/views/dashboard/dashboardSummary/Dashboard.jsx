@@ -3,6 +3,7 @@ import {
   CButton,
   CButtonGroup,
   CCard,
+  CCardHeader,
   CCardBody,
   CCardFooter,
   CCol,
@@ -14,8 +15,9 @@ import MainChartExample from "../charts/MainChartExample.js";
 import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
-// import { get_sales_summary } from "../../../actions/dashboard/salesSummaryActions";
 import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
 
 const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
@@ -538,6 +540,37 @@ const Dashboard = (props) => {
         </CCardFooter>
       </CCard>
       <CCard>
+        <CCardHeader>
+          <CRow>
+            {typeof salesSummary?.sales_graph_data?.summary !== "undefined" && salesSummary?.sales_graph_data?.summary?.length > 0 ?
+              <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                <CSVLink data={salesSummary?.sales_graph_data?.summary?.length > 0 ? salesSummary?.sales_graph_data?.summary?.map(itm => {
+                    return {
+                      ["Time"]: itm.Date,
+                      ["Gross sales"]: itm.GrossSales?.toFixed(2),
+                      ["Refunds"]: itm.Refunds?.toFixed(2),
+                      ["Discounts"]: itm.discounts?.toFixed(2),
+                      ["Net sales"]: itm.NetSales?.toFixed(2),
+                      ["Cost of Goods"]: itm.CostOfGoods?.toFixed(2),
+                      ["Gross profit"]: itm.GrossProfit?.toFixed(2),
+                      ["Margin"]: itm.Margin,
+                      ["Taxes"]: '',
+                    }
+                  }) : []}
+                  filename={"SalesSummary"+dateformat(new Date)+".csv"}
+                  target="_blank"
+                  >
+                  <CButton
+                    color="secondary"
+                    className="btn-square"
+                  >
+                    EXPORT
+                  </CButton>
+                  </CSVLink>
+              </CCol>
+              : ""}
+          </CRow>
+        </CCardHeader>
         <CCardBody>
           <SalesSummaryDatatableNew
             {...props}

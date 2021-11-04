@@ -41,6 +41,7 @@ const SalesEmployeeDatatable = (props) => {
     //             },
     return (
         <CDataTable
+   itemsPerPageSelect
             items={props.sales_by_employee_detail}
             fields={[
                 { key: "Name", label: "Name", filter: true },

@@ -1,61 +1,37 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CContainer,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
   get_tax_sale_summary,
-  delete_tax_sale,
 } from "../../../actions/reports/salesTaxesActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesTaxDatatableNew from "../../../datatables/reports/SalesTaxDatatableNew";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
 
 const SalesTax = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
+  const taxes_sales_summary = useSelector((state) => state.reports.salesTaxesReducer.taxes_sales_summary)
 
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [filterReset, setFilterReset] = useState(false);
+  const [exportData, setExportData] = useState([])
   const [daysFilter, setDaysFilter] = useState([
-    { days: 0, name: "Hours", disable: true },
-    { days: 1, name: "Days", disable: true },
-    { days: 6, name: "Weeks", disable: true },
-    { days: 28, name: "Months", disable: true },
-    { days: 120, name: "Quaters", disable: true },
-    { days: 365, name: "Years", disable: true },
+    { days: 0, name: "Hours", disable: false, active: true },
+    { days: 1, name: "Days", disable: true, active: false },
+    { days: 6, name: "Weeks", disable: true, active: false },
+    { days: 28, name: "Months", disable: true, active: false },
+    { days: 120, name: "Quaters", disable: true, active: false },
+    { days: 365, name: "Years", disable: true, active: false },
   ]);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
-
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
 
   useEffect(() => {
     return () => {
@@ -65,34 +41,47 @@ const SalesTax = () => {
   }, []);
 
   useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
+    if(taxes_sales_summary?.taxes?.length > 0){
+      let exortData = []
+      taxes_sales_summary.taxes.map(itm => {
+          exortData.push({
+            ["Tax name"]: itm.title,
+            ["Tax rate"]: itm.tax_rate,
+            ["Taxable sales"]: itm.taxableSale,
+            ["Tax amount"]: itm.taxAmount
+          })
+      });
+      // exortData.push({
+      //   ["Taxable sales"]: taxes_sales_summary.taxableSales,        
+      //   ["Non-taxable sales"]: taxes_sales_summary.NonTaxableSales,        
+      //   ["Total net sales"]: taxes_sales_summary.NetSales,        
+      // })
+      setExportData(exortData)
     }
-  }, [filterComponent, changeInFilter]);
-
-  const deleteSalesTax = () => {
-    console.log("Delete");
-    setShowAlert(!showAlert);
-  };
+  }, [taxes_sales_summary]);
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_tax_sale_summary}
+      />
       <CCard>
         <CCardBody>
           <CRow>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Taxable sales</h6>
-              <h2>0.00</h2>
+              <h2>{taxes_sales_summary.taxableSales}</h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Non-taxable sales</h6>
-              <h2>0.00</h2>
+              <h2>{taxes_sales_summary.NonTaxableSales}</h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Total net sales</h6>
-              <h2>0.00</h2>
+              <h2>{taxes_sales_summary.NetSales}</h2>
             </CCol>
           </CRow>
         </CCardBody>
@@ -103,53 +92,24 @@ const SalesTax = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton
-                    color="success"
-                    className="btn-square"
-                    variant="outline"
+                {typeof taxes_sales_summary.taxes !== "undefined" && taxes_sales_summary.taxes.length > 0 ?
+                <CSVLink data={exportData}
+                  filename={"SalesByTaxes"+dateformat(new Date)+".csv"}
+                  target="_blank"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm "
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
+                    <CButton
+                      color="secondary"
+                      className="btn-square"
                     >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
-                  </CButton>
-                  {true ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Summary?`}
-                        buttonAction={deleteSalesTax}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
+                      EXPORT
+                    </CButton>
+                  </CSVLink>
+                  : ""}
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesTaxDatatableNew taxes_sales_summary={[]} />
+              <SalesTaxDatatableNew taxes_sales_summary={taxes_sales_summary.taxes} />
             </CCardBody>
           </CCard>
         </CCol>

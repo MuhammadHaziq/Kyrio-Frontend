@@ -38,6 +38,7 @@ const CategoryDatatable = (props) => {
   };
   return (
     <CDataTable
+      itemsPerPageSelect
       items={props.categories}
       fields={[
         {

@@ -17,6 +17,7 @@ const SalesItemDatatableNew = (props) => {
 
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.item_sale_summary}
       fields={fields}
       itemsPerPage={10}

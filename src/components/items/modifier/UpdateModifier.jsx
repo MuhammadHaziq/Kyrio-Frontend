@@ -611,14 +611,14 @@ const UpdateModifier = (props) => {
                   />
                   <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
                   {storeId.filter((item) => item.isSelected === false).length === 0
-                  ? "Available in all storesssss"
+                  ? "Available in all stores"
                   : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
                   </CLabel>
                 </CFormGroup>
               </CCol>
-              <CCol md="8">
+              <CCol md="8" >
                 {storeId.map((item, index) => (
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
+                  <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%"}}>
                     <CInputCheckbox
                       custom
                       name="storeId"

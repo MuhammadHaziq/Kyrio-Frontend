@@ -568,7 +568,7 @@ const AddModifier = (props) => {
               </CCol>
               <CCol md="8">
                 {storeId.map((item, index) => (
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
+                  <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%"}}>
                     <CInputCheckbox
                       custom
                       name="storeId"

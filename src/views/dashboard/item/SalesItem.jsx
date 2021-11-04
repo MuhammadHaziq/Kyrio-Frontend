@@ -136,8 +136,8 @@ const SalesItem = () => {
           <CCard>
             <CCardHeader>
               <CRow>
-              {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
                 <CSVLink data={item_sales_summary.itemsReport.length > 0 ? item_sales_summary.itemsReport.map(itm => {
                     return {
                       ["Name"]: itm.name,
@@ -158,32 +158,14 @@ const SalesItem = () => {
                   target="_blank"
                   >
                   <CButton
-                    color="success"
+                    color="secondary"
                     className="btn-square"
-                    variant="outline"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm "
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
+                    EXPORT
                   </CButton>
                   </CSVLink>
+                  : ""}
                 </CCol>
-                : ""}
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
                     xs="12"

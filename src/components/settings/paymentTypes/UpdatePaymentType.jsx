@@ -274,7 +274,7 @@ const UpdatePaymentType = (props) => {
                   className="btn-pill pull-right"
                   variant="outline"
                 >
-                  Update
+                  UPDATE
                 </CButton>
               </CCol>
             </CRow>

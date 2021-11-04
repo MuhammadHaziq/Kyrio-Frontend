@@ -287,7 +287,7 @@ const UpdateKitchenPrinter = (props) => {
                   color="success"
                   onClick={updateKitchenPrinter}
                 >
-                  Update
+                  UPDATE
                 </CButton>
               </CCol>
             </CRow>

@@ -304,7 +304,7 @@ const UpdateStore = (props) => {
                   className="btn-pill pull-right"
                   color="success"
                 >
-                  Update
+                  UPDATE
                 </CButton>
               </CCol>
             </CRow>

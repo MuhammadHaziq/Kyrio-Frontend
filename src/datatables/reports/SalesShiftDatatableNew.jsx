@@ -36,6 +36,7 @@ const SalesShiftDatatableNew = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.sale_shift_summary}
       fields={[
         { key: "pos", label: "POS", filter: true },

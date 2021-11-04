@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
   CInputCheckbox,
   CDropdown,
@@ -17,60 +14,32 @@ import {
   CFormGroup,
   CLabel,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import dateformat from "dateformat";
-import FilterComponent from "../FilterComponent";
-import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import {
-  get_modifier_category_summary,
-  delete_modifier_category_summary,
+  get_modifier_category_summary
 } from "../../../actions/reports/salesModifierActions";
+import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesModifierDatatableNew from "../../../datatables/reports/SalesModifierDatatableNew";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
-import { getStyle, hexToRgba } from "@coreui/utils/src";
+import dateformat from "dateformat";
+import { CSVLink } from "react-csv";
 
 const SalesModifier = () => {
   const dispatch = useDispatch();
-  const filterComponent = useSelector(
-    (state) => state.dashBoard.filterComponentReducer
-  );
 
-  const [columns, setColumns] = useState([
-    { name: "modifier", title: "Modifier", isHidden: false },
-    { name: "quantity_sold", title: "Quantity Sold", isHidden: false },
-    { name: "gross_sales", title: "Gross Sales", isHidden: false },
-    { name: "quantity_refunded", title: "Quantity Refunded", isHidden: true },
-    { name: "refunds", title: "Refunds", isHidden: true },
-    { name: "net_sales", title: "Net Sales", isHidden: true },
-  ]);
+  const sale_modifier_summary = useSelector((state) => state.reports.salesModifierReducer.sale_modifier_summary)
+
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [filterReset, setFilterReset] = useState(false);
+  const [exportData, setExportData] = useState([])
   const [daysFilter, setDaysFilter] = useState([
-    { days: 0, name: "Hours", disable: true },
-    { days: 1, name: "Days", disable: true },
-    { days: 6, name: "Weeks", disable: true },
-    { days: 28, name: "Months", disable: true },
-    { days: 120, name: "Quaters", disable: true },
-    { days: 365, name: "Years", disable: true },
+    { days: 0, name: "Hours", disable: false, active: true },
+    { days: 1, name: "Days", disable: true, active: false },
+    { days: 6, name: "Weeks", disable: true, active: false },
+    { days: 28, name: "Months", disable: true, active: false },
+    { days: 120, name: "Quaters", disable: true, active: false },
+    { days: 365, name: "Years", disable: true, active: false },
   ]);
-  const usePrevious = (data) => {
-    const ref = React.useRef();
-    useEffect(() => {
-      ref.current = data;
-    }, [data]);
-    return ref.current;
-  };
-  // Sales by Day full month
-  const [sales, setSales] = useState([]);
-  const [orginalSale, setOrginalSale] = useState([]);
-  var prevDateRange = usePrevious(filterComponent.filterDate);
-  var changeInFilter = usePrevious(filterComponent);
-
-  const getNatural = (num) => {
-    return parseFloat(num.toString().split(".")[0]);
-  };
 
   useEffect(() => {
     return () => {
@@ -80,82 +49,78 @@ const SalesModifier = () => {
   }, []);
 
   useEffect(() => {
-    if (filterComponent !== changeInFilter && changeInFilter !== undefined) {
-      console.log(changeInFilter, "PrevchangeInFilter");
-      console.log(filterComponent, "vchangeInFilter");
-    }
-  }, [filterComponent, changeInFilter]);
-
-  const deleteSalesModifier = () => {
-    console.log("Delete");
-    setShowAlert(!showAlert);
-  };
-
-  const handleOnChangeCheck = (title) => {
-    setColumns(
-      columns.slice().map((item) => {
-        if (item.title.trim() === title.trim()) {
-          return {
-            ...item,
-            isHidden: !item.isHidden,
-          };
-        }
-        return item;
+    if(sale_modifier_summary.length > 0){
+      let exortData = []
+      sale_modifier_summary.map(itm => {
+        return itm.options.map(op => {
+          exortData.push({
+            ["Modifier name"]: itm.Modifier,
+            ["Option name"]: op.Option,
+            ["Quantity Sold"]: op.quantitySold,
+            ["Gross Sales"]: op.grossSales,
+            ["Quantity Refunded"]: op.refundQuantitySold,
+            ["Refunds"]: op.refundGrossSales,
+            ["Net Sales"]: parseFloat(op.grossSales - op.refundQuantitySold).toFixed(2),
+            ["H"]: "",
+          })
+        })
       })
-    );
+      setExportData(exortData)
+    }
+  }, [sale_modifier_summary]);
+
+  const [columns, setColumns] = useState([
+    { key: "Modifier",           label: "Modifier",          filter: true, isShow: true, disabled: true },
+    { key: "quantitySold",       label: "Quantity Sold",     filter: true, isShow: true, disabled: false },
+    { key: "grossSales",         label: "Gross Sales",       filter: true, isShow: true, disabled: false },
+    { key: "refundQuantitySold", label: "Quantity Refunded", filter: true, isShow: true, disabled: false },
+    { key: "refundGrossSales",   label: "Refunds",           filter: true, isShow: true, disabled: false },
+    { key: "net_sales",          label: "Net sales",         filter: true, isShow: true, disabled: false }
+  ]);
+
+  const handleOnChangeCheck = (itm) => {
+    if(!itm.disabled){
+      setColumns(
+        columns.slice().map((item) => {
+          if (item.key.trim() === itm.key.trim()) {
+            return {
+              ...item,
+              isShow: !item.isShow,
+            };
+          }
+          return item;
+        })
+      );
+    }
   };
 
   return (
     <>
-      <FilterComponent handleOnChangeSales={() => console.log("No Function")} />
+      <ReportsFilters
+        daysFilter={daysFilter}
+        resetFilter={filterReset}
+        filter={false}
+        get_filter_record={get_modifier_category_summary}
+      />
       <CRow>
         <CCol>
           <CCard>
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton
-                    color="success"
-                    className="btn-square"
-                    variant="outline"
+                {typeof sale_modifier_summary !== "undefined" && sale_modifier_summary.length > 0 ?
+                <CSVLink data={exportData}
+                  filename={"SalesByModifier"+dateformat(new Date)+".csv"}
+                  target="_blank"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512 512"
-                      className="c-icon c-icon-sm "
-                      role="img"
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        fontSize: "1rem",
-                      }}
+                    <CButton
+                      color="secondary"
+                      className="btn-square"
                     >
-                      <polygon
-                        fill="var(--ci-primary-color, currentColor)"
-                        points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                        className="ci-primary"
-                      ></polygon>
-                    </svg>
-                    Export
-                  </CButton>
-                  {true ? (
-                    <React.Fragment>
-                      <ConformationAlert
-                        button_text="Delete"
-                        heading="Delete Sales"
-                        section={`Are you sure you want to delete the Sales Modifier?`}
-                        buttonAction={deleteSalesModifier}
-                        show_alert={showAlert}
-                        hideAlert={setShowAlert}
-                        variant="outline"
-                        className="ml-2 btn-square"
-                        color="danger"
-                        block={false}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
+                      EXPORT
+                    </CButton>
+                  </CSVLink>
+                  : ""}
                 </CCol>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
@@ -174,7 +139,7 @@ const SalesModifier = () => {
                           return (
                             <React.Fragment>
                               <CDropdownItem
-                                onClick={() => handleOnChangeCheck(item.title)}
+                                onClick={() => handleOnChangeCheck(item)}
                               >
                                 <CFormGroup variant="custom-checkbox" inline>
                                   <CInputCheckbox
@@ -182,13 +147,14 @@ const SalesModifier = () => {
                                     name="datatableColumn"
                                     id={"datatableColumn" + index}
                                     value={index}
-                                    checked={!item.isHidden}
+                                    disabled={item.disabled}
+                                    checked={item.isShow}
                                   />
                                   <CLabel
                                     variant="custom-checkbox"
                                     id={"datatableColumn" + index}
                                   >
-                                    {item.title}
+                                    {item.label}
                                   </CLabel>
                                 </CFormGroup>
                               </CDropdownItem>
@@ -203,7 +169,7 @@ const SalesModifier = () => {
             </CCardHeader>
             <CCardBody>
               <SalesModifierDatatableNew
-                sale_modifier_summary={[]}
+                sale_modifier_summary={sale_modifier_summary}
                 columns={columns}
               />
             </CCardBody>

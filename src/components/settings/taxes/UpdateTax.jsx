@@ -542,7 +542,7 @@ const UpdateTax = (props) => {
             color="success"
             onClick={updateItemTax}
           >
-            Update
+            UPDATE
           </CButton>
         </CCol>
       </CRow>

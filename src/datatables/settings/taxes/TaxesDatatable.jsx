@@ -33,6 +33,7 @@ const TaxesDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.taxes}
       fields={[
         {

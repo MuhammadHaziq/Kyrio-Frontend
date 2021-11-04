@@ -160,7 +160,7 @@ const SalesReceipts = () => {
                   <>
                   
                     <CDropdown>
-                      <CDropdownToggle color="secondary">Export</CDropdownToggle>
+                      <CDropdownToggle color="secondary">EXPORT</CDropdownToggle>
                       <CDropdownMenu>
                         <CDropdownHeader><ExportCSVReceipts /></CDropdownHeader>
                         <CDropdownHeader><ExportCSVReceiptsByItem /></CDropdownHeader>

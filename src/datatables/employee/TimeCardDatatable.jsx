@@ -35,6 +35,7 @@ const TimeCardDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.timeCard_list}
       fields={[
         {

@@ -39,6 +39,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
   return (
     <>
     <CDataTable
+   itemsPerPageSelect
       items={props.sales_by_paymentType_detail}
       fields={[
         { key: "PaymentType", label: "Payment type", filter: true },

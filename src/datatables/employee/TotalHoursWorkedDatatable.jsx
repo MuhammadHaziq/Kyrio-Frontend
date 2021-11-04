@@ -9,6 +9,7 @@ import {
 const TotalHoursWorkedDatatable = (props) => {
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.total_working_hours}
       fields={[
         { key: "employeeName", label: "Employee", filter: true },

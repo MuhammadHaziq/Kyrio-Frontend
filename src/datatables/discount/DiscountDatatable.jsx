@@ -32,6 +32,7 @@ const DiscountDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.discount}
       fields={[
         {

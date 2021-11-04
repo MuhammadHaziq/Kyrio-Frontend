@@ -30,6 +30,7 @@ const SalesReceiptDatatable = (props) => {
   };
   return (
     <CDataTable
+   itemsPerPageSelect
       items={props.sale_receipt_sumary}
       fields={[
         { key: "receipt_number", label: "Receipt no", filter: true },

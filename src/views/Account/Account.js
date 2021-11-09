@@ -13,9 +13,13 @@ import {
   CCardFooter,
   CInputGroupAppend,
   CInputGroupText,
-  CSelect
+  CSelect,
 } from "@coreui/react";
+var languages = require("language-list")();
+
 const Account = () => {
+  const [language] = useState(languages.getData());
+
   return (
     <React.Fragment>
       <CRow className="justify-content-left">
@@ -113,6 +117,52 @@ const Account = () => {
                         </option>
                         <option value="3">
                           (UTC+05:30) Sri Jayawardenepura
+                        </option>
+                      </CSelect>
+                    </CInputGroup>
+                  </CFormGroup>
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol>
+                  <CFormGroup>
+                    <CLabel htmlFor="language">UI Language</CLabel>
+                    <CInputGroup>
+                      <CSelect
+                        size="md"
+                        name="language"
+                        id="language"
+                        value="en"
+                      >
+                        {language.map((item, index) => {
+                          return (
+                            <option value={item.code} key={index}>
+                              {item.language}
+                            </option>
+                          );
+                        })}
+                      </CSelect>
+                    </CInputGroup>
+                  </CFormGroup>
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol>
+                  <CFormGroup>
+                    <CLabel htmlFor="number_format">Select format</CLabel>
+                    <CInputGroup>
+                      <CSelect
+                        type="select"
+                        name="number_format"
+                        id="number_format"
+                        placeholder="0.00"
+                      >
+                        <option value="">Please select</option>
+                        <option value="1">
+                          Amount with 2 decimals
+                        </option>
+                        <option value="2">
+                          Amount with 0 decimals
                         </option>
                       </CSelect>
                     </CInputGroup>

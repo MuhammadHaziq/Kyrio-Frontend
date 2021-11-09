@@ -270,7 +270,6 @@ const OpenTickets = () => {
                     <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                       <CFormGroup>
                         <CSelect
-                          custom
                           size="md"
                           name="selectStore"
                           id="selectStore"

@@ -309,7 +309,6 @@ const AddItem = (props) => {
               <CFormGroup>
                 <CLabel htmlFor="categoryId">Category</CLabel>
                 <CSelect
-                  custom
                   size="md"
                   name="categoryId"
                   id="categoryId"

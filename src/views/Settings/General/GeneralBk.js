@@ -427,7 +427,6 @@ const General = () => {
               <CLabel htmlFor="language">UI Language</CLabel>
               <CInputGroup>
                 <CSelect
-                  custom
                   size="md"
                   name="language"
                   id="language"

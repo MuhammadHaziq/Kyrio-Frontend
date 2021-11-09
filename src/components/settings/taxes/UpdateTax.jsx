@@ -370,7 +370,6 @@ const UpdateTax = (props) => {
               <CFormGroup>
                 <CLabel htmlFor="taxTypeId">Type</CLabel>
                 <CSelect
-                  custom
                   size="md"
                   name="taxTypeId"
                   id="taxTypeId"
@@ -393,7 +392,6 @@ const UpdateTax = (props) => {
               <CFormGroup>
                 <CLabel htmlFor="taxOptionId">Option</CLabel>
                 <CSelect
-                  custom
                   size="md"
                   name="taxOptionId"
                   id="taxOptionId"

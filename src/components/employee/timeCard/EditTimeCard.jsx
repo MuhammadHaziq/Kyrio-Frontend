@@ -379,7 +379,6 @@ const EditTimeCard = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="employeeId"
                         id="employeeId"
@@ -417,7 +416,6 @@ const EditTimeCard = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="storeId"
                         id="storeId"

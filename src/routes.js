@@ -4,6 +4,9 @@ import React from "react";
 const Dashboard = React.lazy(() =>
   import("./views/dashboard/dashboardSummary/Dashboard")
 );
+const Account = React.lazy(() =>
+  import("./views/Account/Account")
+);
 const SalesItem = React.lazy(() => import("./views/dashboard/item/SalesItem"));
 // const SalesItem = React.lazy(() =>
 //   import("./views/dashboard/salesByItems/SalesByItems")
@@ -47,6 +50,7 @@ const TotalHoursWorked = React.lazy(() =>
 const routes = [
 
   { path: "/", exact: true, name: "Home", Component: Dashboard },
+  { path: "/account", exact: true, name: "Account", Component: Account },
   { path: "/reports/sales", name: "Reports / Sales Summary", Component: Dashboard },
   {
     path: "/reports/goods",

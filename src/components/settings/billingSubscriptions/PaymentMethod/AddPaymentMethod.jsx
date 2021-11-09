@@ -185,7 +185,6 @@ const AddPaymentMethod = (props) => {
                         Country of business registration
                       </CLabel>
                       <CSelect
-                        custom
                         name="country"
                         id="country"
                         value={country}

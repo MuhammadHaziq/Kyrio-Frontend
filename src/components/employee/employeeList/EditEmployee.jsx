@@ -481,7 +481,6 @@ const EditEmployee = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="role"
                         id="role"
@@ -501,7 +500,6 @@ const EditEmployee = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="role"
                         id="role"
@@ -530,7 +528,6 @@ const EditEmployee = (props) => {
                           ? "form-control is-invalid"
                           : "form-control"
                       }
-                      custom
                       size="md"
                       name="role"
                       id="role"

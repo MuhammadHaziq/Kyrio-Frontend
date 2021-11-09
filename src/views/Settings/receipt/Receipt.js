@@ -251,7 +251,6 @@ const Receipt = (props) => {
                   <CCol xs="12" lg="6">
                     <CFormGroup>
                       <CSelect
-                        custom
                         size="md"
                         name="selectedStoreId"
                         id="selectedStoreId"
@@ -470,7 +469,6 @@ const Receipt = (props) => {
                         Receipt language
                       </CLabel>
                       <CSelect
-                        custom
                         size="md"
                         name="selectedLanguage"
                         id="selectedLanguage"

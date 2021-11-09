@@ -331,7 +331,6 @@ const AddEmployeeTime = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="employeeId"
                         id="employeeId"
@@ -368,7 +367,6 @@ const AddEmployeeTime = (props) => {
                             ? "form-control is-invalid"
                             : "form-control"
                         }
-                        custom
                         size="md"
                         name="storeId"
                         id="storeId"

@@ -160,7 +160,6 @@ const AddPosDevice = (props) => {
             </CFormGroup>
             <CFormGroup>
               <CSelect
-                custom
                 size="md"
                 name="selectedStoreId"
                 id="selectedStoreId"

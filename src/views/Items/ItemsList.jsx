@@ -641,7 +641,6 @@ const ItemsList = () => {
                           <CCol xs="12" sm="2" md="2" xl="xl">
                             <CFormGroup>
                               <CSelect
-                                custom
                                 size="md"
                                 name="storeId"
                                 id="storeId"
@@ -666,7 +665,6 @@ const ItemsList = () => {
                       <CCol xs="12" sm="2" md="2" xl="xl">
                         <CFormGroup>
                           <CSelect
-                            custom
                             size="md"
                             name="selectCategory"
                             id="selectCategory"
@@ -689,7 +687,6 @@ const ItemsList = () => {
                       <CCol xs="12" sm="2" md="2" xl="xl">
                         <CFormGroup>
                           <CSelect
-                            custom
                             size="md"
                             name="selectStock"
                             id="selectStock"

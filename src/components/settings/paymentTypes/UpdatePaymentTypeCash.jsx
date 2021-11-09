@@ -175,7 +175,6 @@ const UpdatePaymentType = (props) => {
             </CFormGroup>
             <CFormGroup>
               <CSelect
-                custom
                 size="md"
                 name="cashPaymentRound"
                 id="cashPaymentRound"

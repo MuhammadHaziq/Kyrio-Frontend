@@ -204,7 +204,6 @@ const EmployeeList = () => {
                           <CCol xs="12" sm="6" md="6" xl="xl">
                             <CFormGroup style={{ float: "right" }}>
                               <CSelect
-                                custom
                                 size="md"
                                 name="selectStore"
                                 id="selectStore"

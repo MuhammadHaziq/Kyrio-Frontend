@@ -148,7 +148,6 @@ const AddNewPaymentType = (props) => {
           <CForm onSubmit={submitPaymentForm}>
             <CFormGroup>
               <CSelect
-                custom
                 size="md"
                 name="selectedPaymentType"
                 id="selectedPaymentType"

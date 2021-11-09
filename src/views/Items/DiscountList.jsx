@@ -165,7 +165,6 @@ const DiscountList = (props) => {
                   >
                     <CFormGroup>
                       <CSelect
-                        custom
                         size="md"
                         name="selectStore"
                         id="selectStore"

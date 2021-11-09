@@ -333,7 +333,6 @@ class DiningOptions2 extends Component {
                       <CCol xs="6" lg="6">
                         <CFormGroup>
                           <CSelect
-                            custom
                             size="md"
                             name="selectedStoreId"
                             id="selectStore"

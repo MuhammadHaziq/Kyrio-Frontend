@@ -38,7 +38,7 @@ const TheHeaderDropdown = () => {
         </CDropdownItem>
         <CDropdownItem tag='span'>
           <MdPerson />
-          <CHeaderNavLink to="/"> Profile</CHeaderNavLink>
+          <CHeaderNavLink to="/account"> Account</CHeaderNavLink>
         </CDropdownItem>
         <CDropdownItem divider />
         <CDropdownItem tag='span'>

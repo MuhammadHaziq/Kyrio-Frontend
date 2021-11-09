@@ -157,7 +157,6 @@ const UpdatePosDevice = (props) => {
             </CFormGroup>
             <CFormGroup>
               <CSelect
-                custom
                 size="md"
                 name="selectedStoreId"
                 id="selectedStoreId"

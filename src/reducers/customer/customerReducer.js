@@ -8,7 +8,7 @@ import {
   ROW_DATA_CUSTOMER,
   UPDATE_POINTS_BALANCE,
   UPDATE_CUSTOMER,
-  EDIT_PROFILE_VIEW,
+  EDIT_PROFILE_VIEW
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -56,7 +56,7 @@ const customerReducer = (state = initialState, action) => {
             });
           }
           return item;
-        }),
+        })
       });
     }
 

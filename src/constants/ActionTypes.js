@@ -4,6 +4,15 @@ export const SIDEBAR = "SIDEBAR";
 export const DARK = "DARK";
 
 // DEFAULT Authorization
+export const GET_ACCOUNT = "GET_ACCOUNT";
+export const CHECK_PASSWORD = "CHECK_PASSWORD"
+export const CHANGE_CHECK_PASSWORD = "CHANGE_CHECK_PASSWORD"
+export const CHANGE_EMAIL = "CHANGE_EMAIL"
+export const CHANGE_PASSWORD = "CHANGE_PASSWORD"
+export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT"
+export const CHANGE_UPDATE_CHECK = "CHANGE_UPDATE_CHECK"
+
+// DEFAULT Authorization
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT"
 

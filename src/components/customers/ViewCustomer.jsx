@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
 import {
   CButton,
   CCard,
   CCardBody,
   CCardHeader,
-  CCardFooter,
   CCol,
   CContainer,
   CForm,
@@ -14,11 +12,6 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
-  CInvalidFeedback,
-  CFormGroup,
-  CInputCheckbox,
-  CLabel,
-  CSpinner,
   CFade,
   CDropdown,
   CDropdownToggle,
@@ -30,17 +23,10 @@ import {
   CModalFooter,
 } from "@coreui/react";
 import {
-  MdPerson,
-  MdLock,
-  MdBusiness,
-  MdFlag,
   MdKeyboardArrowLeft,
   MdMailOutline,
   MdLocationOn,
-  MdNote,
-  MdPermContactCalendar,
-  MdStar,
-  MdShoppingBasket,
+  MdNote
 } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
@@ -48,17 +34,10 @@ import CIcon from "@coreui/icons-react";
 import NumberFormat from "react-number-format";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import {
-  CountryDropdown,
-  RegionDropdown,
-  CountryRegionData,
-} from "react-country-region-selector";
-import ConformationAlert from "../conformationAlert/ConformationAlert";
 import EditCustomer from "./EditCustomer.jsx";
 
 import {
   update_points_balance,
-  delete_customer,
   edit_profile_view,
 } from "../../actions/customer/customerActions";
 const ViewCustomer = (props) => {
@@ -389,10 +368,10 @@ const ViewCustomer = (props) => {
               </CModalBody>
               <CModalFooter>
                 <CButton color="secondary" onClick={toggle}>
-                  Cancel
+                  CANCEL
                 </CButton>
                 <CButton color="success" onClick={save_points_balance}>
-                  Save
+                  SAVE
                 </CButton>
               </CModalFooter>
             </CModal>

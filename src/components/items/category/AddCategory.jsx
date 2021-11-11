@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_category } from "../../../actions/items/categoryActions";
+
 const AddCategory = (props) => {
   const [fields, setFields] = useState({
     category_name: "",

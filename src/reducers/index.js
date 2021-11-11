@@ -31,6 +31,7 @@ import employeeListReducer from "./employee/employeeListReducer";
 import timeCardReducer from "./employee/timeCardReducer";
 import userRolesReducer from "./employee/userRolesReducer";
 import openTicketReducer from "./settings/openTicketReducer";
+import accountReducer from "./account/accountReducer";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
@@ -84,6 +85,7 @@ const employeeReducers = combineReducers({
   timeCardReducer,
 });
 const rootReducer = combineReducers({
+  account: accountReducer,
   settings: settingsReducer,
   auth: authReducer,
   msg: messageReducer,

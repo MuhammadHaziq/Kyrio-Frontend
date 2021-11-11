@@ -5,8 +5,9 @@ const Dashboard = React.lazy(() =>
   import("./views/dashboard/dashboardSummary/Dashboard")
 );
 const Account = React.lazy(() =>
-  import("./views/Account/Account")
+  import("./views/Account/Account.jsx")
 );
+
 const SalesItem = React.lazy(() => import("./views/dashboard/item/SalesItem"));
 // const SalesItem = React.lazy(() =>
 //   import("./views/dashboard/salesByItems/SalesByItems")

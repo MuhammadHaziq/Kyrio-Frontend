@@ -12,13 +12,13 @@ import {
   CSwitch,
   CLink,
 } from "@coreui/react";
-import {
-  MdKeyboardArrowUp,
-  MdKeyboardArrowDown
-} from "react-icons/md";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import parse from "html-react-parser";
-import { toggle_feature_module, get_setting_features } from "../../../actions/settings/featuresActions";
+import {
+  toggle_feature_module,
+  get_setting_features,
+} from "../../../actions/settings/featuresActions";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
@@ -31,18 +31,17 @@ const General = () => {
   const [sChecked, setChecked] = React.useState(user.features);
   const [checkPrev, setCheckPrev] = useState([]);
 
- useEffect(()=>{
-  dispatch(get_setting_features());
- },[])
-  const closeAlert = () => {
-    // setChecked(user.features);
+  useEffect(() => {
     dispatch(get_setting_features());
-  }
+  }, []);
+  const closeAlert = () => {
+    dispatch(get_setting_features());
+  };
   const showAlert = (param) => {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <div className='custom-ui'>
+          <div className="custom-ui">
             <h3>{param.heading}</h3>
             <p>{param.section}</p>
             <CRow>
@@ -52,7 +51,10 @@ const General = () => {
                   block
                   className="btn-pill pull-right"
                   outline="outline"
-                  onClick={() => { closeAlert(); onClose(); }}
+                  onClick={() => {
+                    closeAlert();
+                    onClose();
+                  }}
                 >
                   CANCEL
                 </CButton>
@@ -74,7 +76,7 @@ const General = () => {
             </CRow>
           </div>
         );
-      }
+      },
     });
   };
   useEffect(() => {
@@ -92,8 +94,8 @@ const General = () => {
 
         user.features.filter(
           (item) =>
-            item.feature.title.toUpperCase() === "Dining options".toUpperCase() &&
-            item.enable === true
+            item.feature.title.toUpperCase() ===
+              "Dining options".toUpperCase() && item.enable === true
         ).length > 0,
         user.features.filter(
           (item) =>
@@ -105,7 +107,6 @@ const General = () => {
     }
   }, [user.features]);
 
-
   const handleFeature = (index, enable) => {
     let array = sChecked;
     array[index].enable = !enable;
@@ -113,18 +114,18 @@ const General = () => {
   };
 
   const saveFeatures = () => {
-    let hold = false
+    let hold = false;
     let settings = (user.settings || []).map((item, index) => {
-      let feature = item.feature !== null ? item.feature._id : null
-      let enable = (sChecked || []).filter(itm => itm.feature._id == feature)
-      enable = enable.length > 0 ? enable[0].enable : item.enable
+      let feature = item.feature !== null ? item.feature._id : null;
+      let enable = (sChecked || []).filter((itm) => itm.feature._id == feature);
+      enable = enable.length > 0 ? enable[0].enable : item.enable;
       return {
         feature: feature,
         enable: enable,
         _id: item._id,
-        module: item.module._id
+        module: item.module._id,
       };
-    })
+    });
     const features = (sChecked || []).map((item, index) => {
       return {
         featureId: item.feature._id,
@@ -138,8 +139,8 @@ const General = () => {
     const customer_displays =
       features.filter(
         (item) =>
-          item.name.toUpperCase() ===
-            "Customer displays".toUpperCase() && item.enable === false
+          item.name.toUpperCase() === "Customer displays".toUpperCase() &&
+          item.enable === false
       ).length > 0;
     const dining_option =
       features.filter(
@@ -150,14 +151,11 @@ const General = () => {
     const kitchen_printer =
       features.filter(
         (item) =>
-          item.name.toUpperCase() ===
-            "Kitchen printers".toUpperCase() && item.enable === false
+          item.name.toUpperCase() === "Kitchen printers".toUpperCase() &&
+          item.enable === false
       ).length > 0;
-      
-    if (
-      kitchen_printer &&
-      checkPrev[2] === true
-    ) {
+
+    if (kitchen_printer && checkPrev[2] === true) {
       showAlert({
         button_text: "Disbale",
         heading: "Disable kitchen printers",
@@ -165,18 +163,15 @@ const General = () => {
           "Are you sure you want to disable kitchen printers? All settings of the kitchen printers will be lost.",
         index: features
           .filter(
-            (item) => item.name.toUpperCase() ===
-                "Kitchen printers".toUpperCase()
+            (item) =>
+              item.name.toUpperCase() === "Kitchen printers".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      hold = true
-    } else if (
-      customer_displays &&
-      checkPrev[0] === true
-    ) {
+      hold = true;
+    } else if (customer_displays && checkPrev[0] === true) {
       showAlert({
         button_text: "Disbale",
         heading: "Disable customer displays",
@@ -185,18 +180,14 @@ const General = () => {
         index: features
           .filter(
             (item) =>
-              item.name.toUpperCase() ===
-                "Customer displays".toUpperCase()
+              item.name.toUpperCase() === "Customer displays".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      hold = true
-    } else if (
-      dining_option &&
-      checkPrev[1] === true
-    ) {
+      hold = true;
+    } else if (dining_option && checkPrev[1] === true) {
       showAlert({
         button_text: "Disbale",
         heading: "Disable dining options",
@@ -204,20 +195,18 @@ const General = () => {
           "Are you sure you want to disable dining options? All settings of the dining options will be lost.",
         index: features
           .filter(
-            (item) =>
-              item.name.toUpperCase() ===
-                "Dining options".toUpperCase()
+            (item) => item.name.toUpperCase() === "Dining options".toUpperCase()
           )
           .map((item) => {
             return item.index;
           }),
       });
-      hold = true
-    } 
-    if(!hold){
+      hold = true;
+    }
+    if (!hold) {
       const data = {
         features: features,
-        settings: settings
+        settings: settings,
       };
       dispatch(toggle_feature_module(data));
     }
@@ -225,16 +214,16 @@ const General = () => {
 
   const saveAlertFeatures = () => {
     let settings = (user.settings || []).map((item, index) => {
-      let feature = item.feature !== null ? item.feature._id : null
-      let enable = (sChecked || []).filter(itm => itm.feature._id == feature)
-      enable = enable.length > 0 ? enable[0].enable : item.enable
+      let feature = item.feature !== null ? item.feature._id : null;
+      let enable = (sChecked || []).filter((itm) => itm.feature._id == feature);
+      enable = enable.length > 0 ? enable[0].enable : item.enable;
       return {
         feature: feature,
         enable: enable,
         _id: item._id,
-        module: item.module._id
+        module: item.module._id,
       };
-    })
+    });
     const features = (sChecked || []).map((item, index) => {
       return {
         featureId: item.feature._id,
@@ -246,14 +235,11 @@ const General = () => {
     });
     const data = {
       features: features,
-      settings: settings
+      settings: settings,
     };
     dispatch(toggle_feature_module(data));
   };
 
-  const handleLanguageChange = (event) => {
-    console.log(sChecked);
-  };
   return (
     <div className="animated fadeIn">
       <CCard>
@@ -270,80 +256,70 @@ const General = () => {
         </CCardHeader>
         <CCollapse show={collapsed[1]}>
           <CCardBody>
-            {showFeatures ? 
-            <CListGroup>
-              {/*// user.features */}
-              {(sChecked || []).map((itm, index) => {
-                return (
-                  <CListGroupItem
-                    key={index}
-                    className="justify-content-between"
-                    style={{
-                      marginBottom: "2%",
-                      height: "65px",
-                      lineHeight: "0.23",
-                      border: "none",
-                    }}
-                  >
-                    <h5>
-                      {parse(itm.feature.icon || "")}&nbsp;{itm.feature.title || ""}
-                      <CSwitch
-                        className={"mx-1 float-right"}
-                        shape="pill"
-                        color={"success"}
-                        checked={sChecked[index].enable || ""}
-                        onChange={() =>
-                          handleFeature(index, sChecked[index].enable)
-                        }
-                      />
-                    </h5>
-                    <p style={{ paddingLeft: "25px", lineHeight: "normal" }}>
-                      {parse(itm.feature.description)}
-                    </p>
-                  </CListGroupItem>
-                );
-              })}
-            </CListGroup>
-            : "Loading..."}
+            {showFeatures ? (
+              <CListGroup>
+                {/*// user.features */}
+                {(sChecked || []).map((itm, index) => {
+                  return (
+                    <CListGroupItem
+                      key={index}
+                      className="justify-content-between"
+                      style={{
+                        marginBottom: "2%",
+                        height: "65px",
+                        lineHeight: "0.23",
+                        border: "none",
+                      }}
+                    >
+                      <h5>
+                        {parse(itm.feature.icon || "")}&nbsp;
+                        {itm.feature.title || ""}
+                        <CSwitch
+                          className={"mx-1 float-right"}
+                          shape="pill"
+                          color={"success"}
+                          checked={sChecked[index].enable || ""}
+                          onChange={() =>
+                            handleFeature(index, sChecked[index].enable)
+                          }
+                        />
+                      </h5>
+                      <p style={{ paddingLeft: "25px", lineHeight: "normal" }}>
+                        {parse(itm.feature.description)}
+                      </p>
+                    </CListGroupItem>
+                  );
+                })}
+              </CListGroup>
+            ) : (
+              "Loading..."
+            )}
+            <CRow>
+              <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                <CButton
+                  color="danger"
+                  block
+                  className="btn-pill pull-right"
+                  outline="outline"
+                >
+                  BACK
+                </CButton>
+              </CCol>
+              <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                <CButton
+                  color="success"
+                  block
+                  className="btn-pill pull-right"
+                  outline="outline"
+                  onClick={saveFeatures}
+                >
+                  SAVE
+                </CButton>
+              </CCol>
+            </CRow>
           </CCardBody>
         </CCollapse>
       </CCard>
-      <CRow>
-        <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
-          <CButton
-            color="danger"
-            block
-            className="btn-pill pull-right"
-            outline="outline"
-          >
-            BACK
-          </CButton>
-        </CCol>
-        <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
-          <CButton
-            color="success"
-            block
-            className="btn-pill pull-right"
-            outline="outline"
-            onClick={saveFeatures}
-          >
-            SAVE
-          </CButton>
-        </CCol>
-      </CRow>
-        {/* <CCol sm xs="12" md="2" lg="2" className="text-center mt-3">
-         <ConformationAlert
-           button_text={modelState.button_text}
-           heading={modelState.heading}
-           section={modelState.section}
-           buttonAction={saveAlertFeatures}
-           show_alert={showAlert}
-           hideAlert={hideShowAlert}
-           className="btn-pill pull-right"
-           outline="outline"
-           block="block"
-         />
-       </CCol> */}
     </div>
   );
 };

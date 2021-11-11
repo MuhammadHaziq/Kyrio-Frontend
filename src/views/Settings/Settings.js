@@ -160,8 +160,8 @@ const Settings = () => {
   ) : (
     <CRow>
       <CCol xs="12">
-        <CCard>
-          <CCardBody>
+        {/* <CCard>
+          <CCardBody> */}
             <CRow>
               <CCol xs="12" sm="12" md="4" lg="4">
                 <CListGroup id="list-tab" role="tablist">
@@ -282,8 +282,8 @@ const Settings = () => {
                 </HashRouter>
               </CCol>
             </CRow>
-          </CCardBody>
-        </CCard>
+          {/* </CCardBody>
+        </CCard> */}
       </CCol>
     </CRow>
   );

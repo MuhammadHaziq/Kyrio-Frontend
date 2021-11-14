@@ -11,3 +11,54 @@
 // .hideDetailMenu thead tr th input{
 //     display: none !important;
 // }
+.form-check-input {
+    width: 20px;
+    height: 20px;
+}
+.checkbox-label{
+    padding-left: 10px;
+    padding-top: 3px;   
+}
+.form-group-space{
+    padding: 10px; 
+    & input{
+        cursor: pointer;
+    }
+    & label{
+        cursor: pointer;
+    }
+}
+
+.message-block-img{ 
+    width: 128px;
+    height: 128px;
+    margin: 0 auto;
+}
+.account-deleted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    background-color: #f2f2f2;
+    display: none;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.account-deleted .message-block {
+    margin: auto;
+}
+.account-deleted .message-block-message {
+    color: rgba(0,0,0,.54);
+    text-align: center;
+}
+.account-deleted .message-block-message-title {
+    font-size: 28px;
+    margin-top: 10px;
+}
+.account-deleted .message-block-message-text {
+    font-size: 16px;
+}

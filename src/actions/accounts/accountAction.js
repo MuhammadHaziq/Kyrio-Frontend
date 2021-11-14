@@ -4,6 +4,7 @@ import {
     CHANGE_CHECK_PASSWORD,
     CHANGE_EMAIL,
     CHANGE_PASSWORD,
+    DELETE_ACCOUNT,
     UPDATE_ACCOUNT,
     CHANGE_UPDATE_CHECK,
     MESSAGE,
@@ -228,28 +229,31 @@ export const set_account_info = (data) => {
     };
 };
 
-
-
-export const change_update_check = (data) => {
-    return (dispatch) => {
-        dispatch({ type: CHANGE_UPDATE_CHECK, response: data });
-    }
-}
-export const change_check_password = (data) => {
-    return (dispatch) => {
-        dispatch({ type: CHANGE_CHECK_PASSWORD, response: data });
-    }
-}
-export const check_password = (data) => {
+export const delete_account = (data) => {
     return (dispatch) => {
       try {
         authAxios({
           method: "POST",
-          url: `ownercab/checkPassword`,
+          url: 'ownercab/deleteAccount',
           data: data
         })
           .then((response) => {
-            dispatch({ type: CHECK_PASSWORD, response: response.data.passwordCorrect });
+            if( response.data.status){
+                localStorage.removeItem("kyrio");
+                localStorage.removeItem("endDate");
+                localStorage.removeItem("startDate");
+                localStorage.removeItem("persist:primary");
+                // dispatch(ACTIONS.Logout())
+                dispatch({ type: DELETE_ACCOUNT, response: response.data });
+            } else {
+                let msg = {
+                    open: true,
+                    message: "Account settings cannot be changed! Contact admin.",
+                    object: {},
+                    error: true,
+                  };
+                dispatch({ type: MESSAGE, data: msg });
+            }
           })
           .catch((error) => {
             let msg = {
@@ -283,28 +287,30 @@ export const check_password = (data) => {
         dispatch({ type: MESSAGE, data: msg });
       }
     };
-  };
-  
-  
-  
-  export const update_account = (data) => {
+};
+
+
+
+export const change_update_check = (data) => {
+    return (dispatch) => {
+        dispatch({ type: CHANGE_UPDATE_CHECK, response: data });
+    }
+}
+export const change_check_password = (data) => {
+    return (dispatch) => {
+        dispatch({ type: CHANGE_CHECK_PASSWORD, response: data });
+    }
+}
+export const check_password = (data) => {
     return (dispatch) => {
       try {
         authAxios({
-          method: "PATCH",
-          url: `customers/`,
-          data: data,
-  
+          method: "POST",
+          url: `ownercab/checkPassword`,
+          data: data
         })
           .then((response) => {
-            dispatch({ type: UPDATE_ACCOUNT, response: response.data });
-            let msg = {
-              open: true,
-              message: "Update Points Balance Successfully",
-              object: {},
-              error: false,
-            };
-            dispatch({ type: MESSAGE, data: msg });
+            dispatch({ type: CHECK_PASSWORD, response: response.data.passwordCorrect });
           })
           .catch((error) => {
             let msg = {

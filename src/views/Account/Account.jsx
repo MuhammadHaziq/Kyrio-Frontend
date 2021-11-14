@@ -19,6 +19,9 @@ import {
   CModalHeader,
   CModalBody,
   CModalFooter,
+  CInputRadio,
+  CInputCheckbox,
+  // CFormCheck
 } from "@coreui/react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import validator from "validator";
@@ -31,6 +34,7 @@ import {
   change_update_check,
   set_account_info,
   update_password,
+  delete_account,
 } from "../../actions/accounts/accountAction";
 var languages = require("language-list")();
 
@@ -76,6 +80,7 @@ const Account = () => {
     newPassword: false,
     confirmPassword: false,
   });
+
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [NPShow, setNPShow] = useState(false);
@@ -83,6 +88,47 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState("");
   const [changeType, setChangeType] = useState("");
+  const [comments, setComments] = useState("");
+  const [reasons, setReasons] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteReasons] = useState([
+    {
+      id: 1,
+      label: "Business closed",
+    },
+    {
+      id: 2,
+      label: "High subscription prices",
+    },
+    {
+      id: 3,
+      label: "Lack of features for my business",
+    },
+    {
+      id: 4,
+      label: "The service is difficult to use",
+    },
+    {
+      id: 5,
+      label: "Poor customer support",
+    },
+    {
+      id: 6,
+      label: "My hardware is not supported",
+    },
+    {
+      id: 7,
+      label: "It was an account for testing",
+    },
+    {
+      id: 8,
+      label: "Found a better service",
+    },
+    {
+      id: 9,
+      label: "Other reason",
+    },
+  ]);
 
   const handleDataFetching = useCallback(async () => {
     setLoading(true);
@@ -226,6 +272,16 @@ const Account = () => {
           const data = { password: passwordFields.newPassword };
           dispatch(update_password(data));
         }
+      } else if (changeType == "delete") {
+        if (!validator.isEmpty(reasons)) {
+          setChangeType("confirm");
+        }
+      } else if (changeType == "confirm") {
+        if (!validator.isEmpty(reasons)) {
+          setChangeType("confirm");
+          const data = { reason: reasons, comments: comments, confirm: confirmDelete };
+          dispatch(delete_account(data));
+        }
       }
     }
   };
@@ -235,7 +291,11 @@ const Account = () => {
   const toggle = () => {
     dispatch(change_check_password(false));
     setModal(false);
+    setConfirmDelete(false);
     setPassword("");
+    setChangeType("");
+    setComments("");
+    setReasons("");
     setEmailFields({
       newEmail: "",
       confirmEmail: "",
@@ -407,6 +467,73 @@ const Account = () => {
               </p>
             </CModalBody>
           </>
+        ) : password_correct == "YES" && changeType == "delete" ? (
+          <>
+            <CModalHeader closeButton>Reason for account deletion</CModalHeader>
+            <CModalBody>
+              <CFormGroup>
+                {deleteReasons.map((item) => {
+                  return (
+                    <CFormGroup variant="checkbox" className="form-group-space">
+                      <CInputRadio
+                        className="form-check-input"
+                        id={"deleteAccountReason" + item.id}
+                        name="deleteAccountReason"
+                        value={item.label}
+                        onChange={(e) => setReasons(e.target.value)}
+                      />
+                      <CLabel
+                        variant="checkbox"
+                        className="checkbox-label"
+                        htmlFor={"deleteAccountReason" + item.id}
+                      >
+                        {item.label}
+                      </CLabel>
+                    </CFormGroup>
+                  );
+                })}
+              </CFormGroup>
+              <CFormGroup>
+                <CLabel htmlFor="comments">Aditional comments</CLabel>
+                <CInputGroup>
+                  <CInput
+                    id="comments"
+                    name="comments"
+                    type="text"
+                    placeholder="Add comments"
+                    onChange={(e) => setComments(e.target.value)}
+                    value={comments}
+                  />
+                </CInputGroup>
+              </CFormGroup>
+            </CModalBody>
+          </>
+        ) : password_correct == "YES" && changeType == "confirm" ? (
+          <>
+            <CModalHeader closeButton>Delete account</CModalHeader>
+            <CModalBody>
+              <p>
+                After deleting your account, you will no longer be able to
+                access any of its data. All subscriptions to Loyverse services
+                will be cancelled.
+              </p>
+              <CFormGroup variant="checkbox" className="form-group-space">
+                <CInputCheckbox
+                  className="form-check-input"
+                  id="confirmDelete"
+                  name="deleteAccountReason"
+                  onChange={() => setConfirmDelete(!confirmDelete)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="checkbox-label"
+                  htmlFor="confirmDelete"
+                >
+                  Yes, I want to delete my Kyrio account and all its data
+                </CLabel>
+              </CFormGroup>
+            </CModalBody>
+          </>
         ) : (
           ""
         )}
@@ -416,10 +543,36 @@ const Account = () => {
           </CButton>
           <CButton
             color="success"
-            disabled={!password ? true : false}
+            disabled={
+              password_correct == "" && validator.isEmpty(password)
+                ? true
+                : password_correct == "YES" &&
+                  changeType == "email" &&
+                  (validator.isEmpty(emailFields.newEmail) ||
+                    validator.isEmpty(emailFields.confirmEmail) ||
+                    !validator.isEmail(emailFields.newEmail) ||
+                    emailFields.newEmail !== emailFields.confirmEmail)
+                ? true
+                : password_correct == "YES" &&
+                  changeType == "password" &&
+                  (validator.isEmpty(passwordFields.newPassword) ||
+                    validator.isEmpty(passwordFields.confirmPassword) ||
+                    passwordFields.newPassword !==
+                      passwordFields.confirmPassword)
+                ? true
+                : password_correct == "YES" &&
+                  changeType == "delete" &&
+                  validator.isEmpty(reasons)
+                ? true
+                : password_correct == "YES" &&
+                  changeType == "confirm" &&
+                  !confirmDelete
+                ? true
+                : false
+            }
             onClick={continueAction}
           >
-            CONTINUE
+            {changeType == "confirm" ? "DELETE ACCOUNT" : "CONTINUE" }
           </CButton>
         </CModalFooter>
       </CModal>
@@ -451,6 +604,7 @@ const Account = () => {
                             value={fields.businessName}
                             invalid={errors.businessName}
                             onBlur={handleOnBlur}
+                            disabled={!account_detail.is_owner}
                           />
                           <CInvalidFeedback>
                             {errors.businessName === true
@@ -590,6 +744,31 @@ const Account = () => {
                     </CCol>
                   </CRow>
                 </>
+              )}
+              <hr />
+              {account_detail.is_owner ? (
+                <CRow>
+                  <CCol sm="8" md="8" xl="xl">
+                    <h6>Delete account</h6>
+                    <p>
+                      You can permanently delete your Kyrio account and all its
+                      data
+                    </p>
+                  </CCol>
+                  <CCol sm="4" md="4" xl="xl" className="mt-3 mb-xl-0">
+                    <CButton
+                      block
+                      variant="ghost"
+                      className="btn-pill pull-right"
+                      color="success"
+                      onClick={() => openModal("delete")}
+                    >
+                      DELETE
+                    </CButton>
+                  </CCol>
+                </CRow>
+              ) : (
+                ""
               )}
             </CCardBody>
             <CCardFooter>

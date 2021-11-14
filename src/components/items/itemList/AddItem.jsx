@@ -379,6 +379,7 @@ const AddItem = (props) => {
                     id="sold_by"
                     name="sold_by"
                     onChange={handleOnChange}
+                    className="checkbox-label"
                     value={"Each"}
                     checked={fields.sold_by === "Each"}
                   />

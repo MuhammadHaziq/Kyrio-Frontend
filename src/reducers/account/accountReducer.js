@@ -1,3 +1,4 @@
+import storage from "redux-persist/lib/storage";
 import {
   GET_ACCOUNT,
   CHECK_PASSWORD,
@@ -5,12 +6,14 @@ import {
   CHANGE_EMAIL,
   CHANGE_PASSWORD,
   UPDATE_ACCOUNT,
+  DELETE_ACCOUNT,
   CHANGE_UPDATE_CHECK
 } from "../../constants/ActionTypes";
 
 const initialState = {
   account_detail: {},
   password_correct: "",
+  account_deleted: "",
   updated: null
 };
 const accountReducer = (state = initialState, action) => {
@@ -56,6 +59,11 @@ const accountReducer = (state = initialState, action) => {
             language: action.response.language
         },
         updated: true
+      });
+    }
+    case DELETE_ACCOUNT: {
+      return Object.assign({}, state, {
+        account_deleted: true
       });
     }
     case CHANGE_UPDATE_CHECK: {

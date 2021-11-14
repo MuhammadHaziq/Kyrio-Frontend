@@ -14,17 +14,19 @@ import {
   SET_ACCESS_RIGHT_MODULE
 } from "../constants/ActionTypes";
 import io from "socket.io-client";
+import DeleteIcon from '../assets/icons/account-deleted.png';
 
 const TheLayout = () => {
   const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.settings.darkMode);
   const user = useSelector((state) => state.auth.user);
+  const account_deleted = useSelector((state) => state.account.account_deleted);
 
   const classes = classNames(
     "c-app c-default-layout",
     darkMode && "c-dark-theme"
   );
-
+  
   useEffect(() => {
 
     var connectionOptions =  {
@@ -66,6 +68,18 @@ const TheLayout = () => {
 
   return (
     <div className={classes}>
+      {account_deleted ? <div className="c-body">
+      <div className="account-deleted" style={{display: "flex"}}>
+      <div className="message-block">
+        <div className="message-block-img"><img src={DeleteIcon} /></div>
+        <div className="message-block-message">
+          <div className="message-block-message-title">Your account has been deleted</div>
+          <div className="message-block-message-text">Thank you for using our services</div>
+        </div>
+      </div>
+    </div>
+        </div> :
+      <>
       <TheSidebar />
       <TheAside />
       <div className="c-wrapper">
@@ -75,6 +89,7 @@ const TheLayout = () => {
         </div>
         <TheFooter />
       </div>
+      </>}
     </div>
   );
 };

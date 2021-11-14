@@ -227,7 +227,7 @@ const Login = () => {
                         active
                         tabIndex={-1}
                       >
-                        Register Now!{" "}
+                        New to Kyrio?{" "}
                       </CButton>
                     </Link>
                   </div>

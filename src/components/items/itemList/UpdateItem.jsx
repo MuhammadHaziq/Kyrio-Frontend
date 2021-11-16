@@ -175,7 +175,7 @@ const AddItem = (props) => {
       ]);
       let selectedModifier = modifire.modifiers_list;
       selectedModifier = selectedModifier.map((item) => {
-        if(typeof props.item_row_data.modifiers !== "undefined"){
+        if (typeof props.item_row_data.modifiers !== "undefined") {
           if (
             props.item_row_data.modifiers.filter((ite) => ite._id === item._id)
               .length > 0
@@ -215,7 +215,7 @@ const AddItem = (props) => {
     modifiers
       .filter((ite) => ite.isSelected === true)
       .map((item) => {
-        return modifier.push(item._id)
+        return modifier.push(item._id);
         // return modifier.push({
         //   id: item._id,
         //   title: item.title,
@@ -226,7 +226,7 @@ const AddItem = (props) => {
       .filter((item) => item.isSelected === true)
       .map((item) => {
         return (item.taxes || []).map((tax) => {
-          taxes.push(tax._id)
+          taxes.push(tax._id);
           // taxes.push({
           //   id: tax._id,
           //   title: typeof tax.title == "undefined" ? "" : tax.title,
@@ -251,8 +251,7 @@ const AddItem = (props) => {
     formData.append("availableForSale", fields.availableForSale);
     formData.append(
       "category",
-      fields.categoryId !== "0"
-        ? fields.categoryId : null
+      fields.categoryId !== "0" ? fields.categoryId : null
     );
     formData.append("soldByType", fields.sold_by);
     formData.append(
@@ -276,11 +275,13 @@ const AddItem = (props) => {
     formData.append(
       "taxes",
       JSON.stringify(
-        (itemTax || []).filter((item) => {
-          return item.isSelected === true;
-        }).map((item) => {
-          return item._id
-        })
+        (itemTax || [])
+          .filter((item) => {
+            return item.isSelected === true;
+          })
+          .map((item) => {
+            return item._id;
+          })
       )
     );
     formData.append(
@@ -295,8 +296,11 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile == "" ? fields.image : receiptFile);
     formData.append("stockQty", stockQty);
-    formData.append("autoSKU", props.item_row_data.sku == fields.sku && fields.autoSKU);
-    
+    formData.append(
+      "autoSKU",
+      props.item_row_data.sku == fields.sku && fields.autoSKU
+    );
+
     dispatch(update_item_record(formData));
   };
 
@@ -454,27 +458,41 @@ const AddItem = (props) => {
                 <CLabel>Sold by</CLabel>
               </CCol>
               <CCol sm="2">
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
+                    className="form-check-input"
                     id="sold_by"
                     name="sold_by"
                     onChange={handleOnChange}
                     value={"Each"}
                     checked={fields.sold_by === "Each"}
                   />
-                  <CLabel htmlFor="sold_by">Each</CLabel>
+                  <CLabel htmlFor="sold_by" className="checkbox-label">
+                    Each
+                  </CLabel>
                 </CInputGroup>
               </CCol>
               <CCol sm="2">
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
+                    className="form-check-input"
                     id="sold_by"
                     name="sold_by"
                     onChange={handleOnChange}
                     value={"Weight/Volume"}
                     checked={fields.sold_by === "Weight/Volume"}
                   />
-                  <CLabel htmlFor="sold_by">Weight/Volume</CLabel>
+                  <CLabel htmlFor="sold_by" className="checkbox-label">
+                    Weight/Volume
+                  </CLabel>
                 </CInputGroup>
               </CCol>
             </CRow>
@@ -707,7 +725,8 @@ const AddItem = (props) => {
                         <p style={{ lineHeight: "normal" }}>
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : "Available in " + item.stores.map((str) => str.title).join(",")}
+                            : "Available in " +
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -755,7 +774,8 @@ const AddItem = (props) => {
                         <p style={{ lineHeight: "normal" }}>
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
-                            : "Available in " + item.stores.map((str) => str.title).join(",")}
+                            : "Available in " +
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -799,31 +819,42 @@ const AddItem = (props) => {
           <CCol xs="12" sm="12" md="12">
             <CRow>
               <CCol sm="6" md="6" lg="6">
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
+                    className="form-check-input"
                     id="represent_type"
                     name="represent_type"
                     onChange={handleOnChange}
                     value={"Color_and_shape"}
                     checked={fields.represent_type === "Color_and_shape"}
                   />
-                  <CLabel htmlFor="represent_type">Color and shape</CLabel>
+                  <CLabel htmlFor="represent_type" className="checkbox-label">
+                    Color and shape
+                  </CLabel>
                 </CInputGroup>
               </CCol>
               <CCol sm="6" md="6" lg="6">
                 <CInputGroup
                   variant="custom-radio"
                   inline
+                  className="form-group-space"
                   style={{ float: "right", width: "15%" }}
                 >
                   <CInputRadio
+                    className="form-check-input"
                     id="represent_type"
                     name="represent_type"
                     onChange={handleOnChange}
                     value={"image"}
                     checked={fields.represent_type === "image"}
                   />
-                  <CLabel htmlFor="represent_type">Image</CLabel>
+                  <CLabel htmlFor="represent_type" className="checkbox-label">
+                    Image
+                  </CLabel>
                 </CInputGroup>
               </CCol>
             </CRow>

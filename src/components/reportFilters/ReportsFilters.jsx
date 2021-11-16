@@ -770,8 +770,9 @@ const ReportsFilters = (props) => {
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
               {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={() => handleOnChange(0)}>
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup variant="custom-radio" inline className="form-group-space">
                   <CInputRadio
+                  className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={0}
@@ -779,21 +780,22 @@ const ReportsFilters = (props) => {
                     divider={true}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel htmlFor="time_filter" className="checkbox-label" style={{ marginLeft: "20px" }}>
                     All Day
                   </CLabel>
                 </CInputGroup>
               </CDropdownItem>
               <CDropdownItem onClick={() => handleOnChange(1)}>
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup variant="custom-radio" inline className="form-group-space">
                   <CInputRadio
+                  className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={1}
                     checked={fields.time_filter === 1}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel htmlFor="time_filter"  className="checkbox-label" style={{ marginLeft: "20px" }}>
                     Custome Period
                   </CLabel>
                 </CInputGroup>

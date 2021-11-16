@@ -89,9 +89,6 @@ const DashboardFilter = (props) => {
     }, [data]);
     return ref.current;
   };
-  
-  var prevStartTime = usePrevious(timeRange.startTime);
-  var prevEndTime = usePrevious(timeRange.endTime);
 
   var prevStartDate = usePrevious(dateRange.startDate);
   var prevEndDate = usePrevious(dateRange.endDate);
@@ -322,16 +319,18 @@ const DashboardFilter = (props) => {
       const timeDiff = moment
         .duration(moment(dateRange.endDate).diff(moment(dateRange.startDate)))
         .asDays();
-      const filter = getNatural(timeDiff) == 0 ? "Hours" : "Days";
+      const dateCheck = moment(dateRange.endDate).format("D-M-YYYY") == moment(dateRange.startDate).format("D-M-YYYY");
+      
+      const filter = getNatural(timeDiff) == 0 ? "Hours" : dateCheck ? "Hours" : "Days";
       props.setDaysFilter(
         props.daysFilter.map((item) => {
           if (parseInt(item.days) <= getNatural(timeDiff)) {
             return {
               ...item,
               disable:
-                getNatural(timeDiff) == 0
+                getNatural(timeDiff) == 0 || dateCheck
                   ? false
-                  : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0
+                  : getNatural(timeDiff) >= 0 && parseInt(item.days) === 0 && !dateCheck
                   ? true
                   : false,
               active: item.name === filter ? true : false,
@@ -649,10 +648,11 @@ const DashboardFilter = (props) => {
     });
   };
 
-  const handleOnChange = (e) => {
+  const handleOnChange = (e,value) => {
+    e.stopPropagation();
     setFields({
       ...fields,
-      time_filter: e,
+      time_filter: value,
     });
   };
   const toggleDropdown = (tab) => {
@@ -753,7 +753,7 @@ const DashboardFilter = (props) => {
         ],
       },
     });
-    props.handleOnChangeSales("All Sales");
+    props.handleOnChangeSales("Gross sales");
   };
 
   return (
@@ -778,7 +778,7 @@ const DashboardFilter = (props) => {
         <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
-              <MdAvTimer />{" "}
+              <MdAvTimer />&nbsp;&nbsp;
               {fields.time_filter === 0
                 ? "All Day"
                 : startHours + startTimeZone + "-" + endHours + endTimeZone}
@@ -786,9 +786,10 @@ const DashboardFilter = (props) => {
 
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
               {/*// show={toggleDropDown[0]}*/}
-              <CDropdownItem onClick={() => handleOnChange(0)}>
-                <CInputGroup variant="custom-radio" inline>
+              <CDropdownItem onClick={(e) => handleOnChange(e,0)}>
+                <CInputGroup variant="custom-radio" inline className="form-group-space">
                   <CInputRadio
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={0}
@@ -796,21 +797,22 @@ const DashboardFilter = (props) => {
                     divider={true}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel htmlFor="time_filter" className="checkbox-label" style={{ marginLeft: "20px" }}>
                     All Day
                   </CLabel>
                 </CInputGroup>
               </CDropdownItem>
-              <CDropdownItem onClick={() => handleOnChange(1)}>
-                <CInputGroup variant="custom-radio" inline>
+              <CDropdownItem onClick={(e) => handleOnChange(e,1)}>
+                <CInputGroup variant="custom-radio" inline className="form-group-space">
                   <CInputRadio
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={1}
                     checked={fields.time_filter === 1}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel htmlFor="time_filter" className="checkbox-label" style={{ marginLeft: "20px" }}>
                     Custome Period
                   </CLabel>
                 </CInputGroup>
@@ -971,12 +973,3 @@ const DashboardFilter = (props) => {
 };
 
 export default DashboardFilter;
-// <CCol sm="12" md="2" lg="2" xs="12">
-//   <CButton
-//     color="success"
-//     className="btn-square pull right"
-//     onClick={resetFilters}
-//   >
-//     Reset
-//   </CButton>
-// </CCol>

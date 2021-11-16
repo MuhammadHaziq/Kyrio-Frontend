@@ -35,6 +35,7 @@ const Register = () => {
       password: "",
       businessName: "",
       country: "",
+      timezone: "",
     },
     errors: {
       username: false,
@@ -50,7 +51,7 @@ const Register = () => {
   const msg = useSelector((state) => state.msg);
 
   useEffect(() => {
-    fetch("https://extreme-ip-lookup.com/json/")
+    fetch("https://extreme-ip-lookup.com/json/?key=CCEvn3ZsTSeEWoEF2eNI")
       .then((res) => res.json())
       .then((response) => {
         setFormState((formState) => ({
@@ -58,6 +59,7 @@ const Register = () => {
           values: {
             ...formState.values,
             country: response.country,
+            timezone: response.timezone
           },
         }));
       })
@@ -191,6 +193,7 @@ const Register = () => {
         password: formState.values.password,
         businessName: formState.values.businessName,
         country: formState.values.country,
+        timezone: formState.values.timezone,
         terms: terms,
         platform: "backoffice"
       };

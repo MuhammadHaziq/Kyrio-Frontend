@@ -1,4 +1,4 @@
-import React, { lazy, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CButtonGroup,
@@ -7,7 +7,6 @@ import {
   CCardBody,
   CCardFooter,
   CCol,
-  CProgress,
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
@@ -15,11 +14,12 @@ import MainChartExample from "../charts/MainChartExample.js";
 import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
+import SalesCards from "./SalesCards";
 import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
-
-const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
+import { amountFormat } from "../../../utils/helpers";
+// const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
 const brandDanger = getStyle("danger") || "#f86c6b";
@@ -30,6 +30,7 @@ const brandSecondary = getStyle("secondary") || "#8a93a2";
 const Dashboard = (props) => {
   const dispatch = useDispatch();
   // States
+  const decimal = useSelector((state) => state.auth.user.decimal);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("Hours");
   const [daysFilter, setDaysFilter] = useState([
@@ -40,7 +41,7 @@ const Dashboard = (props) => {
     { days: 120, name: "Quaters", disable: true, active: false },
     { days: 365, name: "Years", disable: true, active: false },
   ]);
-  const [salesFilter, setSalesFilter] = useState("All Sales");
+  const [salesFilter, setSalesFilter] = useState("All sales");
   const [filterReset, setFilterReset] = useState(false);
   const [orginalSale, setOrginalSale] = useState([
     {
@@ -69,7 +70,7 @@ const Dashboard = (props) => {
     },
     {
       data: [],
-      label: "Net Sales",
+      label: "Net sales",
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: brandInfo,
@@ -119,7 +120,7 @@ const Dashboard = (props) => {
     },
     {
       data: [],
-      label: "Net Sales",
+      label: "Net sales",
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: brandInfo,
@@ -176,7 +177,7 @@ const Dashboard = (props) => {
             sale.data = Refunds;
           } else if (sale.label == "Discounts") {
             sale.data = discounts;
-          } else if (sale.label == "Net Sales") {
+          } else if (sale.label == "Net sales") {
             sale.data = NetSales;
           } else if (sale.label == "Cost Of Goods") {
             sale.data = CostOfGoods;
@@ -187,6 +188,7 @@ const Dashboard = (props) => {
         });
         setOrginalSale(filterSale);
         setSales(filterSale);
+        setSalesFilter("Gross sales");
       }
     }
   }, [salesSummary.sales_graph_data]);
@@ -219,7 +221,7 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (prevSalesFilter !== salesFilter && prevSalesFilter !== undefined) {
-      if (salesFilter == "All Sales") {
+      if (salesFilter == "All sales") {
         setSales(orginalSale);
       } else {
         const sales = orginalSale.filter((item) => {
@@ -239,9 +241,7 @@ const Dashboard = (props) => {
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
-  const reset_Filter = () => {
-    setFilterReset(true);
-  };
+
   const grossSales =
     salesSummary.sales_graph_data !== undefined &&
     salesSummary.sales_graph_data !== null
@@ -249,7 +249,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.GrossSales !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.GrossSales !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossSales,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossSales, 2)
           : 0
         : 0
       : 0;
@@ -260,7 +260,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.Refunds !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.Refunds !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.Refunds,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.Refunds, 2)
           : 0
         : 0
       : 0;
@@ -271,7 +271,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.discounts !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.discounts !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.discounts,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.discounts, 2)
           : 0
         : 0
       : 0;
@@ -282,7 +282,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.NetSales !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.NetSales !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.NetSales,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.NetSales, 2)
           : 0
         : 0
       : 0;
@@ -293,7 +293,7 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods, 2)
           : 0
         : 0
       : 0;
@@ -304,18 +304,14 @@ const Dashboard = (props) => {
         salesSummary.sales_graph_data.SalesTotal !== null
         ? salesSummary.sales_graph_data.SalesTotal.GrossProfit !== undefined &&
           salesSummary.sales_graph_data.SalesTotal.GrossProfit !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossProfit,2)
+          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossProfit, 2)
           : 0
         : 0
       : 0;
 
-  var formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
   return (
     <>
-     <CRow>
+      <CRow>
         <CCol sm="12">
           <DashboardFilter
             daysFilter={daysFilter}
@@ -327,26 +323,48 @@ const Dashboard = (props) => {
           />
         </CCol>
       </CRow>
-      <DashboardCard
-        grossSales={grossSales}
-        refunds={refunds}
-        discounts={discounts}
-        netSales={netSales}
-        CostOfGoods={CostOfGoods}
-        grossProfit={grossProfit}
-        handleOnChangeSales={handleOnChangeSales}
-      />
       <CCard>
         <CCardBody>
+          <CRow className="text-center mb-2">
+            <SalesCards
+              title="Gross sales"
+              value={grossSales}
+              salesFilter={salesFilter}
+              color="success"
+              handleOnChangeSales={() => handleOnChangeSales("Gross sales")}
+            />
+            <SalesCards
+              title="Refunds"
+              value={refunds}
+              salesFilter={salesFilter}
+              color="danger"
+              handleOnChangeSales={() => handleOnChangeSales("Refunds")}
+            />
+            <SalesCards
+              title="Discounts"
+              value={discounts}
+              salesFilter={salesFilter}
+              color="warning"
+              handleOnChangeSales={() => handleOnChangeSales("Discounts")}
+            />
+            <SalesCards
+              title="Net sales"
+              value={netSales}
+              salesFilter={salesFilter}
+              color="info"
+              handleOnChangeSales={() => handleOnChangeSales("Net sales")}
+            />
+            <SalesCards
+              title="Gross profit"
+              value={grossProfit}
+              salesFilter={salesFilter}
+              color="primary"
+              handleOnChangeSales={() => handleOnChangeSales("Gross profit")}
+            />
+          </CRow>
           <CRow>
             <CCol sm="12" className="d-none d-md-block float-right">
-              <CButton
-                color="primary"
-                className="float-right"
-                onClick={reset_Filter}
-              >
-                <CIcon name="cil-cloud-download" />
-              </CButton>
+              <h5 className="ml-4">{salesFilter}</h5>
               <CButtonGroup className="float-right mr-3">
                 {daysFilter.map((value, index) => (
                   <CButton
@@ -355,6 +373,7 @@ const Dashboard = (props) => {
                     className="mx-0"
                     onClick={() => changeFilter(value.name)}
                     active={value.name === filter}
+                    style={{ cursor: value.disable ? "not-allowed" : "pointer"}}
                     disabled={value.disable}
                   >
                     {value.name}
@@ -373,202 +392,43 @@ const Dashboard = (props) => {
             "Loading..."
           )}
         </CCardBody>
-        <CCardFooter>
-          <CRow className="text-center">
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Gross sales")}
-            >
-              <div
-                className={
-                  salesFilter === "Gross sales" ? "text-success" : "text-muted"
-                }
-              >
-                Gross Sales
-              </div>
-              <strong>
-                {formatter.format(grossSales)} 
-                {/* ({grossSales === "0" || grossSales === 0 ? 0 : parseInt(grossSales / 100)}) */}
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="success"
-                value={grossSales}
-              />
-            </CCol>
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0 d-md-down-none"
-              onClick={() => handleOnChangeSales("Refunds")}
-            >
-              <div
-                className={
-                  salesFilter === "Refunds" ? "text-info" : "text-muted"
-                }
-              >
-                Refunds
-              </div>
-              <strong>
-                {" "}
-                {formatter.format(refunds)} (
-                {refunds === "0" || refunds === 0
-                  ? "0%"
-                  : parseInt((refunds / grossSales) * 100) + "%"}
-                )
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="info"
-                value={parseInt((refunds / grossSales) * 100)}
-              />
-            </CCol>
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Discounts")}
-            >
-              <div
-                className={
-                  salesFilter === "Discounts" ? "text-warning" : "text-muted"
-                }
-              >
-                Discounts
-              </div>
-              <strong>
-                {formatter.format(discounts)} (
-                {discounts === "0" || discounts === 0
-                  ? "0%"
-                  : parseInt((discounts / grossSales) * 100) + "%"}
-                )
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="warning"
-                value={parseInt((discounts / grossSales) * 100)}
-              />
-            </CCol>
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Net Sales")}
-            >
-              <div
-                className={
-                  salesFilter === "Net Sales" ? "text-info" : "text-muted"
-                }
-              >
-                Net Sales
-              </div>
-              <strong>
-                {formatter.format(netSales)} (
-                {netSales === "0" || netSales === 0
-                  ? "0%"
-                  : parseInt((netSales / grossSales) * 100) + "%"}
-                )
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="info"
-                value={parseInt((netSales / grossSales) * 100)}
-              />
-            </CCol>
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0"
-              onClick={() => handleOnChangeSales("Cost Of Goods")}
-            >
-              <div
-                className={
-                  salesFilter === "Cost Of Goods" ? "text-danger" : "text-muted"
-                }
-              >
-                Cost Of Goods
-              </div>
-              <strong>
-                {formatter.format(CostOfGoods)} (
-                {CostOfGoods === "0" || CostOfGoods === 0
-                  ? "0%"
-                  : parseInt((CostOfGoods / grossSales) * 100) + "%"}
-                )
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="danger"
-                value={parseInt((CostOfGoods / grossSales) * 100)}
-              />
-            </CCol>
-            <CCol
-              md
-              sm="12"
-              className="mb-sm-2 mb-0 d-md-down-none"
-              onClick={() => handleOnChangeSales("Gross profit")}
-            >
-              <div
-                className={
-                  salesFilter === "Gross profit" ? "text-primary" : "text-muted"
-                }
-              >
-                Gross Profit
-              </div>
-              <strong>
-                {" "}
-                {formatter.format(grossProfit)} (
-                {grossProfit === "0" || grossProfit === 0
-                  ? "0%"
-                  : parseInt((grossProfit / grossSales) * 100) + "%"}
-                )
-              </strong>
-              <CProgress
-                className="progress-xs mt-2"
-                precision={1}
-                color="primary"
-                value={parseInt((grossProfit / grossSales) * 100)}
-              />
-            </CCol>
-          </CRow>
-        </CCardFooter>
+        <CCardFooter></CCardFooter>
       </CCard>
       <CCard>
         <CCardHeader>
           <CRow>
-            {typeof salesSummary?.sales_graph_data?.summary !== "undefined" && salesSummary?.sales_graph_data?.summary?.length > 0 ?
+            {typeof salesSummary?.sales_graph_data?.summary !== "undefined" &&
+            salesSummary?.sales_graph_data?.summary?.length > 0 ? (
               <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                <CSVLink data={salesSummary?.sales_graph_data?.summary?.length > 0 ? salesSummary?.sales_graph_data?.summary?.map(itm => {
-                    return {
-                      ["Time"]: itm.Date,
-                      ["Gross sales"]: itm.GrossSales?.toFixed(2),
-                      ["Refunds"]: itm.Refunds?.toFixed(2),
-                      ["Discounts"]: itm.discounts?.toFixed(2),
-                      ["Net sales"]: itm.NetSales?.toFixed(2),
-                      ["Cost of Goods"]: itm.CostOfGoods?.toFixed(2),
-                      ["Gross profit"]: itm.GrossProfit?.toFixed(2),
-                      ["Margin"]: itm.Margin,
-                      ["Taxes"]: '',
-                    }
-                  }) : []}
-                  filename={"SalesSummary"+dateformat(new Date)+".csv"}
+                <CSVLink
+                  data={
+                    salesSummary?.sales_graph_data?.summary?.length > 0
+                      ? salesSummary?.sales_graph_data?.summary?.map((itm) => {
+                          return {
+                            ["Time"]: itm.Date,
+                            ["Gross sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
+                            ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
+                            ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
+                            ["Net sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
+                            ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
+                            ["Gross profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
+                            ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
+                            ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
+                          };
+                        })
+                      : []
+                  }
+                  filename={"SalesSummary" + dateformat(new Date()) + ".csv"}
                   target="_blank"
-                  >
-                  <CButton
-                    color="secondary"
-                    className="btn-square"
-                  >
+                >
+                  <CButton color="secondary" className="btn-square">
                     EXPORT
                   </CButton>
-                  </CSVLink>
+                </CSVLink>
               </CCol>
-              : ""}
+            ) : (
+              ""
+            )}
           </CRow>
         </CCardHeader>
         <CCardBody>

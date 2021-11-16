@@ -3,14 +3,10 @@ import {
   CWidgetDropdown,
   CRow,
   CCol,
-  CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import ChartLineSimple from "../charts/ChartLineSimple";
 import ChartBarSimple from "../charts/ChartBarSimple";
+import Amount from "../../../components/utils/Amount";
 
 const DashboardCard = (props) => {
   // render
@@ -27,7 +23,7 @@ const DashboardCard = (props) => {
       >
         <CWidgetDropdown
           color="gradient-success"
-          header={formatter.format(props.grossSales)}
+          header={<Amount value={props.grossSales} />}
           text="Gross Sales"
           footerSlot={
             <ChartLineSimple
@@ -46,7 +42,7 @@ const DashboardCard = (props) => {
       <CCol sm="4"  onClick={() => props.handleOnChangeSales("Refunds")}>
         <CWidgetDropdown
           color="gradient-danger"
-          header={formatter.format(props.refunds)}
+          header={<Amount value={props.refunds} />}
           text="Refunds"
           footerSlot={
             <ChartLineSimple
@@ -70,7 +66,7 @@ const DashboardCard = (props) => {
       >
         <CWidgetDropdown
           color="gradient-warning"
-          header={formatter.format(props.discounts)}
+          header={<Amount value={props.discounts} />}
           text="Discounts"
           footerSlot={
             <ChartLineSimple
@@ -94,7 +90,7 @@ const DashboardCard = (props) => {
       >
         <CWidgetDropdown
           color="gradient-info"
-          header={formatter.format(props.netSales)}
+          header={<Amount value={props.netSales} />}
           text="Net Sales"
           footerSlot={
             <ChartBarSimple
@@ -110,7 +106,7 @@ const DashboardCard = (props) => {
       <CCol sm="4"  onClick={() => props.handleOnChangeSales("Cost Of Goods")}>
         <CWidgetDropdown
           color="gradient-dark"
-          header={formatter.format(props.CostOfGoods)}
+          header={<Amount value={props.CostOfGoods} />}
           text="Cost Of Goods"
           footerSlot={
             <ChartLineSimple
@@ -133,7 +129,7 @@ const DashboardCard = (props) => {
       >
         <CWidgetDropdown
           color="gradient-primary"
-          header={formatter.format(props.grossProfit)}
+          header={<Amount value={props.grossProfit} />}
           text="Gross Profit"
           footerSlot={
             <ChartBarSimple
@@ -145,17 +141,6 @@ const DashboardCard = (props) => {
             />
           }
         >
-          {/* <CDropdown>
-            <CDropdownToggle caret className="text-white" color="transparent">
-              <CIcon name="cil-settings" />
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem>Action</CDropdownItem>
-              <CDropdownItem>Another action</CDropdownItem>
-              <CDropdownItem>Something else here...</CDropdownItem>
-              <CDropdownItem disabled>Disabled action</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown> */}
         </CWidgetDropdown>
       </CCol>
     </CRow>

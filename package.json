@@ -34,6 +34,7 @@
     "@wojtekmaj/enzyme-adapter-react-17": "^0.3.2",
     "apexcharts": "^3.22.0",
     "axios": "^0.19.2",
+    "big-number": "^2.0.0",
     "bootstrap-daterangepicker": "^3.1.0",
     "classnames": "^2.2.6",
     "codemirror": "^5.58.3",

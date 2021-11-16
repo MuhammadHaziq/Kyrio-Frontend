@@ -51,8 +51,18 @@ const FilterComponent = (props) => {
     startTime: "0",
     endTime: "0",
   });
-  const [startDate, setStartDate] = useState(localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment())
-  const [endDate, setEndDate] = useState(localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment())
+  const [startDate, setStartDate] = useState(
+    localStorage.getItem("startDate") !== null &&
+      typeof localStorage.getItem("startDate") !== "undefined"
+      ? moment(localStorage.getItem("startDate"))
+      : moment()
+  );
+  const [endDate, setEndDate] = useState(
+    localStorage.getItem("endDate") !== null &&
+      typeof localStorage.getItem("endDate") !== "undefined"
+      ? moment(localStorage.getItem("endDate"))
+      : moment()
+  );
   const [dateRange, setDateRange] = useState({
     startDate: startDate,
     endDate: endDate,
@@ -283,8 +293,8 @@ const FilterComponent = (props) => {
   }
 
   const handleEvent = (event, picker) => {
-    localStorage.setItem("startDate",picker.startDate)
-    localStorage.setItem("endDate",picker.endDate)
+    localStorage.setItem("startDate", picker.startDate);
+    localStorage.setItem("endDate", picker.endDate);
     setDateRange({
       ...dateRange,
       startDate: picker.startDate,
@@ -380,8 +390,8 @@ const FilterComponent = (props) => {
       startTime: "0",
       endTime: "0",
     });
-    localStorage.setItem("startDate",moment())
-    localStorage.setItem("endDate",moment())
+    localStorage.setItem("startDate", moment());
+    localStorage.setItem("endDate", moment());
     setDateRange({
       startDate: moment(),
       endDate: moment(),
@@ -435,8 +445,13 @@ const FilterComponent = (props) => {
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
               {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={() => handleOnChange(0)}>
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={0}
@@ -444,21 +459,34 @@ const FilterComponent = (props) => {
                     divider={true}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel
+                    htmlFor="time_filter"
+                    className="checkbox-label"
+                    style={{ marginLeft: "20px" }}
+                  >
                     All Day
                   </CLabel>
                 </CInputGroup>
               </CDropdownItem>
               <CDropdownItem onClick={() => handleOnChange(1)} toggle={false}>
-                <CInputGroup variant="custom-radio" inline>
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={1}
                     checked={fields.time_filter === 1}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" style={{ marginLeft: "20px" }}>
+                  <CLabel
+                    htmlFor="time_filter"
+                    className="checkbox-label"
+                    style={{ marginLeft: "20px" }}
+                  >
                     Custome Period
                   </CLabel>
                 </CInputGroup>
@@ -615,9 +643,9 @@ const FilterComponent = (props) => {
         </CCol>
         <CCol sm="12" md="1" lg="1" xs="12">
           <CButton
-              className="btn btn-outline-primary btn-block"
-              onClick={resetFilters}
-            >
+            className="btn btn-outline-primary btn-block"
+            onClick={resetFilters}
+          >
             Reset
           </CButton>
         </CCol>

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CDataTable
 } from "@coreui/react";
-
-import { useDispatch } from "react-redux";
+import Amount from "../../components/utils/Amount";
 
 const SalesSummaryDatatableNew = (props) => {
 
@@ -36,11 +35,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {item.GrossSales !== "undefined" && item.GrossSales !== null
-                ? item.GrossSales.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.GrossSales} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -49,11 +45,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.Refunds !== "undefined" && item.Refunds !== null
-                ? item.Refunds.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.Refunds} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -61,11 +54,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.discounts !== "undefined" && item.discounts !== null
-                ? item.discounts.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.discounts} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -73,11 +63,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.NetSales !== "undefined" && item.NetSales !== null
-                ? item.NetSales.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.NetSales} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -86,11 +73,8 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.CostOfGoods !== "undefined" &&
                 item.CostOfGoods !== null
-                ? item.CostOfGoods.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.CostOfGoods} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -99,11 +83,8 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {typeof item.GrossProfit !== "undefined" &&
                 item.GrossProfit !== null
-                ? item.GrossProfit.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.GrossProfit} />
+                : <Amount value={0} />}
             </td>
           );
         },
@@ -112,20 +93,7 @@ const SalesSummaryDatatableNew = (props) => {
             <td>
               {item.Margin !== "undefined" && item.Margin !== null
                 ? item.Margin
-                : "0.00 %"}
-            </td>
-          );
-        },
-        GrossProfit: (item) => {
-          return (
-            <td>
-              {typeof item.GrossProfit !== "undefined" &&
-                item.GrossProfit !== null
-                ? item.GrossProfit.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                : <Amount value={0} />+" %"}
             </td>
           );
         },
@@ -133,11 +101,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {typeof item.Tax !== "undefined" && item.Tax !== null
-                ? item.Tax.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })
-                : "$ 0.00"}
+                ? <Amount value={item.Tax} />
+                : <Amount value={0} />}
             </td>
           );
         },

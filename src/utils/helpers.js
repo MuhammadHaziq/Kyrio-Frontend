@@ -1,4 +1,3 @@
-const BigNumber = require('big-number');
 
 export let removeChars = (num) => {
     let newNum = String(num).replace(/[^\d.-]/g,'');

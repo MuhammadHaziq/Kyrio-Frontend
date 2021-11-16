@@ -40,9 +40,7 @@ export let roundToThree = (num, upOrDown = 1) => {
         if(typeof(num)!=="number"){
             num = parseFloat(num);
         }
-        let n = new BigNumber(num);
-        n.precision(3, BigNumber.ROUND_UP);
-        let t = parseFloat(n.toFixed(3, upOrDown)).toFixed(3);
+        let t = parseFloat(num.toFixed(3, upOrDown)).toFixed(3);
         return Math.round(t * 1e2) / 1e2
     }
     return 0.000;
@@ -53,9 +51,7 @@ export let roundToTwo = (num, upOrDown = 1) => {
         if(typeof(num)!=="number"){
             num = parseFloat(num);
         }
-        let n = new BigNumber(num);
-        n.precision(2, BigNumber.ROUND_UP);
-        let t = parseFloat(n.toFixed(2, upOrDown)).toFixed(2);
+        let t = parseFloat(num.toFixed(2, upOrDown)).toFixed(2);
         return Math.round(t * 1e2) / 1e2
     }
     return 0.00;
@@ -84,8 +80,3 @@ export let stringToNum = (str) => {
         return '';
     }
 };
-export let bigNumberMult = (num1, num2) => {
-    num1 = parseFloat(num1);
-    num2 = parseFloat(num2);
-    return roundToTwo((new BigNumber(num1)).multipliedBy(new BigNumber(num2)));
-}

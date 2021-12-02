@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  CDataTable,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
-} from "@coreui/react";
+import { CDataTable } from "@coreui/react";
+import Amount from "../../components/utils/Amount";
 
 const SalesCategoryDatatable = (props) => {
-  
   const [fields, setFields] = useState([]);
 
   useEffect(() => {
-    if(props.columns.length > 0){
-      setFields(props.columns.filter(itm => itm.isShow))
+    if (props.columns.length > 0) {
+      setFields(props.columns.filter((itm) => itm.isShow));
     }
-  },[props.columns])
-  
+  }, [props.columns]);
+
   return (
     <CDataTable
-   itemsPerPageSelect
+      itemsPerPageSelect
       items={props.category_sales_summary}
       fields={fields}
       itemsPerPage={10}
@@ -31,13 +26,18 @@ const SalesCategoryDatatable = (props) => {
       // onRowClick={clickRow}
       scopedSlots={{
         category: (item) => {
-          return <td style={{ borderRight: "1px solid #d8dbe0" }}>{item.category}</td>
+          return (
+            <td style={{ borderRight: "1px solid #d8dbe0" }}>
+              {item.category}
+            </td>
+          );
         },
         ItemsSold: (item) => {
           return (
             <td>
-              {typeof item.ItemsSold !== "undefined" &&
-                item.ItemsSold !== null ? item.ItemsSold : "0"}
+              {typeof item.ItemsSold !== "undefined" && item.ItemsSold !== null
+                ? item.ItemsSold
+                : "0"}
             </td>
           );
         },
@@ -45,12 +45,9 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.ItemsRefunded !== "undefined" &&
-                item.ItemsRefunded !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.ItemsRefunded))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.ItemsRefunded !== null
+                ? item.ItemsRefunded
+                : 0}
             </td>
           );
         },
@@ -58,12 +55,11 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.GrossSales !== "undefined" &&
-                item.GrossSales !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.GrossSales))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.GrossSales !== null ? (
+                <Amount value={item.GrossSales} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
@@ -71,12 +67,11 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.NetSales !== "undefined" &&
-                item.NetSales !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.NetSales))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.NetSales !== null ? (
+                <Amount value={item.NetSales} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
@@ -84,12 +79,11 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.CostOfGoods !== "undefined" &&
-                item.CostOfGoods !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.CostOfGoods))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.CostOfGoods !== null ? (
+                <Amount value={item.CostOfGoods} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
@@ -97,32 +91,31 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.GrossProfit !== "undefined" &&
-                item.GrossProfit !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.GrossProfit))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.GrossProfit !== null ? (
+                <Amount value={item.GrossProfit} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
         Margin: (item) => {
           return (
             <td>
-              {item.Margin +"%"}
+              {item.Margin !== "undefined" && item.Margin !== null
+                ? item.Margin+"%"
+                : <Amount value={0} sign="%" />}
             </td>
-          )
+          );
         },
         Refunds: (item) => {
           return (
             <td>
-              {typeof item.Refunds !== "undefined" &&
-                item.Refunds !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.Refunds))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              {typeof item.Refunds !== "undefined" && item.Refunds !== null ? (
+                <Amount value={item.Refunds} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
@@ -130,12 +123,22 @@ const SalesCategoryDatatable = (props) => {
           return (
             <td>
               {typeof item.discounts !== "undefined" &&
-                item.discounts !== null ? new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(Number(item.discounts))// '$100.00'
-                : new Intl.NumberFormat('en-US',
-                  { style: 'currency', currency: 'USD' }
-                ).format(0)}
+              item.discounts !== null ? (
+                <Amount value={item.discounts} />
+              ) : (
+                <Amount value={0} />
+              )}
+            </td>
+          );
+        },
+        Tax: (item) => {
+          return (
+            <td>
+              {typeof item.Tax !== "undefined" && item.Tax !== null ? (
+                <Amount value={item.Tax} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },

@@ -26,13 +26,15 @@ import { add_new_modifier } from "../../../actions/items/modifiresActions";
 import NumberFormat from "react-number-format";
 
 const AddModifier = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({
     modifier_name: "",
     checkAll: true,
   });
   const [modifierFields, setModifierFields] = useState([
-    { id: "0", name: "", price: "", position: 0 },
+    { id: "0", name: "", price: "0", position: 0 },
   ]);
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
@@ -280,7 +282,7 @@ const AddModifier = (props) => {
               return {
                 ...ite,
                 name: validator.isEmpty(item.name),
-                price: validator.isEmpty(item.price),
+                price: false,
               };
             }
             return ite;
@@ -295,7 +297,7 @@ const AddModifier = (props) => {
         {
           id: modifierFields.length.toString(),
           name: "",
-          price: "$0.0",
+          price: "0",
           position: modifierFields.length,
         },
       ]);
@@ -323,7 +325,7 @@ const AddModifier = (props) => {
         return {
           ...item,
           name: validator.isEmpty(modifierFields[idx].name),
-          price: validator.isEmpty(modifierFields[idx].price),
+          price: false,
         };
       }
       return item;
@@ -444,28 +446,28 @@ const AddModifier = (props) => {
                                                 placeholder="Price"
                                                 value={item.price}
                                                 thousandSeparator={true}
-                                                decimalScale={2}
-                                                fixedDecimalScale={true}
+                                                allowNegative={false}
+                                                decimalScale={decimal}
                                                 className="form-control"
                                                 onChange={handleOnChangeModifierField(
                                                   index
                                                 )}
-                                                invalid={
-                                                  modifierFieldsError[index]
-                                                    .price
-                                                }
+                                                // invalid={
+                                                //   modifierFieldsError[index]
+                                                //     .price
+                                                // }
                                                 onBlur={modifierFieldBlur(
                                                   index
                                                 )}
                                               />
-                                              {modifierFieldsError[index]
+                                              {/* {modifierFieldsError[index]
                                                 .price === true ? (
                                                 <CInvalidFeedback
                                                   style={{ display: "block" }}
                                                 >
                                                   Please Enter Option Price
                                                 </CInvalidFeedback>
-                                              ) : null}
+                                              ) : null} */}
                                             </CInputGroup>
                                           </CFormGroup>
                                         </CCol>

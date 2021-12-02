@@ -20,8 +20,9 @@ import { toggle_receipt_sideBar, cancel_receipt } from "../../../actions/reports
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment'
 import { confirmAlert } from "react-confirm-alert";
-import { groupBy, sumBy } from 'lodash';
+import { groupBy, sumBy, orderBy } from 'lodash';
 import authAxios from '../../../constants/authAxios'
+import Amount from "../../../components/utils/Amount";
 
 const CancelReceipt = props => {
     const show = useSelector(state => state.reports.salesReceiptReducer.show_receipt_detail)
@@ -138,7 +139,7 @@ const CancelReceipt = props => {
             // price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
             price: parseFloat(tax.tax_total).toFixed(2)
         })))
-        let group = groupBy(taxes,'_id')
+        let group = groupBy(orderBy(taxes,'type','desc'),'_id')
         let keys = Object.keys(group)
         
         return keys.map(key => {
@@ -147,7 +148,7 @@ const CancelReceipt = props => {
                     <p>{group[key][0].title} <span style={{color: 'gray'}}>{group[key][0].type}</span></p>
                 </CCol>
                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                    <p>{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
+                    <p>{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
                 </CCol>
                 </>
         })
@@ -172,7 +173,7 @@ const CancelReceipt = props => {
                      <p>{group[key][0].title} {group[key][0].percent}</p>
                  </CCol>
                  <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                     <p>-{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
+                     <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
                  </CCol>
                  </>
         })
@@ -196,7 +197,7 @@ const CancelReceipt = props => {
                      <p>{group[key][0].title} {group[key][0].percent}</p>
                  </CCol>
                  <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                     <p>-{parseFloat(sumBy(group[key].map(p => parseFloat(p.price)))).toFixed(2)}</p>
+                     <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
                  </CCol>
                  </>
         })
@@ -242,7 +243,7 @@ const CancelReceipt = props => {
                     <CCardBody>
                         <CRow className="p-3">
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
-                                <h2>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</h2>
+                                <h2>{<Amount value={item?.total_price} />}</h2>
                                 <h6>Total</h6>
                             </CCol>
                         </CRow>
@@ -275,17 +276,17 @@ const CancelReceipt = props => {
                                 <React.Fragment>
                                     <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
                                         <h6><b>{ite.name}</b></h6>
-                                        <span>{ite.quantity} x {parseFloat(ite.price).toFixed(2)}</span><br/>
+                                        <span>{ite.quantity} x {<Amount value={ite?.price} />}</span><br/>
                                         {(ite.modifiers || []).map(mod => {
                                             return (mod.options || []).map(op => {
-                                                return <><span>+ {op.option_name} ({parseFloat(op.price*ite.quantity).toFixed(2)})</span><br/></>
+                                                return <><span>+ {op.option_name} ({<Amount value={(op?.price*ite?.quantity)} />})</span><br/></>
                                             })
                                         })}
                                         <span><i>{ite.comment}</i></span>
                                         <br/><br/>
                                     </CCol>
                                     <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                        <h6><b>{parseFloat(ite.total_price).toFixed(2)}</b></h6>
+                                        <h6><b>{<Amount value={ite?.total_price} />}</b></h6>
                                     </CCol>
                                 </React.Fragment>
                             ))}
@@ -302,7 +303,7 @@ const CancelReceipt = props => {
                                 <h6><b>Subtotal</b></h6>
                             </CCol>
                             <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                <h6><b>{parseFloat(sumBy(item.items,'total_price') - parseFloat(item.total_discount)).toFixed(2)}</b></h6>
+                                <h6><b>{<Amount value={(sumBy(item.items,'total_price') - parseFloat(item.total_discount))} />}</b></h6>
                             </CCol>
                         </CRow>
                         <CRow>
@@ -314,14 +315,14 @@ const CancelReceipt = props => {
                                 <h6><b>Total</b></h6>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <h6><b>{parseFloat(item.total_price !== undefined && item.total_price !== null ? item.total_price || 0 : 0).toFixed(2)}</b></h6>
+                                <h6><b>{<Amount value={item?.total_price} />}</b></h6>
                             </CCol>
                             <br />
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
                                 <p>{item.payment_method}</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{parseFloat(item.cash_received !== undefined && item.cash_received !== null ? item.cash_received || 0 : 0).toFixed(2)}</p>
+                                <p>{<Amount value={item?.cash_received} />}</p>
                             </CCol>
                             
                             {item?.cash_return > 0 ? <>
@@ -329,7 +330,7 @@ const CancelReceipt = props => {
                                 <p>Change</p>
                             </CCol>
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{parseFloat(item.cash_return !== undefined && item.cash_return !== null ? item.cash_return || 0 : 0).toFixed(2)}</p>
+                                <p>{<Amount value={item?.cash_return} />}</p>
                             </CCol>
                             </>
                             : ""}

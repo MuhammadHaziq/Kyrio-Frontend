@@ -16,10 +16,12 @@ import { useSelector, useDispatch } from "react-redux";
 import SalesPaymentTypeDatatableNew from "../../../datatables/reports/SalesPaymentTypeDatatableNew";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
+import { amountFormat } from "../../../utils/helpers";
 
 const SalesPaymentType = () => {
   const dispatch = useDispatch();
-  const paymentType_sales_summary = useSelector((state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary)
+  const paymentType_sales_summary = useSelector((state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary);
+  const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -60,10 +62,10 @@ const SalesPaymentType = () => {
                       return {
                         ["Payment type"]: itm.PaymentType,
                         ["Payment transactions"]: itm.ItemsSold,
-                        ["Payment amount"]: itm.GrossSales,
+                        ["Payment amount"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
                         ["Refund transactions"]: itm.ItemsRefunded,
-                        ["Refund amount"]: itm.Refunds,
-                        ["Net amount"]: itm.NetSales
+                        ["Refund amount"]: amountFormat(itm?.Refunds, parseInt(decimal)),
+                        ["Net amount"]: amountFormat(itm?.NetSales, parseInt(decimal))
                       }
                     }) : []}
                     filename={"SalesByItem"+dateformat(new Date)+".csv"}

@@ -12,6 +12,8 @@ import {
   update_row_data,
 } from "../../actions/items/itemActions";
 import { useDispatch } from "react-redux";
+import Amount from "../../components/utils/Amount";
+
 const ItemsListDatatable = (props) => {
   const dispatch = useDispatch();
 
@@ -103,8 +105,11 @@ const ItemsListDatatable = (props) => {
               {item.price !== undefined &&
               item.price !== null &&
               item.price !== ""
-                ? Number(item.price).toFixed(2)
-                : " 0.00"}
+              ? (
+                <Amount value={item.price} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
@@ -112,8 +117,11 @@ const ItemsListDatatable = (props) => {
           return (
             <td>
               {item.cost !== undefined && item.cost !== null && item.cost !== ""
-                ? Number(item.cost).toFixed(2)
-                : " 0.00"}
+                ? (
+                  <Amount value={item.cost} />
+                ) : (
+                  <Amount value={0} />
+                )}
             </td>
           );
         },
@@ -129,9 +137,9 @@ const ItemsListDatatable = (props) => {
             margin = ((price - cost) / price) * 100
           }
           if(margin !== "-"){
-            return <td>{margin.toFixed(2) + " %"}</td>; 
+            return <td>{<Amount value={item.cost} sign="%" />}</td>; 
           } else {
-            return <td>{margin}</td>; 
+            return <td>{<Amount value={0} sign="%" />}</td>; 
           }
         },
         stockQty: (item) => {

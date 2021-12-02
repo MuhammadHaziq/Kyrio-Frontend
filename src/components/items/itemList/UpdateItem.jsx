@@ -34,6 +34,8 @@ import {
   remove_row_data,
 } from "../../../actions/items/itemActions";
 const AddItem = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [fields, setFields] = useState({
     item_name: "",
     categoryId: "0",
@@ -508,7 +510,9 @@ const AddItem = (props) => {
                     placeholder="Price"
                     value={fields.price}
                     thousandSeparator={true}
+                    allowNegative={false}
                     onChange={handleOnChange}
+                    decimalScale={decimal}
                     className="form-control"
                   />
                 </CInputGroup>
@@ -524,8 +528,9 @@ const AddItem = (props) => {
                     placeholder="Cost"
                     value={fields.cost}
                     thousandSeparator={true}
+                    allowNegative={false}
                     onChange={handleOnChange}
-                    decimalScale={2}
+                    decimalScale={decimal}
                     className="form-control"
                   />
                 </CInputGroup>

@@ -9,9 +9,8 @@ import {
   CCol,
   CRow,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import MainChartExample from "../charts/MainChartExample.js";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
 import SalesCards from "./SalesCards";
@@ -28,7 +27,6 @@ const brandPrimary = getStyle("primary") || "#4638c2";
 const brandSecondary = getStyle("secondary") || "#8a93a2";
 
 const Dashboard = (props) => {
-  const dispatch = useDispatch();
   // States
   const decimal = useSelector((state) => state.auth.user.decimal);
   const [loading, setLoading] = useState(false);
@@ -412,7 +410,7 @@ const Dashboard = (props) => {
                             ["Net sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
                             ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
                             ["Gross profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
-                            ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
+                            ["Margin"]: parseFloat(itm?.Margin, parseInt(decimal))+"%",
                             ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
                           };
                         })

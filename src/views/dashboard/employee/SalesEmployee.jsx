@@ -12,19 +12,19 @@ import {
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_employee_summary,
-  delete_employee_sales_summary,
+  get_sales_employee_summary
 } from "../../../actions/reports/salesEmployeeActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
+import { amountFormat } from "../../../utils/helpers";
 
 const SalesEmployee = () => {
   const dispatch = useDispatch();
-  const employee_sales_summary = useSelector((state) => state.reports.salesEmployeeReducer.employee_sales_summary)
+  const employee_sales_summary = useSelector((state) => state.reports.salesEmployeeReducer.employee_sales_summary);
+  const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,19 +71,18 @@ console.log(employee_sales_summary)
                 {typeof employee_sales_summary !== "undefined" && employee_sales_summary.length > 0 ?
                 <CSVLink data={employee_sales_summary.length > 0 ? employee_sales_summary.map(itm => {
                     return {
-                      ["Name"]: itm.Name,
-                      ["No. of Items Sold"]: itm.ItemsSold,
-                      ["Gross Sales"]: itm.GrossSales,
-                      ["Total Items Refunded"]: itm.ItemsRefunded,
-                      ["Refunds"]: itm.Refunds,
-                      ["Discounts"]: itm.discounts,
-                      ["Net Sales"]: itm.NetSales,
-                      ["Cost of Goods"]: itm.CostOfGoods,
-                      ["Gross Profit"]: itm.GrossProfit,
-                      ["Margin"]: itm.Margin+"%"
+                      ["Employee name"]: itm.Name,
+                      ["Gross sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
+                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
+                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
+                      ["Net sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
+                      ["Receipts"]: itm?.Receipts,
+                      ["AverageSale"]: amountFormat(itm?.AverageSale, parseInt(decimal)),
+                      ["Tips"]: '',
+                      ["Customer signed up"]: '',
                     }
                   }) : []}
-                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
+                  filename={"SalesByEmployee"+dateformat(new Date)+".csv"}
                   target="_blank"
                   >
                   <CButton

@@ -92,8 +92,8 @@ const SalesSummaryDatatableNew = (props) => {
           return (
             <td>
               {item.Margin !== "undefined" && item.Margin !== null
-                ? item.Margin
-                : <Amount value={0} />+" %"}
+                ? item.Margin + "%"
+                : <Amount value={0} sign="%" />}
             </td>
           );
         },

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { CInputCheckbox, CRow, CCol, CFormGroup, CLabel } from "@coreui/react";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
-import {
-  toggle_select_all_item_stores,
-  toggle_select_single_item_store,
-  set_item_store_values,
-} from "../../../actions/items/itemActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
 const Cost = (props) => {
   const dispatch = useDispatch();
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [itemCost, setItemCost] = useState(props.item.cost);
   useEffect(() => {
     if (props.item.cost !== null && props.item.cost !== undefined) {
@@ -34,7 +31,8 @@ const Cost = (props) => {
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       thousandSeparator={true}
-      decimalScale={2}
+      decimalScale={decimal}
+      allowNegative={false}
       fixedDecimalScale={true}
     />
   );

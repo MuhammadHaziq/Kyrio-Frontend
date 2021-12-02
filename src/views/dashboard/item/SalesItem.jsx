@@ -29,15 +29,12 @@ import { useSelector, useDispatch } from "react-redux";
 // import moment from "moment";
 import SalesItemDatatableNew from "../../../datatables/reports/SalesItemDatatableNew";
 import { CSVLink } from "react-csv";
-import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
-// import { getStyle, hexToRgba } from "@coreui/utils/src";
-// import $ from "jquery";
+import { amountFormat } from "../../../utils/helpers";
 
 const SalesItem = () => {
-  // $(".dropdown-menu a").on("click", function (event) {
-  //   console.log("Event", event);
-  //   // event.stopPropagation();
   
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const item_sales_summary = useSelector((state) => state.reports.salesItemReducer.item_sales_summary);
   //   // $(this).parent().toggleClass("open");
   // });
@@ -60,7 +57,7 @@ const SalesItem = () => {
     { key: "CostOfGoods", label: "Cost of goods", filter: true, isShow: true, disabled: false },
     { key: "GrossProfit", label: "Gross profit", filter: true, isShow: true, disabled: false },
     { key: "Margin", label: "Margin", filter: true, isShow: true, disabled: false },
-    { key: "taxes", label: "Taxes", filter: true, isShow: false, disabled: false },
+    { key: "Tax", label: "Taxes", filter: true, isShow: true, disabled: false },
   ]);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -124,7 +121,6 @@ const SalesItem = () => {
 
   return (
     <>
-      {/* <FilterComponent handleOnChangeSales={() => console.log("No Function")}  /> */}
       <ReportsFilters
         daysFilter={daysFilter}
         resetFilter={filterReset}
@@ -133,6 +129,11 @@ const SalesItem = () => {
       />
       <CRow>
         <CCol>
+          {/* <CCard>
+            <CCardBody>
+
+            </CCardBody>
+          </CCard> */}
           <CCard>
             <CCardHeader>
               <CRow>
@@ -144,14 +145,15 @@ const SalesItem = () => {
                       ["SKU"]: itm.sku,
                       ["Category"]: itm.category,
                       ["No. of Items Sold"]: itm.ItemsSold,
-                      ["Gross Sales"]: itm.GrossSales,
+                      ["Gross Sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
                       ["Total Items Refunded"]: itm.ItemsRefunded,
-                      ["Refunds"]: itm.Refunds,
-                      ["Discounts"]: itm.discounts,
-                      ["Net Sales"]: itm.NetSales,
-                      ["Cost of Goods"]: itm.CostOfGoods,
-                      ["Gross Profit"]: itm.GrossProfit,
-                      ["Margin"]: itm.Margin+"%"
+                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
+                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
+                      ["Net Sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
+                      ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
+                      ["Gross Profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
+                      ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
+                      ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
                     }
                   }) : []}
                   filename={"SalesByItem"+dateformat(new Date)+".csv"}

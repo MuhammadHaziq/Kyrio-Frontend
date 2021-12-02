@@ -17,10 +17,12 @@ import {
   delete_item_varient,
 } from "../../../actions/items/itemActions";
 import CIcon from "@coreui/icons-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
+
 const Price = (props) => {
   const dispatch = useDispatch();
+  const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [variantPrice, setVariantPrice] = useState(props.item.price);
   useEffect(() => {
@@ -51,7 +53,8 @@ const Price = (props) => {
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       thousandSeparator={true}
-      decimalScale={2}
+      allowNegative={false}
+      decimalScale={decimal}
       fixedDecimalScale={true}
     />
   );
@@ -59,7 +62,8 @@ const Price = (props) => {
 
 const Cost = (props) => {
   const dispatch = useDispatch();
-
+  const decimal = useSelector((state) => state.auth.user.decimal);
+  
   const [variantCost, setVariantCost] = useState(props.item.cost);
   useEffect(() => {
     if (props.item.cost !== null && props.item.cost !== undefined) {
@@ -90,7 +94,8 @@ const Cost = (props) => {
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       thousandSeparator={true}
-      decimalScale={2}
+      allowNegative={false}
+      decimalScale={decimal}
       fixedDecimalScale={true}
     />
   );

@@ -18,7 +18,6 @@ export const get_sales_category_summary = (data) => {
         data: data,
       })
         .then((response) => {
-          console.log(response.data)
           dispatch({
             type: GET_CATEGORY_SALES_SUMMARY,
             response: response.data,

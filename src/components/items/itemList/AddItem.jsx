@@ -34,6 +34,8 @@ import {
 import authAxios from "../../../constants/authAxios";
 
 const AddItem = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [fields, setFields] = useState({
     item_name: "",
     categoryId: "0",
@@ -370,7 +372,7 @@ const AddItem = (props) => {
           </CRow>
           <CCol md="12">
             <CRow>
-              <CCol sm="1">
+              <CCol sm="1" style={{ paddingTop: "5px" }}>
                 <CLabel>Sold by</CLabel>
               </CCol>
               <CCol sm="2">
@@ -425,8 +427,9 @@ const AddItem = (props) => {
                     placeholder="Price"
                     value={fields.price}
                     thousandSeparator={true}
+                    allowNegative={false}
                     onChange={handleOnChange}
-                    decimalScale={2}
+                    decimalScale={decimal}
                     className="form-control"
                   />
                 </CInputGroup>
@@ -442,8 +445,9 @@ const AddItem = (props) => {
                     placeholder="Cost"
                     value={fields.cost}
                     thousandSeparator={true}
+                    allowNegative={false}
                     onChange={handleOnChange}
-                    decimalScale={2}
+                    decimalScale={decimal}
                     className="form-control"
                   />
                 </CInputGroup>

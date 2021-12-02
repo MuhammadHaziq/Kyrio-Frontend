@@ -31,6 +31,7 @@ import NumberFormat from "react-number-format";
 
 const UpdateDiscount = (props) => {
   const discount = useSelector((state) => state.items.discountReducer);
+  const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [collapse, setCollapse] = useState([true, true]);
   const [restricted_access, setRestrictedAccess] = useState(false);
@@ -308,7 +309,7 @@ const UpdateDiscount = (props) => {
                   value={fields.discount_value}
                   thousandSeparator={true}
                   allowNegative={false}
-                  decimalScale={2}
+                  decimalScale={decimal}
                 />
               </CInputGroup>
             </CCol>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   CDataTable
 } from "@coreui/react";
-
+import Amount from "../../components/utils/Amount";
 
 const SalesItemDatatableNew = (props) => {
 
@@ -39,83 +39,75 @@ const SalesItemDatatableNew = (props) => {
         GrossProfit: (item) => {
           return (
             <td>
-              {item.GrossProfit !== "undefined" &&
-              item.GrossProfit !== null
-                ? item.GrossProfit.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.GrossProfit !== "undefined" && item.GrossProfit !== null
+                ? <Amount value={item.GrossProfit} />
+                : <Amount value={0} />}
             </td>
           );
         },
         CostOfGoods: (item) => {
           return (
             <td>
-              {item.CostOfGoods !== "undefined" &&
-              item.CostOfGoods !== null
-                ? item.CostOfGoods.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.CostOfGoods !== "undefined" && item.CostOfGoods !== null
+                ? <Amount value={item.CostOfGoods} />
+                : <Amount value={0} />}
             </td>
           );
         },
         NetSales: (item) => {
           return (
             <td>
-              {item.NetSales !== "undefined" &&
-              item.NetSales !== null
-                ? item.NetSales.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.NetSales !== "undefined" && item.NetSales !== null
+                ? <Amount value={item.NetSales} />
+                : <Amount value={0} />}
             </td>
           );
         },
         discounts: (item) => {
           return (
             <td>
-              {item.discounts !== "undefined" &&
-              item.discounts !== null
-                ? item.discounts.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.discounts !== "undefined" && item.discounts !== null
+                ? <Amount value={item.discounts} />
+                : <Amount value={0} />}
             </td>
           );
         },
         Refunds: (item) => {
           return (
             <td>
-              {item.Refunds !== "undefined" &&
-              item.Refunds !== null
-                ? item.Refunds.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.Refunds !== "undefined" && item.Refunds !== null
+                ? <Amount value={item.Refunds} />
+                : <Amount value={0} />}
             </td>
           );
         },
         GrossSales: (item) => {
           return (
             <td>
-              {item.GrossSales !== "undefined" &&
-              item.GrossSales !== null
-                ? item.GrossSales.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "$ 0.00"}
+              {item.GrossSales !== "undefined" && item.GrossSales !== null
+                ? <Amount value={item.GrossSales} />
+                : <Amount value={0} />}
+                
             </td>
           );
         },
         Margin: (item) => {
-            return <td>{item.Margin + " %"} </td>;
+            return (
+              <td>
+                {item.Margin !== "undefined" && item.Margin !== null
+                  ? item.Margin+"%"
+                  : <Amount value={0} sign="%" />}
+              </td>
+            );
+        },
+        Tax: (item) => {
+            return (
+              <td>
+                {typeof item.Tax !== "undefined" && item.Tax !== null
+                  ? <Amount value={item.Tax} />
+                  : <Amount value={0} />}
+              </td>
+            );
         }
       }}
     />

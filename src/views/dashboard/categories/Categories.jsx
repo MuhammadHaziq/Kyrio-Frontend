@@ -26,11 +26,14 @@ import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDat
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
+import { amountFormat } from "../../../utils/helpers";
 
 const Categories = () => {
   const dispatch = useDispatch();
 
   const category_sales_summary = useSelector((state) => state.reports.salesCategoryReducer.category_sales_summary)
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [columns, setColumns] = useState([
     { key: "category",      label: "Category",       filter: true, isShow: true,  disabled: true },
     { key: "ItemsSold",     label: "Items sold",     filter: true, isShow: true,  disabled: false },
@@ -42,6 +45,7 @@ const Categories = () => {
     { key: "CostOfGoods",   label: "Cost of goods",  filter: true, isShow: true,  disabled: false },
     { key: "GrossProfit",   label: "Gross profit",   filter: true, isShow: true,  disabled: false },
     { key: "Margin",        label: "Margin",         filter: true, isShow: true,  disabled: false },
+    { key: "Tax",           label: "Taxes",          filter: true, isShow: true,  disabled: false }
   ]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
@@ -96,14 +100,15 @@ const Categories = () => {
                     return {
                       ["Category"]: itm.category,
                       ["No. of Items Sold"]: itm.ItemsSold,
-                      ["Gross Sales"]: itm.GrossSales,
+                      ["Gross Sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
                       ["Total Items Refunded"]: itm.ItemsRefunded,
-                      ["Refunds"]: itm.Refunds,
-                      ["Discounts"]: itm.discounts,
-                      ["Net Sales"]: itm.NetSales,
-                      ["Cost of Goods"]: itm.CostOfGoods,
-                      ["Gross Profit"]: itm.GrossProfit,
-                      ["Margin"]: itm.Margin+"%"
+                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
+                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
+                      ["Net Sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
+                      ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
+                      ["Gross Profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
+                      ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
+                      ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
                     }
                   }) : []}
                   filename={"SalesByItem"+dateformat(new Date)+".csv"}

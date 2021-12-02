@@ -97,49 +97,6 @@ const SalesModifierDatatableNew = (props) => {
                     
                   </tbody>
                   </table>
-                // <CDataTable
-                // itemsPerPageSelect
-                // items={item.options}
-                // fields={[
-                //   { key: "Option", label: "Option", filter: true },
-                //   {
-                //     key: "quantitySold",
-                //     label: "Quantity Sold",
-                //     filter: true,
-                //   },
-                //   { key: "grossSales", label: "Gross Sales", filter: true },
-                //   {
-                //     key: "refundQuantitySold",
-                //     label: "Quantity Refunded",
-                //     filter: true,
-                //   },
-                //   { key: "refundGrossSales", label: "Refunds", filter: true },
-                //   { key: "net_sales", label: "Net sales", filter: true },
-                // ]}
-                // addTableClasses={"hideDetailMenu"}
-                // size="lg"
-                // header={false}
-                // columnFilter={false}
-                // responsive={true}
-                // sorter={false}
-                // hover={false}
-                // outlined={false}
-                // pagination={false}
-                // />
-              // <CCollapse show={true}>
-              //   <CCardBody>
-              //     <h4>
-              //       {item.username}
-              //     </h4>
-              //     <p className="text-muted">User since: {item.registered}</p>
-              //     <CButton size="sm" color="info">
-              //       User Settings
-              //     </CButton>
-              //     <CButton size="sm" color="danger" className="ml-1">
-              //       Delete
-              //     </CButton>
-              //   </CCardBody>
-              // </CCollapse>
             )
           }
       }}

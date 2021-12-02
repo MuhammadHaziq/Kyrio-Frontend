@@ -6,9 +6,10 @@ import {
   toggle_select_single_item_store,
   set_item_store_values,
 } from "../../../actions/items/itemActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
 const Price = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
   const dispatch = useDispatch();
   const [storePrice, setStorePrice] = useState(props.item.price);
   useEffect(() => {
@@ -33,8 +34,8 @@ const Price = (props) => {
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       thousandSeparator={true}
-      decimalScale={2}
-      fixedDecimalScale={true}
+      allowNegative={false}
+      decimalScale={decimal}
     />
   );
 };
@@ -64,6 +65,8 @@ const InStock = (props) => {
       className="form-control"
       onChange={handleOnChange}
       onBlur={handleOnBlur}
+      decimalScale={0}
+      allowNegative={false}
     />
   );
 };
@@ -92,6 +95,8 @@ const LowStock = (props) => {
       className="form-control"
       onChange={handleOnChange}
       onBlur={handleOnBlur}
+      decimalScale={0}
+      allowNegative={false}
     />
   );
 };

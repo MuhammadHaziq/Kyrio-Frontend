@@ -6,6 +6,8 @@ import {
   select_row_data_update,
 } from "../../actions/items/discountActions";
 import { useDispatch } from "react-redux";
+import Amount from "../../components/utils/Amount";
+
 const DiscountDatatable = (props) => {
   const dispatch = useDispatch();
 
@@ -91,8 +93,8 @@ const DiscountDatatable = (props) => {
               item.value !== null &&
               item.value !== ""
                 ? item.type.toUpperCase() === "amount".toUpperCase()
-                  ? Number(item.value).toFixed(2)
-                  : Number(item.value).toFixed(2) + " %"
+                  ? <Amount value={item.value} />
+                  : <Amount value={item.value} sign="%" />
                 : item.type.toUpperCase() === "amount".toUpperCase()
                 ? "Variable, Σ"
                 : "Variable, %"}

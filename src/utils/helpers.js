@@ -7,17 +7,28 @@ export let removeChars = (num) => {
     return newNum;
 };
 
-export let amountFormat = (num, decimal) => {
-    return roundToDecimal(numberWithCommas(num),decimal);
+export let amountFormat = (num, decimal, sign = "") => {
+    num = truncateDecimals(num,decimal);
+    return roundToDecimal(numberWithCommas(num,decimal),decimal)+sign;
 }
-
-export let roundToDecimal = (num, decimal, upOrDown = 1) => {
+export let truncateDecimals = (num, digits) => {
+    var numS = num.toString(),
+        decPos = numS.indexOf('.'),
+        substrLength = decPos == -1 ? numS.length : 1 + decPos + digits,
+        trimmedResult = numS.substr(0, substrLength),
+        finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
+    if(num !== 0 && finalResult == 0){
+        finalResult = 1;
+    }
+    return parseFloat(finalResult);
+}
+export let roundToDecimal = (num, decimal, upOrDown = 0) => {
     
     if(num) {
         if(typeof(num)!=="number"){
             num = parseFloat(num);
         }
-        let t = parseFloat(num.toFixed(2, upOrDown)).toFixed(decimal);
+        let t = parseFloat(num.toFixed(decimal, upOrDown)).toFixed(decimal);
         return (Math.round(t * 1e2) / 1e2).toFixed(decimal)
     }
     return parseInt(0).toFixed(decimal);
@@ -29,9 +40,9 @@ export let roundNum = (num) => {
     return Math.round(num * 100) / 100;
 };
 
-export let numberWithCommas = (num) => {
+export let numberWithCommas = (num,decimal) => {
     num = parseFloat(num);
-    return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return num.toFixed(decimal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 };
 
 export let roundToThree = (num, upOrDown = 1) => {

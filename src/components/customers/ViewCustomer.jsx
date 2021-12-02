@@ -41,6 +41,8 @@ import {
   edit_profile_view,
 } from "../../actions/customer/customerActions";
 const ViewCustomer = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [fadeUpdateCustomer, setFadeUpdateCustomer] = useState(false);
   const [fadeViewCustomer, setFadeAddCustomer] = useState(true);
 
@@ -362,7 +364,8 @@ const ViewCustomer = (props) => {
                   placeholder="Balance"
                   value={fields.new_points_balance}
                   onChange={handleOnChange}
-                  decimalScale={2}
+                  decimalScale={decimal}
+                  allowNegative={false}
                   thousandSeparator={true}
                 />
               </CModalBody>

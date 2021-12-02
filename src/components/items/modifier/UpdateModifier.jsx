@@ -30,6 +30,8 @@ import NumberFormat from "react-number-format";
 import ConformationAlert from "../../conformationAlert/ConformationAlert";
 
 const UpdateModifier = (props) => {
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [collapse, setCollapse] = useState([true, true]);
   const [fields, setFields] = useState({
     modifier_name: "",
@@ -37,7 +39,7 @@ const UpdateModifier = (props) => {
   });
   const [showAlert, setShowAlert] = useState(false);
   const [modifierFields, setModifierFields] = useState([
-    { _id: "0", name: "", price: "", position: 0 },
+    { _id: "0", name: "", price: "0", position: 0 },
   ]);
   const [modifierFieldsError, setModifierFieldsError] = useState([
     {
@@ -322,7 +324,7 @@ const UpdateModifier = (props) => {
         {
           _id: "0",
           name: "",
-          price: "$0.0",
+          price: "0",
           position: modifierFields.length,
         },
       ]);
@@ -480,13 +482,13 @@ const UpdateModifier = (props) => {
                                                 placeholder="Price"
                                                 value={item.price}
                                                 thousandSeparator={true}
-                                                decimalScale={2}
-                                                fixedDecimalScale={true}
+                                                allowNegative={false}
+                                                decimalScale={decimal}
                                                 className="form-control"
-                                                invalid={
-                                                  modifierFieldsError[index]
-                                                    .price
-                                                }
+                                                // invalid={
+                                                //   modifierFieldsError[index]
+                                                //     .price
+                                                // }
                                                 onBlur={modifierFieldBlur(
                                                   index
                                                 )}
@@ -494,14 +496,14 @@ const UpdateModifier = (props) => {
                                                   index
                                                 )}
                                               />
-                                              {modifierFieldsError[index]
+                                              {/* {modifierFieldsError[index]
                                                 .price === true ? (
                                                 <CInvalidFeedback
                                                   style={{ display: "block" }}
                                                 >
                                                   Please Enter Option Price
                                                 </CInvalidFeedback>
-                                              ) : null}
+                                              ) : null} */}
 
                                               {/*  <CInput
                                                 type="number"

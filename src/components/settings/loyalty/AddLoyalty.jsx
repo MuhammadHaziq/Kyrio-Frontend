@@ -16,13 +16,15 @@ import {
 } from "@coreui/react";
 import validator from "validator";
 import CIcon from "@coreui/icons-react";
-import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import { add_new_loyalty } from "../../../actions/settings/loyaltyActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
+
 const AddLoyalty = (props) => {
   const auth = useSelector((state) => state.auth);
   const loyalty = useSelector((state) => state.settingReducers.loyaltyReducer);
+  const decimal = useSelector((state) => state.auth.user.decimal);
+
   const [storeId, setStoreId] = useState();
   const [fields, setFields] = useState({
     loyalty_amount: "0.00",
@@ -138,6 +140,8 @@ const AddLoyalty = (props) => {
             format={amountFormat}
             onChange={handleOnChange}
             value={fields.loyalty_amount}
+            decimalScale={decimal}
+            allowNegative={false}
           />
           <CInputGroupAppend>
             <CInputGroupText>%</CInputGroupText>

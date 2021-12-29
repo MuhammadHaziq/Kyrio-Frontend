@@ -134,7 +134,7 @@ const PosDevice = () => {
                           </svg>
                           ADD POS DEVICE
                         </CButton>
-                        {posDevice.pos_device_list.filter(
+                        {[] || posDevice?.pos_device_list?.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
                           <ConformationAlert

@@ -173,7 +173,7 @@ const UpdatePosDevice = (props) => {
                 <ConformationAlert
                   button_text="Delete"
                   heading="Delete POS"
-                  section="Are you sure you want to delete POS? Loyverse POS app will be deactivated on the device assigned to this POS."
+                  section="Are you sure you want to delete POS? Kyrio POS app will be deactivated on the device assigned to this POS."
                   buttonAction={pos_device_delete}
                   show_alert={showAlert}
                   hideAlert={setShowAlert}

@@ -144,7 +144,7 @@ const PosDevice = () => {
                               .filter((item) => item.isDeleted === true)
                               .map((item) => item.title)
                               .join(",")}) ?
-                              Loyverse POS app will be deactivated on the device assigned to this POS.`}
+                              Kyrio POS app will be deactivated on the device assigned to this POS.`}
                             buttonAction={deletePosDevices}
                             show_alert={showAlert}
                             hideAlert={setShowAlert}

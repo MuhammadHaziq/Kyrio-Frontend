@@ -514,7 +514,7 @@ const Account = () => {
             <CModalBody>
               <p>
                 After deleting your account, you will no longer be able to
-                access any of its data. All subscriptions to Loyverse services
+                access any of its data. All subscriptions to Kyrio services
                 will be cancelled.
               </p>
               <CFormGroup variant="checkbox" className="form-group-space">

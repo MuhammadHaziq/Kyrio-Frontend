@@ -134,14 +134,13 @@ const PosDevice = () => {
                           </svg>
                           ADD POS DEVICE
                         </CButton>
-                        {[] || posDevice?.pos_device_list?.filter(
+                        { posDevice?.pos_device_list?.filter(
                           (item) => item.isDeleted === true
                         ).length > 0 ? (
                           <ConformationAlert
                             button_text="Ok"
                             heading="Delete POS"
-                            section={`Are you sure you want to delete POS  (${posDevice.pos_device_list
-                              .filter((item) => item.isDeleted === true)
+                            section={`Are you sure you want to delete POS  (${posDevice?.pos_device_list?.filter((item) => item.isDeleted === true)
                               .map((item) => item.title)
                               .join(",")}) ?
                               Kyrio POS app will be deactivated on the device assigned to this POS.`}

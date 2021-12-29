@@ -131,7 +131,7 @@ export const get_store_pos_device = (data) => {
     try {
       authAxios({
         method: "post",
-        url: `devices/getStoreDevice`,
+        url: `devices/getStoreDeviceByFilter`,
         data: { storeId: data },
 
       })
@@ -139,11 +139,10 @@ export const get_store_pos_device = (data) => {
           dispatch({
             type: GET_POS_DEVICES,
             response:
-              Object.keys(response.data).length > 0 ? [response.data.device] : [],
+            response.data.devices.length > 0 ? response.data.devices : [],
           });
         })
         .catch((error) => {
-          console.log("err", error.response);
           let msg = {
             open: true,
             message:

@@ -27,7 +27,7 @@ import Amount from "../../../components/utils/Amount";
 const CancelReceipt = props => {
     const show = useSelector(state => state.reports.salesReceiptReducer.show_receipt_detail)
     const sales_receipt_data = useSelector(state => state.reports.salesReceiptReducer.sales_receipt_data)
-    
+
     const dispatch = useDispatch()
     const closeReceiptDetail = () => {
         dispatch(toggle_receipt_sideBar(false))
@@ -35,14 +35,14 @@ const CancelReceipt = props => {
 
     const cancelReceiptFunc = () => {
         const type = sales_receipt_data?.[0]?.receipt_type
-        if(type === "REFUND"){
+        if (type === "REFUND") {
             showAlert({
                 button_text: "Disbale",
                 heading: "Cancel receipt",
                 section:
-                  "Receipt will not be accounted in reports. Are you sure you want to continue?",
-              });
-        } else if(type === "SALE"){
+                    "Receipt will not be accounted in reports. Are you sure you want to continue?",
+            });
+        } else if (type === "SALE") {
             const data = {
                 receipt_number: (sales_receipt_data || [])[0] !== undefined && (sales_receipt_data || [])[0] !== null ? (sales_receipt_data || [])[0].receipt_number : ''
             }
@@ -50,16 +50,16 @@ const CancelReceipt = props => {
             authAxios({
                 method: "GET",
                 url: `sales/check/${data.receipt_number}`
-        
-              }).then(res => {
-                if(res.data.refund){
+
+            }).then(res => {
+                if (res.data.refund) {
                     showAlert({
                         button_text: "Disbale",
                         heading: "Cancel receipt",
                         section:
-                          "Unable to cancel receipt that was fully or partially refunded. Please cancel refund receipt first: "+data.receipt_number,
+                            "Unable to cancel receipt that was fully or partially refunded. Please cancel refund receipt first: " + data.receipt_number,
                         refund: true
-                      });
+                    });
                 } else {
                     showAlert({
                         button_text: "Disbale",
@@ -71,14 +71,14 @@ const CancelReceipt = props => {
                             </ul>
                             Are you sure you want to continue?
                         </div>,
-                         refund: false
-                      });
+                        refund: false
+                    });
                 }
-              }).catch(err => {
-                  console.log(err.message)
-              })
+            }).catch(err => {
+                console.log(err.message)
+            })
         }
-        
+
     }
     const cancelReceiptConfirm = () => {
         const data = {
@@ -91,66 +91,66 @@ const CancelReceipt = props => {
 
     const showAlert = (param) => {
         confirmAlert({
-          customUI: ({ onClose }) => {
-            return (
-              <div className='custom-ui'>
-                <h3>{param.heading}</h3>
-                <p>{param.section}</p>
-                <CRow>
-                  <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
-                    <CButton
-                      color="secondary"
-                      block
-                      className="btn-pill pull-right"
-                      outline="outline"
-                      onClick={() => { onClose(); }}
-                    >
-                    {param.refund ? "OK" : "No"}
-                    </CButton>
-                  </CCol>
-                  {param.refund ? "" :
-                  <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
-                    <CButton
-                      color="danger"
-                      block
-                      className="btn-pill pull-right"
-                      outline="outline"
-                      onClick={() => {
-                        cancelReceiptConfirm();
-                        onClose();
-                      }}
-                    >
-                      Yes
-                    </CButton>
-                  </CCol>
-                    }
-                </CRow>
-              </div>
-            );
-          }
+            customUI: ({ onClose }) => {
+                return (
+                    <div className='custom-ui'>
+                        <h3>{param.heading}</h3>
+                        <p>{param.section}</p>
+                        <CRow>
+                            <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                                <CButton
+                                    color="secondary"
+                                    block
+                                    className="btn-pill pull-right"
+                                    outline="outline"
+                                    onClick={() => { onClose(); }}
+                                >
+                                    {param.refund ? "OK" : "No"}
+                                </CButton>
+                            </CCol>
+                            {param.refund ? "" :
+                                <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">
+                                    <CButton
+                                        color="danger"
+                                        block
+                                        className="btn-pill pull-right"
+                                        outline="outline"
+                                        onClick={() => {
+                                            cancelReceiptConfirm();
+                                            onClose();
+                                        }}
+                                    >
+                                        Yes
+                                    </CButton>
+                                </CCol>
+                            }
+                        </CRow>
+                    </div>
+                );
+            }
         });
     };
     const ShowTaxes = ({ items }) => {
         const taxes = []
         items.map(ite => ite.taxes.map(tax => taxes.push({
             _id: tax._id,
-            title: tax.title +" "+ tax.tax_rate + "%",
+            title: tax.title + " " + tax.tax_rate + "%",
             type: tax.tax_type == 'Included in the price' ? '(included)' : '',
             // price: parseFloat((tax.tax_rate/100)*ite.total_price).toFixed(2)
             price: parseFloat(tax.tax_total).toFixed(2)
         })))
-        let group = groupBy(orderBy(taxes,'type','desc'),'_id')
+        let group = groupBy(orderBy(taxes, 'type', 'desc'), '_id')
         let keys = Object.keys(group)
-        
+
         return keys.map(key => {
             return <>
                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                    <p>{group[key][0].title} <span style={{color: 'gray'}}>{group[key][0].type}</span></p>
+                    <p>{group[key][0].title} <span style={{ color: 'gray' }}>{group[key][0].type}</span></p>
                 </CCol>
                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
                     <p>{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
                 </CCol>
-                </>
+            </>
         })
     }
     const ShowPercentDiscounts = ({ items }) => {
@@ -158,24 +158,24 @@ const CancelReceipt = props => {
         items.map(ite => ite.discounts.map(dis => discounts.push({
             _id: dis._id,
             title: dis.title,
-            percent: dis.type == 'Percentage' ? dis.value+"%" : '',
+            percent: dis.type == 'Percentage' ? dis.value + "%" : '',
             type: dis.type,
             // price: dis.type == 'Percentage' ? parseFloat((dis.value/100)*ite.total_price).toFixed(2) : parseFloat(dis.value).toFixed(2)
             price: parseFloat(dis.discount_total).toFixed(2)
         })))
-        
-        let group = groupBy(discounts,'_id')
+
+        let group = groupBy(discounts, '_id')
         let keys = Object.keys(group)
-        
+
         return keys.map(key => {
             return <>
-                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                     <p>{group[key][0].title} {group[key][0].percent}</p>
-                 </CCol>
-                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                     <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
-                 </CCol>
-                 </>
+                <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                    <p>{group[key][0].title} {group[key][0].percent}</p>
+                </CCol>
+                <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                    <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
+                </CCol>
+            </>
         })
     }
     const ShowAmountDiscounts = ({ receipt }) => {
@@ -183,26 +183,26 @@ const CancelReceipt = props => {
         receipt.discounts.map(ite => discounts.push({
             _id: ite._id,
             title: ite.title,
-            percent: ite.type == 'Percentage' ? ite.value+"%" : '',
+            percent: ite.type == 'Percentage' ? ite.value + "%" : '',
             type: ite.type,
             price: parseFloat(ite.value).toFixed(2)
         }))
-        
-        let group = groupBy(discounts,'_id')
+
+        let group = groupBy(discounts, '_id')
         let keys = Object.keys(group)
-        
+
         return keys.map(key => {
             return <>
-                 <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
-                     <p>{group[key][0].title} {group[key][0].percent}</p>
-                 </CCol>
-                 <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                     <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
-                 </CCol>
-                 </>
+                <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
+                    <p>{group[key][0].title} {group[key][0].percent}</p>
+                </CCol>
+                <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
+                    <p>-{<Amount value={sumBy(group[key]?.map(p => parseFloat(p?.price)))} />}</p>
+                </CCol>
+            </>
         })
     }
-    
+
     return (
         <CSidebar
             aside
@@ -211,35 +211,43 @@ const CancelReceipt = props => {
             unfoldable
             show={show}
             onShowChange={closeReceiptDetail}
-            
+
         >
 
             <CNav variant='tabs' className='nav-underline nav-underline-primary ml-auto ' >
                 <CNavItem>
                     <CSidebarClose onClick={closeReceiptDetail} style={{ left: '0' }} />
                 </CNavItem>
-                
+
                 <CNavItem>
                     <CDropdown
                         inNav
                         className="c-header-nav-item mx-2"
                     >
-                        <CDropdownToggle  caret={false}>
-                        {sales_receipt_data?.[0]?.cancelled_at ? "" :
-                            <CIcon name="cil-options" />
-                        }
+                        <CDropdownToggle caret={false}>
+                            {sales_receipt_data?.[0]?.cancelled_at ? "" :
+                                <CIcon name="cil-options" />
+                            }
                         </CDropdownToggle>
                         {sales_receipt_data?.[0]?.cancelled_at ? "" :
-                        <CDropdownMenu placement="bottom-end" className="pt-0">
-                            <CDropdownItem onClick={cancelReceiptFunc}><CIcon name="cil-basket" className="mr-2" /> Cancel Receipt</CDropdownItem>
-                        </CDropdownMenu>
+                            <CDropdownMenu placement="bottom-end" className="pt-0">
+                                <CDropdownItem onClick={cancelReceiptFunc}><CIcon name="cil-basket" className="mr-2" /> Cancel Receipt</CDropdownItem>
+                            </CDropdownMenu>
                         }
                     </CDropdown>
                 </CNavItem>
-                
+
             </CNav>
             {(sales_receipt_data || []).map((item, index) => (
-                <CCard style={{ overflowX: "hidden", overflowY: "scroll"}}>
+                <CCard style={{ overflowX: "hidden", overflowY: "scroll" }}>
+                    {typeof item?.cancelled_by !== "undefined" && item?.cancelled_by ? 
+                    <CRow className="">
+                        <CCol sm="12" md="12" lg="12" style={{ textAlign: "center", backgroundColor: "#fff9c4", color: "black" }}>
+                            <p className="cancel-alert">Cancelled by {item?.cancelled_by?.name} on {moment(item?.cancelled_at).format('MMM D, YYYY')} at {moment(item?.cancelled_at).format('h:mm A')}
+                             </p>
+                        </CCol>
+                    </CRow>
+                    : ""}
                     <CCardBody>
                         <CRow className="p-3">
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
@@ -254,16 +262,16 @@ const CancelReceipt = props => {
                                 <h6>POS: {item.store !== undefined && item.store !== null ? item.store.name !== undefined && item.store.name !== null ? item.store.name || '' : '' : ''}</h6>
                             </CCol>
                         </CRow>
-                        {item.customer !== undefined && item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ? 
-                        <>
-                        <hr />
-                        <CRow>
-                            <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
-                                <h6>Customer: { item.customer.name}</h6>
-                                <h6>{item.customer.email !== undefined && item.customer.email !== null ? item.customer.email || '' : ''}</h6>
-                            </CCol>
-                        </CRow>
-                        </> : "" : ""}
+                        {item.customer !== undefined && item.customer !== null ? item.customer.name !== undefined && item.customer.name !== null ?
+                            <>
+                                <hr />
+                                <CRow>
+                                    <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
+                                        <h6>Customer: {item.customer.name}</h6>
+                                        <h6>{item.customer.email !== undefined && item.customer.email !== null ? item.customer.email || '' : ''}</h6>
+                                    </CCol>
+                                </CRow>
+                            </> : "" : ""}
                         <hr />
                         <CRow>
                             <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
@@ -276,21 +284,21 @@ const CancelReceipt = props => {
                                 <React.Fragment>
                                     <CCol sm="8" md="8" lg="8" style={{ textAlign: "left" }}>
                                         <h6><b>{ite.name}</b></h6>
-                                        <span>{ite.quantity} x {<Amount value={ite?.price} />}</span><br/>
+                                        <span>{ite.quantity} x {<Amount value={ite?.price} />}</span><br />
                                         {(ite.modifiers || []).map(mod => {
                                             return (mod.options || []).map(op => {
-                                                return <><span>+ {op.option_name} ({<Amount value={(op?.price*ite?.quantity)} />})</span><br/></>
+                                                return <><span>+ {op.option_name} ({<Amount value={(op?.price * ite?.quantity)} />})</span><br /></>
                                             })
                                         })}
                                         <span><i>{ite.comment}</i></span>
-                                        <br/><br/>
+                                        <br /><br />
                                     </CCol>
                                     <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
                                         <h6><b>{<Amount value={ite?.total_price} />}</b></h6>
                                     </CCol>
                                 </React.Fragment>
                             ))}
-                            
+
                         </CRow>
                         {item.total_discount > 0 ? <hr /> : ""}
                         <CRow>
@@ -303,11 +311,11 @@ const CancelReceipt = props => {
                                 <h6><b>Subtotal</b></h6>
                             </CCol>
                             <CCol sm="4" md="4" lg="4" style={{ textAlign: "right" }}>
-                                <h6><b>{<Amount value={(sumBy(item.items,'total_price') - parseFloat(item.total_discount))} />}</b></h6>
+                                <h6><b>{<Amount value={(sumBy(item.items, 'total_price') - parseFloat(item.total_discount))} />}</b></h6>
                             </CCol>
                         </CRow>
                         <CRow>
-                            <ShowTaxes items={item.items}/>
+                            <ShowTaxes items={item.items} />
                         </CRow>
                         <hr />
                         <CRow>
@@ -324,16 +332,16 @@ const CancelReceipt = props => {
                             <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
                                 <p>{<Amount value={item?.cash_received} />}</p>
                             </CCol>
-                            
+
                             {item?.cash_return > 0 ? <>
-                            <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
-                                <p>Change</p>
-                            </CCol>
-                            <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
-                                <p>{<Amount value={item?.cash_return} />}</p>
-                            </CCol>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "left" }}>
+                                    <p>Change</p>
+                                </CCol>
+                                <CCol sm="6" md="6" lg="6" style={{ textAlign: "right" }}>
+                                    <p>{<Amount value={item?.cash_return} />}</p>
+                                </CCol>
                             </>
-                            : ""}
+                                : ""}
                         </CRow>
                         <hr />
                         <CRow>

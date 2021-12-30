@@ -17,7 +17,7 @@ export let truncateDecimals = (num, digits) => {
         substrLength = decPos == -1 ? numS.length : 1 + decPos + digits,
         trimmedResult = numS.substr(0, substrLength),
         finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
-    if(num !== 0 && finalResult == 0){
+    if(num !== 0 && finalResult == 0 && digits == 0){
         finalResult = 1;
     }
     return parseFloat(finalResult);
@@ -31,7 +31,7 @@ export let roundToDecimal = (num, decimal, upOrDown = 0) => {
         let t = parseFloat(num.toFixed(decimal, upOrDown)).toFixed(decimal);
         return (Math.round(t * 1e2) / 1e2).toFixed(decimal)
     }
-    return parseInt(0).toFixed(decimal);
+    return parseFloat(0).toFixed(decimal);
 };
 
 export let roundNum = (num) => {

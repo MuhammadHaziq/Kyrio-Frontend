@@ -8,7 +8,7 @@ export let removeChars = (num) => {
 };
 
 export let amountFormat = (num, decimal, sign = "") => {
-    // num = truncateDecimals(num,decimal);
+    num = truncateDecimals(num,decimal);
     return roundToDecimal(numberWithCommas(num,decimal),decimal)+sign;
 }
 export let truncateDecimals = (num, digits) => {
@@ -17,9 +17,9 @@ export let truncateDecimals = (num, digits) => {
         substrLength = decPos == -1 ? numS.length : 1 + decPos + digits,
         trimmedResult = numS.substr(0, substrLength),
         finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
-    // if(num !== 0 && finalResult == 0 && digits !== 0){
-    //     finalResult = 1;
-    // }
+    if(num !== 0 && finalResult == 0 && digits == 0){
+        finalResult = 1;
+    }
     return parseFloat(finalResult);
 }
 export let roundToDecimal = (num, decimal, upOrDown = 0) => {

@@ -25,7 +25,7 @@ import UpdatePosDevice from "../../../components/settings/posDevice/UpdatePosDev
 import ConformationAlert from "../../../components/conformationAlert/ConformationAlert";
 
 const PosDevice = () => {
-  const [collapse, setCollapse] = useState([true, true]);
+  const [collapse, ] = useState([true, true]);
   const [fadePosDevice, setFadePosDevice] = useState(true);
   const [fadeAddPosDevice, setFadeAddPosDevice] = useState(false);
   const [fadeUpdatePosDevice, setFadeUpdatePosDevice] = useState(false);
@@ -70,10 +70,10 @@ const PosDevice = () => {
     setSelectedStoreId(e.target.value);
     dispatch(get_store_pos_device(e.target.value));
   };
-  const toggleCollapse = (tab) => {
-    const state = collapse.map((x, index) => (tab === index ? !x : x));
-    setCollapse(state);
-  };
+  // const toggleCollapse = (tab) => {
+  //   const state = collapse.map((x, index) => (tab === index ? !x : x));
+  //   setCollapse(state);
+  // };
   const deletePosDevices = () => {
     const data = posDevice.pos_device_list
       .filter((item) => item.isDeleted === true)
@@ -83,9 +83,9 @@ const PosDevice = () => {
     dispatch(delete_pos_devices(JSON.stringify(data)));
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
 
   return (
     <React.Fragment>

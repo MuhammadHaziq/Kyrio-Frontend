@@ -60,8 +60,7 @@ const SalesDiscount = () => {
                   return {
                     ["Name"]: dis.title,
                     ["Discounts applied"]: dis.applied,
-                    ["Amount discounted"]: dis.total,
-
+                    ["Amount discounted"]: dis.total
                   }
                 })}
                   filename={"SalesByDiscounts"+dateformat(new Date)+".csv"}

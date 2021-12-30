@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import SalesTaxDatatableNew from "../../../datatables/reports/SalesTaxDatatableNew";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
+import Amount from "../../../components/utils/Amount";
 
 const SalesTax = () => {
   const dispatch = useDispatch();
@@ -51,11 +52,6 @@ const SalesTax = () => {
             ["Tax amount"]: itm.taxAmount
           })
       });
-      // exortData.push({
-      //   ["Taxable sales"]: taxes_sales_summary.taxableSales,        
-      //   ["Non-taxable sales"]: taxes_sales_summary.NonTaxableSales,        
-      //   ["Total net sales"]: taxes_sales_summary.NetSales,        
-      // })
       setExportData(exortData)
     }
   }, [taxes_sales_summary]);
@@ -73,15 +69,15 @@ const SalesTax = () => {
           <CRow>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Taxable sales</h6>
-              <h2>{taxes_sales_summary.taxableSales}</h2>
+              <h2><Amount value={taxes_sales_summary.taxableSales} /></h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Non-taxable sales</h6>
-              <h2>{taxes_sales_summary.NonTaxableSales}</h2>
+              <h2><Amount value={taxes_sales_summary.NonTaxableSales} /></h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Total net sales</h6>
-              <h2>{taxes_sales_summary.NetSales}</h2>
+              <h2><Amount value={taxes_sales_summary.NetSales} /></h2>
             </CCol>
           </CRow>
         </CCardBody>

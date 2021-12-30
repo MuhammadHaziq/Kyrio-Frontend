@@ -2,6 +2,7 @@ import React from "react";
 import {
   CDataTable
 } from "@coreui/react";
+import Amount from "../../components/utils/Amount";
 
 const SalesTaxDatatableNew = (props) => {
   return (
@@ -24,6 +25,18 @@ const SalesTaxDatatableNew = (props) => {
       hover
       outlined
       pagination
+      scopedSlots={{
+        'taxableSale': (item) => (
+          <td>
+            <strong><Amount value={item.taxableSale} /></strong>
+          </td>
+        ),
+        'taxAmount': (item) => (
+          <td>
+            <strong><Amount value={item.taxAmount} /></strong>
+          </td>
+        ),
+      }}
     />
   );
 };

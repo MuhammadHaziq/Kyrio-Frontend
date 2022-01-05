@@ -19,6 +19,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
+import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable"
 import {
   // get_items_list,
   // get_items_stock,
@@ -163,8 +164,8 @@ const ItemsList = () => {
           : "",
       varient_1_value:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined &&
               item.varients[0]["optionValue"].length > 0
@@ -176,16 +177,16 @@ const ItemsList = () => {
           : "",
       varient_2_name:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[1] !== null && item.varients[1] !== undefined
             ? item.varients[1]["optionName"]
             : ""
           : "",
       varient_2_value:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[1] !== null && item.varients[1] !== undefined
             ? item.varients[1]["optionValue"] !== undefined &&
               item.varients[1]["optionValue"].length > 0
@@ -197,16 +198,16 @@ const ItemsList = () => {
           : "",
       varient_3_name:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[2] !== null && item.varients[2] !== undefined
             ? item.varients[2]["optionName"]
             : ""
           : "",
       varient_3_value:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[2] !== null && item.varients[2] !== undefined
             ? item.varients[2]["optionValue"] !== undefined &&
               item.varients[2]["optionValue"].length > 0
@@ -218,8 +219,8 @@ const ItemsList = () => {
           : "",
       price:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["price"]
@@ -228,8 +229,8 @@ const ItemsList = () => {
           : item.price,
       cost:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["cost"]
@@ -238,8 +239,8 @@ const ItemsList = () => {
           : item.cost,
       barcode:
         item.varients !== null &&
-        item.varients !== undefined &&
-        item.varients.length > 0
+          item.varients !== undefined &&
+          item.varients.length > 0
           ? item.varients[0] !== null && item.varients[0] !== undefined
             ? item.varients[0]["optionValue"] !== undefined
               ? item.varients[0]["optionValue"][0]["barcode"]
@@ -253,34 +254,34 @@ const ItemsList = () => {
     var exportStores =
       item.stores !== null && item.stores !== undefined
         ? (item.stores || []).map((stor) => {
-            (store.stores_list || []).map((stoor, storIndex) => {
-              if (stoor._id == stor.id) {
-                csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (arrayIndex == ky) {
-                    return {
-                      ...it,
-                      [`available_for_sale${stor.title}`]: "Y",
-                      [`in_stock${stor.title}`]: stor.inStock,
-                      [`low_stock${stor.title}`]: stor.lowStock,
-                    };
-                  }
-                  return it;
-                });
-              } else {
-                csvDownloadData = csvDownloadData.map((it, ky) => {
-                  if (arrayIndex == ky) {
-                    return {
-                      ...it,
-                      [`available_for_sale${stor.title}`]: "N",
-                      [`in_stock${stor.title}`]: stor.inStock,
-                      [`low_stock${stor.title}`]: stor.lowStock,
-                    };
-                  }
-                  return it;
-                });
-              }
-            });
-          })
+          (store.stores_list || []).map((stoor, storIndex) => {
+            if (stoor._id == stor.id) {
+              csvDownloadData = csvDownloadData.map((it, ky) => {
+                if (arrayIndex == ky) {
+                  return {
+                    ...it,
+                    [`available_for_sale${stor.title}`]: "Y",
+                    [`in_stock${stor.title}`]: stor.inStock,
+                    [`low_stock${stor.title}`]: stor.lowStock,
+                  };
+                }
+                return it;
+              });
+            } else {
+              csvDownloadData = csvDownloadData.map((it, ky) => {
+                if (arrayIndex == ky) {
+                  return {
+                    ...it,
+                    [`available_for_sale${stor.title}`]: "N",
+                    [`in_stock${stor.title}`]: stor.inStock,
+                    [`low_stock${stor.title}`]: stor.lowStock,
+                  };
+                }
+                return it;
+              });
+            }
+          });
+        })
         : [];
     var exportModifier = (modifire.modifiers_list || []).map(
       (modi, modIndex) => {
@@ -423,11 +424,6 @@ const ItemsList = () => {
   }, [item.redirect_update]);
 
   useEffect(() => {
-    const data = {
-      page: pagination,
-      limit: 500,
-      storeId: defaultStoreId,
-    };
     if (defaultStoreId !== undefined) {
       searchFilterRecords();
       // dispatch(get_items_list(data));
@@ -474,6 +470,11 @@ const ItemsList = () => {
       stockFilter: selectStock,
       categoryFilter: selectCategory,
       search: search,
+      page: 1,
+      columnFilterValue: JSON.stringify(''),
+      tableFilterValue: '',
+      sorterValue: JSON.stringify(''),
+      itemsPerPage: 5
     };
     dispatch(search_item_list(data));
   };
@@ -486,6 +487,11 @@ const ItemsList = () => {
       stockFilter: selectStock,
       categoryFilter: selectCategory,
       search: search,
+      page: 1,
+      columnFilterValue: JSON.stringify(''),
+      tableFilterValue: '',
+      sorterValue: JSON.stringify(''),
+      itemsPerPage: 5
     };
 
     dispatch(search_item_list(data));
@@ -538,7 +544,12 @@ const ItemsList = () => {
 
     dispatch(search_item_list(data));
   };
-
+  const filters = {
+    storeId: storeId,
+    stockFilter: selectStock,
+    categoryFilter: selectCategory,
+    search: search
+  }
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -548,7 +559,7 @@ const ItemsList = () => {
               goBack={goBack}
               store={item.store_list}
               item_row_data={item.item_row_data}
-              key={"addItem"+0}
+              key={"addItem" + 0}
             />
           </CFade>
         ) : (
@@ -556,7 +567,7 @@ const ItemsList = () => {
         )}
         {fadeAddItem ? (
           <CFade timeout={timeout} in={fadeAddItem}>
-            <AddItem goBack={goBack} store={item.store_list} key={"addItem"+1} />
+            <AddItem goBack={goBack} store={item.store_list} key={"addItem" + 1} />
           </CFade>
         ) : (
           ""
@@ -744,7 +755,8 @@ const ItemsList = () => {
                 </CRow>
               </CCardHeader>
               <CCardBody>
-                <ItemsListDatatable itemList={item.item_list} />
+                <ItemListServerSideDatatable filters={filters} itemList={item.item_list} item_pages={item.item_pages} />
+                {/* <ItemsListDatatable itemList={item.item_list} /> */}
               </CCardBody>
             </CCard>
           </React.Fragment>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   CDataTable,
-  CCardBody,
   CInputCheckbox,
   CFormGroup,
   CLabel,
@@ -40,7 +39,7 @@ const ItemsListDatatable = (props) => {
   };
   return (
     <CDataTable
-   itemsPerPageSelect
+      itemsPerPageSelect
       items={props.itemList}
       fields={[
         { key: "select", label: "Select", filter: false },
@@ -51,13 +50,16 @@ const ItemsListDatatable = (props) => {
         { key: "margin", label: "Margin %", filter: true },
         { key: "stockQty", label: "Stock", filter: true },
       ]}
-      itemsPerPage={10}
+      itemsPerPage={5}
       columnFilter
       sorter
       hover
       outlined
       pagination
       clickableRows
+      onPaginationChange={(value) => alert(value)}
+      onPageChange={(value) => alert(value)}
+      onSorterValueChange={(value) => console.log(value, "SORT")}
       onRowClick={clickRow}
       columnHeaderSlot={{
         select: [
@@ -103,13 +105,13 @@ const ItemsListDatatable = (props) => {
           return (
             <td>
               {item.price !== undefined &&
-              item.price !== null &&
-              item.price !== ""
-              ? (
-                <Amount value={item.price} />
-              ) : (
-                <Amount value={0} />
-              )}
+                item.price !== null &&
+                item.price !== ""
+                ? (
+                  <Amount value={item.price} />
+                ) : (
+                  <Amount value={0} />
+                )}
             </td>
           );
         },
@@ -131,15 +133,15 @@ const ItemsListDatatable = (props) => {
 
           let margin = "-";
 
-          if( cost == 0 && price !== 0 ){
+          if (cost == 0 && price !== 0) {
             margin = 100
-          } else if( cost !== 0 && price !== 0 ){
+          } else if (cost !== 0 && price !== 0) {
             margin = ((price - cost) / price) * 100
           }
-          if(margin !== "-"){
-            return <td>{<Amount value={item.cost} sign="%" />}</td>; 
+          if (margin !== "-") {
+            return <td>{<Amount value={item.cost} sign="%" />}</td>;
           } else {
-            return <td>{<Amount value={0} sign="%" />}</td>; 
+            return <td>{<Amount value={0} sign="%" />}</td>;
           }
         },
         stockQty: (item) => {

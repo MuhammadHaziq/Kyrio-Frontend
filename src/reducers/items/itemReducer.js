@@ -30,6 +30,7 @@ import {
 
 const initialState = {
   item_list: [],
+  item_pages: 1,
   stock_list: [],
   store_list: [],
   item_taxes: [],
@@ -65,6 +66,7 @@ const itemReducer = (state = initialState, action) => {
     case GET_ITEM_LIST: {
       return Object.assign({}, state, {
         item_list: action.response,
+        item_pages: action.pages
       });
     }
     case GET_ITEM_STOCK: {

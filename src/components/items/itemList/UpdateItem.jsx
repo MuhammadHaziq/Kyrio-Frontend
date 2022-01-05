@@ -149,7 +149,7 @@ const AddItem = (props) => {
         item_name: props.item_row_data.title,
         categoryId:
           props.item_row_data.category !== undefined &&
-          props.item_row_data.category !== null
+            props.item_row_data.category !== null
             ? props.item_row_data.category._id
             : "0",
         sold_by: props.item_row_data.soldByType,
@@ -258,13 +258,13 @@ const AddItem = (props) => {
     formData.append("soldByType", fields.sold_by);
     formData.append(
       "price",
-      fields.price !== undefined && fields.price !== null
+      fields.price
         ? ReturnNumber(fields.price)
         : 0
     );
     formData.append(
       "cost",
-      fields.cost !== undefined && fields.cost !== null
+      fields.cost
         ? ReturnNumber(fields.cost)
         : 0
     );
@@ -731,7 +731,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                              item.stores.map((str) => str.title).join(",")}
+                            item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -780,7 +780,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                              item.stores.map((str) => str.title).join(",")}
+                            item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -807,7 +807,7 @@ const AddItem = (props) => {
             <StoresDatatable
               stores={props.store}
               stock={inventorySwitch[1]}
-              // stores={props.item_row_data.stores}
+            // stores={props.item_row_data.stores}
             />
           </CCol>
         </CCardBody>

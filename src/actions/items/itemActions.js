@@ -204,7 +204,7 @@ export const search_item_list = (data) => {
 
       })
         .then((response) => {
-          dispatch({ type: GET_ITEM_LIST, response: response.data });
+          dispatch({ type: GET_ITEM_LIST, response: response.data.data, pages: response.data.pages });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -783,7 +783,7 @@ export const update_row_data = (row) => {
 
       })
         .then((response) => {
-          if(typeof response.data.message !== "undefined"){
+          if (typeof response.data.message !== "undefined") {
             let msg = {
               open: true,
               message: response.data.message,

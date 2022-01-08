@@ -1,6 +1,7 @@
 //  DEFAULT Settings
 export const ASIDE = "ASIDE";
 export const SIDEBAR = "SIDEBAR";
+export const SIDEBAR_SETTINGS = "SIDEBAR_SETTINGS"
 export const DARK = "DARK";
 
 // DEFAULT Authorization

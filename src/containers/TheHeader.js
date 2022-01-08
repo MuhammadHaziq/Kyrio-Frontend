@@ -11,10 +11,11 @@ import {
   CBreadcrumbRouter,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { 
+import {
   TheHeaderDropdown
-}  from './index'
-import { sidebarToggle, themeToggle, asideToggle } from "../actions/settingsAction";
+} from './index'
+import { sidebarToggle, themeToggle, asideToggle, toggleSettingSideBar } from "../actions/settingsAction";
+import { MdSettings } from "react-icons/md";
 // routes config
 import routes from '../routes'
 
@@ -23,6 +24,7 @@ const TheHeader = () => {
   const asideShow = useSelector(state => state.settings.asideShow)
   const darkMode = useSelector(state => state.settings.darkMode)
   const sidebarShow = useSelector(state => state.settings.sidebarShow)
+  const settingSideBarShow = useSelector(state => state.settings.settingSideBarShow)
 
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
@@ -32,6 +34,10 @@ const TheHeader = () => {
   const toggleSidebarMobile = () => {
     const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
     dispatch(sidebarToggle(val))
+  }
+  const toggleSettingSidebarMobile = () => {
+    const val = [false, 'responsive'].includes(settingSideBarShow) ? true : 'responsive'
+    dispatch(toggleSettingSideBar(val))
   }
 
   return (
@@ -43,11 +49,17 @@ const TheHeader = () => {
       />
       <CToggler
         inHeader
+        className="ml-md-3 d-lg-none"
+        onClick={toggleSettingSidebarMobile}
+        children={<><MdSettings /></>}
+      />
+      <CToggler
+        inHeader
         className="ml-3 d-md-down-none"
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo"/>
+        <CIcon name="logo" height="48" alt="Logo" />
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
@@ -66,7 +78,7 @@ const TheHeader = () => {
           <CIcon name="cil-moon" className="c-d-dark-none" alt="CoreUI Icons Moon" />
           <CIcon name="cil-sun" className="c-d-default-none" alt="CoreUI Icons Sun" />
         </CToggler>
-        <TheHeaderDropdown/>
+        <TheHeaderDropdown />
         <CToggler
           inHeader
           className="d-md-down-none"

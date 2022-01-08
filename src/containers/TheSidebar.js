@@ -36,7 +36,7 @@ const TheSidebar = () => {
         dispatch({ type: MESSAGE, data: msg });
       } else {
         let module = user.roleData.allowBackoffice.modules || [];
-        
+
         let routes = [];
 
         for (const mod of module) {
@@ -45,19 +45,19 @@ const TheSidebar = () => {
               let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
 
               if (nav.length > 0) {
-                
-                if(nav.filter(itm => itm.module ==  mod.backoffice.title).length <= 0){
-                  nav.push(_nav.filter(itm => itm.module ==  mod.backoffice.title))
+
+                if (nav.filter(itm => itm.module == mod.backoffice.title).length <= 0) {
+                  nav.push(_nav.filter(itm => itm.module == mod.backoffice.title))
                 }
-                if(nav[0].name === "Reports"){
-                let shift = user.features.filter(ftr => ftr.feature.title === "Shifts")
-                  if(!shift[0].enable){
+                if (nav[0].name === "Reports") {
+                  let shift = user.features.filter(ftr => ftr.feature.title === "Shifts")
+                  if (!shift[0].enable) {
                     let index = nav[0]._children.findIndex(e => e.name === "Shifts")
-                    if(index >= 0){
+                    if (index >= 0) {
                       nav[0]._children.splice(index, 1);
                     }
-                    
-                  } else if(nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0){
+
+                  } else if (nav[0]._children.filter(ch => ch.name === "Shifts").length <= 0) {
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
                       name: "Shifts",
@@ -65,28 +65,28 @@ const TheSidebar = () => {
                     })
                   }
                 }
-                if(nav[0].name === "Employees"){
+                if (nav[0].name === "Employees") {
                   let timeClok = user.features.filter(ftr => ftr.feature.title === "Time clock")
-                  if(!timeClok[0].enable){
+                  if (!timeClok[0].enable) {
                     let index = nav[0]._children.findIndex(e => e.name === "Timecards")
-                    if(index >= 0){
+                    if (index >= 0) {
                       nav[0]._children.splice(index, 1);
                     }
                     index = nav[0]._children.findIndex(e => e.name === "Total hours worked")
-                    if(index >= 0){
+                    if (index >= 0) {
                       nav[0]._children.splice(index, 1);
                     }
-                  } else if(nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0){
+                  } else if (nav[0]._children.filter(ch => ch.name === "Timecards").length <= 0) {
                     nav[0]._children.push({
                       _tag: "CSidebarNavItem",
                       name: "Timecards",
                       to: "/employees/timecard",
                     },
-                    {
-                      _tag: "CSidebarNavItem",
-                      name: "Total hours worked",
-                      to: "/employees/total-hour-worked",
-                    })
+                      {
+                        _tag: "CSidebarNavItem",
+                        name: "Total hours worked",
+                        to: "/employees/total-hour-worked",
+                      })
                   }
                 }
 
@@ -97,16 +97,16 @@ const TheSidebar = () => {
               }
             } else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
               let nav = _nav.filter((itm) => itm.module === "Edit general settings");
-                if(routes.filter(itm => itm.name == "Settings").length <= 0){
-                  nav.push(_nav.filter(itm => itm.name == "Settings")[0])
-                  routes.push(nav[0]);
-                }
+              if (routes.filter(itm => itm.name == "Settings").length <= 0) {
+                nav.push(_nav.filter(itm => itm.name == "Settings")[0])
+                routes.push(nav[0]);
+              }
             }
           } else {
-              let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
-              if (nav.length > 0) {
-                  nav.splice(nav.findIndex(e => e.module === mod.backoffice.title),1);
-              }
+            let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
+            if (nav.length > 0) {
+              nav.splice(nav.findIndex(e => e.module === mod.backoffice.title), 1);
+            }
           }
         }
         setNavigation(routes);

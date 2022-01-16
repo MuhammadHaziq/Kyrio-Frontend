@@ -18,6 +18,7 @@ import CategoryDatatable from "../../datatables/category/CategoryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCategory from "../../components/items/category/AddCategory";
 import UpdateCategory from "../../components/items/category/UpdateCategory";
+import CategroySplash from "../../components/splashScreen/CategorySplash";
 const CategoryList = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [fadeCategory, setFadeCategory] = useState(true);
@@ -72,7 +73,7 @@ const CategoryList = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn">
+      <div className="animated fadeIn col-sm-8 col-md-8 col-xl-8">
         {fadeUpdateStore ? (
           <CFade timeout={timeout} in={fadeUpdateStore}>
             <UpdateCategory
@@ -96,7 +97,7 @@ const CategoryList = (props) => {
               <CCardHeader>
                 <CRow>
                   <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                    <CButton
+                    {category?.category_list?.length !== 0 && (<CButton
                       color="success"
                       className="btn-square pull right"
                       onClick={addCategory}
@@ -114,7 +115,8 @@ const CategoryList = (props) => {
                         ></polygon>
                       </svg>
                       ADD CATEGORY
-                    </CButton>
+                    </CButton>)}
+
                     {category.category_list.filter(
                       (item) => item.isDeleted === true
                     ).length > 0 ? (
@@ -146,10 +148,12 @@ const CategoryList = (props) => {
                 </CRow>
               </CCardHeader>
               <CCardBody>
-                <CategoryDatatable
+
+                {category?.category_list?.length === 0 ? <CategroySplash buttonName="ADD CATEGORY" onClick={addCategory} description={"Categories help you organize items."} descriptionLink={"https://help.loyverse.com/help/how-add-items-loyverse-back-office?utm_source=Back%20Office&utm_medium=Categories"} title="Categories" /> : <CategoryDatatable
                   categories={category.category_list}
                   {...props}
-                />
+                />}
+
               </CCardBody>
             </CCard>
           </CFade>

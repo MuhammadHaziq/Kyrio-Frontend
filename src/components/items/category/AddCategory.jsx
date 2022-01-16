@@ -126,11 +126,10 @@ const AddCategory = (props) => {
           <CCol sm="12">
             {colors.map((item, index) => (
               <CCol
-                sm="2"
                 style={{
                   backgroundColor: `${item.color}`,
-                  width: "100px",
-                  height: "100px",
+                  width: "60px",
+                  height: "60px",
                   float: "left",
                 }}
                 className="ml-2"

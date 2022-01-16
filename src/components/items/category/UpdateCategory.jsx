@@ -25,7 +25,7 @@ import {
 const UpdateCategory = (props) => {
   const [fields, setFields] = useState({
     category_name: "",
-    color: "rgb(224, 224, 224)",
+    color: "#e0e0e0",
   });
   const [errors, setErrors] = useState({
     category_name: false,
@@ -50,7 +50,7 @@ const UpdateCategory = (props) => {
     ) {
       setFields({
         category_name: category.update_item_category.title || "",
-        color: category.update_item_category.color || "",
+        color: category?.update_item_category?.color?.toLowerCase() || "",
       });
     }
   }, [category.update_item_category]);
@@ -147,29 +147,26 @@ const UpdateCategory = (props) => {
           <CCol sm="12">
             {colors.map((item, index) => (
               <CCol
-                sm="2"
                 style={{
                   backgroundColor: `${item.color}`,
-                  width: "100px",
-                  height: "100px",
+                  width: "60px",
+                  height: "60px",
                   float: "left",
                 }}
                 className="ml-2"
                 key={index}
                 onClick={() => changeColor(item.color)}
               >
-                {item.color === fields.color ? (
+                {item.color === fields.color && (
                   <CImg
                     src="web-category-check.png"
                     alt="image"
                     style={{
                       width: "25px",
-                      marginTop: "41px",
-                      marginLeft: "19px",
+                      marginTop: "20px",
+                      marginLeft: "2px",
                     }}
                   />
-                ) : (
-                  ""
                 )}
               </CCol>
             ))}

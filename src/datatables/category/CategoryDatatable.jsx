@@ -15,15 +15,9 @@ import { useDispatch } from "react-redux";
 const CategoryDatatable = (props) => {
   const dispatch = useDispatch();
 
-  const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const check = (e, item) => {
-    // if (e.target.checked) {
-    //   setSelected([...selected, id]);
-    // } else {
-    //   setSelected(selected.filter((itemId) => itemId !== id));
-    // }
     dispatch(toggle_category_single_select(item));
   };
   const clickRow = (item, index, column) => {
@@ -100,7 +94,7 @@ const CategoryDatatable = (props) => {
                 <small
                   style={{
                     display: "grid",
-                    marginLeft: "60px",
+                    marginLeft: "37px",
                     marginTop: "-15px",
                   }}
                 >

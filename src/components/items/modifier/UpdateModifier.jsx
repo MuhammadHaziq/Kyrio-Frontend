@@ -16,7 +16,8 @@ import {
   CInvalidFeedback,
   CCardFooter,
   CListGroup,
-  CListGroupItem
+  CListGroupItem,
+  CContainer
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +29,7 @@ import {
 } from "../../../actions/items/modifiresActions";
 import NumberFormat from "react-number-format";
 import ConformationAlert from "../../conformationAlert/ConformationAlert";
+import ModifierIcon from '../../icons/ModifierIcon'
 
 const UpdateModifier = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
@@ -158,26 +160,26 @@ const UpdateModifier = (props) => {
         id: props.modifier_row_data._id,
         title: fields.modifier_name,
         options: modifierFields.map((item) => {
-            if(item._id == "0"){
-              return {
-                name: item.name,
-                price: ReturnNumber(item.price),
-                position: item.position,
-              };
-            } else {
-              return {
-                _id: item._id,
-                name: item.name,
-                price: ReturnNumber(item.price),
-                position: item.position,
-              };
-            }
-          }),
+          if (item._id == "0") {
+            return {
+              name: item.name,
+              price: ReturnNumber(item.price),
+              position: item.position,
+            };
+          } else {
+            return {
+              _id: item._id,
+              name: item.name,
+              price: ReturnNumber(item.price),
+              position: item.position,
+            };
+          }
+        }),
         stores: storeId
-            .filter((item) => item.isSelected === true)
-            .map((ite) => {
-              return ite._id
-            })
+          .filter((item) => item.isSelected === true)
+          .map((ite) => {
+            return ite._id
+          })
       };
       dispatch(update_modifier(data));
     }
@@ -379,9 +381,23 @@ const UpdateModifier = (props) => {
     <React.Fragment>
       <CCard>
         <CCardHeader>
-          <h4>
-            <strong>Create Modifier</strong>
-          </h4>
+          <CContainer className='text-center' style={{
+            width: "135px",
+            height: "135px",
+            borderRadius: "70px",
+            backgroundColor: "#9ccc65",
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}>
+            <ModifierIcon style={{
+              height: '50px',
+              width: '50px',
+              background: '#9ccc65',
+              marginLeft: "25px",
+              fill: "aliceblue"
+            }} />
+          </CContainer>
         </CCardHeader>
 
         <CCardBody>
@@ -421,7 +437,7 @@ const UpdateModifier = (props) => {
                           {modifierFields.map((item, index) => (
                             <Draggable
                               key={item._id}
-                              draggableId={"draggableID"+item._id}
+                              draggableId={"draggableID" + item._id}
                               index={index}
                             >
                               {(provided, snapshot) => (
@@ -576,72 +592,72 @@ const UpdateModifier = (props) => {
         </CCardBody>
         <CCardFooter>
           <CCard>
-          <CCardHeader>
-            <h4>
-              Stores
-              <div className="card-footer-actions float-right">
-                <CLink className="card-footer-action" onClick={() => toggle(0)}>
-                  <CIcon
-                    name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
-                  />
-                </CLink>
-              </div>
-            </h4>
-            <span>
-              <small>
-                {storeId.filter((item) => item.isSelected === false).length === 0
-                  ? "Available in all stores"
-                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
-              </small>
-            </span>
-          </CCardHeader>
-          <CCollapse show={!collapse[0]}>
-          <CCardBody>
-            <CFormGroup>
-              <CCol md="3">
-                <CLabel>Select Store</CLabel>
-              </CCol>
-              <CCol md="9">
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                    onChange={storeHandleChange}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                  {storeId.filter((item) => item.isSelected === false).length === 0
-                  ? "Available in all stores"
-                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
-                  </CLabel>
-                </CFormGroup>
-              </CCol>
-              <CCol md="8" >
-                {storeId.map((item, index) => (
-                  <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%"}}>
-                    <CInputCheckbox
-                      custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
-                      onChange={storeHandleChange}
+            <CCardHeader>
+              <h4>
+                Stores
+                <div className="card-footer-actions float-right">
+                  <CLink className="card-footer-action" onClick={() => toggle(0)}>
+                    <CIcon
+                      name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
                     />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
-                    >
-                      {item.title}
-                    </CLabel>
-                  </CFormGroup>
-                ))}
-              </CCol>
-            </CFormGroup>
-          </CCardBody>
-          </CCollapse>
-        </CCard>
+                  </CLink>
+                </div>
+              </h4>
+              <span>
+                <small>
+                  {storeId.filter((item) => item.isSelected === false).length === 0
+                    ? "Available in all stores"
+                    : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
+                </small>
+              </span>
+            </CCardHeader>
+            <CCollapse show={!collapse[0]}>
+              <CCardBody>
+                <CFormGroup>
+                  <CCol md="3">
+                    <CLabel>Select Store</CLabel>
+                  </CCol>
+                  <CCol md="9">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CInputCheckbox
+                        custom
+                        name="checkAll"
+                        id={"checkAll"}
+                        value={0}
+                        checked={fields.checkAll}
+                        onChange={storeHandleChange}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                        {storeId.filter((item) => item.isSelected === false).length === 0
+                          ? "Available in all stores"
+                          : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
+                      </CLabel>
+                    </CFormGroup>
+                  </CCol>
+                  <CCol md="8" >
+                    {storeId.map((item, index) => (
+                      <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%" }}>
+                        <CInputCheckbox
+                          custom
+                          name="storeId"
+                          id={"storeId" + item._id}
+                          value={item._id}
+                          checked={item.isSelected}
+                          onChange={storeHandleChange}
+                        />
+                        <CLabel
+                          variant="custom-checkbox"
+                          htmlFor={"storeId" + item._id}
+                        >
+                          {item.title}
+                        </CLabel>
+                      </CFormGroup>
+                    ))}
+                  </CCol>
+                </CFormGroup>
+              </CCardBody>
+            </CCollapse>
+          </CCard>
         </CCardFooter>
       </CCard>
       <CRow>

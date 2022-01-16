@@ -40,7 +40,9 @@ import { get_modifires_list } from "../../actions/items/modifiresActions";
 import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
 import { CSVLink } from "react-csv";
-
+import PlusIcon from "../../components/icons/PlusIcon.js";
+import ItemSplash from "../../components/splashScreen/ItemSplash.jsx";
+import SearchIcon from "../../components/icons/SearchIcon.js";
 const ItemsList = () => {
   let item = useSelector((state) => state.items.itemReducer);
   const category = useSelector((state) => state.items.categoryReducer);
@@ -585,7 +587,7 @@ const ItemsList = () => {
         {fadeItem ? (
           <React.Fragment>
             <CCard>
-              <CCardHeader>
+              {item?.item_list?.length !== 0 && (<CCardHeader>
                 <CRow>
                   <CCol xs="12" sm="5" md="5" xl="xl" className="mb-3 mb-xl-0">
                     <CButton
@@ -593,18 +595,7 @@ const ItemsList = () => {
                       className="btn-square"
                       onClick={addItem}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                        className="c-icon c-icon-sm"
-                        role="img"
-                      >
-                        <polygon
-                          fill="var(--ci-primary-color, currentColor)"
-                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                          className="ci-primary"
-                        ></polygon>
-                      </svg>
+                      <PlusIcon />
                       ADD ITEM
                     </CButton>
                     {item.item_list.filter((item) => item.isDeleted === true)
@@ -716,15 +707,7 @@ const ItemsList = () => {
                         </CFormGroup>
                       </CCol>
                       <CCol xs="12" sm="1" md="1" xl="xl">
-                        <svg
-                          viewBox="0 0 20 20"
-                          className="c-icon c-icon-lg"
-                          role="img"
-                          style={{ marginTop: "10px", cursor: "pointer" }}
-                          onClick={() => setShowSearch(!showSearch)}
-                        >
-                          <path d="M18.125,15.804l-4.038-4.037c0.675-1.079,1.012-2.308,1.01-3.534C15.089,4.62,12.199,1.75,8.584,1.75C4.815,1.75,1.982,4.726,2,8.286c0.021,3.577,2.908,6.549,6.578,6.549c1.241,0,2.417-0.347,3.44-0.985l4.032,4.026c0.167,0.166,0.43,0.166,0.596,0l1.479-1.478C18.292,16.234,18.292,15.968,18.125,15.804 M8.578,13.99c-3.198,0-5.716-2.593-5.733-5.71c-0.017-3.084,2.438-5.686,5.74-5.686c3.197,0,5.625,2.493,5.64,5.624C14.242,11.548,11.621,13.99,8.578,13.99 M16.349,16.981l-3.637-3.635c0.131-0.11,0.721-0.695,0.876-0.884l3.642,3.639L16.349,16.981z"></path>
-                        </svg>
+                        <SearchIcon setShowSearch={setShowSearch} showSearch={showSearch} style={{ marginTop: "10px", cursor: "pointer" }} />
                       </CCol>
                     </React.Fragment>
                   ) : (
@@ -753,10 +736,10 @@ const ItemsList = () => {
                     </React.Fragment>
                   )}
                 </CRow>
-              </CCardHeader>
+              </CCardHeader>)}
+
               <CCardBody>
-                <ItemListServerSideDatatable filters={filters} itemList={item.item_list} item_pages={item.item_pages} />
-                {/* <ItemsListDatatable itemList={item.item_list} /> */}
+                {item?.item_list?.length === 0 ? (<ItemSplash buttonName="ADD ITEM" onClick={addItem} description={"Here you can manage your items."} descriptionLink={"https://help.loyverse.com/help/how-add-items-loyverse-back-office?utm_source=Back%20Office&utm_medium=Categories"} title="Items" secondButton="IMPORT ITEMS" secondClick={importList} />) : (<ItemListServerSideDatatable filters={filters} itemList={item.item_list} item_pages={item.item_pages} />)}
               </CCardBody>
             </CCard>
           </React.Fragment>

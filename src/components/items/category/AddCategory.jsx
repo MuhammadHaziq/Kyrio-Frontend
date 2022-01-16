@@ -17,7 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_category } from "../../../actions/items/categoryActions";
-
+import { colors } from "../../../utils/Constants";
 const AddCategory = (props) => {
   const [fields, setFields] = useState({
     category_name: "",
@@ -81,17 +81,6 @@ const AddCategory = (props) => {
     });
   };
 
-  const colors = [
-    { id: 0, color: "#E0E0E0" },
-    { id: 1, color: "#E04336" },
-    { id: 2, color: "#E91E63" },
-    { id: 3, color: "#FF9800" },
-    { id: 4, color: "#CDDC39" },
-    { id: 5, color: "#4CAF50" },
-    { id: 6, color: "#2196F3" },
-    { id: 7, color: "#9C27B0" },
-  ];
-
   return (
     <React.Fragment>
       <CCard>
@@ -136,18 +125,16 @@ const AddCategory = (props) => {
                 key={index}
                 onClick={() => changeColor(item.color)}
               >
-                {item.color === fields.color ? (
+                {item.color?.toLowerCase() === fields.color?.toLowerCase() && (
                   <CImg
                     src="web-category-check.png"
                     alt="image"
                     style={{
                       width: "25px",
-                      marginTop: "41px",
-                      marginLeft: "19px",
+                      marginTop: "20px",
+                      marginLeft: "2px",
                     }}
                   />
-                ) : (
-                  ""
                 )}
               </CCol>
             ))}

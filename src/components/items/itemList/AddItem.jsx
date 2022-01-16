@@ -32,7 +32,6 @@ import {
   set_item_store_values,
 } from "../../../actions/items/itemActions";
 import authAxios from "../../../constants/authAxios";
-
 const AddItem = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
 

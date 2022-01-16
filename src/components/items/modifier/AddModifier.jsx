@@ -16,7 +16,8 @@ import {
   CInvalidFeedback,
   CCardFooter,
   CListGroup,
-  CListGroupItem
+  CListGroupItem,
+  CContainer
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +25,7 @@ import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { add_new_modifier } from "../../../actions/items/modifiresActions";
 import NumberFormat from "react-number-format";
-
+import ModifierIcon from '../../icons/ModifierIcon'
 const AddModifier = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
 
@@ -121,21 +122,21 @@ const AddModifier = (props) => {
       const data = {
         title: fields.modifier_name,
         options: modifierFields.map((item) => {
-            return {
-              name: item.name,
-              price: ReturnNumber(item.price),
-              position: item.position,
-            };
-          }),
+          return {
+            name: item.name,
+            price: ReturnNumber(item.price),
+            position: item.position,
+          };
+        }),
         stores: storeId
-            .filter((item) => item.isSelected === true)
-            .map((ite) => {
-              return ite._id
-              // return {
-              //   id: ite._id,
-              //   name: ite.title,
-              // };
-            })
+          .filter((item) => item.isSelected === true)
+          .map((ite) => {
+            return ite._id
+            // return {
+            //   id: ite._id,
+            //   name: ite.title,
+            // };
+          })
       };
       dispatch(add_new_modifier(data));
     }
@@ -218,8 +219,8 @@ const AddModifier = (props) => {
           : "rgb(128 128 128 / 0%)"
         : // : "rgb(19 18 18 / 42%)"
         isDragging
-        ? "rgb(255 255 255)"
-        : "rgb(255 255 255)",
+          ? "rgb(255 255 255)"
+          : "rgb(255 255 255)",
 
     // styles we need to apply on draggables
     ...draggableStyle,
@@ -233,8 +234,8 @@ const AddModifier = (props) => {
           : "rgb(128 128 128 / 0%)"
         : // : "rgb(76 73 73)"
         isDraggingOver
-        ? "rgb(255 255 255)"
-        : "rgb(255 255 255)",
+          ? "rgb(255 255 255)"
+          : "rgb(255 255 255)",
     padding: grid,
     // width: 250,
   });
@@ -343,9 +344,23 @@ const AddModifier = (props) => {
     <React.Fragment>
       <CCard>
         <CCardHeader>
-          <h4>
-            <strong>Create Modifier</strong>
-          </h4>
+          <CContainer className='text-center' style={{
+            width: "135px",
+            height: "135px",
+            borderRadius: "70px",
+            backgroundColor: "#9ccc65",
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}>
+            <ModifierIcon style={{
+              height: '50px',
+              width: '50px',
+              background: '#9ccc65',
+              marginLeft: "25px",
+              fill: "aliceblue"
+            }} />
+          </CContainer>
         </CCardHeader>
 
         <CCardBody>
@@ -385,7 +400,7 @@ const AddModifier = (props) => {
                           {modifierFields.map((item, index) => (
                             <Draggable
                               key={item.id}
-                              draggableId={"draggableID"+item.id}
+                              draggableId={"draggableID" + item.id}
                               index={index}
                             >
                               {(provided, snapshot) => (
@@ -523,78 +538,78 @@ const AddModifier = (props) => {
           </CCol>
         </CCardBody>
         <CCardFooter>
-        <CCard>
-          <CCardHeader>
-            <h4>
-              Stores
-              <div className="card-footer-actions float-right">
-                <CLink className="card-footer-action" onClick={() => toggle(0)}>
-                  <CIcon
-                    name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
-                  />
-                </CLink>
-              </div>
-            </h4>
-            <span>
-              <small>
-                {storeId.filter((item) => item.isSelected === false).length === 0
-                  ? "Available in all stores"
-                  : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
-              </small>
-            </span>
-          </CCardHeader>
-          <CCollapse show={!collapse[0]}>
-          <CCardBody>
-            <CFormGroup>
-              <CCol md="3">
-                <CLabel>Select Store</CLabel>
-              </CCol>
-              <CCol md="9">
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                    onChange={storeHandleChange}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    Available in all stores
-                    {/*storeId.filter((item) => item.isSelected !== true)
+          <CCard>
+            <CCardHeader>
+              <h4>
+                Stores
+                <div className="card-footer-actions float-right">
+                  <CLink className="card-footer-action" onClick={() => toggle(0)}>
+                    <CIcon
+                      name={collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"}
+                    />
+                  </CLink>
+                </div>
+              </h4>
+              <span>
+                <small>
+                  {storeId.filter((item) => item.isSelected === false).length === 0
+                    ? "Available in all stores"
+                    : storeId.filter((item) => item.isSelected === true).length > 0 ? "Available in selected store" : "Not available in stores"}
+                </small>
+              </span>
+            </CCardHeader>
+            <CCollapse show={!collapse[0]}>
+              <CCardBody>
+                <CFormGroup>
+                  <CCol md="3">
+                    <CLabel>Select Store</CLabel>
+                  </CCol>
+                  <CCol md="9">
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CInputCheckbox
+                        custom
+                        name="checkAll"
+                        id={"checkAll"}
+                        value={0}
+                        checked={fields.checkAll}
+                        onChange={storeHandleChange}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                        Available in all stores
+                        {/*storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
                       : "Select All"*/}
-                  </CLabel>
+                      </CLabel>
+                    </CFormGroup>
+                  </CCol>
+                  <CCol md="8">
+                    {storeId.map((item, index) => (
+                      <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%" }}>
+                        <CInputCheckbox
+                          custom
+                          name="storeId"
+                          id={"storeId" + item._id}
+                          value={item._id}
+                          checked={item.isSelected}
+                          onChange={storeHandleChange}
+                        />
+                        <CLabel
+                          variant="custom-checkbox"
+                          htmlFor={"storeId" + item._id}
+                        >
+                          {item.title}
+                        </CLabel>
+                      </CFormGroup>
+                    ))}
+                  </CCol>
                 </CFormGroup>
-              </CCol>
-              <CCol md="8">
-                {storeId.map((item, index) => (
-                  <CFormGroup variant="custom-checkbox" inline key={index} style={{ paddingLeft: "8%", paddingTop: "2%"}}>
-                    <CInputCheckbox
-                      custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
-                      onChange={storeHandleChange}
-                    />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
-                    >
-                      {item.title}
-                    </CLabel>
-                  </CFormGroup>
-                ))}
-              </CCol>
-            </CFormGroup>
-          </CCardBody>
-          </CCollapse>
-        </CCard>
+              </CCardBody>
+            </CCollapse>
+          </CCard>
         </CCardFooter>
       </CCard>
-      
+
       <CRow>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
           <CButton

@@ -21,6 +21,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
 import AddDiscount from "../../components/items/disocunt/AddDiscount.jsx";
 import UpdateDiscount from "../../components/items/disocunt/UpdateDiscount.jsx";
+import PlusIcon from "../../components/icons/PlusIcon";
+import ItemSplash from "../../components/splashScreen/ItemSplash";
 const DiscountList = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState("0");
@@ -82,7 +84,7 @@ const DiscountList = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn">
+      <div className="animated fadeIn col-sm-12 col-md-8 col-lg-8">
         {fadeUpdateDiscount ? (
           <CFade timeout={timeout} in={fadeUpdateDiscount}>
             <UpdateDiscount
@@ -104,89 +106,81 @@ const DiscountList = (props) => {
         {fadeDiscount ? (
           <CFade timeout={timeout} in={fadeDiscount}>
             <CCard>
-              <CCardHeader>
-                <CRow>
-                  <CCol xs="3" lg="3">
-                    <CButton
-                      color="success"
-                      className="btn-square"
-                      onClick={addDicount}
+              {discount?.discount_list?.length !== 0 && (
+                <CCardHeader>
+                  <CRow>
+                    <CCol xs="3" lg="3">
+                      <CButton
+                        color="success"
+                        className="btn-square"
+                        onClick={addDicount}
+                      >
+                        <PlusIcon />
+                        ADD DISCOUNT
+                      </CButton>
+                    </CCol>
+                    <CCol xs="2" md="2" xl="xl" className="btn-square pull-left">
+                      {discount.discount_list.filter(
+                        (item) => item.isDeleted === true
+                      ).length > 0 ? (
+                        <React.Fragment>
+                          <ConformationAlert
+                            button_text="Delete"
+                            heading="Delete Discount"
+                            section={`Are you sure you want to delete the Discount (${discount.discount_list
+                              .filter((item) => {
+                                return item.isDeleted === true;
+                              })
+                              .map((item) => {
+                                return item.title;
+                              })
+                              .join(",")}) ?`}
+                            buttonAction={delete_discounts}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
+                            variant="outline"
+                            className="ml-2"
+                            color="danger"
+                            block={false}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
+                    </CCol>
+
+                    <CCol
+                      xs="7"
+                      md="7"
+                      xl="xl"
+                      className="mb-3 mb-xl-0 pull-right"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                        className="c-icon c-icon-sm"
-                        role="img"
-                      >
-                        <polygon
-                          fill="var(--ci-primary-color, currentColor)"
-                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                          className="ci-primary"
-                        ></polygon>
-                      </svg>
-                      ADD DISCOUNT
-                    </CButton>
-                  </CCol>
-                  <CCol xs="2" md="2" xl="xl" className="btn-square pull-left">
-                    {discount.discount_list.filter(
-                      (item) => item.isDeleted === true
-                    ).length > 0 ? (
-                      <React.Fragment>
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete Discount"
-                          section={`Are you sure you want to delete the Discount (${discount.discount_list
-                            .filter((item) => {
-                              return item.isDeleted === true;
-                            })
-                            .map((item) => {
-                              return item.title;
-                            })
-                            .join(",")}) ?`}
-                          buttonAction={delete_discounts}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2"
-                          color="danger"
-                          block={false}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                  </CCol>
-
-                  <CCol
-                    xs="7"
-                    md="7"
-                    xl="xl"
-                    className="mb-3 mb-xl-0 pull-right"
-                  >
-                    <CFormGroup>
-                      <CSelect
-                        size="md"
-                        name="selectStore"
-                        id="selectStore"
-                        value={selectedStoreId}
-                        onChange={storeHandleChange}
-                      >
-                        <option value="0">Select Store</option>
-                        {store.stores_list.map((item, index) => {
-                          return (
-                            <option value={item._id} key={index}>
-                              {item.title}
-                            </option>
-                          );
-                        })}
-                      </CSelect>
-                    </CFormGroup>
-                  </CCol>
-                </CRow>
-              </CCardHeader>
-
+                      <CFormGroup>
+                        <CSelect
+                          size="md"
+                          name="selectStore"
+                          id="selectStore"
+                          value={selectedStoreId}
+                          onChange={storeHandleChange}
+                        >
+                          <option value="0">Select Store</option>
+                          {store.stores_list.map((item, index) => {
+                            return (
+                              <option value={item._id} key={index}>
+                                {item.title}
+                              </option>
+                            );
+                          })}
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+              )}
               <CCardBody>
-                <DiscountDatatable discount={discount.discount_list} />
+                {discount?.discount_list?.length === 0 ? (<ItemSplash buttonName="ADD DISCOUNT" onClick={addDicount} description={"Create discounts that can be applied at the time of sale."} descriptionLink={"https://help.loyverse.com/help/how-create-and-configure-discounts?utm_source=Back%20Office&utm_medium=Discounts"} title="Discounts" />) : (
+                  <DiscountDatatable discount={discount.discount_list} />
+                )}
               </CCardBody>
             </CCard>
           </CFade>

@@ -21,7 +21,7 @@ import {
   update_item_category,
   delete_categories,
 } from "../../../actions/items/categoryActions";
-
+import { colors } from "../../../utils/Constants";
 const UpdateCategory = (props) => {
   const [fields, setFields] = useState({
     category_name: "",
@@ -50,7 +50,7 @@ const UpdateCategory = (props) => {
     ) {
       setFields({
         category_name: category.update_item_category.title || "",
-        color: category?.update_item_category?.color?.toLowerCase() || "",
+        color: category?.update_item_category?.color || "",
       });
     }
   }, [category.update_item_category]);
@@ -95,17 +95,6 @@ const UpdateCategory = (props) => {
     });
   };
 
-  const colors = [
-    { id: 0, color: "#e0e0e0" },
-    { id: 1, color: "#f44336" },
-    { id: 2, color: "#e91e63" },
-    { id: 3, color: "#ff9800" },
-    { id: 4, color: "#cddc39" },
-    { id: 5, color: "#4caf50" },
-    { id: 6, color: "#2196f3" },
-    { id: 7, color: "#9c27b0" },
-  ];
-
   const delete_category = () => {
     const data = [props.update_item_category._id];
     dispatch(delete_categories(JSON.stringify(data)));
@@ -118,7 +107,7 @@ const UpdateCategory = (props) => {
       <CCard>
         <CCardHeader>
           <h4>
-            <strong>Create Category</strong>
+            <strong>Update Category</strong>
           </h4>
         </CCardHeader>
 
@@ -157,7 +146,7 @@ const UpdateCategory = (props) => {
                 key={index}
                 onClick={() => changeColor(item.color)}
               >
-                {item.color === fields.color && (
+                {item.color?.toLowerCase() === fields.color?.toLowerCase() && (
                   <CImg
                     src="web-category-check.png"
                     alt="image"

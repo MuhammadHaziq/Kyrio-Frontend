@@ -18,13 +18,14 @@ import {
   CListGroup,
   CListGroupItem,
   CSwitch,
+  CContainer
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { add_new_disocunt } from "../../../actions/items/discountActions";
 import NumberFormat from "react-number-format";
-
+import DiscountIcon from "../../icons/DiscountIcon";
 const AddDiscount = (props) => {
   const discount = useSelector((state) => state.items.discountReducer);
   const decimal = useSelector((state) => state.auth.user.decimal);
@@ -100,10 +101,6 @@ const AddDiscount = (props) => {
       let storeData = [];
       store.map((item) => {
         return storeData.push(item._id);
-        // return storeData.push({
-        //   id: item._id,
-        //   title: item.title,
-        // });
       });
 
       const data = {
@@ -190,9 +187,23 @@ const AddDiscount = (props) => {
     <React.Fragment>
       <CCard>
         <CCardHeader>
-          <h4>
-            <strong>Create Discount</strong>
-          </h4>
+          <CContainer className='text-center' style={{
+            width: "135px",
+            height: "135px",
+            borderRadius: "70px",
+            backgroundColor: "#ec407a",
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}>
+            <DiscountIcon style={{
+              height: '50px',
+              width: '50px',
+              background: '#ec407a',
+              marginLeft: "25px",
+              fill: "aliceblue"
+            }} />
+          </CContainer>
         </CCardHeader>
 
         <CCardBody>
@@ -322,7 +333,7 @@ const AddDiscount = (props) => {
             <span>
               <small>
                 {storeId.filter((item) => item.isSelected === false).length ===
-                0
+                  0
                   ? "Available in all stores"
                   : "Not available in stores"}
               </small>

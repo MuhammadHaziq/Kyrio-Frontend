@@ -21,6 +21,8 @@ import {
 import ModifireList from "../../components/items/modifier/ModifireList";
 import AddModifier from "../../components/items/modifier/AddModifier";
 import UpdateModifier from "../../components/items/modifier/UpdateModifier";
+import PlusIcon from "../../components/icons/PlusIcon";
+import ItemSplash from "../../components/splashScreen/ItemSplash";
 const Modifires = (props) => {
   const dispatch = useDispatch();
 
@@ -83,7 +85,7 @@ const Modifires = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn">
+      <div className="animated fadeIn col-sm-12 col-md-8 col-lg-8">
         {fadeUpdateModifier ? (
           <CFade timeout={timeout} in={fadeUpdateModifier}>
             <UpdateModifier
@@ -105,7 +107,7 @@ const Modifires = (props) => {
         {fadeModifier ? (
           <CFade timeout={timeout} in={fadeModifier}>
             <CCard>
-              <CCardHeader>
+              {modifire?.modifiers_list?.length !== 0 && (<CCardHeader>
                 <CRow>
                   <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                     <CButton
@@ -113,18 +115,7 @@ const Modifires = (props) => {
                       color="success"
                       onClick={addModifier}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                        className="c-icon c-icon-sm"
-                        role="img"
-                      >
-                        <polygon
-                          fill="var(--ci-primary-color, currentColor)"
-                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                          className="ci-primary"
-                        ></polygon>
-                      </svg>
+                      <PlusIcon />
                       ADD MODIFIER
                     </CButton>
                     {modifire.modifiers_list.filter(
@@ -164,11 +155,11 @@ const Modifires = (props) => {
                     </CFormGroup>
                   </CCol>
                 </CRow>
-              </CCardHeader>
+              </CCardHeader>)}
               <CCardBody>
                 <CRow>
                   <CCol sm="12" lg="12" md="12">
-                    <ModifireList fadeModifier={fadeModifier} {...props} />
+                    {modifire?.modifiers_list?.length === 0 ? (<ItemSplash buttonName="ADD MODIFIER" onClick={addModifier} description={"Create sets of options that can be applied to items."} descriptionLink={"https://help.loyverse.com/help/how-set-and-apply-modifiers?utm_source=Back%20Office&utm_medium=Modifiers"} title="Item modifiers" />) : (<ModifireList fadeModifier={fadeModifier} {...props} />)}
                   </CCol>
                 </CRow>
               </CCardBody>

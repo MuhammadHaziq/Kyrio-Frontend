@@ -18,7 +18,8 @@ import CategoryDatatable from "../../datatables/category/CategoryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddCategory from "../../components/items/category/AddCategory";
 import UpdateCategory from "../../components/items/category/UpdateCategory";
-import CategroySplash from "../../components/splashScreen/CategorySplash";
+import ItemSplash from "../../components/splashScreen/ItemSplash";
+import PlusIcon from "../../components/icons/PlusIcon";
 const CategoryList = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [fadeCategory, setFadeCategory] = useState(true);
@@ -73,7 +74,7 @@ const CategoryList = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn col-sm-8 col-md-8 col-xl-8">
+      <div className="animated fadeIn col-sm-12 col-md-8 col-lg-8">
         {fadeUpdateStore ? (
           <CFade timeout={timeout} in={fadeUpdateStore}>
             <UpdateCategory
@@ -94,66 +95,54 @@ const CategoryList = (props) => {
         {fadeCategory ? (
           <CFade timeout={timeout} in={fadeCategory}>
             <CCard>
-              <CCardHeader>
-                <CRow>
-                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                    {category?.category_list?.length !== 0 && (<CButton
-                      color="success"
-                      className="btn-square pull right"
-                      onClick={addCategory}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                        className="c-icon c-icon-sm"
-                        role="img"
+              {category?.category_list?.length !== 0 && (
+                <CCardHeader>
+                  <CRow>
+                    <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                      <CButton
+                        color="success"
+                        className="btn-square pull right"
+                        onClick={addCategory}
                       >
-                        <polygon
-                          fill="var(--ci-primary-color, currentColor)"
-                          points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                          className="ci-primary"
-                        ></polygon>
-                      </svg>
-                      ADD CATEGORY
-                    </CButton>)}
+                        <PlusIcon />
+                        ADD CATEGORY
+                      </CButton>
 
-                    {category.category_list.filter(
-                      (item) => item.isDeleted === true
-                    ).length > 0 ? (
-                      <React.Fragment>
-                        <ConformationAlert
-                          button_text="Delete"
-                          heading="Delete Category"
-                          section={`Are you sure you want to delete the Categories (${category.category_list
-                            .filter((item) => {
-                              return item.isDeleted === true;
-                            })
-                            .map((item) => {
-                              return item.title;
-                            })
-                            .join(",")}) ?`}
-                          buttonAction={deleteCategory}
-                          show_alert={showAlert}
-                          hideAlert={setShowAlert}
-                          variant="outline"
-                          className="ml-2 btn-square"
-                          color="danger"
-                          block={false}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                  </CCol>
-                </CRow>
-              </CCardHeader>
+                      {category.category_list.filter(
+                        (item) => item.isDeleted === true
+                      ).length > 0 ? (
+                        <React.Fragment>
+                          <ConformationAlert
+                            button_text="Delete"
+                            heading="Delete Category"
+                            section={`Are you sure you want to delete the Categories (${category.category_list
+                              .filter((item) => {
+                                return item.isDeleted === true;
+                              })
+                              .map((item) => {
+                                return item.title;
+                              })
+                              .join(",")}) ?`}
+                            buttonAction={deleteCategory}
+                            show_alert={showAlert}
+                            hideAlert={setShowAlert}
+                            variant="outline"
+                            className="ml-2 btn-square"
+                            color="danger"
+                            block={false}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
+                    </CCol>
+                  </CRow>
+                </CCardHeader>)}
               <CCardBody>
-
-                {category?.category_list?.length === 0 ? <CategroySplash buttonName="ADD CATEGORY" onClick={addCategory} description={"Categories help you organize items."} descriptionLink={"https://help.loyverse.com/help/how-add-items-loyverse-back-office?utm_source=Back%20Office&utm_medium=Categories"} title="Categories" /> : <CategoryDatatable
+                {category?.category_list?.length === 0 ? <ItemSplash buttonName="ADD CATEGORY" onClick={addCategory} description={"Categories help you organize items."} descriptionLink={"https://help.loyverse.com/help/how-add-items-loyverse-back-office?utm_source=Back%20Office&utm_medium=Categories"} title="Categories" /> : <CategoryDatatable
                   categories={category.category_list}
                   {...props}
                 />}
-
               </CCardBody>
             </CCard>
           </CFade>

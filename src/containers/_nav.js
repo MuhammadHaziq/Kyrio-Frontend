@@ -75,25 +75,25 @@ const _nav = [
       {
         _tag: "CSidebarNavItem",
         name: "Categories",
-        to: "/categories",
+        to: "/items/categories",
       },
       {
         _tag: "CSidebarNavItem",
         name: "Modifiers",
-        to: "/modifiers",
+        to: "/items/modifiers",
       },
       {
         _tag: "CSidebarNavItem",
         name: "Discounts",
-        to: "/discounts",
+        to: "/items/discounts",
       },
     ],
   },
   {
     _tag: "CSidebarNavItem",
     name: "Inventory",
-    module: "Items",
-    to: "/inventory",
+    module: "Dashboard",
+    to: "/",
     icon: "cil-cursor",
   },
   {

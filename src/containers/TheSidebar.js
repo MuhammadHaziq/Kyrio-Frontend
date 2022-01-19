@@ -40,17 +40,17 @@ const TheSidebar = () => {
         let routes = [];
 
         for (const mod of module) {
-          if (mod.enable) {
-            if (mod.backoffice.isMenu && !mod.backoffice.isChild) {
-              let nav = _nav.filter((itm) => itm.module === mod.backoffice.title);
+          if (mod?.enable) {
+            if (mod?.backoffice?.isMenu && !mod?.backoffice?.isChild) {
+              let nav = _nav.filter((itm) => itm.module === mod?.backoffice?.title);
 
               if (nav.length > 0) {
 
-                if (nav.filter(itm => itm.module == mod.backoffice.title).length <= 0) {
+                if (nav.filter(itm => itm.module == mod?.backoffice?.title).length <= 0) {
                   nav.push(_nav.filter(itm => itm.module == mod.backoffice.title))
                 }
                 if (nav[0].name === "Reports") {
-                  let shift = user.features.filter(ftr => ftr.feature.title === "Shifts")
+                  let shift = user.features.filter(ftr => ftr?.feature?.title === "Shifts")
                   if (!shift[0].enable) {
                     let index = nav[0]._children.findIndex(e => e.name === "Shifts")
                     if (index >= 0) {
@@ -95,7 +95,7 @@ const TheSidebar = () => {
                   routes.push(nav[1]);
                 }
               }
-            } else if (mod.backoffice.isMenu && mod.backoffice.isChild) {
+            } else if (mod?.backoffice?.isMenu && mod?.backoffice?.isChild) {
               let nav = _nav.filter((itm) => itm.module === "Edit general settings");
               if (routes.filter(itm => itm.name == "Settings").length <= 0) {
                 nav.push(_nav.filter(itm => itm.name == "Settings")[0])

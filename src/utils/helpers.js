@@ -1,6 +1,6 @@
 
 export let removeChars = (num) => {
-    let newNum = String(num).replace(/[^\d.-]/g,'');
+    let newNum = String(num).replace(/[^\d.-]/g, '');
 
     newNum = parseFloat(newNum) ? parseFloat(newNum) : 0;
 
@@ -8,24 +8,24 @@ export let removeChars = (num) => {
 };
 
 export let amountFormat = (num, decimal, sign = "") => {
-    num = truncateDecimals(num,decimal);
-    return roundToDecimal(numberWithCommas(num,decimal),decimal)+sign;
+    num = truncateDecimals(num, decimal);
+    return roundToDecimal(numberWithCommas(num, decimal), decimal) + sign;
 }
 export let truncateDecimals = (num, digits) => {
-    var numS = num.toString(),
-        decPos = numS.indexOf('.'),
-        substrLength = decPos == -1 ? numS.length : 1 + decPos + digits,
-        trimmedResult = numS.substr(0, substrLength),
+    var numS = num?.toString(),
+        decPos = numS?.indexOf('.'),
+        substrLength = decPos == -1 ? numS?.length : 1 + decPos + digits,
+        trimmedResult = numS?.substr(0, substrLength),
         finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
-    if(num !== 0 && finalResult == 0 && digits == 0){
+    if (num !== 0 && finalResult == 0 && digits == 0) {
         finalResult = 1;
     }
     return parseFloat(finalResult);
 }
 export let roundToDecimal = (num, decimal, upOrDown = 0) => {
-    
-    if(num) {
-        if(typeof(num)!=="number"){
+
+    if (num) {
+        if (typeof (num) !== "number") {
             num = parseFloat(num);
         }
         let t = parseFloat(num.toFixed(decimal, upOrDown)).toFixed(decimal);
@@ -40,14 +40,14 @@ export let roundNum = (num) => {
     return Math.round(num * 100) / 100;
 };
 
-export let numberWithCommas = (num,decimal) => {
+export let numberWithCommas = (num, decimal) => {
     num = parseFloat(num);
     return num.toFixed(decimal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 };
 
 export let roundToThree = (num, upOrDown = 1) => {
-    if(num) {
-        if(typeof(num)!=="number"){
+    if (num) {
+        if (typeof (num) !== "number") {
             num = parseFloat(num);
         }
         let t = parseFloat(num.toFixed(3, upOrDown)).toFixed(3);
@@ -57,8 +57,8 @@ export let roundToThree = (num, upOrDown = 1) => {
 };
 
 export let roundToTwo = (num, upOrDown = 1) => {
-    if(num) {
-        if(typeof(num)!=="number"){
+    if (num) {
+        if (typeof (num) !== "number") {
             num = parseFloat(num);
         }
         let t = parseFloat(num.toFixed(2, upOrDown)).toFixed(2);
@@ -68,7 +68,7 @@ export let roundToTwo = (num, upOrDown = 1) => {
 };
 
 export let roundToOne = (num) => {
-    return Math.round( num * 10 ) / 10
+    return Math.round(num * 10) / 10
 };
 
 
@@ -78,11 +78,11 @@ export let currencyFormat = (num, currency) => {
 };
 
 export let stringToNum = (str) => {
-    if(str && typeof str == 'string' ){
+    if (str && typeof str == 'string') {
 
         return parseFloat(str.replace(/[^\d.-]/g, ''));
 
-    } else if(str && typeof str == 'number') {
+    } else if (str && typeof str == 'number') {
 
         return str;
 

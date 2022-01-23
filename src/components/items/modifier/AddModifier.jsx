@@ -232,12 +232,11 @@ const AddModifier = (props) => {
         ? isDraggingOver
           ? "rgb(128 128 128 / 0%)"
           : "rgb(128 128 128 / 0%)"
-        : // : "rgb(76 73 73)"
+        :
         isDraggingOver
           ? "rgb(255 255 255)"
           : "rgb(255 255 255)",
     padding: grid,
-    // width: 250,
   });
 
   const onDragEnd = (result) => {

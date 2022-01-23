@@ -121,7 +121,7 @@ const AddCategory = (props) => {
                   height: "60px",
                   float: "left",
                 }}
-                className="ml-2"
+                className="ml-2 mb-2"
                 key={index}
                 onClick={() => changeColor(item.color)}
               >

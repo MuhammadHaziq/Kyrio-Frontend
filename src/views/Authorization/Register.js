@@ -54,6 +54,7 @@ const Register = () => {
     fetch("https://extreme-ip-lookup.com/json/?key=CCEvn3ZsTSeEWoEF2eNI")
       .then((res) => res.json())
       .then((response) => {
+        console.log(response, "response")
         setFormState((formState) => ({
           ...formState,
           values: {
@@ -102,6 +103,7 @@ const Register = () => {
     }));
   };
   const selectCountry = (val) => {
+    console.log(val)
     setFormState({
       ...formState,
       values: {
@@ -252,10 +254,10 @@ const Register = () => {
                           ? validator.isEmpty(formState.values.email)
                             ? true
                             : !validator.isEmail(formState.values.email)
-                            ? true
-                            : msg.error
-                            ? true
-                            : false
+                              ? true
+                              : msg.error
+                                ? true
+                                : false
                           : false
                       }
                       value={formState.values.email}

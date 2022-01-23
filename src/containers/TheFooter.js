@@ -10,7 +10,7 @@ const TheFooter = () => {
         </CLink>
       </div>
       <div className="ml-auto">
-        <span className="mr-1">by Techserve</span>
+        <span className="mr-1">by Kevin Doen</span>
       </div>
     </CFooter>
   )

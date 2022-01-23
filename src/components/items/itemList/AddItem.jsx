@@ -17,6 +17,7 @@ import {
   CSwitch,
   CImg,
   CSelect,
+  CContainer,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -736,9 +737,10 @@ const AddItem = (props) => {
         </CCardHeader>
 
         <CCardBody>
-          <CCol xs="12" sm="12" md="12">
-            <CRow>
-              <CCol sm="6" md="6" lg="6">
+          <CContainer>
+            {/* <CCol xs="12" sm="12" md="12"> */}
+            <CRow className="justify-content-between">
+              <CCol sm="6" md="6" lg="6" xs="6">
                 <CInputGroup
                   variant="custom-radio"
                   inline
@@ -757,7 +759,7 @@ const AddItem = (props) => {
                   </CLabel>
                 </CInputGroup>
               </CCol>
-              <CCol sm="6" md="6" lg="6">
+              <CCol sm="6" md="6" lg="6" xs="6">
                 <CInputGroup
                   variant="custom-radio"
                   inline
@@ -792,7 +794,7 @@ const AddItem = (props) => {
                         fields.represent_type === "image" ? "none" : "",
                       opacity: fields.represent_type === "image" ? 0.4 : "",
                     }}
-                    className="ml-2"
+                    className="ml-2 mb-2"
                     key={index}
                     onClick={() => changeColor(item.color)}
                   >
@@ -866,7 +868,8 @@ const AddItem = (props) => {
                 </div>
               </CCol>
             </CRow>
-          </CCol>
+            {/* </CCol> */}
+          </CContainer>
         </CCardBody>
       </CCard>
       <CRow>

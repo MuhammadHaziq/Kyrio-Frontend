@@ -8,6 +8,7 @@ import {
 } from "../../../actions/items/itemActions";
 import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
+import "../../../assets/css/itemList.css"
 const Price = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
   const dispatch = useDispatch();
@@ -167,49 +168,51 @@ const StoresDatatable = (props) => {
           </CFormGroup>
         </CCol>
       </CRow>
-      <CRow>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Available</th>
-              <th>Store</th>
-              <th>Price</th>
-              {props.stock === true ? (
-                <React.Fragment>
-                  <th>In Stock</th>
-                  <th>Low Stock</th>
-                </React.Fragment>
-              ) : (
-                ""
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {(props.stores || []).map((item, index) => (
-              <tr key={index}>
-                <td>
-                  <CheckAvailablity item={item} />
-                </td>
-                <td>{typeof item.store !== "undefined" ? item.store.title : item.title}</td>
-                <td>
-                  <Price item={item} />
-                </td>
+      <CRow className="items-store-table">
+        <CCol md="12" xs="12" lg="12" sm="12">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Available</th>
+                <th>Store</th>
+                <th>Price</th>
                 {props.stock === true ? (
                   <React.Fragment>
-                    <td>
-                      <InStock item={item} />
-                    </td>
-                    <td>
-                      <LowStock item={item} />
-                    </td>
+                    <th>In Stock</th>
+                    <th>Low Stock</th>
                   </React.Fragment>
                 ) : (
                   ""
                 )}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {(props.stores || []).map((item, index) => (
+                <tr key={index}>
+                  <td className="item-store-td">
+                    <CheckAvailablity item={item} />
+                  </td>
+                  <td className="item-store-td">{typeof item.store !== "undefined" ? item.store.title : item.title}</td>
+                  <td className="item-store-td">
+                    <Price item={item} />
+                  </td>
+                  {props.stock === true ? (
+                    <React.Fragment>
+                      <td className="item-store-td">
+                        <InStock item={item} />
+                      </td>
+                      <td className="item-store-td">
+                        <LowStock item={item} />
+                      </td>
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CCol>
       </CRow>
     </React.Fragment>
   );

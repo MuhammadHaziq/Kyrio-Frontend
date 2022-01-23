@@ -1,0 +1,6 @@
+.items-store-table {
+    overflow-x:auto;
+}
+.item-store-td {
+    min-width: 120px;
+}

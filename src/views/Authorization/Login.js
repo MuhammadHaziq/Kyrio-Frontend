@@ -140,8 +140,8 @@ const Login = () => {
                             ? validator.isEmpty(formState.values.email)
                               ? true
                               : !validator.isEmail(formState.values.email)
-                              ? true
-                              : formState.errors.email
+                                ? true
+                                : formState.errors.email
                             : false
                         }
                         placeholder="email"
@@ -207,6 +207,13 @@ const Login = () => {
                         <CButton color="link" className="px-0">
                           Forgot password?
                         </CButton>
+                      </CCol>
+                      <CCol xs="12" className="text-right">
+                        <Link to="/register">
+                          <CButton color="link" className="px-0">
+                            New to kyrio?
+                          </CButton>
+                        </Link>
                       </CCol>
                     </CRow>
                   </CForm>

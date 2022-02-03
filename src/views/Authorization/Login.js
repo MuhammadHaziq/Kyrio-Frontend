@@ -125,8 +125,13 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={loginUser}>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your Kyrio account</p>
+                    <img
+                        src={"logo/logo.png"}
+                        className="c-sidebar-brand-full"
+                        alt="kyrio POS"
+                        style={{ width: "142px", height: "100%" }}
+                      />
+                    <p className="text-muted" style={{ fontSize: "18px" }}>Sign In to your Kyrio account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -219,7 +224,7 @@ const Login = () => {
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard
+              {/* <CCard
                 className="text-white bg-primary py-5 d-md-down-none"
                 style={{ width: "44%" }}
               >
@@ -239,7 +244,7 @@ const Login = () => {
                     </Link>
                   </div>
                 </CCardBody>
-              </CCard>
+              </CCard> */}
             </CCardGroup>
           </CCol>
         </CRow>

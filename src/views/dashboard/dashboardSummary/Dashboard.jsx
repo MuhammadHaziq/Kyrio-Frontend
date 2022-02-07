@@ -251,6 +251,7 @@ const Dashboard = (props) => {
           : 0
         : 0
       : 0;
+
   const refunds =
     salesSummary.sales_graph_data !== undefined &&
     salesSummary.sales_graph_data !== null
@@ -371,7 +372,9 @@ const Dashboard = (props) => {
                     className="mx-0"
                     onClick={() => changeFilter(value.name)}
                     active={value.name === filter}
-                    style={{ cursor: value.disable ? "not-allowed" : "pointer"}}
+                    style={{
+                      cursor: value.disable ? "not-allowed" : "pointer",
+                    }}
                     disabled={value.disable}
                   >
                     {value.name}
@@ -404,14 +407,36 @@ const Dashboard = (props) => {
                       ? salesSummary?.sales_graph_data?.summary?.map((itm) => {
                           return {
                             ["Time"]: itm.Date,
-                            ["Gross sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
-                            ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
-                            ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
-                            ["Net sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
-                            ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
-                            ["Gross profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
-                            ["Margin"]: parseFloat(itm?.Margin, parseInt(decimal))+"%",
-                            ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
+                            ["Gross sales"]: amountFormat(
+                              itm?.GrossSales,
+                              parseInt(decimal)
+                            ),
+                            ["Refunds"]: amountFormat(
+                              itm?.Refunds,
+                              parseInt(decimal)
+                            ),
+                            ["Discounts"]: amountFormat(
+                              itm?.discounts,
+                              parseInt(decimal)
+                            ),
+                            ["Net sales"]: amountFormat(
+                              itm?.NetSales,
+                              parseInt(decimal)
+                            ),
+                            ["Cost of Goods"]: amountFormat(
+                              itm?.CostOfGoods,
+                              parseInt(decimal)
+                            ),
+                            ["Gross profit"]: amountFormat(
+                              itm?.GrossProfit,
+                              parseInt(decimal)
+                            ),
+                            ["Margin"]:
+                              parseFloat(itm?.Margin, parseInt(decimal)) + "%",
+                            ["Taxes"]: amountFormat(
+                              itm?.Tax,
+                              parseInt(decimal)
+                            ),
                           };
                         })
                       : []

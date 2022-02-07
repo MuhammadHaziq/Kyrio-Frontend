@@ -166,9 +166,9 @@ class ModifireList extends Component {
     );
     const data = {
       modifier: items.map((item, index) => {
-          return { id: item.id, position: index, title: item.content };
-        })
-      }
+        return { id: item.id, position: index, title: item.content };
+      }),
+    };
     this.props.update_modifire_postion(data);
     this.props.update_modifier_props_postion(allModifiers);
     this.setState({
@@ -223,7 +223,7 @@ class ModifireList extends Component {
                 onChange={this.selectAll}
                 style={{
                   marginTop: "24px",
-                  marginLeft: "29px",
+                  marginLeft: "25px",
                   bottom: "12px",
                 }}
               />
@@ -257,7 +257,7 @@ class ModifireList extends Component {
                       {this.state.items.map((item, index) => (
                         <Draggable
                           key={item.id}
-                          draggableId={"draggableID"+item.id}
+                          draggableId={"draggableID" + item.id}
                           index={index}
                         >
                           {(provided, snapshot) => (
@@ -362,5 +362,5 @@ export default connect(mapStateToProps, {
   toggle_modifire_single_select,
   update_modifire_postion,
   update_row_data,
-  update_modifier_props_postion
+  update_modifier_props_postion,
 })(ModifireList);

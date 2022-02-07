@@ -84,7 +84,7 @@ class ModifireList extends Component {
     }
   }
   onDragEnd(result) {
-    console.log(result)
+    console.log(result);
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -177,7 +177,7 @@ class ModifireList extends Component {
                       {this.state.items.map((item, index) => (
                         <Draggable
                           key={item.id}
-                          draggableId={"draggableID"+item.id}
+                          draggableId={"draggableID" + item.id}
                           index={index}
                         >
                           {(provided, snapshot) => (

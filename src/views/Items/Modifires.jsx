@@ -107,59 +107,75 @@ const Modifires = (props) => {
         {fadeModifier ? (
           <CFade timeout={timeout} in={fadeModifier}>
             <CCard>
-              {modifire?.modifiers_list?.length !== 0 && (<CCardHeader>
-                <CRow>
-                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                    <CButton
-                      className="btn-square pull right"
-                      color="success"
-                      onClick={addModifier}
-                    >
-                      <PlusIcon />
-                      ADD MODIFIER
-                    </CButton>
-                    {modifire.modifiers_list.filter(
-                      (item) => item.isDeleted === true
-                    ).length > 0 ? (
+              {modifire?.modifiers_list?.length !== 0 && (
+                <CCardHeader>
+                  <CRow>
+                    <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                       <CButton
-                        variant="outline"
-                        className="ml-2"
-                        color="danger"
-                        onClick={deleteItem}
+                        className="btn-square pull right"
+                        color="success"
+                        onClick={addModifier}
                       >
-                        <CIcon name="cil-trash" />
-                        DELETE
+                        <PlusIcon />
+                        ADD MODIFIER
                       </CButton>
-                    ) : (
-                      ""
-                    )}
-                  </CCol>
-                  <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                    <CFormGroup>
-                      <CSelect
-                        size="md"
-                        name="selectedStoreId"
-                        id="selectedStoreId"
-                        value={selectedStoreId}
-                        onChange={storeHandleChange}
-                      >
-                        <option value="0">All Store</option>
-                        {(store.stores_list || []).map((item) => {
-                          return (
-                            <option value={item._id} key={item._id}>
-                              {item.title}
-                            </option>
-                          );
-                        })}
-                      </CSelect>
-                    </CFormGroup>
-                  </CCol>
-                </CRow>
-              </CCardHeader>)}
+                      {modifire.modifiers_list.filter(
+                        (item) => item.isDeleted === true
+                      ).length > 0 ? (
+                        <CButton
+                          variant="outline"
+                          className="ml-2"
+                          color="danger"
+                          onClick={deleteItem}
+                        >
+                          <CIcon name="cil-trash" />
+                          DELETE
+                        </CButton>
+                      ) : (
+                        ""
+                      )}
+                    </CCol>
+                    <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
+                      <CFormGroup>
+                        <CSelect
+                          size="md"
+                          name="selectedStoreId"
+                          id="selectedStoreId"
+                          value={selectedStoreId}
+                          onChange={storeHandleChange}
+                        >
+                          <option value="0">All Store</option>
+                          {(store.stores_list || []).map((item) => {
+                            return (
+                              <option value={item._id} key={item._id}>
+                                {item.title}
+                              </option>
+                            );
+                          })}
+                        </CSelect>
+                      </CFormGroup>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+              )}
               <CCardBody>
                 <CRow>
                   <CCol sm="12" lg="12" md="12">
-                    {modifire?.modifiers_list?.length === 0 ? (<ItemSplash buttonName="ADD MODIFIER" onClick={addModifier} description={"Create sets of options that can be applied to items."} descriptionLink={"https://help.loyverse.com/help/how-set-and-apply-modifiers?utm_source=Back%20Office&utm_medium=Modifiers"} title="Item modifiers" />) : (<ModifireList fadeModifier={fadeModifier} {...props} />)}
+                    {modifire?.modifiers_list?.length === 0 ? (
+                      <ItemSplash
+                        buttonName="ADD MODIFIER"
+                        onClick={addModifier}
+                        description={
+                          "Create sets of options that can be applied to items."
+                        }
+                        descriptionLink={
+                          "https://help.loyverse.com/help/how-set-and-apply-modifiers?utm_source=Back%20Office&utm_medium=Modifiers"
+                        }
+                        title="Item modifiers"
+                      />
+                    ) : (
+                      <ModifireList fadeModifier={fadeModifier} {...props} />
+                    )}
                   </CCol>
                 </CRow>
               </CCardBody>

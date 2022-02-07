@@ -125,8 +125,13 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={loginUser}>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your Kyrio account</p>
+                    <img
+                        src={"logo/logo.png"}
+                        className="c-sidebar-brand-full"
+                        alt="kyrio POS"
+                        style={{ width: "142px", height: "100%" }}
+                      />
+                    <p className="text-muted" style={{ fontSize: "18px" }}>Sign In to your Kyrio account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -140,8 +145,8 @@ const Login = () => {
                             ? validator.isEmpty(formState.values.email)
                               ? true
                               : !validator.isEmail(formState.values.email)
-                              ? true
-                              : formState.errors.email
+                                ? true
+                                : formState.errors.email
                             : false
                         }
                         placeholder="email"
@@ -208,11 +213,18 @@ const Login = () => {
                           Forgot password?
                         </CButton>
                       </CCol>
+                      <CCol xs="12" className="text-right">
+                        <Link to="/register">
+                          <CButton color="link" className="px-0">
+                            New to kyrio?
+                          </CButton>
+                        </Link>
+                      </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard
+              {/* <CCard
                 className="text-white bg-primary py-5 d-md-down-none"
                 style={{ width: "44%" }}
               >
@@ -232,7 +244,7 @@ const Login = () => {
                     </Link>
                   </div>
                 </CCardBody>
-              </CCard>
+              </CCard> */}
             </CCardGroup>
           </CCol>
         </CRow>

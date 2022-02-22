@@ -107,7 +107,7 @@ const EditCustomer = (props) => {
     //     email: validator.isEmpty(fields.email),
     //   });
     //   return false;
-    // } 
+    // }
     else {
       const data = {
         name: fields.name,
@@ -382,7 +382,7 @@ const EditCustomer = (props) => {
                       <CInput
                         id="customerCode"
                         name="customerCode"
-                        placeholder="Postal Code"
+                        placeholder="Customer Code"
                         onChange={handleOnChange}
                         value={fields.customerCode}
                       />

@@ -1,160 +1,126 @@
 import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
   toggle_customer_single_select,
   toggle_customer_all_select,
   update_row_data,
 } from "../../actions/customer/customerActions";
+import { CDataTable, CInputCheckbox, CFormGroup, CLabel } from "@coreui/react";
 import { useDispatch } from "react-redux";
 
 const CustomerDatatable = (props) => {
   const dispatch = useDispatch();
+  const [selectAll, setSelectAll] = React.useState(false);
 
-  const showName = (cell, row) => {
-    return (
-      <React.Fragment>
-        <b style={{ fontSize: "smaller" }}>{row.name || "-"}</b>
-        <span>
-          <p>{row.note || ""}</p>
-        </span>
-      </React.Fragment>
-    );
+  const check = (e, item) => {
+    dispatch(toggle_customer_single_select(item));
   };
-  const showContacts = (cell, row) => {
-    return (
-      <React.Fragment>
-        {row.email}
-        <span>
-          <p>{row.phone}</p>
-        </span>
-      </React.Fragment>
-    );
-  };
-
-  const firstVisit = (cell, row) => {
-    return row.firstVisitData || "-";
-  };
-  const lastVisit = (cell, row) => {
-    return row.lastVisitData || "-";
-  };
-  const totalVisit = (cell, row) => {
-    return row.totalVisit || "0";
-  };
-  const totalSpent = (cell, row) => {
-    return row.totalSpent || "0.00";
-  };
-  const pointBalance = (cell, row) => {
-    return row.pointBalance || "0.00";
-  };
-
-  const onRowSelect = (row, isSelected, e) => {
-    dispatch(toggle_customer_single_select(row));
-  };
-
-  const onSelectAll = (isSelected, rows) => {
-    if (isSelected) {
-      dispatch(toggle_customer_all_select(true));
-    } else {
-      dispatch(toggle_customer_all_select(false));
+  const clickRow = (item, index, column) => {
+    if (column !== "select") {
+      dispatch(update_row_data(item));
     }
   };
 
-  const selectRowProp = {
-    mode: "checkbox",
-    onSelect: onRowSelect,
-    onSelectAll: onSelectAll,
+  const checkAll = (e, selectAll) => {
+    setSelectAll(!selectAll);
+    dispatch(toggle_customer_all_select(!selectAll));
   };
-  /**
-   *
-   *  Datatable functions End
-   *
-   ***/
-  const options = {
-    sizePerPageList: [
-      {
-        text: "5",
-        value: 5,
-      },
-      {
-        text: "10",
-        value: 10,
-      },
-      {
-        text: "All",
-        value: props.customers.length,
-      },
-    ],
-    sizePerPage: 5,
-    onRowClick: function (row) {
-      dispatch(update_row_data(row));
-    },
-  };
+
   return (
     <React.Fragment>
-      <BootstrapTable
-        data={props.customers}
-        version="4"
-        hover={true}
-        selectRow={selectRowProp}
-        options={options}
-        pagination={true}
-      >
-        <TableHeaderColumn
-          dataField="_id"
-          dataSort={true}
-          hidden={true}
-          isKey={true}
-        >
-          Id
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataFormat={showName} width="20%">
-          Customer
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="email"
-          dataSort={true}
-          dataFormat={showContacts}
-          width="20%"
-        >
-          Conatcts
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="firstVisit"
-          dataSort={true}
-          dataFormat={firstVisit}
-        >
-          First visit
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="lastVisit"
-          dataSort={true}
-          dataFormat={lastVisit}
-        >
-          Last visit
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="totalVisit"
-          dataSort={true}
-          dataFormat={totalVisit}
-        >
-          Total Visits
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="totalSpent"
-          dataSort={true}
-          dataFormat={totalSpent}
-        >
-          Total Spent
-        </TableHeaderColumn>
-        <TableHeaderColumn
-          dataField="pointsBalance"
-          dataSort={true}
-          dataFormat={pointBalance}
-        >
-          Points Balance
-        </TableHeaderColumn>
-      </BootstrapTable>
+      <CDataTable
+        itemsPerPageSelect
+        items={props.customers}
+        fields={[
+          {
+            key: "select",
+            label: "Select",
+            filter: false,
+            _style: { width: "5%" },
+          },
+          { key: "name", label: "Name", filter: true },
+          { key: "email", label: "Email", filter: true },
+          { key: "firstVisit", label: "First visit", filter: true },
+          { key: "lastVisit", label: "Last visit", filter: true },
+          { key: "totalVisit", label: "Total Visits", filter: true },
+          { key: "totalSpent", label: "Total Spent", filter: true },
+          { key: "pointsBalance", label: "Points Balance", filter: true },
+        ]}
+        itemsPerPage={10}
+        columnFilter
+        sorter
+        hover
+        outlined
+        pagination
+        clickableRows
+        onRowClick={clickRow}
+        columnHeaderSlot={{
+          select: [
+            <CFormGroup variant="custom-checkbox">
+              <CInputCheckbox
+                custom
+                id={`checkbox`}
+                onClick={(e) => checkAll(e, selectAll)}
+              />
+              <CLabel variant="custom-checkbox" htmlFor={`checkbox`} />
+            </CFormGroup>,
+          ],
+        }}
+        scopedSlots={{
+          select: (item) => {
+            return (
+              <td>
+                <CFormGroup variant="custom-checkbox">
+                  <CInputCheckbox
+                    custom
+                    id={`checkbox${item._id}`}
+                    checked={item.isDeleted}
+                    onChange={(e) => check(e, item)}
+                  />
+                  <CLabel
+                    variant="custom-checkbox"
+                    htmlFor={`checkbox${item._id}`}
+                  />
+                </CFormGroup>
+              </td>
+            );
+          },
+          name: (item) => {
+            return (
+              <td>
+                <b style={{ fontSize: "smaller" }}>{item.name || "-"}</b>
+                <span>
+                  <p>{item.note || ""}</p>
+                </span>
+              </td>
+            );
+          },
+          email: (item) => {
+            return (
+              <td>
+                {item.email}
+                <span>
+                  <p>{item.phone}</p>
+                </span>
+              </td>
+            );
+          },
+          firstVisit: (item) => {
+            return <td>{item.firstVisitData || "-"}</td>;
+          },
+          lastVisit: (item) => {
+            return <td>{item.lastVisitData || "-"}</td>;
+          },
+          totalVisit: (item) => {
+            return <td>{item.totalVisit || "0"}</td>;
+          },
+          totalSpent: (item) => {
+            return <td>{item.totalSpent || "0.00"}</td>;
+          },
+          pointsBalance: (item) => {
+            return <td>{item.pointBalance || "0.00"}</td>;
+          },
+        }}
+      />
     </React.Fragment>
   );
 };

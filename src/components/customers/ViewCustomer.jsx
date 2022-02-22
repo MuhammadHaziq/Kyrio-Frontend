@@ -21,12 +21,14 @@ import {
   CModalHeader,
   CModalBody,
   CModalFooter,
+  CLabel,
+  CFormGroup,
 } from "@coreui/react";
 import {
   MdKeyboardArrowLeft,
   MdMailOutline,
   MdLocationOn,
-  MdNote
+  MdNote,
 } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
@@ -34,12 +36,14 @@ import CIcon from "@coreui/icons-react";
 import NumberFormat from "react-number-format";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import dateFormat from "dateformat";
 import EditCustomer from "./EditCustomer.jsx";
-
 import {
   update_points_balance,
   edit_profile_view,
 } from "../../actions/customer/customerActions";
+import { amountFormat } from "../../utils/helpers";
+
 const ViewCustomer = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
 
@@ -62,6 +66,11 @@ const ViewCustomer = (props) => {
     note: "",
     points_balance: "0.00",
     new_points_balance: "",
+    first_visit: "",
+    last_visit: "",
+    total_points: 0,
+    total_spent: 0,
+    total_visits: 0,
   });
 
   const dispatch = useDispatch();
@@ -117,6 +126,11 @@ const ViewCustomer = (props) => {
         note: customer.customer_row_data.note || "",
         points_balance: customer.customer_row_data.points_balance || "",
         new_points_balance: customer.customer_row_data.points_balance || "",
+        first_visit: customer.customer_row_data.first_visit || "",
+        last_visit: customer.customer_row_data.last_visit || "",
+        total_points: customer.customer_row_data.total_points || 0,
+        total_spent: customer.customer_row_data.total_spent || 0,
+        total_visits: customer.customer_row_data.total_visits || 0,
       });
     }
   }, [customer.customer_row_data]);
@@ -156,7 +170,6 @@ const ViewCustomer = (props) => {
 
   const deleteCustomer = () => {
     const data = [customer.customer_row_data._id];
-    console.log(data);
     confirmAlert({
       title: "Delete Customer",
       message: `Are you sure you want to delete the customer? Upon deleting, his or her data will no longer be displayed in associated receipts.`,
@@ -290,6 +303,7 @@ const ViewCustomer = (props) => {
                           name="email"
                           placeholder="Email"
                           value={fields.email}
+                          disabled
                         />
                       </CInputGroup>
                       <CInputGroup className="mb-3">
@@ -319,6 +333,7 @@ const ViewCustomer = (props) => {
                           className={"form-control"}
                           name="phone"
                           value={fields.phone}
+                          disabled
                         />
                       </CInputGroup>
                       <CInputGroup className="mb-3">
@@ -332,6 +347,7 @@ const ViewCustomer = (props) => {
                           name="address"
                           placeholder="Address"
                           value={fullAddress}
+                          disabled
                         />
                       </CInputGroup>
                       <CInputGroup className="mb-3">
@@ -345,14 +361,162 @@ const ViewCustomer = (props) => {
                           name="note"
                           placeholder="Note"
                           value={fields.note}
+                          disabled
                         />
                       </CInputGroup>
+                      <hr />
+                      <CRow>
+                        <CCol
+                          xs="12"
+                          sm="12"
+                          md="6"
+                          xl="xl"
+                          className="mb-xl-0"
+                        >
+                          <CFormGroup>
+                            <CLabel htmlFor="first_visit">
+                              <strong>First Visit</strong>
+                            </CLabel>
+                            <CInputGroup className="mb-3">
+                              <CInputGroupPrepend>
+                                <CInputGroupText>
+                                  <CIcon name="cil-calendar" />
+                                </CInputGroupText>
+                              </CInputGroupPrepend>
+                              <CInput
+                                id="first_visit"
+                                name="first_visit"
+                                placeholder="First visit"
+                                value={dateFormat(
+                                  fields.first_visit,
+                                  "mmm dd, yyyy"
+                                )}
+                                disabled
+                              />
+                            </CInputGroup>
+                          </CFormGroup>
+                        </CCol>
+                        <CCol
+                          xs="12"
+                          sm="12"
+                          md="6"
+                          xl="xl"
+                          className="mb-xl-0"
+                        >
+                          <CFormGroup>
+                            <CLabel htmlFor="last_visit">
+                              <strong>Last Visit</strong>
+                            </CLabel>
+                            <CInputGroup className="mb-3">
+                              <CInputGroupPrepend>
+                                <CInputGroupText>
+                                  <CIcon name="cil-calendar" />
+                                </CInputGroupText>
+                              </CInputGroupPrepend>
+                              <CInput
+                                id="last_visit"
+                                name="last_visit"
+                                placeholder="Last visit"
+                                value={dateFormat(
+                                  fields.last_visit,
+                                  "mmm dd, yyyy hh:mm tt"
+                                )}
+                                disabled
+                              />
+                            </CInputGroup>
+                          </CFormGroup>
+                        </CCol>
+                        <CCol
+                          xs="12"
+                          sm="12"
+                          md="6"
+                          xl="xl"
+                          className="mb-xl-0"
+                        >
+                          <CFormGroup>
+                            <CLabel htmlFor="Visits">
+                              <strong>Visits</strong>
+                            </CLabel>
+                            <CInputGroup className="mb-3">
+                              <CInputGroupPrepend>
+                                <CInputGroupText>
+                                  <CIcon name="cil-basket" />
+                                </CInputGroupText>
+                              </CInputGroupPrepend>
+                              <CInput
+                                id="Visits"
+                                name="Visits"
+                                placeholder="Total visit"
+                                value={fields.total_visits}
+                                disabled
+                              />
+                            </CInputGroup>
+                          </CFormGroup>
+                        </CCol>
+                        <CCol
+                          xs="12"
+                          sm="12"
+                          md="6"
+                          xl="xl"
+                          className="mb-xl-0"
+                        >
+                          <CFormGroup>
+                            <CLabel htmlFor="total_spent">
+                              <strong>Total spent</strong>
+                            </CLabel>
+                            <CInputGroup className="mb-3">
+                              <CInputGroupPrepend>
+                                <CInputGroupText>
+                                  <CIcon name="cil-dollar" />
+                                </CInputGroupText>
+                              </CInputGroupPrepend>
+                              <CInput
+                                id="total_spent"
+                                name="total_spent"
+                                placeholder="Total visit"
+                                value={amountFormat(
+                                  fields?.total_spent,
+                                  parseInt(decimal)
+                                )}
+                                disabled
+                              />
+                            </CInputGroup>
+                          </CFormGroup>
+                        </CCol>
+                        <CCol
+                          xs="12"
+                          sm="12"
+                          md="6"
+                          xl="xl"
+                          className="mb-xl-0"
+                        >
+                          <CFormGroup>
+                            <CLabel htmlFor="total_points">
+                              <strong>Points</strong>
+                            </CLabel>
+                            <CInputGroup className="mb-3">
+                              <CInputGroupPrepend>
+                                <CInputGroupText>
+                                  <CIcon name="cil-star" />
+                                </CInputGroupText>
+                              </CInputGroupPrepend>
+                              <CInput
+                                id="total_points"
+                                name="total_points"
+                                placeholder="Total points"
+                                value={fields.total_points}
+                                disabled
+                              />
+                            </CInputGroup>
+                          </CFormGroup>
+                        </CCol>
+                      </CRow>
                     </CForm>
-                    <hr />
                   </CCardBody>
                 </CCard>
               </CCol>
             </CRow>
+
             {/* Model For Update Points Balance*/}
             <CModal show={modal} onClose={toggle}>
               <CModalHeader closeButton>Edit points balance</CModalHeader>

@@ -10,9 +10,7 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CInputGroupAppend,
-  CFormText,
   CForm,
-  CInvalidFeedback,
 } from "@coreui/react";
 import validator from "validator";
 import CIcon from "@coreui/icons-react";
@@ -21,11 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import NumberFormat from "react-number-format";
 
 const AddLoyalty = (props) => {
-  const auth = useSelector((state) => state.auth);
   const loyalty = useSelector((state) => state.settingReducers.loyaltyReducer);
   const decimal = useSelector((state) => state.auth.user.decimal);
 
-  const [storeId, setStoreId] = useState();
   const [fields, setFields] = useState({
     loyalty_amount: "0.00",
     loyalty_type: "Bonus system",
@@ -35,10 +31,6 @@ const AddLoyalty = (props) => {
     loyalty_type: false,
   });
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
-  }, [auth]);
 
   useEffect(() => {
     setFields({
@@ -54,10 +46,8 @@ const AddLoyalty = (props) => {
     const data = {
       loyalty_type: fields.loyalty_type,
       loyalty_amount: fields.loyalty_amount,
-      storeId: storeId,
     };
     dispatch(add_new_loyalty(data));
-    console.log("loyalty_type", data);
   };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -73,30 +63,30 @@ const AddLoyalty = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
-  const limit = (val, max) => {
-    if (val.length === 1 && val[0] > max[0]) {
-      val = "0" + val;
-    }
+  // const limit = (val, max) => {
+  //   if (val.length === 1 && val[0] > max[0]) {
+  //     val = "0" + val;
+  //   }
 
-    if (val.length === 2) {
-      if (Number(val) === 0) {
-        val = "0";
+  //   if (val.length === 2) {
+  //     if (Number(val) === 0) {
+  //       val = "0";
 
-        //this can happen when user paste number
-      } else if (val > max) {
-        val = max;
-      }
-    }
+  //       //this can happen when user paste number
+  //     } else if (val > max) {
+  //       val = max;
+  //     }
+  //   }
 
-    return val;
-  };
+  //   return val;
+  // };
 
-  const amountFormat = (val) => {
-    let number = limit(val.substring(0, 2), "99");
-    let points = val.substring(2, 4);
+  // const amountFormat = (val) => {
+  //   let number = limit(val.substring(0, 2), "99");
+  //   let points = val.substring(2, 4);
 
-    return number + (points.length ? "." + points : "." + "00");
-  };
+  //   return number + (points.length ? "." + points : "." + "00");
+  // };
 
   return (
     <CForm onSubmit={submitStoreForm}>
@@ -119,11 +109,6 @@ const AddLoyalty = (props) => {
               value={fields.loyalty_type}
               disabled
             />
-            <CInvalidFeedback>
-              {validator.isEmpty(fields.loyalty_type)
-                ? "Please Enter The Loyalty Type"
-                : ""}
-            </CInvalidFeedback>
           </CInputGroup>
         </CCol>
       </CFormGroup>
@@ -137,7 +122,7 @@ const AddLoyalty = (props) => {
             className="form-control"
             name="loyalty_amount"
             defaultValue={fields.loyalty_amount}
-            format={amountFormat}
+            format={"##.##"}
             onChange={handleOnChange}
             value={fields.loyalty_amount}
             decimalScale={decimal}
@@ -147,7 +132,6 @@ const AddLoyalty = (props) => {
             <CInputGroupText>%</CInputGroupText>
           </CInputGroupAppend>
         </CInputGroup>
-        {/*  <CFormText color="muted">ex. 9.99</CFormText> */}
       </CFormGroup>
       <CRow>
         <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">

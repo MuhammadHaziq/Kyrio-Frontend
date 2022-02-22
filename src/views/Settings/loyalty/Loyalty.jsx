@@ -13,19 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Loyalty = () => {
   const [timeout] = useState(300);
-  const [storeId, setStoreId] = useState();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
-  }, [auth]);
-
-  useEffect(() => {
-    if (storeId !== "" && typeof storeId !== "undefined") {
-      dispatch(get_loyalty(storeId));
-    }
-  }, [dispatch, storeId]);
+    dispatch(get_loyalty());
+  }, [dispatch]);
 
   return (
     <React.Fragment>

@@ -14,8 +14,6 @@ import {
 import { useDispatch } from "react-redux";
 const EmployeeListDatatable = (props) => {
   const dispatch = useDispatch();
-
-  const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const check = (e, item) => {
@@ -33,7 +31,7 @@ const EmployeeListDatatable = (props) => {
   };
   return (
     <CDataTable
-   itemsPerPageSelect
+      itemsPerPageSelect
       items={props.employee_list}
       fields={[
         {
@@ -116,7 +114,8 @@ const EmployeeListDatatable = (props) => {
           return (
             <td>
               {item.role !== undefined
-                ? item.role["title"] !== undefined && item.role["title"] !== null
+                ? item.role["title"] !== undefined &&
+                  item.role["title"] !== null
                   ? item.role["title"] || "-"
                   : "-"
                 : "-"}

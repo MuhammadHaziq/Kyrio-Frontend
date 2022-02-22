@@ -4,22 +4,19 @@ import {
   MESSAGE,
   ERROR_MESSAGE,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
-
+import authAxios from "../../constants/authAxios";
 
 export const get_loyalty = (storeId) => {
   return (dispatch) => {
     try {
       authAxios({
         method: "get",
-        url: `settingsLoyalty/${storeId}`,
-
+        url: `loyalty`,
       })
         .then((response) => {
           dispatch({ type: GET_LOYALTY, response: response.data.data });
         })
         .catch((error) => {
-          console.log("err", error.response);
           let msg = {
             open: true,
             message:
@@ -37,7 +34,6 @@ export const get_loyalty = (storeId) => {
           dispatch({ type: MESSAGE, data: msg });
         });
     } catch (error) {
-      console.log("err catch", error);
       let msg = {
         open: true,
         message:
@@ -59,17 +55,15 @@ export const add_new_loyalty = (data) => {
     try {
       authAxios({
         method: "post",
-        url: `settingsLoyalty`,
+        url: `loyalty`,
         data: data,
-
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: ADD_NEW_LOYALTY, response: response.data.data });
 
           let msg = {
             open: true,
-            message: `Save Successfully`,
+            message: `Loyalty configuration successfully edited`,
             object: {},
             error: false,
           };
@@ -78,7 +72,6 @@ export const add_new_loyalty = (data) => {
         .catch((error) => {
           let msg;
           let errors = [];
-          console.log("err", error.response);
           if (typeof error.response !== "undefined") {
             if (typeof error.response.data.errors !== "undefined") {
               (error.response.data.errors || []).map((item) => {
@@ -92,8 +85,8 @@ export const add_new_loyalty = (data) => {
                   ? error.response.status === 404
                     ? error.response.statusText
                     : errors.length > 0
-                      ? errors
-                      : error.response.data.message
+                    ? errors
+                    : error.response.data.message
                   : ERROR_MESSAGE,
               object:
                 typeof error.response != "undefined"
@@ -105,7 +98,6 @@ export const add_new_loyalty = (data) => {
           }
         });
     } catch (error) {
-      console.log("err catch", error);
       let msg = {
         open: true,
         message:

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import {
-  get_sales_employee_summary
-} from "../../../actions/reports/salesEmployeeActions";
+import { get_sales_employee_summary } from "../../../actions/reports/salesEmployeeActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
@@ -23,12 +18,13 @@ import { amountFormat } from "../../../utils/helpers";
 
 const SalesEmployee = () => {
   const dispatch = useDispatch();
-  const employee_sales_summary = useSelector((state) => state.reports.salesEmployeeReducer.employee_sales_summary);
+  const employee_sales_summary = useSelector(
+    (state) => state.reports.salesEmployeeReducer.employee_sales_summary
+  );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: true },
     { days: 1, name: "Days", disable: true },
@@ -41,19 +37,12 @@ const SalesEmployee = () => {
   // Sales by Day full month
 
   useEffect(() => {
-    console.log(employee_sales_summary)
     return () => {
       setLoading(false);
       dispatch(unmount_filter());
     };
   }, []);
 
-
-  const deleteSalesEmployee = () => {
-    console.log("Delete");
-    setShowAlert(!showAlert);
-  };
-console.log(employee_sales_summary)
   return (
     <>
       <ReportsFilters
@@ -68,37 +57,60 @@ console.log(employee_sales_summary)
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof employee_sales_summary !== "undefined" && employee_sales_summary.length > 0 ?
-                <CSVLink data={employee_sales_summary.length > 0 ? employee_sales_summary.map(itm => {
-                    return {
-                      ["Employee name"]: itm.Name,
-                      ["Gross sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
-                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
-                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
-                      ["Net sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
-                      ["Receipts"]: itm?.Receipts,
-                      ["AverageSale"]: amountFormat(itm?.AverageSale, parseInt(decimal)),
-                      ["Tips"]: '',
-                      ["Customer signed up"]: '',
-                    }
-                  }) : []}
-                  filename={"SalesByEmployee"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                  <CButton
-                      color="secondary"
-                      className="btn-square"
+                  {typeof employee_sales_summary !== "undefined" &&
+                  employee_sales_summary.length > 0 ? (
+                    <CSVLink
+                      data={
+                        employee_sales_summary.length > 0
+                          ? employee_sales_summary.map((itm) => {
+                              return {
+                                ["Employee name"]: itm.Name,
+                                ["Gross sales"]: amountFormat(
+                                  itm?.GrossSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Refunds"]: amountFormat(
+                                  itm?.Refunds,
+                                  parseInt(decimal)
+                                ),
+                                ["Discounts"]: amountFormat(
+                                  itm?.discounts,
+                                  parseInt(decimal)
+                                ),
+                                ["Net sales"]: amountFormat(
+                                  itm?.NetSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Receipts"]: itm?.Receipts,
+                                ["AverageSale"]: amountFormat(
+                                  itm?.AverageSale,
+                                  parseInt(decimal)
+                                ),
+                                ["Tips"]: "",
+                                ["Customer signed up"]: "",
+                              };
+                            })
+                          : []
+                      }
+                      filename={
+                        "SalesByEmployee" + dateformat(new Date()) + ".csv"
+                      }
+                      target="_blank"
                     >
-                      EXPORT
-                    </CButton>
-                  </CSVLink>
-                  : ""}
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
+                    </CSVLink>
+                  ) : (
+                    ""
+                  )}
                 </CCol>
-                
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesEmployeeDatatable sales_by_employee_detail={employee_sales_summary} />
+              <SalesEmployeeDatatable
+                sales_by_employee_detail={employee_sales_summary}
+              />
             </CCardBody>
           </CCard>
         </CCol>

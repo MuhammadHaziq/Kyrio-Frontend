@@ -77,7 +77,7 @@ const AddCustomer = (props) => {
     //     email: validator.isEmpty(fields.email),
     //   });
     //   return false;
-    // } 
+    // }
     else {
       const data = {
         name: fields.name,
@@ -343,7 +343,7 @@ const AddCustomer = (props) => {
                       <CInput
                         id="customerCode"
                         name="customerCode"
-                        placeholder="Postal Code"
+                        placeholder="Customer Code"
                         onChange={handleOnChange}
                         value={fields.customerCode}
                       />

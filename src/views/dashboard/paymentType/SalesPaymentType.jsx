@@ -5,13 +5,11 @@ import {
   CCardBody,
   CCardHeader,
   CCol,
-  CRow
+  CRow,
 } from "@coreui/react";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import {
-  get_sales_payment_type_summary
-} from "../../../actions/reports/salesPaymentTypeActions";
+import { get_sales_payment_type_summary } from "../../../actions/reports/salesPaymentTypeActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesPaymentTypeDatatableNew from "../../../datatables/reports/SalesPaymentTypeDatatableNew";
 import dateformat from "dateformat";
@@ -20,7 +18,9 @@ import { amountFormat } from "../../../utils/helpers";
 
 const SalesPaymentType = () => {
   const dispatch = useDispatch();
-  const paymentType_sales_summary = useSelector((state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary);
+  const paymentType_sales_summary = useSelector(
+    (state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary
+  );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [loading, setLoading] = useState(false);
@@ -57,34 +57,50 @@ const SalesPaymentType = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof paymentType_sales_summary !== "undefined" && paymentType_sales_summary.length > 0 ?
-                  <CSVLink data={paymentType_sales_summary.length > 0 ? paymentType_sales_summary.map(itm => {
-                      return {
-                        ["Payment type"]: itm.PaymentType,
-                        ["Payment transactions"]: itm.ItemsSold,
-                        ["Payment amount"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
-                        ["Refund transactions"]: itm.ItemsRefunded,
-                        ["Refund amount"]: amountFormat(itm?.Refunds, parseInt(decimal)),
-                        ["Net amount"]: amountFormat(itm?.NetSales, parseInt(decimal))
+                  {typeof paymentType_sales_summary !== "undefined" &&
+                  paymentType_sales_summary.length > 0 ? (
+                    <CSVLink
+                      data={
+                        paymentType_sales_summary.length > 0
+                          ? paymentType_sales_summary.map((itm) => {
+                              return {
+                                ["Payment type"]: itm?.PaymentType,
+                                ["Payment transactions"]:
+                                  itm?.paymentTransactions,
+                                ["Payment amount"]: amountFormat(
+                                  itm?.paymentAmount,
+                                  parseInt(decimal)
+                                ),
+                                ["Refund transactions"]: itm.refundTransactions,
+                                ["Refund amount"]: amountFormat(
+                                  itm?.refundAmount,
+                                  parseInt(decimal)
+                                ),
+                                ["Net amount"]: amountFormat(
+                                  itm?.netAmount,
+                                  parseInt(decimal)
+                                ),
+                              };
+                            })
+                          : []
                       }
-                    }) : []}
-                    filename={"SalesByItem"+dateformat(new Date)+".csv"}
-                    target="_blank"
+                      filename={"SalesByItem" + dateformat(new Date()) + ".csv"}
+                      target="_blank"
                     >
-                    <CButton
-                      color="secondary"
-                      className="btn-square"
-                    >
-                      EXPORT
-                    </CButton>
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
                     </CSVLink>
-                    : ""}
+                  ) : (
+                    ""
+                  )}
                 </CCol>
-               
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesPaymentTypeDatatableNew sales_by_paymentType_detail={paymentType_sales_summary} />
+              <SalesPaymentTypeDatatableNew
+                sales_by_paymentType_detail={paymentType_sales_summary}
+              />
             </CCardBody>
           </CCard>
         </CCol>

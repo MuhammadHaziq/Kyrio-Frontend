@@ -1,10 +1,9 @@
 import React from "react";
 import { CDataTable } from "@coreui/react";
 import Amount from "../../components/utils/Amount";
-import _ from 'lodash';
+import _ from "lodash";
 
 const SalesPaymentTypeDatatableNew = (props) => {
-  
   return (
     <>
       <CDataTable
@@ -13,36 +12,95 @@ const SalesPaymentTypeDatatableNew = (props) => {
         fields={[
           { key: "PaymentType", label: "Payment type", filter: true },
           {
-            key: "ItemsSold",
+            key: "paymentTransactions",
             label: "Payment transactions",
             filter: true,
           },
-          { key: "GrossSales", label: "Payment amount", filter: true },
+          { key: "paymentAmount", label: "Payment amount", filter: true },
           {
-            key: "ItemsRefunded",
+            key: "refundTransactions",
             label: "Refund transactions",
             filter: true,
           },
-          { key: "Refunds", label: "Refund amount", filter: true },
-          { key: "NetSales", label: "Net amount", filter: true },
+          { key: "refundAmount", label: "Refund amount", filter: true },
+          { key: "netAmount", label: "Net amount", filter: true },
         ]}
         itemsPerPage={10}
         columnFilter
         sorter
         hover
         pagination
-        
         underTableSlot={
-          <div className="position-relative table-responsive " style={{ overflow: "auto" }}>
+          <div
+            className="position-relative table-responsive "
+            style={{ overflow: "auto" }}
+          >
             <table className="table table-hover" style={{ width: "100%" }}>
               <tbody>
                 <tr>
-                  <td style={{ width: "16.6%" }}><strong>Total</strong></td>
-                  <td style={{ width: "16.6%" }}><strong>{<Amount value={_.sumBy(props.sales_by_paymentType_detail,'ItemsSold')} />}</strong></td>
-                  <td style={{ width: "16.6%" }}><strong>{<Amount value={_.sumBy(props.sales_by_paymentType_detail,'GrossSales')} />}</strong></td>
-                  <td style={{ width: "16.6%" }}><strong>{<Amount value={_.sumBy(props.sales_by_paymentType_detail,'ItemsRefunded')} />}</strong></td>
-                  <td style={{ width: "16.6%" }}><strong>{<Amount value={_.sumBy(props.sales_by_paymentType_detail,'Refunds')} />}</strong></td>
-                  <td style={{ width: "16.6%" }}><strong>{<Amount value={_.sumBy(props.sales_by_paymentType_detail,'NetSales')} />}</strong></td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>Total</strong>
+                  </td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>
+                      {
+                        <Amount
+                          value={_.sumBy(
+                            props.sales_by_paymentType_detail,
+                            "paymentTransactions"
+                          )}
+                        />
+                      }
+                    </strong>
+                  </td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>
+                      {
+                        <Amount
+                          value={_.sumBy(
+                            props.sales_by_paymentType_detail,
+                            "paymentAmount"
+                          )}
+                        />
+                      }
+                    </strong>
+                  </td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>
+                      {
+                        <Amount
+                          value={_.sumBy(
+                            props.sales_by_paymentType_detail,
+                            "refundTransactions"
+                          )}
+                        />
+                      }
+                    </strong>
+                  </td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>
+                      {
+                        <Amount
+                          value={_.sumBy(
+                            props.sales_by_paymentType_detail,
+                            "refundAmount"
+                          )}
+                        />
+                      }
+                    </strong>
+                  </td>
+                  <td style={{ width: "16.6%" }}>
+                    <strong>
+                      {
+                        <Amount
+                          value={_.sumBy(
+                            props.sales_by_paymentType_detail,
+                            "netAmount"
+                          )}
+                        />
+                      }
+                    </strong>
+                  </td>
                 </tr>
               </tbody>
             </table>

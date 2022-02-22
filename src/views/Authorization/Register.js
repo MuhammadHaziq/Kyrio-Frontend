@@ -30,7 +30,7 @@ const Register = () => {
   const [redirect, setRedirect] = useState(false);
   const [formState, setFormState] = useState({
     values: {
-      username: "",
+      // username: "",
       email: "",
       password: "",
       businessName: "",
@@ -38,7 +38,7 @@ const Register = () => {
       timezone: "",
     },
     errors: {
-      username: false,
+      // username: false,
       email: false,
       password: false,
       businessName: false,
@@ -54,13 +54,13 @@ const Register = () => {
     fetch("https://extreme-ip-lookup.com/json/?key=CCEvn3ZsTSeEWoEF2eNI")
       .then((res) => res.json())
       .then((response) => {
-        console.log(response, "response")
+        console.log(response, "response");
         setFormState((formState) => ({
           ...formState,
           values: {
             ...formState.values,
             country: response.country,
-            timezone: response.timezone
+            timezone: response.timezone,
           },
         }));
       })
@@ -103,7 +103,6 @@ const Register = () => {
     }));
   };
   const selectCountry = (val) => {
-    console.log(val)
     setFormState({
       ...formState,
       values: {
@@ -124,17 +123,17 @@ const Register = () => {
   const registerUser = () => {
     setLoading(true);
     let errors = false;
-    let username = false;
+    // let username = false;
     let email = false;
     let password = false;
     let businessName = false;
     let country = false;
     let terms = document.getElementById("terms").checked;
 
-    if (validator.isEmpty(formState.values.username)) {
-      username = true;
-      errors = true;
-    }
+    // if (validator.isEmpty(formState.values.username)) {
+    //   username = true;
+    //   errors = true;
+    // }
     if (
       validator.isEmpty(formState.values.email) ||
       !validator.isEmail(formState.values.email)
@@ -167,7 +166,7 @@ const Register = () => {
         ...formState,
         errors: {
           ...formState.errors,
-          username: username,
+          // username: username,
           email: email,
           password: password,
           businessName: businessName,
@@ -181,7 +180,7 @@ const Register = () => {
         ...formState,
         errors: {
           ...formState.errors,
-          username: username,
+          // username: username,
           email: email,
           password: password,
           businessName: businessName,
@@ -190,14 +189,14 @@ const Register = () => {
         },
       }));
       let data = {
-        username: formState.values.username,
+        username: "",
         email: formState.values.email,
         password: formState.values.password,
         businessName: formState.values.businessName,
         country: formState.values.country,
         timezone: formState.values.timezone,
         terms: terms,
-        platform: "backoffice"
+        platform: "backoffice",
       };
       dispatch(signup(data));
     }
@@ -217,8 +216,10 @@ const Register = () => {
                     alt="kyrio POS"
                     style={{ width: "142px", height: "100%" }}
                   />
-                  <p className="text-muted" style={{ fontSize: "18px" }}>Create Your Free Kyrio Account</p>
-                  <CInputGroup className="mb-3">
+                  <p className="text-muted" style={{ fontSize: "18px" }}>
+                    Create Your Free Kyrio Account
+                  </p>
+                  {/* <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>
                         <MdPerson />
@@ -244,7 +245,7 @@ const Register = () => {
                     ) : (
                       ""
                     )}
-                  </CInputGroup>
+                  </CInputGroup> */}
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>
@@ -259,10 +260,10 @@ const Register = () => {
                           ? validator.isEmpty(formState.values.email)
                             ? true
                             : !validator.isEmail(formState.values.email)
-                              ? true
-                              : msg.error
-                                ? true
-                                : false
+                            ? true
+                            : msg.error
+                            ? true
+                            : false
                           : false
                       }
                       value={formState.values.email}

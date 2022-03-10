@@ -10,6 +10,14 @@
 // .hideDetailMenu thead tr th input{
 //     display: none !important;
 // }
+.salescard {
+  cursor: pointer;
+  margin-left: 40px;
+}
+.responsive {
+  width: 100%;
+  overflow: scroll !important;
+}
 .form-check-input {
   width: 20px;
   height: 20px;

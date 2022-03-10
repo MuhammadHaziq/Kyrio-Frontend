@@ -59,8 +59,18 @@ const ReportsFilters = (props) => {
     endTime: "0",
   });
 
-  const [startDate, ] = useState(localStorage.getItem("startDate") !== null && typeof localStorage.getItem("startDate") !== "undefined" ? moment(localStorage.getItem("startDate")) : moment())
-  const [endDate, ] = useState(localStorage.getItem("endDate") !== null && typeof localStorage.getItem("endDate") !== "undefined" ? moment(localStorage.getItem("endDate")) : moment())
+  const [startDate] = useState(
+    localStorage.getItem("startDate") !== null &&
+      typeof localStorage.getItem("startDate") !== "undefined"
+      ? moment(localStorage.getItem("startDate"))
+      : moment()
+  );
+  const [endDate] = useState(
+    localStorage.getItem("endDate") !== null &&
+      typeof localStorage.getItem("endDate") !== "undefined"
+      ? moment(localStorage.getItem("endDate"))
+      : moment()
+  );
   const [dateRange, setDateRange] = useState({
     startDate: startDate,
     endDate: endDate,
@@ -331,7 +341,6 @@ const ReportsFilters = (props) => {
           : "Days";
 
       days_filter(dateRange.startDate, dateRange.endDate, filter);
-
     }
   }, [
     (dateRange.startDate !== prevStartDate &&
@@ -350,7 +359,7 @@ const ReportsFilters = (props) => {
       employeeId.length > 0 &&
       props.resetFilter === false
     ) {
-      days_filter(startDate, endDate, props.filter)
+      days_filter(startDate, endDate, props.filter);
       const data = {
         startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
         endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
@@ -410,7 +419,6 @@ const ReportsFilters = (props) => {
   }, [Days]);
 
   useEffect(() => {
-    
     if (
       Days !== undefined &&
       Days.length > 0 &&
@@ -623,8 +631,8 @@ const ReportsFilters = (props) => {
   }
 
   const handleEvent = (event, picker) => {
-    localStorage.setItem("startDate",picker.startDate)
-    localStorage.setItem("endDate",picker.endDate)
+    localStorage.setItem("startDate", picker.startDate);
+    localStorage.setItem("endDate", picker.endDate);
     setDateRange({
       ...dateRange,
       startDate: picker.startDate,
@@ -719,8 +727,8 @@ const ReportsFilters = (props) => {
       startTime: "0",
       endTime: "0",
     });
-    localStorage.setItem("startDate",moment())
-    localStorage.setItem("endDate",moment())
+    localStorage.setItem("startDate", moment());
+    localStorage.setItem("endDate", moment());
     setDateRange({
       startDate: moment(),
       endDate: moment(),
@@ -742,7 +750,7 @@ const ReportsFilters = (props) => {
   return (
     <>
       <CRow className="mb-3">
-        <CCol sm="12" md="3" lg="3">
+        <CCol sm="12" md="3" lg="3" className="mb-3">
           <DatetimeRangePicker
             startDate={dateRange.startDate}
             endDate={dateRange.endDate}
@@ -758,7 +766,7 @@ const ReportsFilters = (props) => {
             </CButton>
           </DatetimeRangePicker>
         </CCol>
-        <CCol sm="12" md="3" lg="3" xs="12">
+        <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
               <MdAvTimer />{" "}
@@ -770,9 +778,13 @@ const ReportsFilters = (props) => {
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
               {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={() => handleOnChange(0)}>
-                <CInputGroup variant="custom-radio" inline className="form-group-space">
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
-                  className="form-check-input"
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={0}
@@ -780,22 +792,34 @@ const ReportsFilters = (props) => {
                     divider={true}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter" className="checkbox-label" style={{ marginLeft: "20px" }}>
+                  <CLabel
+                    htmlFor="time_filter"
+                    className="checkbox-label"
+                    style={{ marginLeft: "20px" }}
+                  >
                     All Day
                   </CLabel>
                 </CInputGroup>
               </CDropdownItem>
               <CDropdownItem onClick={() => handleOnChange(1)}>
-                <CInputGroup variant="custom-radio" inline className="form-group-space">
+                <CInputGroup
+                  variant="custom-radio"
+                  inline
+                  className="form-group-space"
+                >
                   <CInputRadio
-                  className="form-check-input"
+                    className="form-check-input"
                     id="time_filter"
                     name="time_filter"
                     value={1}
                     checked={fields.time_filter === 1}
                     style={{ marginLeft: "0px" }}
                   />
-                  <CLabel htmlFor="time_filter"  className="checkbox-label" style={{ marginLeft: "20px" }}>
+                  <CLabel
+                    htmlFor="time_filter"
+                    className="checkbox-label"
+                    style={{ marginLeft: "20px" }}
+                  >
                     Custome Period
                   </CLabel>
                 </CInputGroup>
@@ -835,7 +859,7 @@ const ReportsFilters = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="3" lg="3" xs="12">
+        <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
               <MdStoreMallDirectory />
@@ -887,7 +911,7 @@ const ReportsFilters = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
+        <CCol sm="12" md="2" lg="2" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default btn-block">
               <MdPerson />{" "}
@@ -944,9 +968,9 @@ const ReportsFilters = (props) => {
         </CCol>
         <CCol sm="12" md="1" lg="1" xs="12">
           <CButton
-              className="btn btn-outline-primary btn-block"
-              onClick={resetFilters}
-            >
+            className="btn btn-outline-primary btn-block"
+            onClick={resetFilters}
+          >
             Reset
           </CButton>
         </CCol>

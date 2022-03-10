@@ -25,7 +25,10 @@ import moment from "moment";
 import SalesSummaryDatatable from "../../datatables/sales/SalesSummaryDatatable";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
-import { filterDatesAction, filterDaysAction } from "../../components/reportFilters/FilterFunction"
+import {
+  filterDatesAction,
+  filterDaysAction,
+} from "../../components/reportFilters/FilterFunction";
 
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
@@ -81,14 +84,14 @@ const Dashboard = () => {
   };
 
   const days = (from, to) => {
-    const result = await filterDaysAction(from, to)
+    const result = await filterDaysAction(from, to);
     setFilter(result.filter);
     setDays(result.days);
     setDates(result.dates);
   };
 
   const days_filter = (from, to, filterName) => {
-    const result = await filterDatesAction(from, to, filterName)
+    const result = await filterDatesAction(from, to, filterName);
     setFilter(result.filter);
     setDays(result.days);
     setDates(result.dates);

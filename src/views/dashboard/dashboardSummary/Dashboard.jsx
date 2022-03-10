@@ -5,7 +5,6 @@ import {
   CCard,
   CCardHeader,
   CCardBody,
-  CCardFooter,
   CCol,
   CRow,
 } from "@coreui/react";
@@ -325,42 +324,56 @@ const Dashboard = (props) => {
       <CCard>
         <CCardBody>
           <CRow className="text-center mb-2">
-            <SalesCards
-              title="Gross sales"
-              value={grossSales}
-              salesFilter={salesFilter}
-              color="success"
-              handleOnChangeSales={() => handleOnChangeSales("Gross sales")}
-            />
-            <SalesCards
-              title="Refunds"
-              value={refunds}
-              salesFilter={salesFilter}
-              color="danger"
-              handleOnChangeSales={() => handleOnChangeSales("Refunds")}
-            />
-            <SalesCards
-              title="Discounts"
-              value={discounts}
-              salesFilter={salesFilter}
-              color="warning"
-              handleOnChangeSales={() => handleOnChangeSales("Discounts")}
-            />
-            <SalesCards
-              title="Net sales"
-              value={netSales}
-              salesFilter={salesFilter}
-              color="info"
-              handleOnChangeSales={() => handleOnChangeSales("Net sales")}
-            />
-            <SalesCards
-              title="Gross profit"
-              value={grossProfit}
-              salesFilter={salesFilter}
-              color="primary"
-              handleOnChangeSales={() => handleOnChangeSales("Gross profit")}
-            />
+            <table className="responsive">
+              <tbody>
+                <tr>
+                  <SalesCards
+                    title="Gross sales"
+                    value={grossSales}
+                    salesFilter={salesFilter}
+                    color="success"
+                    handleOnChangeSales={() =>
+                      handleOnChangeSales("Gross sales")
+                    }
+                  />
+                  <SalesCards
+                    title="Refunds"
+                    value={refunds}
+                    salesFilter={salesFilter}
+                    color="danger"
+                    handleOnChangeSales={() => handleOnChangeSales("Refunds")}
+                  />
+                  <SalesCards
+                    title="Discounts"
+                    value={discounts}
+                    salesFilter={salesFilter}
+                    color="warning"
+                    handleOnChangeSales={() => handleOnChangeSales("Discounts")}
+                  />
+                  <SalesCards
+                    title="Net sales"
+                    value={netSales}
+                    salesFilter={salesFilter}
+                    color="info"
+                    handleOnChangeSales={() => handleOnChangeSales("Net sales")}
+                  />
+                  <SalesCards
+                    title="Gross profit"
+                    value={grossProfit}
+                    salesFilter={salesFilter}
+                    color="primary"
+                    handleOnChangeSales={() =>
+                      handleOnChangeSales("Gross profit")
+                    }
+                  />
+                </tr>
+              </tbody>
+            </table>
           </CRow>
+        </CCardBody>
+      </CCard>
+      <CCard>
+        <CCardBody>
           <CRow>
             <CCol sm="12" className="d-none d-md-block float-right">
               <h5 className="ml-4">{salesFilter}</h5>
@@ -393,7 +406,6 @@ const Dashboard = (props) => {
             "Loading..."
           )}
         </CCardBody>
-        <CCardFooter></CCardFooter>
       </CCard>
       <CCard>
         <CCardHeader>

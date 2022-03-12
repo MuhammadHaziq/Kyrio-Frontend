@@ -22,7 +22,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
-import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
+import DatetimeRangePicker from "react-bootstrap-datetimerangepicker-updated";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-bootstrap-time-picker";
 import {
@@ -385,25 +385,6 @@ const DashboardFilter = (props) => {
       props.resetFilter === false
     ) {
       days_filter(startDate, endDate, props.filter);
-      // const data = {
-      //   startDate: dateformat(dateRange.startDate, "yyyy-mm-dd"),
-      //   endDate: dateformat(dateRange.endDate, "yyyy-mm-dd"),
-      //   stores: storeId
-      //     .filter((item) => item.isSelected === true)
-      //     .map((item) => {
-      //       return item._id;
-      //     }),
-      //   employees: employeeId
-      //     .filter((item) => item.isSelected === true)
-      //     .map((item) => {
-      //       return item._id;
-      //     }),
-      //   divider: "Hours",
-      //   graph: Days,
-      //   // need this formate with year to match with date filter exactly
-      //   matches: daysDates,
-      // };
-      // dispatch(get_grap_sales_summary(data));
     }
   }, [
     storeId !== undefined &&
@@ -936,7 +917,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12" className="mb-3">
+        <CCol sm="12" md="3" lg="2" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default btn-block">
               <MdPerson />{" "}
@@ -991,7 +972,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
-        <CCol sm="12" md="1" lg="1" xs="12">
+        <CCol sm="12" md="3" lg="1" xs="12">
           <CButton
             className="btn btn-outline-primary btn-block"
             onClick={resetFilters}

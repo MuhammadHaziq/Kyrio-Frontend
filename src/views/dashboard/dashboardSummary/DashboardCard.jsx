@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  CWidgetDropdown,
-  CRow,
-  CCol,
-} from "@coreui/react";
+import { CWidgetDropdown, CRow, CCol } from "@coreui/react";
 import ChartLineSimple from "../charts/ChartLineSimple";
 import ChartBarSimple from "../charts/ChartBarSimple";
 import Amount from "../../../components/utils/Amount";
@@ -16,11 +12,7 @@ const DashboardCard = (props) => {
   });
   return (
     <CRow>
-      <CCol
-        sm="4"
-        
-        onClick={() => props.handleOnChangeSales("Gross sales")}
-      >
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Gross sales")}>
         <CWidgetDropdown
           color="gradient-success"
           header={<Amount value={props.grossSales} />}
@@ -39,7 +31,7 @@ const DashboardCard = (props) => {
         ></CWidgetDropdown>
       </CCol>
 
-      <CCol sm="4"  onClick={() => props.handleOnChangeSales("Refunds")}>
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Refunds")}>
         <CWidgetDropdown
           color="gradient-danger"
           header={<Amount value={props.refunds} />}
@@ -59,11 +51,7 @@ const DashboardCard = (props) => {
         ></CWidgetDropdown>
       </CCol>
 
-      <CCol
-        sm="4"
-        
-        onClick={() => props.handleOnChangeSales("Discounts")}
-      >
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Discounts")}>
         <CWidgetDropdown
           color="gradient-warning"
           header={<Amount value={props.discounts} />}
@@ -83,11 +71,7 @@ const DashboardCard = (props) => {
         ></CWidgetDropdown>
       </CCol>
 
-      <CCol
-        sm="4"
-        
-        onClick={() => props.handleOnChangeSales("Net Sales")}
-      >
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Net Sales")}>
         <CWidgetDropdown
           color="gradient-info"
           header={<Amount value={props.netSales} />}
@@ -103,7 +87,7 @@ const DashboardCard = (props) => {
           }
         ></CWidgetDropdown>
       </CCol>
-      <CCol sm="4"  onClick={() => props.handleOnChangeSales("Cost Of Goods")}>
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Cost Of Goods")}>
         <CWidgetDropdown
           color="gradient-dark"
           header={<Amount value={props.CostOfGoods} />}
@@ -122,11 +106,7 @@ const DashboardCard = (props) => {
           }
         ></CWidgetDropdown>
       </CCol>
-      <CCol
-        sm="4"
-        
-        onClick={() => props.handleOnChangeSales("Gross profit")}
-      >
+      <CCol sm="4" onClick={() => props.handleOnChangeSales("Gross profit")}>
         <CWidgetDropdown
           color="gradient-primary"
           header={<Amount value={props.grossProfit} />}
@@ -140,8 +120,7 @@ const DashboardCard = (props) => {
               labels="months"
             />
           }
-        >
-        </CWidgetDropdown>
+        ></CWidgetDropdown>
       </CCol>
     </CRow>
   );

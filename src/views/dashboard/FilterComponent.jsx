@@ -18,7 +18,7 @@ import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
-import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
+import DatetimeRangePicker from "react-bootstrap-datetimerangepicker-updated";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TimePicker from "react-bootstrap-time-picker";
 import {

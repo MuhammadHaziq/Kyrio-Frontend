@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import {
   CRow,
   CCol,
@@ -21,9 +21,10 @@ import { get_total_time_hours } from "../../actions/employee/timeCardActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
-import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
+import DatetimeRangePicker from "react-bootstrap-datetimerangepicker-updated";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import TotalHoursWorkedDatatable from "../../datatables/employee/TotalHoursWorkedDatatable";
+
 const TotalHoursWorked = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.settingReducers.storeReducer);
@@ -57,10 +58,11 @@ const TotalHoursWorked = () => {
     checkAllEmployee: true,
   });
   useEffect(() => {
-      let feature = features.filter(ftr => ftr.feature.title == "Time clock")[0].enable
-      if(!feature){
-        setRedirect(true)
-      }
+    let feature = features.filter((ftr) => ftr.feature.title == "Time clock")[0]
+      .enable;
+    if (!feature) {
+      setRedirect(true);
+    }
   }, []);
   // useEffect(() => {
   //   if (store.stores_list.length === 0) {
@@ -194,150 +196,162 @@ const TotalHoursWorked = () => {
 
   return (
     <>
-    {redirect ? <Redirect to="/" /> : 
-    <React.Fragment>
-      <CRow className="mb-3">
-        <CCol sm="12" md="2" lg="2">
-          <DatetimeRangePicker
-            startDate={dateRange.startDate}
-            endDate={dateRange.endDate}
-            ranges={dateRange.ranges}
-            onEvent={handleEvent}
-          >
-            <CButton style={{ backgroundColor: "white", width: "100%" }}>
-              <span>{label}</span>
-            </CButton>
-          </DatetimeRangePicker>
-        </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
-          <CDropdown style={{ backgroundColor: "white" }}>
-            <CDropdownToggle caret color="default  btn-block">
-              {" "}
-              {storeId.filter((item) => item.isSelected !== true).length === 0
-                ? "All Stores"
-                : storeId.filter((item) => item.isSelected === true).length +
-                  " Stores"}
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <CDropdownItem onClick={() => storeHandleChange("0")}>
-                {" "}
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    All Stores
-                  </CLabel>
-                </CFormGroup>
-              </CDropdownItem>
-              {(storeId || []).map((item, index) => (
-                <CDropdownItem
-                  index={item._id}
-                  onClick={() => storeHandleChange(item._id)}
-                >
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
-                    <CInputCheckbox
-                      custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
-                      // onChange={storeHandleChange}
-                    />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
+      {redirect ? (
+        <Redirect to="/" />
+      ) : (
+        <React.Fragment>
+          <CRow className="mb-3">
+            <CCol sm="12" md="2" lg="2">
+              <DatetimeRangePicker
+                startDate={dateRange.startDate}
+                endDate={dateRange.endDate}
+                ranges={dateRange.ranges}
+                onEvent={handleEvent}
+              >
+                <CButton style={{ backgroundColor: "white", width: "100%" }}>
+                  <span>{label}</span>
+                </CButton>
+              </DatetimeRangePicker>
+            </CCol>
+            <CCol sm="12" md="2" lg="2" xs="12">
+              <CDropdown style={{ backgroundColor: "white" }}>
+                <CDropdownToggle caret color="default  btn-block">
+                  {" "}
+                  {storeId.filter((item) => item.isSelected !== true).length ===
+                  0
+                    ? "All Stores"
+                    : storeId.filter((item) => item.isSelected === true)
+                        .length + " Stores"}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem onClick={() => storeHandleChange("0")}>
+                    {" "}
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CInputCheckbox
+                        custom
+                        name="checkAll"
+                        id={"checkAll"}
+                        value={0}
+                        checked={fields.checkAll}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                        All Stores
+                      </CLabel>
+                    </CFormGroup>
+                  </CDropdownItem>
+                  {(storeId || []).map((item, index) => (
+                    <CDropdownItem
+                      index={item._id}
+                      onClick={() => storeHandleChange(item._id)}
                     >
-                      {item.title}
-                    </CLabel>
-                  </CFormGroup>
-                </CDropdownItem>
-              ))}
-            </CDropdownMenu>
-          </CDropdown>
-        </CCol>
-        <CCol sm="12" md="2" lg="2" xs="12">
-          <CDropdown style={{ backgroundColor: "white" }}>
-            <CDropdownToggle caret color="default btn-block">
-              {" "}
-              {employeeId.filter((item) => item.isSelected !== true).length ===
-              0
-                ? "All Employees"
-                : employeeId.filter((item) => item.isSelected === true).length +
-                  " Employee"}
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <CDropdownItem onClick={() => employeeHandleChange("0")}>
-                {" "}
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAllEmployee"
-                    id={"checkAllEmployee"}
-                    value={0}
-                    checked={fields.checkAllEmployee}
-                  />
-                  <CLabel
-                    variant="custom-checkbox"
-                    htmlFor={"checkAllEmployee"}
-                  >
-                    All Employees
-                  </CLabel>
-                </CFormGroup>
-              </CDropdownItem>
-              {(employeeId || []).map((item, index) => (
-                <CDropdownItem
-                  index={index}
-                  onClick={() => employeeHandleChange(item._id)}
-                >
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
-                    <CInputCheckbox
-                      custom
-                      name="employeeId"
-                      id={"employeeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
-                    />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"employeeId" + item._id}
+                      <CFormGroup variant="custom-checkbox" inline key={index}>
+                        <CInputCheckbox
+                          custom
+                          name="storeId"
+                          id={"storeId" + item._id}
+                          value={item._id}
+                          checked={item.isSelected}
+                          // onChange={storeHandleChange}
+                        />
+                        <CLabel
+                          variant="custom-checkbox"
+                          htmlFor={"storeId" + item._id}
+                        >
+                          {item.title}
+                        </CLabel>
+                      </CFormGroup>
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+            </CCol>
+            <CCol sm="12" md="2" lg="2" xs="12">
+              <CDropdown style={{ backgroundColor: "white" }}>
+                <CDropdownToggle caret color="default btn-block">
+                  {" "}
+                  {employeeId.filter((item) => item.isSelected !== true)
+                    .length === 0
+                    ? "All Employees"
+                    : employeeId.filter((item) => item.isSelected === true)
+                        .length + " Employee"}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem onClick={() => employeeHandleChange("0")}>
+                    {" "}
+                    <CFormGroup variant="custom-checkbox" inline>
+                      <CInputCheckbox
+                        custom
+                        name="checkAllEmployee"
+                        id={"checkAllEmployee"}
+                        value={0}
+                        checked={fields.checkAllEmployee}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"checkAllEmployee"}
+                      >
+                        All Employees
+                      </CLabel>
+                    </CFormGroup>
+                  </CDropdownItem>
+                  {(employeeId || []).map((item, index) => (
+                    <CDropdownItem
+                      index={index}
+                      onClick={() => employeeHandleChange(item._id)}
                     >
-                      {item.name}
-                    </CLabel>
-                  </CFormGroup>
-                </CDropdownItem>
-              ))}
-            </CDropdownMenu>
-          </CDropdown>
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol xs="12" sm="12">
-          <CCard>
-            <CCardHeader>
-              <CRow>
-                <CCol xs="12" sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
-                  <CButton color="success" className="btn-square pull right">
-                    Export
-                  </CButton>
-                </CCol>
-              </CRow>
-            </CCardHeader>
-            <CCardBody>
-              <TotalHoursWorkedDatatable
-                total_working_hours={timeCard.total_working_hours}
-                store={store.stores_list}
-              />
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
-    </React.Fragment>
-    }
+                      <CFormGroup variant="custom-checkbox" inline key={index}>
+                        <CInputCheckbox
+                          custom
+                          name="employeeId"
+                          id={"employeeId" + item._id}
+                          value={item._id}
+                          checked={item.isSelected}
+                        />
+                        <CLabel
+                          variant="custom-checkbox"
+                          htmlFor={"employeeId" + item._id}
+                        >
+                          {item.name}
+                        </CLabel>
+                      </CFormGroup>
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol xs="12" sm="12">
+              <CCard>
+                <CCardHeader>
+                  <CRow>
+                    <CCol
+                      xs="12"
+                      sm="4"
+                      md="4"
+                      xl="xl"
+                      className="mb-3 mb-xl-0"
+                    >
+                      <CButton
+                        color="success"
+                        className="btn-square pull right"
+                      >
+                        Export
+                      </CButton>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+                <CCardBody>
+                  <TotalHoursWorkedDatatable
+                    total_working_hours={timeCard.total_working_hours}
+                    store={store.stores_list}
+                  />
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+        </React.Fragment>
+      )}
     </>
   );
 };

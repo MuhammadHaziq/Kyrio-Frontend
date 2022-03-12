@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from "react-router-dom";
 import {
   CRow,
   CCol,
@@ -30,7 +30,7 @@ import { get_stores } from "../../actions/settings/storeActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import dateFormat from "dateformat";
-import DatetimeRangePicker from "react-bootstrap-datetimerangepicker";
+import DatetimeRangePicker from "react-bootstrap-datetimerangepicker-updated";
 import "bootstrap-daterangepicker/daterangepicker.css";
 
 const TimeCards = () => {
@@ -71,10 +71,11 @@ const TimeCards = () => {
     checkAllEmployee: true,
   });
   useEffect(() => {
-      let feature = features.filter(ftr => ftr.feature.title == "Time clock")[0].enable
-      if(!feature){
-        setRedirect(true)
-      }
+    let feature = features.filter((ftr) => ftr.feature.title == "Time clock")[0]
+      .enable;
+    if (!feature) {
+      setRedirect(true);
+    }
   }, []);
   // useEffect(() => {
   //   if (store.stores_list.length === 0) {
@@ -244,228 +245,238 @@ const TimeCards = () => {
 
   return (
     <>
-    {redirect ? <Redirect to="/" /> : 
-    <React.Fragment>
-      <div className="animated fadeIn">
-        {fadeTimeCardUpdate ? (
-          <CFade timeout={timeout} in={fadeTimeCardUpdate}>
-            <EditTimeCard
-              store={store.stores_list}
-              goBack={goBack}
-              time_card_row_data={timeCard.timeCard_row_data}
-            />
-          </CFade>
-        ) : (
-          ""
-        )}
-        {fadeAddTimeCard ? (
-          <CFade timeout={timeout} in={fadeAddTimeCard}>
-            <AddEmployeeTime store={store.stores_list} goBack={goBack} />
-          </CFade>
-        ) : (
-          ""
-        )}
-        {fadeTimeCard ? (
-          <React.Fragment>
-            <CRow className="mb-3">
-              <CCol sm="12" md="2" lg="2">
-                <DatetimeRangePicker
-                  startDate={dateRange.startDate}
-                  endDate={dateRange.endDate}
-                  ranges={dateRange.ranges}
-                  onEvent={handleEvent}
-                  autoApply={true}
-                >
-                  <CButton style={{ backgroundColor: "white", width: "100%" }}>
-                    <span>{label}</span>
-                  </CButton>
-                </DatetimeRangePicker>
-              </CCol>
-              <CCol sm="12" md="2" lg="2" xs="12">
-                <CDropdown style={{ backgroundColor: "white" }}>
-                  <CDropdownToggle caret color="default  btn-block">
-                    {" "}
-                    {storeId.filter((item) => item.isSelected !== true)
-                      .length === 0
-                      ? "All Stores"
-                      : storeId.filter((item) => item.isSelected === true)
-                          .length + " Stores"}
-                  </CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem onClick={() => storeHandleChange("0")}>
-                      {" "}
-                      <CFormGroup variant="custom-checkbox" inline>
-                        <CInputCheckbox
-                          custom
-                          name="checkAll"
-                          id={"checkAll"}
-                          value={0}
-                          checked={fields.checkAll}
-                        />
-                        <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                          All Stores
-                        </CLabel>
-                      </CFormGroup>
-                    </CDropdownItem>
-                    {(storeId || []).map((item, index) => (
-                      <CDropdownItem
-                        key={index}
-                        onClick={() => storeHandleChange(item._id)}
+      {redirect ? (
+        <Redirect to="/" />
+      ) : (
+        <React.Fragment>
+          <div className="animated fadeIn">
+            {fadeTimeCardUpdate ? (
+              <CFade timeout={timeout} in={fadeTimeCardUpdate}>
+                <EditTimeCard
+                  store={store.stores_list}
+                  goBack={goBack}
+                  time_card_row_data={timeCard.timeCard_row_data}
+                />
+              </CFade>
+            ) : (
+              ""
+            )}
+            {fadeAddTimeCard ? (
+              <CFade timeout={timeout} in={fadeAddTimeCard}>
+                <AddEmployeeTime store={store.stores_list} goBack={goBack} />
+              </CFade>
+            ) : (
+              ""
+            )}
+            {fadeTimeCard ? (
+              <React.Fragment>
+                <CRow className="mb-3">
+                  <CCol sm="12" md="2" lg="2">
+                    <DatetimeRangePicker
+                      startDate={dateRange.startDate}
+                      endDate={dateRange.endDate}
+                      ranges={dateRange.ranges}
+                      onEvent={handleEvent}
+                      autoApply={true}
+                    >
+                      <CButton
+                        style={{ backgroundColor: "white", width: "100%" }}
                       >
-                        <CFormGroup
-                          variant="custom-checkbox"
-                          inline
-                          key={index}
-                        >
-                          <CInputCheckbox
-                            custom
-                            name="storeId"
-                            id={"storeId" + item._id}
-                            value={item._id}
-                            checked={item.isSelected}
-                          />
-                          <CLabel
-                            variant="custom-checkbox"
-                            htmlFor={"storeId" + item._id}
-                          >
-                            {item.title}
-                          </CLabel>
-                        </CFormGroup>
-                      </CDropdownItem>
-                    ))}
-                  </CDropdownMenu>
-                </CDropdown>
-              </CCol>
-              <CCol sm="12" md="2" lg="2" xs="12">
-                <CDropdown style={{ backgroundColor: "white" }}>
-                  <CDropdownToggle caret color="default btn-block">
-                    {" "}
-                    {employeeId.filter((item) => item.isSelected !== true)
-                      .length === 0
-                      ? "All Employees"
-                      : employeeId.filter((item) => item.isSelected === true)
-                          .length + " Employee"}
-                  </CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem onClick={() => employeeHandleChange("0")}>
-                      {" "}
-                      <CFormGroup variant="custom-checkbox" inline>
-                        <CInputCheckbox
-                          custom
-                          name="checkAllEmployee"
-                          id={"checkAllEmployee"}
-                          value={0}
-                          checked={fields.checkAllEmployee}
-                        />
-                        <CLabel
-                          variant="custom-checkbox"
-                          htmlFor={"checkAllEmployee"}
-                        >
-                          All Employees
-                        </CLabel>
-                      </CFormGroup>
-                    </CDropdownItem>
-                    {(employeeId || []).map((item, index) => (
-                      <CDropdownItem
-                        key={index}
-                        onClick={() => employeeHandleChange(item._id)}
-                      >
-                        <CFormGroup
-                          variant="custom-checkbox"
-                          inline
-                          key={index}
-                        >
-                          <CInputCheckbox
-                            custom
-                            name="employeeId"
-                            id={"employeeId" + item._id}
-                            value={item._id}
-                            checked={item.isSelected}
-                          />
-                          <CLabel
-                            variant="custom-checkbox"
-                            htmlFor={"employeeId" + item._id}
-                          >
-                            {item.name}
-                          </CLabel>
-                        </CFormGroup>
-                      </CDropdownItem>
-                    ))}
-                  </CDropdownMenu>
-                </CDropdown>
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol xs="12" sm="12">
-                <CCard>
-                  <CCardHeader>
-                    <CRow>
-                      <CCol
-                        xs="12"
-                        sm="4"
-                        md="4"
-                        xl="xl"
-                        className="mb-3 mb-xl-0"
-                      >
-                        <CButton
-                          color="success"
-                          className="btn-square pull right"
-                          onClick={addTimeCard}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 512 512"
-                            className="c-icon c-icon-sm"
-                            role="img"
-                          >
-                            <polygon
-                              fill="var(--ci-primary-color, currentColor)"
-                              points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
-                              className="ci-primary"
-                            ></polygon>
-                          </svg>
-                          ADD TIMECARD
-                        </CButton>
-
-                        {timeCard.timeCard_list.filter(
-                          (item) => item.isDeleted === true
-                        ).length > 0 ? (
-                          <React.Fragment>
-                            <ConformationAlert
-                              button_text="Delete"
-                              heading="Delete Time Card"
-                              section={`Are you sure you want to delete the Time Card?`}
-                              buttonAction={deleteTimeCard}
-                              show_alert={showAlert}
-                              hideAlert={setShowAlert}
-                              variant="outline"
-                              className="ml-2 btn-square"
-                              color="danger"
-                              block={false}
+                        <span>{label}</span>
+                      </CButton>
+                    </DatetimeRangePicker>
+                  </CCol>
+                  <CCol sm="12" md="2" lg="2" xs="12">
+                    <CDropdown style={{ backgroundColor: "white" }}>
+                      <CDropdownToggle caret color="default  btn-block">
+                        {" "}
+                        {storeId.filter((item) => item.isSelected !== true)
+                          .length === 0
+                          ? "All Stores"
+                          : storeId.filter((item) => item.isSelected === true)
+                              .length + " Stores"}
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem onClick={() => storeHandleChange("0")}>
+                          {" "}
+                          <CFormGroup variant="custom-checkbox" inline>
+                            <CInputCheckbox
+                              custom
+                              name="checkAll"
+                              id={"checkAll"}
+                              value={0}
+                              checked={fields.checkAll}
                             />
-                          </React.Fragment>
-                        ) : (
-                          ""
-                        )}
-                      </CCol>
-                    </CRow>
-                  </CCardHeader>
-                  <CCardBody>
-                    <TimeCardDatatable
-                      timeCard_list={timeCard.timeCard_list}
-                      store={store.stores_list}
-                    />
-                  </CCardBody>
-                </CCard>
-              </CCol>
-            </CRow>
-          </React.Fragment>
-        ) : (
-          ""
-        )}
-      </div>
-    </React.Fragment>
-        }
+                            <CLabel
+                              variant="custom-checkbox"
+                              htmlFor={"checkAll"}
+                            >
+                              All Stores
+                            </CLabel>
+                          </CFormGroup>
+                        </CDropdownItem>
+                        {(storeId || []).map((item, index) => (
+                          <CDropdownItem
+                            key={index}
+                            onClick={() => storeHandleChange(item._id)}
+                          >
+                            <CFormGroup
+                              variant="custom-checkbox"
+                              inline
+                              key={index}
+                            >
+                              <CInputCheckbox
+                                custom
+                                name="storeId"
+                                id={"storeId" + item._id}
+                                value={item._id}
+                                checked={item.isSelected}
+                              />
+                              <CLabel
+                                variant="custom-checkbox"
+                                htmlFor={"storeId" + item._id}
+                              >
+                                {item.title}
+                              </CLabel>
+                            </CFormGroup>
+                          </CDropdownItem>
+                        ))}
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                  <CCol sm="12" md="2" lg="2" xs="12">
+                    <CDropdown style={{ backgroundColor: "white" }}>
+                      <CDropdownToggle caret color="default btn-block">
+                        {" "}
+                        {employeeId.filter((item) => item.isSelected !== true)
+                          .length === 0
+                          ? "All Employees"
+                          : employeeId.filter(
+                              (item) => item.isSelected === true
+                            ).length + " Employee"}
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem
+                          onClick={() => employeeHandleChange("0")}
+                        >
+                          {" "}
+                          <CFormGroup variant="custom-checkbox" inline>
+                            <CInputCheckbox
+                              custom
+                              name="checkAllEmployee"
+                              id={"checkAllEmployee"}
+                              value={0}
+                              checked={fields.checkAllEmployee}
+                            />
+                            <CLabel
+                              variant="custom-checkbox"
+                              htmlFor={"checkAllEmployee"}
+                            >
+                              All Employees
+                            </CLabel>
+                          </CFormGroup>
+                        </CDropdownItem>
+                        {(employeeId || []).map((item, index) => (
+                          <CDropdownItem
+                            key={index}
+                            onClick={() => employeeHandleChange(item._id)}
+                          >
+                            <CFormGroup
+                              variant="custom-checkbox"
+                              inline
+                              key={index}
+                            >
+                              <CInputCheckbox
+                                custom
+                                name="employeeId"
+                                id={"employeeId" + item._id}
+                                value={item._id}
+                                checked={item.isSelected}
+                              />
+                              <CLabel
+                                variant="custom-checkbox"
+                                htmlFor={"employeeId" + item._id}
+                              >
+                                {item.name}
+                              </CLabel>
+                            </CFormGroup>
+                          </CDropdownItem>
+                        ))}
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol xs="12" sm="12">
+                    <CCard>
+                      <CCardHeader>
+                        <CRow>
+                          <CCol
+                            xs="12"
+                            sm="4"
+                            md="4"
+                            xl="xl"
+                            className="mb-3 mb-xl-0"
+                          >
+                            <CButton
+                              color="success"
+                              className="btn-square pull right"
+                              onClick={addTimeCard}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512"
+                                className="c-icon c-icon-sm"
+                                role="img"
+                              >
+                                <polygon
+                                  fill="var(--ci-primary-color, currentColor)"
+                                  points="440 240 272 240 272 72 240 72 240 240 72 240 72 272 240 272 240 440 272 440 272 272 440 272 440 240"
+                                  className="ci-primary"
+                                ></polygon>
+                              </svg>
+                              ADD TIMECARD
+                            </CButton>
+
+                            {timeCard.timeCard_list.filter(
+                              (item) => item.isDeleted === true
+                            ).length > 0 ? (
+                              <React.Fragment>
+                                <ConformationAlert
+                                  button_text="Delete"
+                                  heading="Delete Time Card"
+                                  section={`Are you sure you want to delete the Time Card?`}
+                                  buttonAction={deleteTimeCard}
+                                  show_alert={showAlert}
+                                  hideAlert={setShowAlert}
+                                  variant="outline"
+                                  className="ml-2 btn-square"
+                                  color="danger"
+                                  block={false}
+                                />
+                              </React.Fragment>
+                            ) : (
+                              ""
+                            )}
+                          </CCol>
+                        </CRow>
+                      </CCardHeader>
+                      <CCardBody>
+                        <TimeCardDatatable
+                          timeCard_list={timeCard.timeCard_list}
+                          store={store.stores_list}
+                        />
+                      </CCardBody>
+                    </CCard>
+                  </CCol>
+                </CRow>
+              </React.Fragment>
+            ) : (
+              ""
+            )}
+          </div>
+        </React.Fragment>
+      )}
     </>
   );
 };

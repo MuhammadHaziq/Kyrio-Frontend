@@ -322,53 +322,43 @@ const Dashboard = (props) => {
         </CCol>
       </CRow>
       <CCard>
-        <CCardBody>
-          <CRow className="text-center mb-2">
-            <table className="responsive">
-              <tbody>
-                <tr>
-                  <SalesCards
-                    title="Gross sales"
-                    value={grossSales}
-                    salesFilter={salesFilter}
-                    color="success"
-                    handleOnChangeSales={() =>
-                      handleOnChangeSales("Gross sales")
-                    }
-                  />
-                  <SalesCards
-                    title="Refunds"
-                    value={refunds}
-                    salesFilter={salesFilter}
-                    color="danger"
-                    handleOnChangeSales={() => handleOnChangeSales("Refunds")}
-                  />
-                  <SalesCards
-                    title="Discounts"
-                    value={discounts}
-                    salesFilter={salesFilter}
-                    color="warning"
-                    handleOnChangeSales={() => handleOnChangeSales("Discounts")}
-                  />
-                  <SalesCards
-                    title="Net sales"
-                    value={netSales}
-                    salesFilter={salesFilter}
-                    color="info"
-                    handleOnChangeSales={() => handleOnChangeSales("Net sales")}
-                  />
-                  <SalesCards
-                    title="Gross profit"
-                    value={grossProfit}
-                    salesFilter={salesFilter}
-                    color="primary"
-                    handleOnChangeSales={() =>
-                      handleOnChangeSales("Gross profit")
-                    }
-                  />
-                </tr>
-              </tbody>
-            </table>
+        <CCardBody className="card-body">
+          <CRow className="text-center table-row">
+            <SalesCards
+              title="Gross sales"
+              value={grossSales}
+              salesFilter={salesFilter}
+              color="success"
+              handleOnChangeSales={() => handleOnChangeSales("Gross sales")}
+            />
+            <SalesCards
+              title="Refunds"
+              value={refunds}
+              salesFilter={salesFilter}
+              color="danger"
+              handleOnChangeSales={() => handleOnChangeSales("Refunds")}
+            />
+            <SalesCards
+              title="Discounts"
+              value={discounts}
+              salesFilter={salesFilter}
+              color="warning"
+              handleOnChangeSales={() => handleOnChangeSales("Discounts")}
+            />
+            <SalesCards
+              title="Net sales"
+              value={netSales}
+              salesFilter={salesFilter}
+              color="info"
+              handleOnChangeSales={() => handleOnChangeSales("Net sales")}
+            />
+            <SalesCards
+              title="Gross profit"
+              value={grossProfit}
+              salesFilter={salesFilter}
+              color="primary"
+              handleOnChangeSales={() => handleOnChangeSales("Gross profit")}
+            />
           </CRow>
         </CCardBody>
       </CCard>

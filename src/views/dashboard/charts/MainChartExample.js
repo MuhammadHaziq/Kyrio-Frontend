@@ -38,8 +38,10 @@ const MainChartExample = (attributes) => {
             ticks: {
               beginAtZero: true,
               maxTicksLimit: 10,
-              stepSize: Math.ceil(Math.max(...(data || [])) / 10),
-              max: Math.max(...(data || [])) + 100,
+              // stepSize: Math.ceil(Math.max(...(data || [])) / 10),
+              // max: Math.max(...(data || [])) + 100,
+              stepSize: 8,
+              max: parseInt(Math.max(...(data || [])) + 60),
             },
             gridLines: {
               display: true,

@@ -3,35 +3,23 @@ import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCardFooter,
   CCol,
   CInput,
   CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CRow,
   CInvalidFeedback,
   CFormGroup,
   CInputCheckbox,
   CLabel,
-  CLink,
   CCollapse,
-  CSelect,
-  CFormText,
   CSwitch,
   CListGroup,
   CListGroupItem,
 } from "@coreui/react";
 import validator from "validator";
 import parse from "html-react-parser";
-import {
-  toggleBackOffice,
-  togglePOS,
-  toggle_back_office_module,
-  toggle_pos_module,
-  update_user_role,
-} from "../../../actions/employee/userRolesActions";
+import { update_user_role } from "../../../actions/employee/userRolesActions";
 // import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import { useSelector, useDispatch } from "react-redux";
 const EditUserRole = (props) => {

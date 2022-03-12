@@ -14,12 +14,12 @@
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .card-body {
-    max-width: 150%;
+    max-width: 200%;
     overflow-x: scroll;
     overflow-y: hidden;
   }
   .table-row {
-    width: 150%;
+    width: 200%;
     overflow-x: scroll;
   }
 }
@@ -27,12 +27,12 @@
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
   .card-body {
-    max-width: 150%;
+    max-width: 200%;
     overflow-x: scroll;
     overflow-y: hidden;
   }
   .table-row {
-    width: 150%;
+    width: 200%;
     overflow-x: scroll;
   }
 }
@@ -40,12 +40,12 @@
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .card-body {
-    max-width: 150%;
+    max-width: 200%;
     overflow-x: scroll;
     overflow-y: hidden;
   }
   .table-row {
-    width: 150%;
+    width: 200%;
     overflow-x: scroll;
   }
 }

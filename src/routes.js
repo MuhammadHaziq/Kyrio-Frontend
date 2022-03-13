@@ -4,9 +4,7 @@ import React from "react";
 const Dashboard = React.lazy(() =>
   import("./views/dashboard/dashboardSummary/Dashboard")
 );
-const Account = React.lazy(() =>
-  import("./views/Account/Account.jsx")
-);
+const Account = React.lazy(() => import("./views/Account/Account.jsx"));
 
 const SalesItem = React.lazy(() => import("./views/dashboard/item/SalesItem"));
 // const SalesItem = React.lazy(() =>
@@ -49,13 +47,23 @@ const TotalHoursWorked = React.lazy(() =>
 );
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-
   { path: "/", exact: true, name: "Home", Component: Dashboard },
+  {
+    path: "/confirm/:uuid",
+    exact: true,
+    name: "Confirm Email",
+    Component: Dashboard,
+  },
   { path: "/account", exact: true, name: "Account", Component: Account },
   { path: "/customers", exact: true, name: "Customer", Component: Customers },
   { path: "/inventory", exact: true, name: "Dashboard", Component: Dashboard },
-  { path: "/reports", name: "Reports", Component: Dashboard, exact: true, },
-  { path: "/reports/sales", name: "Sales Summary", Component: Dashboard, exact: true, },
+  { path: "/reports", name: "Reports", Component: Dashboard, exact: true },
+  {
+    path: "/reports/sales",
+    name: "Sales Summary",
+    Component: Dashboard,
+    exact: true,
+  },
   {
     path: "/reports/goods",
     name: "Sale by Items",
@@ -117,10 +125,30 @@ const routes = [
     Component: Features,
   },
   { path: "/items", name: "Item", exact: true, Component: ItemsList },
-  { path: "/items/categories", exact: true, name: "Category-list", Component: CategoryList },
-  { path: "/items/discounts", exact: true, name: "Discount-list", Component: DiscountList },
-  { path: "/items/modifiers", exact: true, name: "Modifire-list", Component: Modifires },
-  { path: "/items/customers", exact: true, name: "Customer", Component: Customers },
+  {
+    path: "/items/categories",
+    exact: true,
+    name: "Category-list",
+    Component: CategoryList,
+  },
+  {
+    path: "/items/discounts",
+    exact: true,
+    name: "Discount-list",
+    Component: DiscountList,
+  },
+  {
+    path: "/items/modifiers",
+    exact: true,
+    name: "Modifire-list",
+    Component: Modifires,
+  },
+  {
+    path: "/items/customers",
+    exact: true,
+    name: "Customer",
+    Component: Customers,
+  },
   {
     path: "/employees",
     name: "Employee List",

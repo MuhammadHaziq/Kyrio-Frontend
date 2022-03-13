@@ -205,7 +205,6 @@ const CancelReceipt = (props) => {
           title: dis.title,
           percent: dis.type == "Percentage" ? dis.value + "%" : "",
           type: dis.type,
-          // price: dis.type == 'Percentage' ? parseFloat((dis.value/100)*ite.total_price).toFixed(2) : parseFloat(dis.value).toFixed(2)
           price: parseFloat(dis.discount_total).toFixed(2),
         })
       )

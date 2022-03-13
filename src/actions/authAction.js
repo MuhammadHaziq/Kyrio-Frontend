@@ -1,4 +1,10 @@
-import { LOGIN, MESSAGE, ERROR_MESSAGE, LOGOUT } from "../constants/ActionTypes";
+import {
+  LOGIN,
+  MESSAGE,
+  ERROR_MESSAGE,
+  LOGOUT,
+  CONFIRM,
+} from "../constants/ActionTypes";
 import axios from "axios";
 import { BaseUrl } from "../constants/baseUrls";
 // import jwt from "jsonwebtoken";
@@ -103,12 +109,56 @@ export const signup = (data) => {
     }
   };
 };
+export const confirmEmail = (data) => {
+  return (dispatch) => {
+    try {
+      axios({
+        method: "get",
+        url: `${BaseUrl}users/confirm/${data}`,
+      })
+        .then((response) => {
+          dispatch({ type: CONFIRM, response: response.data });
+          if (response.data.success) {
+            let msg = {
+              open: true,
+              message: `Email verified successfully`,
+              object: {},
+              error: false,
+            };
+            dispatch({ type: MESSAGE, data: msg });
+          }
+        })
+        .catch((error) => {
+          let msg = {
+            open: true,
+            message:
+              typeof error.response != "undefined"
+                ? error.response.data.message
+                : ERROR_MESSAGE,
+            object: error,
+            error: true,
+          };
+          dispatch({ type: MESSAGE, data: msg });
+        });
+    } catch (error) {
+      let msg = {
+        open: true,
+        message:
+          typeof error.response != "undefined"
+            ? error.response.data.message
+            : ERROR_MESSAGE,
+        object: {},
+        error: true,
+      };
+      dispatch({ type: MESSAGE, data: msg });
+    }
+  };
+};
 
 export const Logout = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: LOGOUT,
-
-    })
-  }
-}
+    });
+  };
+};

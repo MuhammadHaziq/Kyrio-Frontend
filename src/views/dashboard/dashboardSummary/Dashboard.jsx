@@ -9,15 +9,16 @@ import {
   CRow,
 } from "@coreui/react";
 import MainChartExample from "../charts/MainChartExample.js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getStyle, hexToRgba } from "@coreui/utils/src";
 import DashboardFilter from "./DashboardFilter";
 import SalesCards from "./SalesCards";
 import SalesSummaryDatatableNew from "../../../datatables/sales/SalesSummaryDatatableNew";
+import { confirmEmail } from "../../../actions/authAction";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
 import { amountFormat } from "../../../utils/helpers";
-// const DashboardCard = lazy(() => import("./DashboardCard.jsx"));
+
 const brandSuccess = getStyle("success") || "#4dbd74";
 const brandInfo = getStyle("info") || "#20a8d8";
 const brandDanger = getStyle("danger") || "#f86c6b";
@@ -27,6 +28,13 @@ const brandSecondary = getStyle("secondary") || "#8a93a2";
 
 const Dashboard = (props) => {
   // States
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let urlSplit = props.location.pathname.split("/");
+    if (urlSplit[1] === "confirm") {
+      dispatch(confirmEmail(urlSplit[2]));
+    }
+  }, []);
   const decimal = useSelector((state) => state.auth.user.decimal);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("Hours");

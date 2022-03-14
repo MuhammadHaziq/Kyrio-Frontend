@@ -89,18 +89,18 @@ const General = () => {
         user.features.filter(
           (item) =>
             item.feature.title.toUpperCase() ===
-            "Customer displays".toUpperCase() && item.enable === true
+              "Customer displays".toUpperCase() && item.enable === true
         ).length > 0,
 
         user.features.filter(
           (item) =>
             item.feature.title.toUpperCase() ===
-            "Dining options".toUpperCase() && item.enable === true
+              "Dining options".toUpperCase() && item.enable === true
         ).length > 0,
         user.features.filter(
           (item) =>
             item.feature.title.toUpperCase() ===
-            "Kitchen printers".toUpperCase() && item.enable === true
+              "Kitchen printers".toUpperCase() && item.enable === true
         ).length > 0,
       ]);
       setChecked(user.features);
@@ -257,11 +257,13 @@ const General = () => {
         <CCollapse show={collapsed[1]}>
           <CCardBody>
             {showFeatures ? (
-              <CListGroup style={{
-                display: 'flex',
-                flexDirection: "column",
-                flexWrap: "nowrap"
-              }}>
+              <CListGroup
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flexWrap: "nowrap",
+                }}
+              >
                 {/*// user.features */}
                 {(sChecked || []).map((itm, index) => {
                   return (
@@ -269,9 +271,9 @@ const General = () => {
                       key={index}
                       className="justify-content-between"
                       style={{
-                        lineHeight: '0.23px',
-                        border: 'none',
-                        padding: "0px"
+                        lineHeight: "0.23px",
+                        border: "none",
+                        padding: "0px",
                       }}
                     >
                       <h5>
@@ -305,7 +307,7 @@ const General = () => {
                   className="btn-pill pull-right"
                   outline="outline"
                 >
-                  BACK
+                  CANCEL
                 </CButton>
               </CCol>
               <CCol sm xs="6" md="6" lg="6" className="text-center mt-3">

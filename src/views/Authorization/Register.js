@@ -20,6 +20,7 @@ import {
   CSpinner,
 } from "@coreui/react";
 import { MdLock, MdBusiness, MdFlag } from "react-icons/md";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { CountryDropdown } from "react-country-region-selector";
 import { signup } from "../../actions/authAction";
@@ -28,6 +29,7 @@ import validator from "validator";
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formState, setFormState] = useState({
     values: {
       // username: "",
@@ -102,6 +104,11 @@ const Register = () => {
       },
     }));
   };
+
+  const showPasswordFunc = () => {
+    setShowPassword(!showPassword);
+  };
+
   const selectCountry = (val) => {
     setFormState({
       ...formState,
@@ -219,33 +226,6 @@ const Register = () => {
                   <p className="text-muted" style={{ fontSize: "18px" }}>
                     Create Your Free Kyrio Account
                   </p>
-                  {/* <CInputGroup className="mb-3">
-                    <CInputGroupPrepend>
-                      <CInputGroupText>
-                        <MdPerson />
-                      </CInputGroupText>
-                    </CInputGroupPrepend>
-                    <CInput
-                      type="text"
-                      placeholder="Username"
-                      autoComplete="username"
-                      name="username"
-                      invalid={
-                        formState.errors.username
-                          ? validator.isEmpty(formState.values.username)
-                            ? true
-                            : false
-                          : false
-                      }
-                      value={formState.values.username}
-                      onChange={(e) => handleChange(e)}
-                    />
-                    {validator.isEmpty(formState.values.username) ? (
-                      <CInvalidFeedback>This cannot be blank</CInvalidFeedback>
-                    ) : (
-                      ""
-                    )}
-                  </CInputGroup> */}
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>
@@ -282,13 +262,16 @@ const Register = () => {
                     )}
                   </CInputGroup>
                   <CInputGroup className="mb-3">
-                    <CInputGroupPrepend>
+                    <CInputGroupPrepend
+                      onClick={showPasswordFunc}
+                      style={{ cursor: "pointer" }}
+                    >
                       <CInputGroupText>
-                        <MdLock />
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
                       </CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Password"
                       autoComplete="new-password"
                       invalid={

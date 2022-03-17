@@ -19,7 +19,7 @@ import {
   CLabel,
   CSpinner,
 } from "@coreui/react";
-import { MdPerson, MdLock, MdBusiness, MdFlag } from "react-icons/md";
+import { MdLock, MdBusiness, MdFlag } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { CountryDropdown } from "react-country-region-selector";
 import { signup } from "../../actions/authAction";
@@ -206,7 +206,7 @@ const Register = () => {
       {redirect ? <Redirect to="/dashboard" /> : ""}
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md="9" lg="7" xl="6">
+          <CCol md="6" lg="7" xl="6">
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm>

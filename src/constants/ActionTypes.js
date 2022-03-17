@@ -18,6 +18,9 @@ export const CHANGE_UPDATE_CHECK = "CHANGE_UPDATE_CHECK";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const CONFIRM = "CONFIRM";
+export const RESET_PASSWORD_REQUEST = "RESET_PASSWORD_REQUEST";
+export const CONFIRM_PASSWORD = "CONFIRM_PASSWORD";
+export const CHECK_URL = "CHECK_URL";
 
 // DEFAULT Message Handler
 export const MESSAGE = "MESSAGE";

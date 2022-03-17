@@ -1,4 +1,10 @@
-import { LOGIN, TOGGLE_FEATURE_MODULE, GET_FEATURE_MODULE, LOGOUT, SET_ACCESS_RIGHT_MODULE } from "../constants/ActionTypes";
+import {
+  LOGIN,
+  TOGGLE_FEATURE_MODULE,
+  GET_FEATURE_MODULE,
+  LOGOUT,
+  SET_ACCESS_RIGHT_MODULE,
+} from "../constants/ActionTypes";
 
 const initialState = {
   user: {},
@@ -11,31 +17,31 @@ const settingsReducer = (state = initialState, action) => {
 
     case TOGGLE_FEATURE_MODULE: {
       const data = action.response;
-      
+
       return Object.assign({}, state, {
         user: Object.assign({}, state.user, {
           features: data.features,
-          settings: data.settings
+          settings: data.settings,
         }),
       });
     }
 
     case SET_ACCESS_RIGHT_MODULE: {
       const data = action.response;
-      
+
       return Object.assign({}, state, {
         user: Object.assign({}, state.user, {
-          roleData: data
+          roleData: data,
         }),
       });
     }
     case GET_FEATURE_MODULE: {
       const data = action.response;
-      
+
       return Object.assign({}, state, {
         user: Object.assign({}, state.user, {
           features: data.features,
-          settings: data.settings
+          settings: data.settings,
         }),
       });
     }
@@ -44,7 +50,7 @@ const settingsReducer = (state = initialState, action) => {
       return {
         ...state,
         user: {},
-      }
+      };
     }
     default:
       return state;

@@ -13,6 +13,12 @@ const loading = (
 
 // Containers
 const Login = React.lazy(() => import("./views/Authorization/Login"));
+const ResetPassword = React.lazy(() =>
+  import("./views/Authorization/ResetPassword")
+);
+const ChangePassword = React.lazy(() =>
+  import("./views/Authorization/ChangePassword")
+);
 const Register = React.lazy(() => import("./views/Authorization/Register"));
 const Page404 = React.lazy(() => import("./views/Errors/Page404"));
 const Page500 = React.lazy(() => import("./views/Errors/Page500"));
@@ -72,6 +78,18 @@ const App = () => {
           ""
         )}
         <Switch>
+          <Route
+            exact
+            path="/resetpswd"
+            name="Reset Password"
+            render={(props) => <ResetPassword {...props} />}
+          />
+          <Route
+            exact
+            path="/changepswd/:uuid"
+            name="Change Password"
+            render={(props) => <ChangePassword {...props} />}
+          />
           <Route
             exact
             path="/login"

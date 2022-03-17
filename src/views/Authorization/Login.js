@@ -16,7 +16,8 @@ import {
   CInvalidFeedback,
   CSpinner,
 } from "@coreui/react";
-import { MdPerson, MdLock } from "react-icons/md";
+import { MdPerson } from "react-icons/md";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../actions/authAction";
 import validator from "validator";
@@ -57,6 +58,7 @@ const Login = () => {
   }, []);
   const [loading, setLoading] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formState, setFormState] = useState({
     values: {
       email: "",
@@ -77,6 +79,11 @@ const Login = () => {
       },
     }));
   };
+
+  const showPasswordFunc = () => {
+    setShowPassword(!showPassword);
+  };
+
   const loginUser = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -109,7 +116,7 @@ const Login = () => {
       let data = {
         email: formState.values.email,
         password: formState.values.password,
-        platform: "backoffice"
+        platform: "backoffice",
       };
       dispatch(login(data));
     }
@@ -120,18 +127,20 @@ const Login = () => {
 
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md="8">
+          <CCol md="6">
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
                   <CForm onSubmit={loginUser}>
                     <img
-                        src={"logo/logo.png"}
-                        className="c-sidebar-brand-full"
-                        alt="kyrio POS"
-                        style={{ width: "142px", height: "100%" }}
-                      />
-                    <p className="text-muted" style={{ fontSize: "18px" }}>Sign In to your Kyrio account</p>
+                      src={"logo/logo.png"}
+                      className="c-sidebar-brand-full"
+                      alt="kyrio POS"
+                      style={{ width: "142px", height: "100%" }}
+                    />
+                    <p className="text-muted" style={{ fontSize: "18px" }}>
+                      Sign In to your Kyrio account
+                    </p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -145,8 +154,8 @@ const Login = () => {
                             ? validator.isEmpty(formState.values.email)
                               ? true
                               : !validator.isEmail(formState.values.email)
-                                ? true
-                                : formState.errors.email
+                              ? true
+                              : formState.errors.email
                             : false
                         }
                         placeholder="email"
@@ -170,13 +179,16 @@ const Login = () => {
                       )}
                     </CInputGroup>
                     <CInputGroup className="mb-4">
-                      <CInputGroupPrepend>
+                      <CInputGroupPrepend
+                        onClick={showPasswordFunc}
+                        style={{ cursor: "pointer" }}
+                      >
                         <CInputGroupText>
-                          <MdLock />
+                          {showPassword ? <FaEye /> : <FaEyeSlash />}
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         invalid={
                           formState.errors.password
                             ? validator.isEmpty(formState.values.email)
@@ -209,9 +221,11 @@ const Login = () => {
                         </CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
-                        </CButton>
+                        <Link to="/resetpswd">
+                          <CButton color="link" className="px-0">
+                            Forgot password?
+                          </CButton>
+                        </Link>
                       </CCol>
                       <CCol xs="12" className="text-right">
                         <Link to="/register">

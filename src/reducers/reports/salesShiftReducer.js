@@ -4,12 +4,15 @@ import {
   TOGGLE_SHIFT_SALE_SUMMARY_ALL_SELECT,
   DELETE_SHIFT_SALES_SUMMARY,
   ROW_DATA_SHIFT_SALES_SUMMARY,
+  TOGGLE_SHIFT_SIDEBAR,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   sale_shift_summary: [],
   redirect_update: false,
   redirect_sale_shift_summary: true,
+  show_shift_detail: false,
+  sales_shift_data: [],
 };
 const salesShiftReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -19,7 +22,19 @@ const salesShiftReducer = (state = initialState, action) => {
         sale_shift_summary: action.response,
       });
     }
-
+    case ROW_DATA_SHIFT_SALES_SUMMARY: {
+      return {
+        ...state,
+        show_shift_detail: action.status,
+        sales_shift_data: action.response,
+      };
+    }
+    case TOGGLE_SHIFT_SIDEBAR: {
+      return {
+        ...state,
+        show_shift_detail: action.status,
+      };
+    }
     case TOGGLE_SHIFT_SALE_SUMMARY_SINGLE_SELECT: {
       return Object.assign({}, state, {
         sale_shift_summary: state.sale_shift_summary.map((item) => {

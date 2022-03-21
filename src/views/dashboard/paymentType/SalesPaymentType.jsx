@@ -84,7 +84,9 @@ const SalesPaymentType = () => {
                             })
                           : []
                       }
-                      filename={"SalesByItem" + dateformat(new Date()) + ".csv"}
+                      filename={
+                        "SalesByPaymentType" + dateformat(new Date()) + ".csv"
+                      }
                       target="_blank"
                     >
                       <CButton color="secondary" className="btn-square">

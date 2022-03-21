@@ -38,7 +38,6 @@ const SalesReceiptDatatable = (props) => {
       hover
       outlined
       pagination
-      outlined
       clickableRows
       onRowClick={clickRow}
       scopedSlots={{

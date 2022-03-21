@@ -75,6 +75,18 @@
     overflow-x: scroll;
   }
 }
+
+// START For Sale Receipt
+.react-confirm-alert-overlay {
+  z-index: 99999;
+}
+.cancel-alert {
+  padding-top: 10px;
+  position: relative;
+  opacity: 0.85;
+}
+// END
+
 .salescard {
   cursor: pointer;
   width: 20%;

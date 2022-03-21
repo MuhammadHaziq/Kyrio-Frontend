@@ -1,8 +1,0 @@
-.react-confirm-alert-overlay {
-    z-index: 99999;
-}
-.cancel-alert {
-    padding-top: 10px;
-    position: relative;
-    opacity: .85;
-}

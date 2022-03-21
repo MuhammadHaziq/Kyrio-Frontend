@@ -1,5 +1,4 @@
-import "./index.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   CNav,
   CNavItem,
@@ -308,7 +307,7 @@ const CancelReceipt = (props) => {
         </CNavItem>
       </CNav>
       {(sales_receipt_data || []).map((item, index) => (
-        <CCard style={{ overflowX: "hidden", overflowY: "scroll" }}>
+        <CCard style={{ overflowY: "hidden" }}>
           {typeof item?.cancelled_by !== "undefined" && item?.cancelled_by ? (
             <CRow className="">
               <CCol
@@ -331,7 +330,7 @@ const CancelReceipt = (props) => {
           ) : (
             ""
           )}
-          <CCardBody>
+          <CCardBody style={{ overflowY: "scroll" }}>
             <CRow className="p-3">
               <CCol sm="12" md="12" lg="12" style={{ textAlign: "center" }}>
                 <h2>{<Amount value={item?.total_price} />}</h2>

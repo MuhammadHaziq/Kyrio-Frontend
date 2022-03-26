@@ -19,7 +19,7 @@ const SalesShiftDatatable = (props) => {
       itemsPerPageSelect
       items={props.sale_receipt_sumary}
       fields={[
-        { key: "pos_device_id", label: "POS", filter: true },
+        { key: "pos_device", label: "POS", filter: true },
         { key: "opened_at", label: "Opening time", filter: true },
         {
           key: "closed_at",
@@ -39,8 +39,8 @@ const SalesShiftDatatable = (props) => {
       clickableRows
       onRowClick={clickRow}
       scopedSlots={{
-        pos_device_id: (item) => {
-          return <td>{item?.pos_device_id?.title}</td>;
+        pos_device: (item) => {
+          return <td>{item?.pos_device?.title}</td>;
         },
         opened_at: (item) => {
           return (

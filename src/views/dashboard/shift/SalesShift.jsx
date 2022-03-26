@@ -10,10 +10,9 @@ import {
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import { get_shift_summary } from "../../../actions/reports/salesShiftActions";
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
 import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
-import CancelReceipt from "./ShiftDetail";
+import ShiftDetail from "./ShiftDetail";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
 
@@ -21,6 +20,9 @@ const SalesReceipts = () => {
   const dispatch = useDispatch();
   const sale_shift_summary = useSelector(
     (state) => state.reports.salesShiftReducer.sale_shift_summary
+  );
+  const sales_shift_data = useSelector(
+    (state) => state.reports.salesShiftReducer.sales_shift_data
   );
 
   const [filterReset, setFilterReset] = useState(false);
@@ -82,7 +84,7 @@ const SalesReceipts = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CancelReceipt />
+      {Object.keys(sales_shift_data).length > 0 ? <ShiftDetail /> : ""}
     </>
   );
 };

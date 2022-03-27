@@ -28,7 +28,7 @@ const PaymentTypes = () => {
   const [fadeAddPaymentTypes, setFadeAddPaymentTypes] = useState(false);
   const [fadeUpdatePaymentTypes, setFadeUpdatePaymentTypes] = useState(false);
   const [timeout] = useState(300);
-  const [storeId, setStoreId] = useState();
+  const [storeId, setStoreId] = useState("0");
 
   const dispatch = useDispatch();
   const payment_types = useSelector(
@@ -45,9 +45,9 @@ const PaymentTypes = () => {
   );
   const auth = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
-  }, [auth]);
+  // useEffect(() => {
+  //   setStoreId(auth.user.stores[0] ? auth.user.stores[0]._id : "");
+  // }, [auth]);
 
   // useEffect(() => {
   //   if (payment_types.length === 0 || payment_types === undefined) {
@@ -55,16 +55,18 @@ const PaymentTypes = () => {
   //   }
   // }, [dispatch, payment_types]);
   useEffect(() => {
+    if (payment_types.length === 0 || payment_types === undefined) {
       dispatch(get_payment_types());
+    }
   }, []);
   useEffect(() => {
-    if (storeId !== "" && typeof storeId !== "undefined") {
-      const data = {
-        storeId,
-      };
-      dispatch(get_payments_type(data));
-    }
-  }, [dispatch, storeId]);
+    // if (storeId !== "" && typeof storeId !== "undefined") {
+    //   const data = {
+    //     storeId,
+    //   };
+      dispatch(get_payments_type());
+    // }
+  }, [dispatch]);
 
   useEffect(() => {
     if (update_redirect === true && update_redirect !== undefined) {

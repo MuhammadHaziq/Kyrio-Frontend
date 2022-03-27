@@ -139,14 +139,12 @@ export const add_new_payment_type = (data) => {
   };
 };
 
-export const get_payments_type = (data) => {
+export const get_payments_type = () => {
   return (dispatch) => {
     try {
       authAxios({
         method: "get",
         url: `paymentsType`,
-        params: data,
-
       })
         .then((response) => {
           dispatch({

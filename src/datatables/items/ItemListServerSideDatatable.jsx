@@ -52,6 +52,7 @@ const ItemListServerSideDatatable = (props) => {
 
     useEffect(() => {
         const params = {
+            
             page: page === 0 ? 1 : page,
             columnFilterValue: JSON.stringify(columnFilterValue),
             tableFilterValue,

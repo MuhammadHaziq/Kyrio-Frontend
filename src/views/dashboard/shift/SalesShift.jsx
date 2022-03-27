@@ -7,14 +7,15 @@ import {
   CCol,
   CRow,
 } from "@coreui/react";
-import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import { get_shift_summary } from "../../../actions/reports/salesShiftActions";
 import { useSelector, useDispatch } from "react-redux";
-import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
-import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
-import ShiftDetail from "./ShiftDetail";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
+import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
+import { get_shift_summary } from "../../../actions/reports/salesShiftActions";
+import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
+import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
+import { amountFormat } from "../../../utils/helpers";
+import ShiftDetail from "./ShiftDetail";
 
 const SalesReceipts = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const SalesReceipts = () => {
   const sales_shift_data = useSelector(
     (state) => state.reports.salesShiftReducer.sales_shift_data
   );
+  const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [filterReset, setFilterReset] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,6 +53,7 @@ const SalesReceipts = () => {
         daysFilter={daysFilter}
         resetFilter={filterReset}
         filter={false}
+        hideFilter={true}
         get_filter_record={get_shift_summary}
       />
       <CRow>
@@ -62,8 +65,61 @@ const SalesReceipts = () => {
                   {typeof sale_shift_summary !== "undefined" &&
                   sale_shift_summary?.shifts?.length > 0 ? (
                     <CSVLink
-                      data={[]}
-                      filename={"ShiftReport" + dateformat(new Date()) + ".csv"}
+                      data={
+                        sale_shift_summary?.shifts?.length > 0
+                          ? sale_shift_summary?.shifts?.map((item) => {
+                              // 2/27/2022 14:49
+                              return {
+                                ["POS"]: item?.pos_device?.title,
+                                ["Shift opening time"]: dateformat(
+                                  item?.opened_at,
+                                  "mm/dd/yyyy hh:mm"
+                                ),
+                                ["Shfit opened"]:
+                                  item?.opened_by_employee?.name,
+                                ["Shift closing time"]: dateformat(
+                                  item?.closed_at,
+                                  "mm/dd/yyyy hh:mm"
+                                ),
+                                ["Shift closed"]:
+                                  item?.closed_by_employee?.name,
+                                ["Starting cash"]: amountFormat(
+                                  item?.starting_cash,
+                                  parseInt(decimal)
+                                ),
+                                ["Cash payments"]: amountFormat(
+                                  item?.cash_payments,
+                                  parseInt(decimal)
+                                ),
+                                ["Cash refunds"]: amountFormat(
+                                  item?.cash_refunds,
+                                  parseInt(decimal)
+                                ),
+                                ["Paid in"]: amountFormat(
+                                  item?.paid_in,
+                                  parseInt(decimal)
+                                ),
+                                ["Paid out"]: amountFormat(
+                                  item?.paid_out,
+                                  parseInt(decimal)
+                                ),
+                                ["Expected cash amount"]: amountFormat(
+                                  item?.expected_cash,
+                                  parseInt(decimal)
+                                ),
+                                ["Actual cash amount"]: amountFormat(
+                                  item?.actual_cash,
+                                  parseInt(decimal)
+                                ),
+                                ["Difference"]: amountFormat(
+                                  item?.expected_cash - item?.actual_cash,
+                                  parseInt(decimal)
+                                ),
+                              };
+                            })
+                          : []
+                      }
+                      filename={"shifts-" + dateformat(new Date()) + ".csv"}
                       target="_blank"
                     >
                       <CButton color="secondary" className="btn-square">

@@ -84,7 +84,7 @@ const DiscountList = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn col-sm-12 col-md-8 col-lg-8">
+      <div className="animated fadeIn col-sm-12 col-md-10 col-lg-10">
         {fadeUpdateDiscount ? (
           <CFade timeout={timeout} in={fadeUpdateDiscount}>
             <UpdateDiscount
@@ -163,7 +163,7 @@ const DiscountList = (props) => {
                           value={selectedStoreId}
                           onChange={storeHandleChange}
                         >
-                          <option value="0">Select Store</option>
+                          <option value="0">All Store</option>
                           {store.stores_list.map((item, index) => {
                             return (
                               <option value={item._id} key={index}>

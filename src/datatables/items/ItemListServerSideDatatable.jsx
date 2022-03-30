@@ -183,14 +183,13 @@ const ItemListServerSideDatatable = (props) => {
                         const cost = item.cost !== undefined && item.cost !== null ? item.cost : 0;
 
                         let margin = "-";
-
                         if (cost == 0 && price !== 0) {
                             margin = 100
                         } else if (cost !== 0 && price !== 0) {
                             margin = ((price - cost) / price) * 100
                         }
                         if (margin !== "-") {
-                            return <td>{<Amount value={item.cost} sign="%" />}</td>;
+                            return <td>{<Amount value={margin} sign="%" />}</td>;
                         } else {
                             return <td>{<Amount value={0} sign="%" />}</td>;
                         }

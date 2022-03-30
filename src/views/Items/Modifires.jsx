@@ -85,7 +85,7 @@ const Modifires = (props) => {
 
   return (
     <React.Fragment>
-      <div className="animated fadeIn col-sm-12 col-md-8 col-lg-8">
+      <div className="animated fadeIn col-sm-12 col-md-10 col-lg-10">
         {fadeUpdateModifier ? (
           <CFade timeout={timeout} in={fadeUpdateModifier}>
             <UpdateModifier

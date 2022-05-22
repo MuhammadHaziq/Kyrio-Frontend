@@ -5,13 +5,7 @@ const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";
 const ImageLocalUrl = "http://localhost:3002/";
 const ImageLiveUrl = "https://api.kyriopos.com/";
 
-export const imageBaseUrl =
-  window.location.protocol +
-  "//" +
-  window.location.hostname +
-  ":" +
-  "3002" +
-  "/";
+export const imageBaseUrl = "https://api.kyriopos.com/";
 let Base_Url = "";
 let Image_Url = "";
 

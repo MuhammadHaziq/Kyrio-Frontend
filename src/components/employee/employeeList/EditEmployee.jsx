@@ -294,6 +294,7 @@ const EditEmployee = (props) => {
       });
       return false;
     } else {
+      let role_id = typeof fields.role._id === "undefined" ? fields.role : fields.role._id
       const data = {
         id: props.employee_row_data._id,
         name: fields.name,
@@ -310,7 +311,7 @@ const EditEmployee = (props) => {
               return item._id
             }),
         role: props.user_roles
-            .filter((item) => item.role_id === fields.role._id)
+            .filter((item) => item.role_id === role_id)
             .map((item) => {
               return {
                 _id: item.role_id,
@@ -320,7 +321,7 @@ const EditEmployee = (props) => {
       };
       if (
         props.user_roles
-          .filter((item) => item.role_id === fields.role._id)
+          .filter((item) => item.role_id === role_id)
           .map((item) => {
             return item.allowBackoffice;
           })[0] === true
@@ -329,7 +330,7 @@ const EditEmployee = (props) => {
       }
       if (
         props.user_roles
-          .filter((item) => item.role_id === fields.role._id)
+          .filter((item) => item.role_id === role_id)
           .map((item) => {
             return item.allowPOS;
           })[0] === true

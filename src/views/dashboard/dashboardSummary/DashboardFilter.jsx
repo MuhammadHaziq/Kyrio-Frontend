@@ -311,10 +311,6 @@ const DashboardFilter = (props) => {
   useEffect(() => {
     dispatch(get_stores());
     dispatch(get_employee_list());
-    // $(".dropdown-menu").click(function (event) {
-    //   event.stopPropagation();
-    //   console.log(event);
-    // });
   }, [dispatch]);
 
   useEffect(() => {
@@ -771,7 +767,7 @@ const DashboardFilter = (props) => {
             </CButton>
           </DatetimeRangePicker>
         </CCol>
-        <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
+        {/* <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
               <MdAvTimer />
@@ -782,7 +778,6 @@ const DashboardFilter = (props) => {
             </CDropdownToggle>
 
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
-              {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={(e) => handleOnChange(e, 0)}>
                 <CInputGroup
                   variant="custom-radio"
@@ -864,7 +859,8 @@ const DashboardFilter = (props) => {
               )}
             </CDropdownMenu>
           </CDropdown>
-        </CCol>
+        </CCol> */}
+        {storeId.length > 1 ? (
         <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
@@ -917,6 +913,7 @@ const DashboardFilter = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
+        ) : ""}
         <CCol sm="12" md="3" lg="2" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default btn-block">

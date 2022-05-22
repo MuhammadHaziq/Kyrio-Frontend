@@ -7,6 +7,8 @@ import {
   CCollapse,
   CCol,
   CFormGroup,
+  CInputGroupPrepend,
+  CInputGroupText,
   CInput,
   CLabel,
   CRow,
@@ -20,6 +22,7 @@ import {
   CContainer
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import { MdMenu } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -461,9 +464,15 @@ const UpdateModifier = (props) => {
                                       }}
                                     >
                                       <CRow>
-                                        <CCol sm="4">
+                                        <CCol sm="8">
                                           <CFormGroup>
+                                          <CLabel htmlFor="name">Option name</CLabel>
                                             <CInputGroup>
+                                            <CInputGroupPrepend>
+                                              <CInputGroupText>
+                                                <MdMenu />
+                                              </CInputGroupText>
+                                            </CInputGroupPrepend>
                                               <CInput
                                                 id="name"
                                                 name="name"
@@ -489,8 +498,9 @@ const UpdateModifier = (props) => {
                                             </CInputGroup>
                                           </CFormGroup>
                                         </CCol>
-                                        <CCol sm="4">
+                                        <CCol sm="3">
                                           <CFormGroup>
+                                          <CLabel htmlFor="price">Price</CLabel>
                                             <CInputGroup>
                                               <NumberFormat
                                                 id="price"
@@ -498,7 +508,7 @@ const UpdateModifier = (props) => {
                                                 placeholder="Price"
                                                 value={item.price}
                                                 thousandSeparator={true}
-                                                allowNegative={false}
+                                                allowNegative={true}
                                                 decimalScale={decimal}
                                                 className="form-control"
                                                 // invalid={
@@ -512,36 +522,10 @@ const UpdateModifier = (props) => {
                                                   index
                                                 )}
                                               />
-                                              {/* {modifierFieldsError[index]
-                                                .price === true ? (
-                                                <CInvalidFeedback
-                                                  style={{ display: "block" }}
-                                                >
-                                                  Please Enter Option Price
-                                                </CInvalidFeedback>
-                                              ) : null} */}
-
-                                              {/*  <CInput
-                                                type="number"
-                                                id="price"
-                                                name="price"
-                                                placeholder="Price"
-                                                value={item.price}
-                                                onChange={handleOnChangeModifierField(
-                                                  index
-                                                )}
-                                              />
-                                              <CInvalidFeedback>
-
-                                                {errors.modifier_name === true
-                                                  ? "Please Enter Category Name"
-                                                  : ""}
-
-                                              </CInvalidFeedback>*/}
                                             </CInputGroup>
                                           </CFormGroup>
                                         </CCol>
-                                        <CCol sm="4">
+                                        <CCol sm="1" className="mt-4">
                                           <CButton
                                             variant="outline"
                                             className="pull-right"

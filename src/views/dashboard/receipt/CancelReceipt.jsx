@@ -22,6 +22,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { groupBy, sumBy, orderBy } from "lodash";
 import authAxios from "../../../constants/authAxios";
 import Amount from "../../../components/utils/Amount";
@@ -56,11 +57,17 @@ const CancelReceipt = (props) => {
           (sales_receipt_data || [])[0] !== null
             ? (sales_receipt_data || [])[0].receipt_number
             : "",
+        sale_id:
+          (sales_receipt_data || [])[0] !== undefined &&
+          (sales_receipt_data || [])[0] !== null
+            ? (sales_receipt_data || [])[0]._id
+            : "",
       };
       // dispatch(check_if_refunded(data))
+      
       authAxios({
         method: "GET",
-        url: `sales/check/${data.receipt_number}`,
+        url: `sales/check/${data.sale_id}`,
       })
         .then((res) => {
           if (res.data.refund) {

@@ -357,6 +357,7 @@ const AddEmployeeTime = (props) => {
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
+                {stores.length > 1 ? (
                 <CCol sm="12" md="6" lg="6">
                   <CFormGroup>
                     <CLabel> Store </CLabel>
@@ -375,7 +376,7 @@ const AddEmployeeTime = (props) => {
                         onBlur={handleOnBlur}
                         invalid={errors.storeId}
                       >
-                        <option value="0">Select Store</option>
+                        <option value="0">All Store</option>
                         {stores.map((item, index) => {
                           return (
                             <option value={item._id} key={index}>
@@ -393,6 +394,7 @@ const AddEmployeeTime = (props) => {
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
+                ): ""}
               </CRow>
               <CRow>
                 <CCol sm="12" md="6" lg="6">

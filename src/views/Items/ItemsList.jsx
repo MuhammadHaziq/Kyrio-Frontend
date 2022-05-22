@@ -306,7 +306,6 @@ const ItemsList = () => {
                   {showSearch === false ? (
                     <React.Fragment>
                       {item.store_list.length > 1 ? (
-                        <React.Fragment>
                           <CCol xs="12" sm="2" md="2" xl="xl">
                             <CFormGroup>
                               <CSelect
@@ -327,7 +326,6 @@ const ItemsList = () => {
                               </CSelect>
                             </CFormGroup>
                           </CCol>
-                        </React.Fragment>
                       ) : (
                         ""
                       )}

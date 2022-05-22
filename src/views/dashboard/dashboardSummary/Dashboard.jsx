@@ -46,7 +46,7 @@ const Dashboard = (props) => {
     { days: 120, name: "Quaters", disable: true, active: false },
     { days: 365, name: "Years", disable: true, active: false },
   ]);
-  const [salesFilter, setSalesFilter] = useState("All sales");
+  const [salesFilter, setSalesFilter] = useState("Gross sales");
   const [filterReset, setFilterReset] = useState(false);
   const [orginalSale, setOrginalSale] = useState([
     {
@@ -244,6 +244,7 @@ const Dashboard = (props) => {
     }
   }, [sales]);
   const handleOnChangeSales = (e) => {
+    console.log(e)
     setSalesFilter(e.trim());
   };
 
@@ -292,17 +293,17 @@ const Dashboard = (props) => {
           : 0
         : 0
       : 0;
-  const CostOfGoods =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods, 2)
-          : 0
-        : 0
-      : 0;
+  // const CostOfGoods =
+  //   salesSummary.sales_graph_data !== undefined &&
+  //   salesSummary.sales_graph_data !== null
+  //     ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
+  //       salesSummary.sales_graph_data.SalesTotal !== null
+  //       ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
+  //         salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
+  //         ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods, 2)
+  //         : 0
+  //       : 0
+  //     : 0;
   const grossProfit =
     salesSummary.sales_graph_data !== undefined &&
     salesSummary.sales_graph_data !== null

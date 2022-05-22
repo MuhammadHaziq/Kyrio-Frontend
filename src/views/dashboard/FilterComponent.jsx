@@ -428,7 +428,7 @@ const FilterComponent = (props) => {
             </CButton>
           </DatetimeRangePicker>
         </CCol>
-        <CCol sm="12" md="3" lg="3" xs="12">
+        {/* <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle
               caret
@@ -443,7 +443,6 @@ const FilterComponent = (props) => {
             </CDropdownToggle>
 
             <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
-              {/*// show={toggleDropDown[0]}*/}
               <CDropdownItem onClick={() => handleOnChange(0)}>
                 <CInputGroup
                   variant="custom-radio"
@@ -525,7 +524,8 @@ const FilterComponent = (props) => {
               )}
             </CDropdownMenu>
           </CDropdown>
-        </CCol>
+        </CCol> */}
+        {storeId.length > 1 ? (
         <CCol sm="12" md="3" lg="3" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle
@@ -581,7 +581,7 @@ const FilterComponent = (props) => {
               ))}
             </CDropdownMenu>
           </CDropdown>
-        </CCol>
+        </CCol> ) : ""}
         <CCol sm="12" md="2" lg="2" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle

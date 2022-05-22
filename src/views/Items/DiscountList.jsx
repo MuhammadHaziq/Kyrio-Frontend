@@ -148,7 +148,7 @@ const DiscountList = (props) => {
                         ""
                       )}
                     </CCol>
-
+                    {store.stores_list.length > 1 ? (
                     <CCol
                       xs="7"
                       md="7"
@@ -174,6 +174,7 @@ const DiscountList = (props) => {
                         </CSelect>
                       </CFormGroup>
                     </CCol>
+                    ) : ""}
                   </CRow>
                 </CCardHeader>
               )}

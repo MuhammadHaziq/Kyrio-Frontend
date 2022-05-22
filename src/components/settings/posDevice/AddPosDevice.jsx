@@ -158,6 +158,7 @@ const AddPosDevice = (props) => {
                 </CInputGroup>
               </CCol>
             </CFormGroup>
+            {props.stores.length > 1 ? (
             <CFormGroup>
               <CSelect
                 size="md"
@@ -168,7 +169,7 @@ const AddPosDevice = (props) => {
                 invalid={errors.selectedStoreId}
                 onBlur={handleOnBlurSelect}
               >
-                <option value="0">Select Store</option>
+                <option value="0">All Store</option>
                 {props.stores.map((item) => {
                   return <option value={item._id}>{item.title}</option>;
                 })}
@@ -177,6 +178,7 @@ const AddPosDevice = (props) => {
                 {errors.selectedStoreId ? "Please Select One Store" : ""}
               </CInvalidFeedback>
             </CFormGroup>
+            ) :""}
             <CRow>
               <CCol col="6" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                 <CButton

@@ -406,6 +406,7 @@ const EditTimeCard = (props) => {
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
+                {stores.length > 1 ? (
                 <CCol sm="12" md="6" lg="6">
                   <CFormGroup>
                     <CLabel> Store </CLabel>
@@ -425,7 +426,7 @@ const EditTimeCard = (props) => {
                         invalid={errors.storeId}
                         disabled
                       >
-                        <option value="0">Select Store</option>
+                        <option value="0">All Store</option>
                         {stores.map((item, index) => {
                           return (
                             <option value={item._id} key={index}>
@@ -443,6 +444,7 @@ const EditTimeCard = (props) => {
                     </CInputGroup>
                   </CFormGroup>
                 </CCol>
+                ) : ""}
               </CRow>
               <CRow>
                 <CCol sm="12" md="6" lg="6">

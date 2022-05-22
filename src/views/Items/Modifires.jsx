@@ -135,6 +135,7 @@ const Modifires = (props) => {
                         ""
                       )}
                     </CCol>
+                    {store.stores_list.length > 1 ? (
                     <CCol sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                       <CFormGroup>
                         <CSelect
@@ -155,6 +156,7 @@ const Modifires = (props) => {
                         </CSelect>
                       </CFormGroup>
                     </CCol>
+                    ) : ""}
                   </CRow>
                 </CCardHeader>
               )}

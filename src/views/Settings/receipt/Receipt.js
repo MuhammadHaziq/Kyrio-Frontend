@@ -248,6 +248,7 @@ const Receipt = (props) => {
                   <CCol xs="12" lg="6">
                     <h4>Receipt settings</h4>
                   </CCol>
+                  {store.stores_list.length > 1 ? (
                   <CCol xs="12" lg="6">
                     <CFormGroup>
                       <CSelect
@@ -257,7 +258,7 @@ const Receipt = (props) => {
                         value={selectedStoreId}
                         onChange={storeHandleChange}
                       >
-                        <option value="0">Select Store</option>
+                        <option value="0">All Store</option>
                         {store.stores_list.map((item, index) => {
                           return (
                             <option value={item._id} key={index}>
@@ -268,6 +269,7 @@ const Receipt = (props) => {
                       </CSelect>
                     </CFormGroup>
                   </CCol>
+                  ): ""}
                 </CRow>
               </CCardHeader>
               <CCardBody>

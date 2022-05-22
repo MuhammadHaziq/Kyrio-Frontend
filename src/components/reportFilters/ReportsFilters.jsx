@@ -862,6 +862,7 @@ const ReportsFilters = (props) => {
             //   </CDropdown>
             // </CCol>
         }
+        {storeId.length > 1 ? (
         <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle caret color="default  btn-block">
@@ -914,6 +915,7 @@ const ReportsFilters = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol>
+        ) : ""}
         {props?.hideFilter == true ? (
           ""
         ) : (

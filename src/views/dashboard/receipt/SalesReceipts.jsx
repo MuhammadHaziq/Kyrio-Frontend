@@ -75,7 +75,7 @@ const SalesReceipts = () => {
                   }),
                   ["Dining option"]:
                     typeof item.dining_option !== "undefined"
-                      ? item.dining_option.name
+                      ? item?.dining_option?.name
                       : "",
                   ["POS"]: item.device.name,
                   ["Cashier name"]: item.cashier.name,
@@ -132,7 +132,7 @@ const SalesReceipts = () => {
             ).toFixed(2),
             ["Dining option"]:
               typeof sale.dining_option !== "undefined"
-                ? sale.dining_option.name
+                ? sale?.dining_option?.name
                 : "",
             ["POS"]: sale.device.name,
             ["Cashier name"]: sale.cashier.name,

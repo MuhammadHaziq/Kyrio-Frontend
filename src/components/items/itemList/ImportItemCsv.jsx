@@ -13,7 +13,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { CSVReader } from "react-papaparse";
-import { save_csv, get_items_list, validate_csv } from "../../../actions/items/itemActions";
+import {
+  save_csv,
+  get_items_list,
+  validate_csv,
+} from "../../../actions/items/itemActions";
 import ShowUploadFileErrors from "./ShowUploadFileErrors";
 import ItemImportConfirm from "./ItemImportConfirm";
 const ImportItem = (props) => {
@@ -92,7 +96,7 @@ const ImportItem = (props) => {
       return false;
     } else {
       var fd = new FormData();
-      fd.append("csvFile", addFile);
+      fd.append("file", addFile);
       // dispatch(save_csv({ csvData: JSON.stringify(addFile) }));
       dispatch(validate_csv(fd));
     }

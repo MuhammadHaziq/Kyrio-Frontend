@@ -29,8 +29,7 @@ import {
   ITEM_IMPORT_ERRORS,
   REDIRECT_CONFIRM_UPLOAD,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
-
+import authAxios from "../../constants/authAxios";
 
 export const redirect_back_items = (status) => {
   return (dispatch) => {
@@ -76,7 +75,7 @@ export const get_items_list_server_side = (data) => {
     //   ajax: {
     //     url: url, // json datasource
     //     headers: {
-    //      
+    //
     //     },
     //     // type: 'post', // method  , by default get
     //     dataType: "json",
@@ -98,7 +97,7 @@ export const get_items_list_server_side = (data) => {
 //         url: `items`,
 //         params: data,
 //         headers: {
-//          
+//
 //         },
 //       })
 //         .then((response) => {
@@ -153,7 +152,6 @@ export const get_items_stock = () => {
       authAxios({
         method: "get",
         url: `items/stock`,
-
       })
         .then((response) => {
           dispatch({ type: GET_ITEM_STOCK, response: response.data });
@@ -201,10 +199,13 @@ export const search_item_list = (data) => {
         method: "get",
         url: `items/search`,
         params: data,
-
       })
         .then((response) => {
-          dispatch({ type: GET_ITEM_LIST, response: response.data.data, pages: response.data.pages });
+          dispatch({
+            type: GET_ITEM_LIST,
+            response: response.data.data,
+            pages: response.data.pages,
+          });
         })
         .catch((error) => {
           console.log("err", error.response);
@@ -245,7 +246,6 @@ export const get_items_store = () => {
       authAxios({
         method: "get",
         url: `items/get_item_stores`,
-
       })
         .then((response) => {
           dispatch({ type: GET_ITEM_STORES, response: response.data.stores });
@@ -289,7 +289,6 @@ export const get_item_taxe = () => {
       authAxios({
         method: "get",
         url: `items/get_item_taxes`,
-
       })
         .then((response) => {
           dispatch({ type: GET_ITEMS_TAXES, response: response.data.taxes });
@@ -334,7 +333,6 @@ export const save_item = (data) => {
         method: "post",
         url: `items/`,
         data: data,
-
       })
         .then((response) => {
           dispatch({
@@ -391,7 +389,6 @@ export const update_item_record = (data) => {
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-
         },
       })
         .then((response) => {
@@ -466,7 +463,6 @@ export const delete_item_list = (id) => {
         method: "post",
         url: `items/delete`,
         data: { ids: id },
-
       })
         .then((response) => {
           // console.log(response);
@@ -526,11 +522,10 @@ export const validate_csv = (data) => {
     try {
       authAxios({
         method: "POST",
-        url: `items/validate_csv`,
+        url: `items/validatewaresfile`,
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-
         },
       })
         .then((response) => {
@@ -555,7 +550,7 @@ export const validate_csv = (data) => {
             type: ITEM_IMPORT_ERRORS,
             response:
               typeof error.response != "undefined" &&
-                typeof error.response.data != "undefined"
+              typeof error.response.data != "undefined"
                 ? error.response.data
                 : [],
             status: true,
@@ -595,7 +590,6 @@ export const save_csv = (data) => {
         data: data,
         headers: {
           "Content-Type": "multipart/form-data",
-
         },
         // onUploadProgress: function (progressEvent) {
         //   const { loaded, total } = progressEvent;
@@ -624,7 +618,7 @@ export const save_csv = (data) => {
             type: ITEM_IMPORT_ERRORS,
             response:
               typeof error.response != "undefined" &&
-                typeof error.response.data != "undefined"
+              typeof error.response.data != "undefined"
                 ? error.response.data
                 : [],
             status: true,
@@ -780,7 +774,6 @@ export const update_row_data = (row) => {
       authAxios({
         method: "get",
         url: `items/row/${row._id}`,
-
       })
         .then((response) => {
           if (typeof response.data.message !== "undefined") {

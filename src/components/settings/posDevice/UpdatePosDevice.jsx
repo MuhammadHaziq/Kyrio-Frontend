@@ -53,13 +53,14 @@ const UpdatePosDevice = (props) => {
   }, [props, redirect_pos_devices]);
 
   useEffect(() => {
+    
     if (props.posDevices !== undefined) {
       setFields({
-        pos_device_name: props.posDevices.title || "",
+        pos_device_name: props.posDevices?.title || "",
       });
       setStore({
         _id: props.posDevices.store._id || "0",
-        title: props.posDevices.store.title || "Select STore",
+        title: props.posDevices.store.title || "Select Store",
       });
       setSelectedStoreId(props.posDevices.store._id || "0");
     }

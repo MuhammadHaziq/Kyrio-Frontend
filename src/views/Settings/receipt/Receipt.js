@@ -209,7 +209,7 @@ const Receipt = (props) => {
     
     if (name === "printedReceiptImage") {
       setPrintedReceiptImage(null);
-    } else {
+    } else if (name === "receiptImage"){
       setReceiptImage(null);
     }
   };
@@ -224,9 +224,9 @@ const Receipt = (props) => {
       let data = new FormData();
 
       data.append("receiptImage", receiptFile);
-      // data.append("receiptImagePath", receiptImage);
+      data.append("receiptImagePath", receiptImage);
       data.append("printedReceiptImage", printedReceiptFile);
-      // data.append("printedReceiptImagePath", printedReceiptImage);
+      data.append("printedReceiptImagePath", printedReceiptImage);
       data.append("footer", values.footer);
       data.append("header", values.header);
       data.append("show_customer_info", checked[0]);

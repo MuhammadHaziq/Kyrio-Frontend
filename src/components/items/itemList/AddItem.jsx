@@ -382,11 +382,10 @@ const AddItem = (props) => {
                   className="form-group-space"
                 >
                   <CInputRadio
-                    className="form-check-input"
+                    className="form-check-input checkbox-label"
                     id="sold_by"
                     name="sold_by"
                     onChange={handleOnChange}
-                    className="checkbox-label"
                     value={"Each"}
                     checked={fields.sold_by === "Each"}
                   />
@@ -903,47 +902,3 @@ const AddItem = (props) => {
 };
 
 export default AddItem;
-// const data = {
-//   name: fields.item_name,
-//   availableForSale: false,
-//   category:
-//     fields.categoryId !== "0"
-//       ? JSON.stringify({
-//           id: fields.categoryId,
-//           name: category.category_list
-//             .filter((item) => item._id)
-//             .map((item) => {
-//               return item.catTitle;
-//             })[0],
-//         })
-//       : JSON.stringify({ id: "0", name: "No Category" }),
-//   soldByType: fields.sold_by,
-//   price: ReturnNumber(fields.price),
-//   cost: ReturnNumber(fields.cost),
-//   represent_type: fields.represent_type,
-//   color: fields.color,
-//   compositeItem: inventorySwitch[0],
-//   trackRecord: inventorySwitch[1],
-//   modifierSwitch: modifierSwitch[0],
-//   dsd: modifierSwitch[1],
-//   modifiers:
-//     modifierSwitch[0] === true
-//       ? JSON.stringify(modifiers)
-//       : JSON.stringify([]),
-//   taxes: JSON.stringify(taxes),
-//   stores: JSON.stringify(
-//     item.store_list
-//       .filter((item) => item.isSelected === true)
-//       .map((item) => {
-//         return {
-//           id: item.id,
-//           title: item.title,
-//         };
-//       })
-//   ),
-//   variants: JSON.stringify(item.variants),
-//   repoOnPos: fields.represent_type,
-//   itemColor: fields.color,
-//   image: itemImage,
-//   stockQty: 200,
-// };

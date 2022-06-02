@@ -17,6 +17,7 @@ import {
   CForm,
   CSelect,
   CInvalidFeedback,
+  CNavLink,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { add_new_pos_device } from "../../../actions/settings/posDeviceActions.js";
@@ -61,12 +62,12 @@ const AddPosDevice = (props) => {
         ...errors,
         pos_device_name: validator.isEmpty(fields.pos_device_name),
       });
-    } else if (storeId === 0) {
+    } else if (storeId === 0 && props.stores.length > 1) {
       setErrors({
         ...errors,
         selectedStoreId: true,
       });
-    } else if(storeId?.storeId === 0){
+    } else if(storeId?.storeId === 0 && props.stores.length > 1){
       setErrors({
         ...errors,
         selectedStoreId: true,
@@ -75,7 +76,10 @@ const AddPosDevice = (props) => {
       const data = {
         title: fields.pos_device_name,
         store: storeId?.storeId == undefined ? storeId : storeId?.storeId,
-      };
+      }
+      if(props.stores.length == 1){
+        data.store = props.stores[0]._id
+      }
       dispatch(add_new_pos_device(data));
     }
   };

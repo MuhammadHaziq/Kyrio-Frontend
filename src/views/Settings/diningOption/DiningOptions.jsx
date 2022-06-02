@@ -94,25 +94,25 @@ class DiningOptions extends Component {
       this.props.dining_option_list !== undefined
     ) {
       let result = [];
-
+      
       this.props.dining_option_list.map((item, index) => {
         
         return result.push({
           storeId: item.storeId,
           storeName: item.storeName,
           data: item.data.map((ite) =>
-            ite.stores.filter((str) => str.storeId === item.storeId).length > 0
+            ite.stores.filter((str) => str.store._id === item.storeId).length > 0
               ? {
                   _id: ite._id,
                   content: ite.title,
                   isActive: ite.stores
-                    .filter((str) => str.storeId === item.storeId)
+                    .filter((str) => str.store._id === item.storeId)
                     .map((ites) => {
                       return ites.isActive;
                       // ? ites.isActive : false;
                     })[0],
                   position: ite.stores
-                    .filter((str) => str.storeId === item.storeId)
+                    .filter((str) => str.store._id === item.storeId)
                     .map((ites) => {
                       return ites.position;
                       // ? ites.position : ite.stores.length;
@@ -122,6 +122,7 @@ class DiningOptions extends Component {
           ),
         });
       });
+      
       this.setState({
         ...this.state,
         items: result.map((item) => {
@@ -302,14 +303,15 @@ class DiningOptions extends Component {
     // };
     this.props.update_dining_availablity(data);
   };
-
-  dining_row = (storeId, dining_id) => {
-    const data = this.props.dining_option_list
+  dining_row = (storeId, dining_id, event) => {
+    if(event.target.name !== 'diningId'){
+      const data = this.props.dining_option_list
       .filter((item) => item.storeId === storeId)
       .map((item) => {
         return item.data.filter((ite) => ite._id === dining_id);
       })[0][0];
-    this.props.update_dining_row_data(data);
+      this.props.update_dining_row_data(data);
+    }
   };
 
   render() {
@@ -393,7 +395,7 @@ class DiningOptions extends Component {
                     </CRow>
                   </CCardHeader>
                   {this.state.items.map((dinings, index) =>
-                    (dinings.data || []).length > 0 ? (
+                    dinings.data.length > 0 ? (
                       <React.Fragment key={index}>
                         <CCardBody key={index}>
                           <CRow>
@@ -468,7 +470,13 @@ class DiningOptions extends Component {
                                                       .style
                                                   )}
                                                 >
-                                                  <CRow>
+                                                  <CRow onClick={(e) =>
+                                                          this.dining_row(
+                                                            dinings.storeId,
+                                                            item._id,
+                                                            e
+                                                          )
+                                                        }>
                                                     <CListGroupItem
                                                       action
                                                       key={index}
@@ -478,12 +486,6 @@ class DiningOptions extends Component {
                                                         style={{
                                                           float: "left",
                                                         }}
-                                                        onClick={() =>
-                                                          this.dining_row(
-                                                            dinings.storeId,
-                                                            item._id
-                                                          )
-                                                        }
                                                       >
                                                         {item.content}
                                                       </CCol>
@@ -541,7 +543,7 @@ class DiningOptions extends Component {
                                               )}
                                             </Draggable>
                                           ) : (
-                                            "No dining options available"
+                                            ""
                                           )
                                         )}
                                       </CListGroup>
@@ -552,16 +554,16 @@ class DiningOptions extends Component {
                                 </Droppable>
                               </DragDropContext>
                             </CCol>
-                          </CRow>{" "}
-                        </CCardBody>{" "}
+                          </CRow>
+                        </CCardBody>
                       </React.Fragment>
                     ) : (
-                      ""
+                      "No dining options available"
                     )
                   )}
-                </CCard>{" "}
-              </CCol>{" "}
-            </CRow>{" "}
+                </CCard>
+              </CCol>
+            </CRow>
           </CFade>
         ) : (
           ""

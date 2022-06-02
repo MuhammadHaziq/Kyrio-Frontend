@@ -5,7 +5,8 @@ const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";
 const ImageLocalUrl = "http://localhost:3002/";
 const ImageLiveUrl = "https://api.kyriopos.com/";
 
-export const imageBaseUrl = "https://api.kyriopos.com/";
+// export const imageBaseUrl = "https://api.kyriopos.com/";
+export const imageBaseUrl = "http://94.250.202.208:3003/";
 let Base_Url = "";
 let Image_Url = "";
 
@@ -16,6 +17,8 @@ if (window.location.hostname == "localhost") {
   Base_Url = LiveUrl
   Image_Url = ImageLiveUrl
  } 
+ Base_Url = "http://94.250.202.208:3003/kyrio/v1/"
+ Image_Url = "http://94.250.202.208:3003/"
 //  else {
   // Office IP
   // Base_Url = "http://192.168.18.32:3002/kyrio/v1/"

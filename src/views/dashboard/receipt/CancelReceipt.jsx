@@ -357,10 +357,18 @@ const CancelReceipt = (props) => {
                     : ""}
                 </h6>
                 <h6>
-                  POS:{" "}
+                  Store:{" "}
                   {item.store !== undefined && item.store !== null
                     ? item.store.name !== undefined && item.store.name !== null
                       ? item.store.name || ""
+                      : ""
+                    : ""}
+                </h6>
+                <h6>
+                  POS:{" "}
+                  {item.device !== undefined && item.device !== null
+                    ? item.device.name !== undefined && item.device.name !== null
+                      ? item.device.name || ""
                       : ""
                     : ""}
                 </h6>
@@ -409,8 +417,36 @@ const CancelReceipt = (props) => {
                       </CRow>
                     </>
                   ) || ""
-                : ""
-              : ""}
+                :  <>
+                <hr />
+                <CRow>
+                  <CCol
+                    sm="12"
+                    md="12"
+                    lg="12"
+                    style={{ textAlign: "left" }}
+                  >
+                    <h6>
+                      <b> Dine In</b>
+                    </h6>
+                  </CCol>
+                </CRow>
+              </>
+              :  <>
+              <hr />
+              <CRow>
+                <CCol
+                  sm="12"
+                  md="12"
+                  lg="12"
+                  style={{ textAlign: "left" }}
+                >
+                  <h6>
+                    <b> Dine In</b>
+                  </h6>
+                </CCol>
+              </CRow>
+            </>}
             <hr />
             <CRow>
               {(item.items || []).map((ite) => (
@@ -594,7 +630,7 @@ const CancelReceipt = (props) => {
                   })
                 : ""}
 
-              {item?.cash_return > 0 ? (
+              {item.payments.length <= 0 && item?.cash_return > 0 ? (
                 <>
                   <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
                     <p className="d-flex justify-content-between">

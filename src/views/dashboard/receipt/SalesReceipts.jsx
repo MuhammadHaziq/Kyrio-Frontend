@@ -56,7 +56,7 @@ const SalesReceipts = () => {
                   ["Date"]: moment(item.sale_timestamp).format(
                     "MM/DD/YYYY h:mm a"
                   ),
-                  ["Receipt number"]: item.receipt_number,
+                  ["Receipt number"]: " "+item.receipt_number,
                   ["Receipt type"]: item.receipt_type,
                   ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
                   ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
@@ -67,17 +67,18 @@ const SalesReceipts = () => {
                   ["Total collected"]: parseFloat(item.total_price).toFixed(2),
                   ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
                   ["Gross profit"]: parseFloat(
-                    item.total_price - item.cost_of_goods
+                    (item.total_price - item.cost_of_goods) - item.total_discount
                   ).toFixed(2),
-                  ["Payment type"]: item.payment_method,
+                  ["Payment type"]: item.payments.map(pay => pay.paymentType),
                   ["Discription"]: item.items.map((ite) => {
                     return " " + ite.quantity + " X " + ite.name;
                   }),
                   ["Dining option"]:
                     typeof item.dining_option !== "undefined"
                       ? item?.dining_option?.name
-                      : "",
+                      : "Dine In",
                   ["POS"]: item.device.name,
+                  ["Store"]: item.store.name,
                   ["Cashier name"]: item.cashier.name,
                   ["Customer name"]:
                     typeof item.customer !== "undefined" &&
@@ -111,16 +112,14 @@ const SalesReceipts = () => {
           );
           csvData.push({
             ["Date"]: moment(sale.sale_timestamp).format("MM/DD/YYYY h:mm a"),
-            ["Receipt number"]: sale.receipt_number,
+            ["Receipt number"]: " "+sale.receipt_number,
             ["Receipt type"]: sale.receipt_type,
             ["Category"]: "",
             ["SKU"]: "",
             ["Item"]: item.name,
             ["Modifiers applied"]: modifiers,
             ["Quantity"]: item.quantity,
-            ["Gross sales"]: parseFloat(
-              item.price * item.quantity + item.total_modifiers
-            ).toFixed(2),
+            ["Gross sales"]: parseFloat(item.total_price).toFixed(2),
             ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
             ["Net Sales"]: parseFloat(
               item.total_price - item.total_discount
@@ -128,13 +127,14 @@ const SalesReceipts = () => {
             ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
             ["Cost of Goods"]: parseFloat(item.quantity * item.cost).toFixed(2),
             ["Gross profit"]: parseFloat(
-              item.total_price - item.cost * item.quantity
+              (item.total_price - (item.cost * item.quantity)) - item.total_discount
             ).toFixed(2),
             ["Dining option"]:
               typeof sale.dining_option !== "undefined"
                 ? sale?.dining_option?.name
-                : "",
+                : "Dine In",
             ["POS"]: sale.device.name,
+            ["Store"]: sale.store.name,
             ["Cashier name"]: sale.cashier.name,
             ["Customer name"]:
               typeof sale.customer !== "undefined" && sale.customer !== null

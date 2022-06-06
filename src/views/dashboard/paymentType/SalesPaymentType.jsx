@@ -57,12 +57,12 @@ const SalesPaymentType = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                  {typeof paymentType_sales_summary !== "undefined" &&
-                  paymentType_sales_summary.length > 0 ? (
+                  {typeof paymentType_sales_summary?.report !== "undefined" &&
+                  paymentType_sales_summary?.report.length > 0 ? (
                     <CSVLink
                       data={
-                        paymentType_sales_summary.length > 0
-                          ? paymentType_sales_summary.map((itm) => {
+                        paymentType_sales_summary?.report.length > 0
+                          ? paymentType_sales_summary?.report.map((itm) => {
                               return {
                                 ["Payment type"]: itm?.PaymentType,
                                 ["Payment transactions"]:

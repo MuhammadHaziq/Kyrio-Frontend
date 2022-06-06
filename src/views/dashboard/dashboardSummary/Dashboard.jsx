@@ -83,14 +83,6 @@ const Dashboard = (props) => {
     },
     {
       data: [],
-      label: "Cost Of Goods",
-      backgroundColor: hexToRgba(brandSecondary, 10),
-      borderColor: brandSecondary,
-      pointHoverBackgroundColor: brandSecondary,
-      borderWidth: 2,
-    },
-    {
-      data: [],
       label: "Gross profit",
       backgroundColor: hexToRgba(brandPrimary, 10),
       borderColor: brandPrimary,
@@ -129,14 +121,6 @@ const Dashboard = (props) => {
       backgroundColor: hexToRgba(brandInfo, 10),
       borderColor: brandInfo,
       pointHoverBackgroundColor: brandInfo,
-      borderWidth: 2,
-    },
-    {
-      data: [],
-      label: "Cost Of Goods",
-      backgroundColor: hexToRgba(brandSecondary, 10),
-      borderColor: brandSecondary,
-      pointHoverBackgroundColor: brandSecondary,
       borderWidth: 2,
     },
     {
@@ -191,9 +175,12 @@ const Dashboard = (props) => {
           }
           return sale;
         });
-        setOrginalSale(filterSale);
-        setSales(filterSale);
         setSalesFilter("Gross sales");
+        const newSales = orginalSale.filter((item) => {
+          return item.label == salesFilter;
+        });
+        setOrginalSale(filterSale);
+        setSales(newSales);
       }
     }
   }, [salesSummary.sales_graph_data]);
@@ -229,10 +216,10 @@ const Dashboard = (props) => {
       if (salesFilter == "All sales") {
         setSales(orginalSale);
       } else {
-        const sales = orginalSale.filter((item) => {
+        const newSales = orginalSale.filter((item) => {
           return item.label == salesFilter;
         });
-        setSales(sales);
+        setSales(newSales);
       }
       setFilterReset(false);
     }
@@ -243,8 +230,9 @@ const Dashboard = (props) => {
       setLoading(true);
     }
   }, [sales]);
+  
+  
   const handleOnChangeSales = (e) => {
-    console.log(e)
     setSalesFilter(e.trim());
   };
 

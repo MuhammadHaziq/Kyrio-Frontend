@@ -69,15 +69,15 @@ const SalesTax = () => {
           <CRow>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Taxable sales</h6>
-              <h2><Amount value={taxes_sales_summary.taxableSales} /></h2>
+              <h2><Amount value={taxes_sales_summary?.taxableSales ? taxes_sales_summary.taxableSales : 0} /></h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Non-taxable sales</h6>
-              <h2><Amount value={taxes_sales_summary.NonTaxableSales} /></h2>
+              <h2><Amount value={taxes_sales_summary?.NonTaxableSales ? taxes_sales_summary.NonTaxableSales : 0} /></h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Total net sales</h6>
-              <h2><Amount value={taxes_sales_summary.NetSales} /></h2>
+              <h2><Amount value={taxes_sales_summary?.NetSales ? taxes_sales_summary.NetSales : 0} /></h2>
             </CCol>
           </CRow>
         </CCardBody>

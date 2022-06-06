@@ -8,7 +8,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
     <>
       <CDataTable
         itemsPerPageSelect
-        items={props.sales_by_paymentType_detail}
+        items={props.sales_by_paymentType_detail.report}
         fields={[
           { key: "PaymentType", label: "Payment type", filter: true },
           {
@@ -45,10 +45,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
                     <strong>
                       {
                         <Amount
-                          value={_.sumBy(
-                            props.sales_by_paymentType_detail,
-                            "paymentTransactions"
-                          )}
+                          value={props.sales_by_paymentType_detail?.total?.totalPaymentTransactions ? props.sales_by_paymentType_detail?.total?.totalPaymentTransactions : 0}
                         />
                       }
                     </strong>
@@ -57,10 +54,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
                     <strong>
                       {
                         <Amount
-                          value={_.sumBy(
-                            props.sales_by_paymentType_detail,
-                            "paymentAmount"
-                          )}
+                          value={props.sales_by_paymentType_detail?.total?.totalPaymentAmount ? props.sales_by_paymentType_detail?.total?.totalPaymentAmount : 0}
                         />
                       }
                     </strong>
@@ -69,10 +63,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
                     <strong>
                       {
                         <Amount
-                          value={_.sumBy(
-                            props.sales_by_paymentType_detail,
-                            "refundTransactions"
-                          )}
+                          value={props.sales_by_paymentType_detail?.total?.totalRefundTransactions ? props.sales_by_paymentType_detail?.total?.totalRefundTransactions : 0}
                         />
                       }
                     </strong>
@@ -81,10 +72,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
                     <strong>
                       {
                         <Amount
-                          value={_.sumBy(
-                            props.sales_by_paymentType_detail,
-                            "refundAmount"
-                          )}
+                          value={props.sales_by_paymentType_detail?.total?.totalRefundAmount ? props.sales_by_paymentType_detail?.total?.totalRefundAmount : 0}
                         />
                       }
                     </strong>
@@ -93,10 +81,7 @@ const SalesPaymentTypeDatatableNew = (props) => {
                     <strong>
                       {
                         <Amount
-                          value={_.sumBy(
-                            props.sales_by_paymentType_detail,
-                            "netAmount"
-                          )}
+                          value={props.sales_by_paymentType_detail?.total?.totalNetAmount ? props.sales_by_paymentType_detail?.total?.totalNetAmount : 0}
                         />
                       }
                     </strong>

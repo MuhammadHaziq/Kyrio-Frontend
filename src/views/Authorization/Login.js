@@ -46,7 +46,8 @@ const Login = () => {
           password: false,
         },
       }));
-      setRedirect(true);
+      // setRedirect(true);
+      window.location.href = 'https://dashboard.kyriopos.com'
     }
   }, [msg]);
   useEffect(() => {

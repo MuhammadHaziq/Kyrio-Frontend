@@ -371,7 +371,6 @@ export const get_store_dining = (data) => {
 
       })
         .then((response) => {
-          console.log(response);
           dispatch({ type: GET_DINING_OPTION, response: response.data });
           let msg = {
             open: true,

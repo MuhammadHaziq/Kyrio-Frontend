@@ -19,6 +19,7 @@ import {
 } from "../constants/ActionTypes";
 import io from "socket.io-client";
 import DeleteIcon from "../assets/icons/account-deleted.png";
+import { SocketURL } from "../constants/baseUrls";
 
 const TheLayout = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const TheLayout = () => {
     // window.location.hostname +
     // ":" +
     // "3002";
-    const socketBaseUrl = "https://api.kyriopos.com"; // Ofice IP
+    const socketBaseUrl = SocketURL
     // const socketBaseUrl = "http://192.168.10.7:3002" // Home IP
     let socket = io(socketBaseUrl, connectionOptions);
 
@@ -65,6 +66,9 @@ const TheLayout = () => {
           }
         }
       });
+      // socket.on("ITEM_UPDATE", (data) => {
+      //   console.log(data)
+      // });
       // socket.on(ITEM_INSERT,(data) => {
       //   console.log(data)
       // });

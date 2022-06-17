@@ -80,7 +80,7 @@ const ItemsList = () => {
     dispatch(get_item_taxe());
     dispatch(get_stores());
     if (auth.user.stores.length > 0 && auth.user.stores !== undefined) {
-      dispatch(get_modifires_list(auth.user.stores[0]._id));
+      dispatch(get_modifires_list(0));
     }
   }, [dispatch]);
 

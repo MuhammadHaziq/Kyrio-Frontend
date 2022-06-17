@@ -49,7 +49,7 @@ const UpdateDiningOption = (props) => {
       if (props.update_data !== undefined) {
         (props.update_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
-            if (item._id === ite.store._id) {
+            if (item?._id === ite?.store?._id) {
               return {
                 ...item,
                 isSelected: ite.isActive,
@@ -107,7 +107,6 @@ const UpdateDiningOption = (props) => {
           isActive: item.isSelected,
         });
       });
-
       const data = {
         title: fields.dining_name,
         store: JSON.stringify(storeData),

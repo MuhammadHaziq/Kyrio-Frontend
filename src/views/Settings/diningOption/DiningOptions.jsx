@@ -94,25 +94,23 @@ class DiningOptions extends Component {
       this.props.dining_option_list !== undefined
     ) {
       let result = [];
-      
       this.props.dining_option_list.map((item, index) => {
-        
         return result.push({
           storeId: item.storeId,
           storeName: item.storeName,
           data: item.data.map((ite) =>
-            ite.stores.filter((str) => str.store._id === item.storeId).length > 0
+            ite.stores.filter((str) => str?.store?._id === item.storeId).length > 0
               ? {
                   _id: ite._id,
                   content: ite.title,
                   isActive: ite.stores
-                    .filter((str) => str.store._id === item.storeId)
+                    .filter((str) => str?.store?._id === item.storeId)
                     .map((ites) => {
                       return ites.isActive;
                       // ? ites.isActive : false;
                     })[0],
                   position: ite.stores
-                    .filter((str) => str.store._id === item.storeId)
+                    .filter((str) => str?.store?._id === item.storeId)
                     .map((ites) => {
                       return ites.position;
                       // ? ites.position : ite.stores.length;
@@ -558,7 +556,20 @@ class DiningOptions extends Component {
                         </CCardBody>
                       </React.Fragment>
                     ) : (
-                      "No dining options available"
+                      <React.Fragment key={index}>
+                        <CCardBody key={index}>
+                          <CRow>
+                            <CCol>
+                              <h4>{dinings.storeName}</h4>
+                            </CCol>
+                          </CRow>
+                          <CRow>
+                            <CCol xs="12" lg="12">
+                              No dining options available
+                            </CCol>
+                          </CRow>
+                        </CCardBody>
+                       </React.Fragment>
                     )
                   )}
                 </CCard>

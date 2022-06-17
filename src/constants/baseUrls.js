@@ -30,4 +30,5 @@ if (window.location.hostname == "localhost") {
 
 export const BaseUrl = Base_Url;
 export const ImageUrl = Image_Url;
+export const SocketURL = "https://api.kyriopos.com"; // Server IP
 

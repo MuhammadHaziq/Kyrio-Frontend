@@ -67,7 +67,7 @@ const InStock = (props) => {
       onChange={handleOnChange}
       onBlur={handleOnBlur}
       decimalScale={0}
-      allowNegative={false}
+      allowNegative={true}
     />
   );
 };

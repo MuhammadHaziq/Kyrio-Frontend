@@ -526,62 +526,65 @@ const FilterComponent = (props) => {
           </CDropdown>
         </CCol> */}
         {storeId.length > 1 ? (
-        <CCol sm="12" md="3" lg="3" xs="12">
-          <CDropdown style={{ backgroundColor: "white" }}>
-            <CDropdownToggle
-              caret
-              color="default  btn-block"
-              onClick={() => toggleDropdown(1)}
-            >
-              <MdStoreMallDirectory />
-              {storeId.filter((item) => item.isSelected !== true).length === 0
-                ? "All Stores"
-                : storeId.filter((item) => item.isSelected === true).length +
-                  " Stores"}
-            </CDropdownToggle>
-            <CDropdownMenu style={{ width: "max-content" }}>
-              {/* show={toggleDropDown[1]} */}
+          <CCol sm="12" md="3" lg="3" xs="12">
+            <CDropdown style={{ backgroundColor: "white" }}>
+              <CDropdownToggle
+                caret
+                color="default  btn-block"
+                onClick={() => toggleDropdown(1)}
+              >
+                <MdStoreMallDirectory />
+                {storeId.filter((item) => item.isSelected !== true).length === 0
+                  ? "All Stores"
+                  : storeId.filter((item) => item.isSelected === true).length +
+                    " Stores"}
+              </CDropdownToggle>
+              <CDropdownMenu style={{ width: "max-content" }}>
+                {/* show={toggleDropDown[1]} */}
 
-              <CDropdownItem onClick={() => storeHandleChange("0")}>
-                {" "}
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    All Stores
-                  </CLabel>
-                </CFormGroup>
-              </CDropdownItem>
-              {(storeId || []).map((item, index) => (
-                <CDropdownItem
-                  key={index}
-                  onClick={() => storeHandleChange(item._id)}
-                >
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
+                <CDropdownItem onClick={() => storeHandleChange("0")}>
+                  {" "}
+                  <CFormGroup variant="custom-checkbox" inline>
                     <CInputCheckbox
                       custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
+                      name="checkAll"
+                      id={"checkAll"}
+                      value={0}
+                      checked={fields.checkAll}
                     />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
-                    >
-                      {item.title}
+                    <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                      All Stores
                     </CLabel>
                   </CFormGroup>
                 </CDropdownItem>
-              ))}
-            </CDropdownMenu>
-          </CDropdown>
-        </CCol> ) : ""}
+                {(storeId || []).map((item, index) => (
+                  <CDropdownItem
+                    key={index}
+                    onClick={() => storeHandleChange(item._id)}
+                  >
+                    <CFormGroup variant="custom-checkbox" inline key={index}>
+                      <CInputCheckbox
+                        custom
+                        name="storeId"
+                        id={"storeId" + item._id}
+                        value={item._id}
+                        checked={item.isSelected}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"storeId" + item._id}
+                      >
+                        {item.title}
+                      </CLabel>
+                    </CFormGroup>
+                  </CDropdownItem>
+                ))}
+              </CDropdownMenu>
+            </CDropdown>
+          </CCol>
+        ) : (
+          ""
+        )}
         <CCol sm="12" md="2" lg="2" xs="12">
           <CDropdown style={{ backgroundColor: "white" }}>
             <CDropdownToggle

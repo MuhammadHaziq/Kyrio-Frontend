@@ -21,6 +21,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../actions/authAction";
 import validator from "validator";
+import { DashboardUrl } from "../../constants/baseUrls";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const Login = () => {
         },
       }));
       // setRedirect(true);
-      window.location.href = 'https://dashboard.kyriopos.com'
+      window.location.href = DashboardUrl;
     }
   }, [msg]);
   useEffect(() => {
@@ -102,6 +103,11 @@ const Login = () => {
       password = true;
       errors = true;
     }
+    // Field must contain at least 8 characters
+    // if (formState.values.password.length < 8) {
+    //   password = true;
+    //   errors = true;
+    // }
     if (errors) {
       setFormState((formState) => ({
         ...formState,
@@ -207,7 +213,11 @@ const Login = () => {
                         <CInvalidFeedback>
                           This cannot be blank
                         </CInvalidFeedback>
-                      ) : msg.object.type === "password" ? (
+                      ) : // ) : formState.values.password.length < 8 ? (
+                      //   <CInvalidFeedback>
+                      //     Field must contain at least 8 characters
+                      //   </CInvalidFeedback>
+                      msg.object.type === "password" ? (
                         <CInvalidFeedback>
                           {msg.object.message}
                         </CInvalidFeedback>

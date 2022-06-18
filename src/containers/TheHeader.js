@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   CHeader,
   CHeaderBrand,
@@ -24,6 +25,7 @@ import routes from "../routes";
 
 const TheHeader = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const asideShow = useSelector((state) => state.settings.asideShow);
   const darkMode = useSelector((state) => state.settings.darkMode);
   const sidebarShow = useSelector((state) => state.settings.sidebarShow);
@@ -58,16 +60,20 @@ const TheHeader = () => {
         className="ml-md-3 d-lg-none"
         onClick={toggleSidebarMobile}
       />
-      {/* <CToggler
-        inHeader
-        className="ml-md-3 d-lg-none"
-        onClick={toggleSettingSidebarMobile}
-        children={
-          <>
-            <MdSettings />
-          </>
-        }
-      /> */}
+      {location.pathname === "/settings" ? (
+        <CToggler
+          inHeader
+          className="ml-md-3 d-lg-none"
+          onClick={toggleSettingSidebarMobile}
+          children={
+            <>
+              <MdSettings />
+            </>
+          }
+        />
+      ) : (
+        ""
+      )}
       <CToggler
         inHeader
         className="ml-3 d-md-down-none"

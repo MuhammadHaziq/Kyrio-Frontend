@@ -22,7 +22,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import { confirmAlert } from "react-confirm-alert";
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { groupBy, sumBy, orderBy } from "lodash";
 import authAxios from "../../../constants/authAxios";
 import Amount from "../../../components/utils/Amount";
@@ -64,7 +64,7 @@ const CancelReceipt = (props) => {
             : "",
       };
       // dispatch(check_if_refunded(data))
-      
+
       authAxios({
         method: "GET",
         url: `sales/check/${data.sale_id}`,
@@ -367,11 +367,25 @@ const CancelReceipt = (props) => {
                 <h6>
                   POS:{" "}
                   {item.device !== undefined && item.device !== null
-                    ? item.device.name !== undefined && item.device.name !== null
+                    ? item.device.name !== undefined &&
+                      item.device.name !== null
                       ? item.device.name || ""
                       : ""
                     : ""}
                 </h6>
+                {item?.order_number !== undefined &&
+                item?.order_number !== null &&
+                item?.order_number !== "" ? (
+                  <h6>
+                    Order Number:{" "}
+                    {item.order_number !== undefined &&
+                    item.order_number !== null
+                      ? item.order_number || ""
+                      : ""}
+                  </h6>
+                ) : (
+                  ""
+                )}
               </CCol>
             </CRow>
             {item.customer !== undefined && item.customer !== null ? (
@@ -397,56 +411,50 @@ const CancelReceipt = (props) => {
             ) : (
               ""
             )}
-            {item.dining_option !== undefined && item.dining_option !== null
-              ? item.dining_option.name !== undefined &&
-                item.dining_option.name !== null
-                ? (
-                    <>
-                      <hr />
-                      <CRow>
-                        <CCol
-                          sm="12"
-                          md="12"
-                          lg="12"
-                          style={{ textAlign: "left" }}
-                        >
-                          <h6>
-                            <b> {item.dining_option.name}</b>
-                          </h6>
-                        </CCol>
-                      </CRow>
-                    </>
-                  ) || ""
-                :  <>
+            {item.dining_option !== undefined && item.dining_option !== null ? (
+              item.dining_option.name !== undefined &&
+              item.dining_option.name !== null ? (
+                (
+                  <>
+                    <hr />
+                    <CRow>
+                      <CCol
+                        sm="12"
+                        md="12"
+                        lg="12"
+                        style={{ textAlign: "left" }}
+                      >
+                        <h6>
+                          <b> {item.dining_option.name}</b>
+                        </h6>
+                      </CCol>
+                    </CRow>
+                  </>
+                ) || ""
+              ) : (
+                <>
+                  <hr />
+                  <CRow>
+                    <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
+                      <h6>
+                        <b> Dine In</b>
+                      </h6>
+                    </CCol>
+                  </CRow>
+                </>
+              )
+            ) : (
+              <>
                 <hr />
                 <CRow>
-                  <CCol
-                    sm="12"
-                    md="12"
-                    lg="12"
-                    style={{ textAlign: "left" }}
-                  >
+                  <CCol sm="12" md="12" lg="12" style={{ textAlign: "left" }}>
                     <h6>
                       <b> Dine In</b>
                     </h6>
                   </CCol>
                 </CRow>
               </>
-              :  <>
-              <hr />
-              <CRow>
-                <CCol
-                  sm="12"
-                  md="12"
-                  lg="12"
-                  style={{ textAlign: "left" }}
-                >
-                  <h6>
-                    <b> Dine In</b>
-                  </h6>
-                </CCol>
-              </CRow>
-            </>}
+            )}
             <hr />
             <CRow>
               {(item.items || []).map((ite) => (

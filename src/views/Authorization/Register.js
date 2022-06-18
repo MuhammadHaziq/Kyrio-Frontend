@@ -288,6 +288,10 @@ const Register = () => {
                     {validator.isEmpty(formState.values.password) ? (
                       <CInvalidFeedback>This cannot be blank</CInvalidFeedback>
                     ) : (
+                      // ) : formState.values.password.length < 8 ? (
+                      //   <CInvalidFeedback>
+                      //     Field must contain at least 8 characters
+                      //   </CInvalidFeedback>
                       ""
                     )}
                   </CInputGroup>

@@ -11,6 +11,7 @@ import {
   CSidebarNavTitle,
   CSidebarNavDropdown,
   CSidebarNavItem,
+  CSidebarMinimizer,
 } from "@coreui/react";
 import { sidebarToggle } from "../actions/settingsAction";
 // sidebar nav config
@@ -20,7 +21,8 @@ var _ = require("lodash");
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
-  const show = useSelector((state) => state.settings.sidebarShow);
+  const unfoldable = useSelector((state) => state.sidebarUnfoldable);
+  const sidebarShow = useSelector((state) => state.sidebarShow);
   const user = useSelector((state) => state.auth.user);
 
   const [navigation, setNavigation] = useState([]);
@@ -145,7 +147,7 @@ const TheSidebar = () => {
     <Redirect exact to="/login" />
   ) : (
     <CSidebar
-      show={show}
+      show={sidebarShow}
       unfoldable
       onShowChange={(val) => dispatch(sidebarToggle(val))}
     >
@@ -174,6 +176,7 @@ const TheSidebar = () => {
           }}
         />
       </CSidebarNav>
+      <CSidebarMinimizer className="c-d-md-down-none" />
     </CSidebar>
   );
 };

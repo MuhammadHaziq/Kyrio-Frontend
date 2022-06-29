@@ -47,8 +47,8 @@ const Login = () => {
           password: false,
         },
       }));
-      // setRedirect(true);
-      window.location.href = DashboardUrl;
+       setRedirect(true);
+     // window.location.href = DashboardUrl;
     }
   }, [msg]);
   useEffect(() => {

@@ -289,7 +289,7 @@ const Settings = () => {
                 <CListGroup id="list-tab" role="tablist">
                   <CSidebar
                     show={show}
-                    // colorScheme="light"
+                    colorScheme="light"
                     size="lg"
                     fixed={false}
                     unfoldable

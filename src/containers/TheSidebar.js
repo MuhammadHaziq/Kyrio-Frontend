@@ -21,8 +21,8 @@ var _ = require("lodash");
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable);
-  const sidebarShow = useSelector((state) => state.sidebarShow);
+  // const unfoldable = useSelector((state) => state.sidebarUnfoldable);
+  const sidebarShow = useSelector((state) => state.settings.sidebarShow);
   const user = useSelector((state) => state.auth.user);
 
   const [navigation, setNavigation] = useState([]);

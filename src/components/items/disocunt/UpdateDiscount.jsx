@@ -18,7 +18,7 @@ import {
   CListGroup,
   CListGroupItem,
   CSwitch,
-  CContainer
+  CContainer,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -77,6 +77,11 @@ const UpdateDiscount = (props) => {
             return item;
           }));
         });
+        if (props.update_item_discount.type === "Percentage") {
+          setPercentage(true);
+        } else {
+          setPercentage(false);
+        }
         setFields({
           ...fields,
           discount_name: props.update_item_discount.title,
@@ -109,8 +114,16 @@ const UpdateDiscount = (props) => {
 
   const ReturnNumber = (params) => {
     let num = params;
-    num = Number.isInteger(num) ? num : num !== null ? num.replace("$", "") : num;
-    num = Number.isInteger(num) ? num : num !== null ? num.replace(",", "") : num;
+    num = Number.isInteger(num)
+      ? num
+      : num !== null
+      ? num.replace("$", "")
+      : num;
+    num = Number.isInteger(num)
+      ? num
+      : num !== null
+      ? num.replace(",", "")
+      : num;
     return num;
   };
 
@@ -228,22 +241,27 @@ const UpdateDiscount = (props) => {
     <React.Fragment>
       <CCard>
         <CCardHeader>
-          <CContainer className='text-center' style={{
-            width: "135px",
-            height: "135px",
-            borderRadius: "70px",
-            backgroundColor: "#ec407a",
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}>
-            <DiscountIcon style={{
-              height: '50px',
-              width: '50px',
-              background: '#ec407a',
-              marginLeft: "25px",
-              fill: "aliceblue"
-            }} />
+          <CContainer
+            className="text-center"
+            style={{
+              width: "135px",
+              height: "135px",
+              borderRadius: "70px",
+              backgroundColor: "#ec407a",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <DiscountIcon
+              style={{
+                height: "50px",
+                width: "50px",
+                background: "#ec407a",
+                marginLeft: "25px",
+                fill: "aliceblue",
+              }}
+            />
           </CContainer>
         </CCardHeader>
 
@@ -284,8 +302,9 @@ const UpdateDiscount = (props) => {
                       handleOnChangeToggle("%");
                     }}
                     value={"Percentage"}
-                    checked={Percentage}
-                    checked={fields.disocunt_type === "Percentage"}
+                    checked={
+                      Percentage || fields.disocunt_type === "Percentage"
+                    }
                   />
                   <CLabel variant="custom-checkbox" htmlFor="percentage">
                     Percentage
@@ -358,7 +377,7 @@ const UpdateDiscount = (props) => {
             </CListGroup>
           </CCol>
         </CCardBody>
-        {collapse[0] ? (
+        {collapse[0] && storeId.length > 1 ? (
           <CCardFooter>
             <h4>
               Stores
@@ -375,7 +394,7 @@ const UpdateDiscount = (props) => {
             <span>
               <small>
                 {storeId.filter((item) => item.isSelected === false).length ===
-                  0
+                0
                   ? "Available in all stores"
                   : "Not available in stores"}
               </small>
@@ -385,72 +404,79 @@ const UpdateDiscount = (props) => {
           ""
         )}
       </CCard>
-      <CCollapse show={!collapse[0]}>
-        <CCard>
-          <CCardHeader>
-            <h4>
-              <strong>Stores</strong>
-              <div className="card-header-actions">
-                <CLink className="card-header-action" onClick={() => toggle(0)}>
-                  <CIcon
-                    name={
-                      collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
-                    }
-                  />
-                </CLink>
-              </div>
-            </h4>
-          </CCardHeader>
-          <CCardBody>
-            <CFormGroup>
-              <CCol md="3">
-                <CLabel>Select Store</CLabel>
-              </CCol>
-              <CCol md="9">
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                    onChange={storeHandleChange}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    Available in all stores
-                    {/*{" "}
+      {storeId.length > 1 ? (
+        <CCollapse show={!collapse[0]}>
+          <CCard>
+            <CCardHeader>
+              <h4>
+                <strong>Stores</strong>
+                <div className="card-header-actions">
+                  <CLink
+                    className="card-header-action"
+                    onClick={() => toggle(0)}
+                  >
+                    <CIcon
+                      name={
+                        collapse[0] ? "cil-chevron-bottom" : "cil-chevron-top"
+                      }
+                    />
+                  </CLink>
+                </div>
+              </h4>
+            </CCardHeader>
+            <CCardBody>
+              <CFormGroup>
+                <CCol md="3">
+                  <CLabel>Select Store</CLabel>
+                </CCol>
+                <CCol md="9">
+                  <CFormGroup variant="custom-checkbox" inline>
+                    <CInputCheckbox
+                      custom
+                      name="checkAll"
+                      id={"checkAll"}
+                      value={0}
+                      checked={fields.checkAll}
+                      onChange={storeHandleChange}
+                    />
+                    <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                      Available in all stores
+                      {/*{" "}
                     {storeId.filter((item) => item.isSelected !== true)
                       .length === 0
                       ? "UnSelect All"
                       : "Select All"}
                     */}
-                  </CLabel>
-                </CFormGroup>
-              </CCol>
-              <CCol md="8">
-                {storeId.map((item, index) => (
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
-                    <CInputCheckbox
-                      custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
-                      onChange={storeHandleChange}
-                    />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
-                    >
-                      {item.title}
                     </CLabel>
                   </CFormGroup>
-                ))}
-              </CCol>
-            </CFormGroup>
-          </CCardBody>
-        </CCard>
-      </CCollapse>
+                </CCol>
+                <CCol md="8">
+                  {storeId.map((item, index) => (
+                    <CFormGroup variant="custom-checkbox" inline key={index}>
+                      <CInputCheckbox
+                        custom
+                        name="storeId"
+                        id={"storeId" + item._id}
+                        value={item._id}
+                        checked={item.isSelected}
+                        onChange={storeHandleChange}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"storeId" + item._id}
+                      >
+                        {item.title}
+                      </CLabel>
+                    </CFormGroup>
+                  ))}
+                </CCol>
+              </CFormGroup>
+            </CCardBody>
+          </CCard>
+        </CCollapse>
+      ) : (
+        ""
+      )}
       <CRow>
         <CCol sm="4" md="4" xl="xl" className="mb-3 mb-xl-0">
           <ConformationAlert

@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { login } from "../../actions/authAction";
 import validator from "validator";
 import { DashboardUrl } from "../../constants/baseUrls";
+// import { LiveChatWidget } from "@livechat/widget-react";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const Login = () => {
         },
       }));
       //  setRedirect(true);
-     window.location.href = DashboardUrl;
+      window.location.href = DashboardUrl;
     }
   }, [msg]);
   useEffect(() => {
@@ -138,6 +139,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
+                  {/* <LiveChatWidget license="14293374" /> */}
                   <CForm onSubmit={loginUser}>
                     <img
                       src={"logo/logo.png"}

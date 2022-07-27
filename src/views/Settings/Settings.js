@@ -61,6 +61,7 @@ const Settings = () => {
   // const [show, setShow] = useState(true);
   const [settingBar, setSettingBar] = useState([]);
   const show = useSelector((state) => state.settings.settingSideBarShow);
+  const dark = useSelector((state) => state.settings.darkMode);
 
   const dispatch = useDispatch();
 
@@ -287,7 +288,7 @@ const Settings = () => {
             <CListGroup id="list-tab" role="tablist">
               <CSidebar
                 show={show}
-                colorScheme="light"
+                colorScheme={dark ? "dark" : "light"}
                 size="lg"
                 fixed={false}
                 unfoldable

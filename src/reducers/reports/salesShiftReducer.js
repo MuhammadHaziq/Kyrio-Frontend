@@ -5,6 +5,7 @@ import {
   DELETE_SHIFT_SALES_SUMMARY,
   ROW_DATA_SHIFT_SALES_SUMMARY,
   TOGGLE_SHIFT_SIDEBAR,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -13,13 +14,21 @@ const initialState = {
   redirect_sale_shift_summary: true,
   show_shift_detail: false,
   sales_shift_data: [],
+  loading: true,
 };
 const salesShiftReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_SHIFT_SALES_SUMMARY: {
       return Object.assign({}, state, {
         sale_shift_summary: action.response,
+        loading: false,
       });
     }
     case ROW_DATA_SHIFT_SALES_SUMMARY: {

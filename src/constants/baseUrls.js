@@ -1,5 +1,5 @@
 // API URLs
-const LocalUrl = "http://localhost:3002/kyrio/v1/";
+const LocalUrl = "https://api.kyriopos.com/kyrio/v1/"; // "http://localhost:3002/kyrio/v1/";
 const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";
 // Image URLs
 const ImageLocalUrl = "http://localhost:3002/";

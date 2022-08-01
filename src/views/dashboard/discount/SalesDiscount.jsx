@@ -9,7 +9,8 @@ import {
 } from "@coreui/react";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import {
-  get_discount_summary
+  get_discount_summary,
+  toggle_loading,
 } from "../../../actions/reports/salesDiscountActions";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,11 +21,16 @@ import { CSVLink } from "react-csv";
 const SalesDiscount = () => {
   const dispatch = useDispatch();
 
-  const sale_discount_summary = useSelector((state) => state.reports.salesDiscountReducer.sale_discount_summary)
+  const sale_discount_summary = useSelector(
+    (state) => state.reports.salesDiscountReducer.sale_discount_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesDiscountReducer.loading
+  );
 
   const [loading, setLoading] = useState(false);
   const [filterReset, setFilterReset] = useState(false);
-  const [exportData, setExportData] = useState([])
+  const [exportData, setExportData] = useState([]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
     { days: 1, name: "Days", disable: true, active: false },
@@ -43,11 +49,13 @@ const SalesDiscount = () => {
 
   return (
     <>
-    <ReportsFilters
+      <ReportsFilters
         daysFilter={daysFilter}
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_discount_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>
@@ -55,30 +63,35 @@ const SalesDiscount = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof sale_discount_summary !== "undefined" && sale_discount_summary.length > 0 ?
-                <CSVLink data={sale_discount_summary.map(dis => {
-                  return {
-                    ["Name"]: dis.title,
-                    ["Discounts applied"]: dis.applied,
-                    ["Amount discounted"]: dis.total
-                  }
-                })}
-                  filename={"SalesByDiscounts"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                    <CButton
-                      color="secondary"
-                      className="btn-square"
+                  {typeof sale_discount_summary !== "undefined" &&
+                  sale_discount_summary.length > 0 ? (
+                    <CSVLink
+                      data={sale_discount_summary.map((dis) => {
+                        return {
+                          ["Name"]: dis.title,
+                          ["Discounts applied"]: dis.applied,
+                          ["Amount discounted"]: dis.total,
+                        };
+                      })}
+                      filename={
+                        "SalesByDiscounts" + dateformat(new Date()) + ".csv"
+                      }
+                      target="_blank"
                     >
-                      EXPORT
-                    </CButton>
-                  </CSVLink>
-                  : ""}
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
+                    </CSVLink>
+                  ) : (
+                    ""
+                  )}
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesDiscountDatatableNew sale_discount_summary={sale_discount_summary} />
+              <SalesDiscountDatatableNew
+                sale_discount_summary={sale_discount_summary}
+              />
             </CCardBody>
           </CCard>
         </CCol>

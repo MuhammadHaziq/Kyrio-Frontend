@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
   CInputCheckbox,
   CDropdown,
@@ -19,7 +16,8 @@ import {
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_sales_category_summary
+  get_sales_category_summary,
+  toggle_loading,
 } from "../../../actions/reports/salesCategoryActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesCategoryDatatable from "../../../datatables/reports/SalesCategoryDatatable";
@@ -31,21 +29,86 @@ import { amountFormat } from "../../../utils/helpers";
 const Categories = () => {
   const dispatch = useDispatch();
 
-  const category_sales_summary = useSelector((state) => state.reports.salesCategoryReducer.category_sales_summary)
+  const category_sales_summary = useSelector(
+    (state) => state.reports.salesCategoryReducer.category_sales_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesCategoryReducer.loading
+  );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
   const [columns, setColumns] = useState([
-    { key: "category",      label: "Category",       filter: true, isShow: true,  disabled: true },
-    { key: "ItemsSold",     label: "Items sold",     filter: true, isShow: true,  disabled: false },
-    { key: "GrossSales",    label: "Gross sales",    filter: true, isShow: true,  disabled: false },
-    { key: "ItemsRefunded", label: "Items refunded", filter: true, isShow: true,  disabled: false },
-    { key: "Refunds",       label: "Refunds",        filter: true, isShow: true,  disabled: false },
-    { key: "discounts",     label: "Discount",       filter: true, isShow: true,  disabled: false },
-    { key: "NetSales",      label: "Net sales",      filter: true, isShow: true,  disabled: false },
-    { key: "CostOfGoods",   label: "Cost of goods",  filter: true, isShow: true,  disabled: false },
-    { key: "GrossProfit",   label: "Gross profit",   filter: true, isShow: true,  disabled: false },
-    { key: "Margin",        label: "Margin",         filter: true, isShow: true,  disabled: false },
-    { key: "Tax",           label: "Taxes",          filter: true, isShow: true,  disabled: false }
+    {
+      key: "category",
+      label: "Category",
+      filter: true,
+      isShow: true,
+      disabled: true,
+    },
+    {
+      key: "ItemsSold",
+      label: "Items sold",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "GrossSales",
+      label: "Gross sales",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "ItemsRefunded",
+      label: "Items refunded",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "Refunds",
+      label: "Refunds",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "discounts",
+      label: "Discount",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "NetSales",
+      label: "Net sales",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "CostOfGoods",
+      label: "Cost of goods",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "GrossProfit",
+      label: "Gross profit",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "Margin",
+      label: "Margin",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    { key: "Tax", label: "Taxes", filter: true, isShow: true, disabled: false },
   ]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
@@ -66,7 +129,7 @@ const Categories = () => {
   }, []);
 
   const handleOnChangeCheck = (itm) => {
-    if(!itm.disabled){
+    if (!itm.disabled) {
       setColumns(
         columns.slice().map((item) => {
           if (item.key.trim() === itm.key.trim()) {
@@ -88,6 +151,8 @@ const Categories = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_sales_category_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>
@@ -95,33 +160,61 @@ const Categories = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof category_sales_summary !== "undefined" && category_sales_summary.length > 0 ?
-                <CSVLink data={category_sales_summary.length > 0 ? category_sales_summary.map(itm => {
-                    return {
-                      ["Category"]: itm.category,
-                      ["No. of Items Sold"]: itm.ItemsSold,
-                      ["Gross Sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
-                      ["Total Items Refunded"]: itm.ItemsRefunded,
-                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
-                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
-                      ["Net Sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
-                      ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
-                      ["Gross Profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
-                      ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
-                      ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
-                    }
-                  }) : []}
-                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                  <CButton
-                      color="secondary"
-                      className="btn-square"
+                  {typeof category_sales_summary !== "undefined" &&
+                  category_sales_summary.length > 0 ? (
+                    <CSVLink
+                      data={
+                        category_sales_summary.length > 0
+                          ? category_sales_summary.map((itm) => {
+                              return {
+                                ["Category"]: itm.category,
+                                ["No. of Items Sold"]: itm.ItemsSold,
+                                ["Gross Sales"]: amountFormat(
+                                  itm?.GrossSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Total Items Refunded"]: itm.ItemsRefunded,
+                                ["Refunds"]: amountFormat(
+                                  itm?.Refunds,
+                                  parseInt(decimal)
+                                ),
+                                ["Discounts"]: amountFormat(
+                                  itm?.discounts,
+                                  parseInt(decimal)
+                                ),
+                                ["Net Sales"]: amountFormat(
+                                  itm?.NetSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Cost of Goods"]: amountFormat(
+                                  itm?.CostOfGoods,
+                                  parseInt(decimal)
+                                ),
+                                ["Gross Profit"]: amountFormat(
+                                  itm?.GrossProfit,
+                                  parseInt(decimal)
+                                ),
+                                ["Margin"]:
+                                  amountFormat(itm?.Margin, parseInt(decimal)) +
+                                  "%",
+                                ["Taxes"]: amountFormat(
+                                  itm?.Tax,
+                                  parseInt(decimal)
+                                ),
+                              };
+                            })
+                          : []
+                      }
+                      filename={"SalesByItem" + dateformat(new Date()) + ".csv"}
+                      target="_blank"
                     >
-                      EXPORT
-                    </CButton>
-                  </CSVLink>
-                  : ""}
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
+                    </CSVLink>
+                  ) : (
+                    ""
+                  )}
                 </CCol>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol

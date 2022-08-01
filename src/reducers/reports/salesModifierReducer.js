@@ -3,20 +3,28 @@ import {
   TOGGLE_MODIFIER_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_MODIFIER_SALE_SUMMARY_ALL_SELECT,
   DELETE_MODIFIER_SALES_SUMMARY,
-  ROW_DATA_MODIFIER_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   sale_modifier_summary: [],
   redirect_update: false,
   redirect_sale_modifier_summary: true,
+  loading: true,
 };
 const salesModifierReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_MODIFIER_SALES_SUMMARY: {
       return Object.assign({}, state, {
         sale_modifier_summary: action.response,
+        loading: false,
       });
     }
 

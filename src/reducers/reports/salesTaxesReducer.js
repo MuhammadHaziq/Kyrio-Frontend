@@ -3,20 +3,28 @@ import {
   TOGGLE_TAXES_SALE_SINGLE_SELECT,
   TOGGLE_TAXES_SALE_ALL_SELECT,
   DELETE_TAXES_SALES,
-  ROW_DATA_TAXES_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   taxes_sales_summary: [],
   redirect_update: false,
   redirect_taxes_sales_summary: true,
+  loading: true,
 };
 const salesTaxesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_TAXES_SALES_SUMMARY: {
       return Object.assign({}, state, {
         taxes_sales_summary: action.response,
+        loading: false,
       });
     }
 

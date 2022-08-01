@@ -11,7 +11,10 @@ import {
   CRow,
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import { get_receipt_summary } from "../../../actions/reports/salesReceiptActions";
+import {
+  get_receipt_summary,
+  toggle_loading,
+} from "../../../actions/reports/salesReceiptActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import SalesReceiptDatatable from "../../../datatables/reports/SalesReceiptDatatable";
@@ -24,6 +27,9 @@ const SalesReceipts = () => {
   const dispatch = useDispatch();
   const sale_receipt_summary = useSelector(
     (state) => state.reports.salesReceiptReducer.sale_receipt_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesReceiptReducer.loading
   );
 
   const [filterReset, setFilterReset] = useState(false);
@@ -56,7 +62,7 @@ const SalesReceipts = () => {
                   ["Date"]: moment(item.sale_timestamp).format(
                     "MM/DD/YYYY h:mm a"
                   ),
-                  ["Receipt number"]: " "+item.receipt_number,
+                  ["Receipt number"]: " " + item.receipt_number,
                   ["Receipt type"]: item.receipt_type,
                   ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
                   ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
@@ -67,9 +73,9 @@ const SalesReceipts = () => {
                   ["Total collected"]: parseFloat(item.total_price).toFixed(2),
                   ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
                   ["Gross profit"]: parseFloat(
-                    (item.total_price - item.cost_of_goods) - item.total_discount
+                    item.total_price - item.cost_of_goods - item.total_discount
                   ).toFixed(2),
-                  ["Payment type"]: item.payments.map(pay => pay.paymentType),
+                  ["Payment type"]: item.payments.map((pay) => pay.paymentType),
                   ["Discription"]: item.items.map((ite) => {
                     return " " + ite.quantity + " X " + ite.name;
                   }),
@@ -112,7 +118,7 @@ const SalesReceipts = () => {
           );
           csvData.push({
             ["Date"]: moment(sale.sale_timestamp).format("MM/DD/YYYY h:mm a"),
-            ["Receipt number"]: " "+sale.receipt_number,
+            ["Receipt number"]: " " + sale.receipt_number,
             ["Receipt type"]: sale.receipt_type,
             ["Category"]: item.category,
             ["SKU"]: item.sku,
@@ -127,7 +133,7 @@ const SalesReceipts = () => {
             ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
             ["Cost of Goods"]: parseFloat(item.quantity * item.cost).toFixed(2),
             ["Gross profit"]: parseFloat(
-              (item.total_price - (item.cost * item.quantity)) - item.total_discount
+              item.total_price - item.cost * item.quantity - item.total_discount
             ).toFixed(2),
             ["Dining option"]:
               typeof sale.dining_option !== "undefined"
@@ -166,6 +172,8 @@ const SalesReceipts = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_receipt_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CCard>
         <CCardBody>

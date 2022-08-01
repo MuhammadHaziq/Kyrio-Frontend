@@ -3,20 +3,27 @@ import {
   TOGGLE_PAYMENT_TYPE_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_PAYMENT_TYPE_SALE_SUMMARY_ALL_SELECT,
   DELETE_PAYMENT_TYPE_SALES_SUMMARY,
-  ROW_DATA_PAYMENT_TYPE_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   paymentType_sales_summary: [],
   redirect_update: false,
   redirect_paymentType_sales_summary: true,
+  loading: true,
 };
 const salesPaymentTypeReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
     case GET_PAYMENT_TYPE_SALES_SUMMARY: {
       return Object.assign({}, state, {
         paymentType_sales_summary: action.response,
+        loading: false,
       });
     }
 

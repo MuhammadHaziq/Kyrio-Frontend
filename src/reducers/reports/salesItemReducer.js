@@ -4,19 +4,28 @@ import {
   TOGGLE_ITEM_SALE_ALL_SELECT,
   DELETE_ITEM_SALES,
   ROW_DATA_ITEM_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   item_sales_summary: [],
   redirect_update: false,
   redirect_item_sales_summary: true,
+  loading: true,
 };
 const salesItemReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_ITEM_SALES_SUMMARY: {
       return Object.assign({}, state, {
         item_sales_summary: action.response,
+        loading: false,
       });
     }
 

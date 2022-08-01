@@ -7,10 +7,10 @@ import {
   TOGGLE_RECEIPT_SIDEBAR,
   CANCEL_RECEIPT,
   MESSAGE,
-  ERROR_MESSAGE
+  ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
-
+import authAxios from "../../constants/authAxios";
 
 export const get_receipt_summary = (data) => {
   return (dispatch) => {
@@ -18,7 +18,7 @@ export const get_receipt_summary = (data) => {
       authAxios({
         method: "POST",
         url: `reports/sale/receipts`,
-        data: data
+        data: data,
       })
         .then((response) => {
           dispatch({
@@ -59,7 +59,14 @@ export const get_receipt_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_receipt_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({
@@ -89,36 +96,41 @@ export const delete_receipt_summary = (ids) => {
 
 export const update_row_data = (data, status) => {
   return (dispatch) => {
-    dispatch({ type: ROW_DATA_SALES_RECEIPT_SUMMARY, response: [data], status: status });
+    dispatch({
+      type: ROW_DATA_SALES_RECEIPT_SUMMARY,
+      response: [data],
+      status: status,
+    });
   };
 };
 export const toggle_receipt_sideBar = (status) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: TOGGLE_RECEIPT_SIDEBAR,
-      status: status
-    })
-  }
-}
+      status: status,
+    });
+  };
+};
 export const cancel_receipt = (data) => {
   return (dispatch) => {
     try {
       authAxios({
         method: "PATCH",
         url: `sales/cancel`,
-        data: data
-
+        data: data,
       })
         .then((response) => {
-          
           dispatch({
             type: CANCEL_RECEIPT,
-            data: response.data
-          })
-          if (response.data.message !== undefined && response.data.message !== null) {
+            data: response.data,
+          });
+          if (
+            response.data.message !== undefined &&
+            response.data.message !== null
+          ) {
             let msg = {
               open: true,
-              message: response.data.message || '',
+              message: response.data.message || "",
               object: {},
               error: false,
             };
@@ -126,7 +138,7 @@ export const cancel_receipt = (data) => {
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           let msg = {
             open: true,
             message:
@@ -159,4 +171,4 @@ export const cancel_receipt = (data) => {
       dispatch({ type: MESSAGE, data: msg });
     }
   };
-}
+};

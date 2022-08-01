@@ -11,7 +11,10 @@ import { useSelector, useDispatch } from "react-redux";
 import dateformat from "dateformat";
 import { CSVLink } from "react-csv";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import { get_shift_summary } from "../../../actions/reports/salesShiftActions";
+import {
+  get_shift_summary,
+  toggle_loading,
+} from "../../../actions/reports/salesShiftActions";
 import SalesShiftDatatable from "../../../datatables/reports/SalesShiftDatatable";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { amountFormat } from "../../../utils/helpers";
@@ -24,6 +27,9 @@ const SalesReceipts = () => {
   );
   const sales_shift_data = useSelector(
     (state) => state.reports.salesShiftReducer.sales_shift_data
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesShiftReducer.loading
   );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
@@ -55,6 +61,8 @@ const SalesReceipts = () => {
         filter={false}
         hideFilter={true}
         get_filter_record={get_shift_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>

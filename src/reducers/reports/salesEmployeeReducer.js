@@ -3,20 +3,28 @@ import {
   TOGGLE_EMPLOYEE_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_EMPLOYEE_SALE_SUMMARY_ALL_SELECT,
   DELETE_EMPLOYEE_SALES_SUMMARY,
-  ROW_DATA_EMPLOYEE_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   employee_sales_summary: [],
   redirect_update: false,
   redirect_employee_sales_summary: true,
+  loading: true,
 };
 const salesEmployeeReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_EMPLOYEE_SALES_SUMMARY: {
       return Object.assign({}, state, {
         employee_sales_summary: action.response,
+        loading: false,
       });
     }
 

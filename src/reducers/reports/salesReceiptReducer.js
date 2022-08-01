@@ -5,7 +5,8 @@ import {
   DELETE_SALES_RECEIPT_SUMMARY,
   ROW_DATA_SALES_RECEIPT_SUMMARY,
   TOGGLE_RECEIPT_SIDEBAR,
-  CANCEL_RECEIPT
+  CANCEL_RECEIPT,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
@@ -13,14 +14,22 @@ const initialState = {
   redirect_update: false,
   redirect_sale_receipt_summary: true,
   show_receipt_detail: false,
-  sales_receipt_data: []
+  sales_receipt_data: [],
+  loading: true,
 };
 const salesReceiptReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_SALES_RECEIPT_SUMMARY: {
       return Object.assign({}, state, {
         sale_receipt_summary: action.response,
+        loading: false,
       });
     }
 
@@ -65,32 +74,32 @@ const salesReceiptReducer = (state = initialState, action) => {
       return {
         ...state,
         show_receipt_detail: action.status,
-        sales_receipt_data: action.response
-      }
+        sales_receipt_data: action.response,
+      };
     }
     case TOGGLE_RECEIPT_SIDEBAR: {
       return {
         ...state,
-        show_receipt_detail: action.status
-      }
+        show_receipt_detail: action.status,
+      };
     }
     case CANCEL_RECEIPT: {
       let salesItem = {
         receipts: state.sale_receipt_summary.receipts.map((item) => {
-            if(item._id === action.data._id){
-              item = action.data
-            }
-            return item
-          }),
+          if (item._id === action.data._id) {
+            item = action.data;
+          }
+          return item;
+        }),
         totalReceipts: state.sale_receipt_summary.totalReceipts,
         totalRefunds: state.sale_receipt_summary.totalRefunds,
-        totalSales: state.sale_receipt_summary.totalSales
-      }
+        totalSales: state.sale_receipt_summary.totalSales,
+      };
       return {
         ...state,
         sales_receipt_data: [action.data],
-        sale_receipt_summary: salesItem
-      }
+        sale_receipt_summary: salesItem,
+      };
     }
     default:
       return { ...state };

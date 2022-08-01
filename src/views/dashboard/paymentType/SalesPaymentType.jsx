@@ -9,7 +9,10 @@ import {
 } from "@coreui/react";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import { get_sales_payment_type_summary } from "../../../actions/reports/salesPaymentTypeActions";
+import {
+  get_sales_payment_type_summary,
+  toggle_loading,
+} from "../../../actions/reports/salesPaymentTypeActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesPaymentTypeDatatableNew from "../../../datatables/reports/SalesPaymentTypeDatatableNew";
 import dateformat from "dateformat";
@@ -20,6 +23,9 @@ const SalesPaymentType = () => {
   const dispatch = useDispatch();
   const paymentType_sales_summary = useSelector(
     (state) => state.reports.salesPaymentTypeReducer.paymentType_sales_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesPaymentTypeReducer.loading
   );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
@@ -50,6 +56,8 @@ const SalesPaymentType = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_sales_payment_type_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>

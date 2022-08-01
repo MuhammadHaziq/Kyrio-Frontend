@@ -5,6 +5,7 @@ import {
   TOGGLE_SALE_SUMMARY_ALL_SELECT,
   DELETE_SALES_SUMMARY,
   CHANGE_DAYS,
+  SET_LOADING,
   ROW_DATA_SALES_SUMMARY,
 } from "../../constants/ActionTypes";
 
@@ -14,10 +15,16 @@ const initialState = {
   redirect_sale_summary: true,
   sales_graph_data: [],
   filter_days: [],
+  loading: true,
 };
 const salesSummaryReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
     case GET_SALES_SUMMARY: {
       return Object.assign({}, state, {
         sales_summary: action.response,
@@ -27,6 +34,7 @@ const salesSummaryReducer = (state = initialState, action) => {
       return {
         ...state,
         sales_graph_data: action.response,
+        loading: false,
       };
     }
     case TOGGLE_SALE_SUMMARY_SINGLE_SELECT: {

@@ -525,6 +525,7 @@ const FilterComponent = (props) => {
             </CDropdownMenu>
           </CDropdown>
         </CCol> */}
+
         {storeId.length > 1 ? (
           <CCol sm="12" md="3" lg="3" xs="12">
             <CDropdown style={{ backgroundColor: "white" }}>

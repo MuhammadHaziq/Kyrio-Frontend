@@ -22,7 +22,7 @@ const SalesCards = ({
       <strong>
         <h2>{<Amount value={value} />}</h2>
       </strong>
-      <p>{<Amount value={0} />} (0%)</p>
+      {/* <p>{<Amount value={0} />} (0%)</p> */}
       {salesFilter === title ? (
         <CProgress
           className="progress-xs mt-2"

@@ -230,79 +230,32 @@ const Dashboard = (props) => {
       setLoading(true);
     }
   }, [sales]);
-  
-  
+
   const handleOnChangeSales = (e) => {
     setSalesFilter(e.trim());
   };
 
-  const grossSales =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.GrossSales !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.GrossSales !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossSales, 2)
-          : 0
-        : 0
-      : 0;
-
-  const refunds =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.Refunds !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.Refunds !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.Refunds, 2)
-          : 0
-        : 0
-      : 0;
-  const discounts =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.discounts !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.discounts !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.discounts, 2)
-          : 0
-        : 0
-      : 0;
-  const netSales =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.NetSales !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.NetSales !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.NetSales, 2)
-          : 0
-        : 0
-      : 0;
-  // const CostOfGoods =
-  //   salesSummary.sales_graph_data !== undefined &&
-  //   salesSummary.sales_graph_data !== null
-  //     ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-  //       salesSummary.sales_graph_data.SalesTotal !== null
-  //       ? salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== undefined &&
-  //         salesSummary.sales_graph_data.SalesTotal.CostOfGoods !== null
-  //         ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods, 2)
-  //         : 0
-  //       : 0
-  //     : 0;
-  const grossProfit =
-    salesSummary.sales_graph_data !== undefined &&
-    salesSummary.sales_graph_data !== null
-      ? salesSummary.sales_graph_data.SalesTotal !== undefined &&
-        salesSummary.sales_graph_data.SalesTotal !== null
-        ? salesSummary.sales_graph_data.SalesTotal.GrossProfit !== undefined &&
-          salesSummary.sales_graph_data.SalesTotal.GrossProfit !== null
-          ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossProfit, 2)
-          : 0
-        : 0
-      : 0;
+  const grossSales = salesSummary?.sales_graph_data?.SalesTotal?.GrossSales
+    ? parseFloat(
+        salesSummary?.sales_graph_data?.SalesTotal?.GrossSales,
+        decimal
+      )
+    : 0;
+  const refunds = salesSummary?.sales_graph_data?.SalesTotal?.Refunds
+    ? parseFloat(salesSummary.sales_graph_data.SalesTotal.Refunds, decimal)
+    : 0;
+  const discounts = salesSummary?.sales_graph_data?.SalesTotal?.discounts
+    ? parseFloat(salesSummary.sales_graph_data.SalesTotal.discounts, decimal)
+    : 0;
+  const netSales = salesSummary?.sales_graph_data?.SalesTotal?.NetSales
+    ? parseFloat(salesSummary.sales_graph_data.SalesTotal.NetSales, decimal)
+    : 0;
+  // const CostOfGoods = salesSummary?.sales_graph_data?.SalesTotal?.CostOfGoods
+  //   ? parseFloat(salesSummary.sales_graph_data.SalesTotal.CostOfGoods, decimal)
+  //   : 0;
+  const grossProfit = salesSummary?.sales_graph_data?.SalesTotal?.GrossProfit
+    ? parseFloat(salesSummary.sales_graph_data.SalesTotal.GrossProfit, decimal)
+    : 0;
 
   return (
     <>
@@ -315,6 +268,7 @@ const Dashboard = (props) => {
             setFilter={setFilter}
             resetFilter={filterReset}
             handleOnChangeSales={handleOnChangeSales}
+            loading={salesSummary.loading}
           />
         </CCol>
       </CRow>

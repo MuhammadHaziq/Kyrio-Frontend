@@ -8,8 +8,9 @@ import {
   ROW_DATA_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
+import authAxios from "../../constants/authAxios";
 
 export const get_sales_summary = () => {
   return (dispatch) => {
@@ -17,9 +18,9 @@ export const get_sales_summary = () => {
       authAxios({
         method: "GET",
         url: `sales/all`,
-
       })
         .then((response) => {
+          toggle_loading(true);
           dispatch({ type: GET_SALES_SUMMARY, response: response.data });
         })
         .catch((error) => {
@@ -65,6 +66,7 @@ export const get_grap_sales_summary = (data) => {
         data: data,
       })
         .then((response) => {
+          toggle_loading(true);
           dispatch({ type: GET_SALES_GRAPH_DATA, response: response.data });
         })
         .catch((error) => {
@@ -101,6 +103,14 @@ export const get_grap_sales_summary = (data) => {
   };
 };
 
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_sales_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({
@@ -134,7 +144,7 @@ export const delete_sales_summary = (ids) => {
     //     authAxios({
     //         method: "DELETE",
     //         url: `${BaseUrl}employee/employeeList/${ids}`,
-    //        
+    //
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_SALES_SUMMARY, response: JSON.parse(ids) });

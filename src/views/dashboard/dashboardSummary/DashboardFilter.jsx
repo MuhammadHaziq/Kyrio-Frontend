@@ -8,8 +8,7 @@ import {
   CDropdownMenu,
   CDropdownItem,
   CInputCheckbox,
-  CInputRadio,
-  CInputGroup,
+  CSpinner,
   CLabel,
   CButton,
 } from "@coreui/react";
@@ -976,7 +975,7 @@ const DashboardFilter = (props) => {
             className="btn btn-outline-primary btn-block"
             onClick={resetFilters}
           >
-            Reset
+            {props.loading ? <CSpinner color="info" /> : "Reset"}
           </CButton>
         </CCol>
       </CRow>

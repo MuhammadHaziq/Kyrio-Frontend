@@ -4,6 +4,7 @@ export const SIDEBAR = "SIDEBAR";
 export const SIDEBAR_SETTINGS = "SIDEBAR_SETTINGS";
 export const DARK = "DARK";
 
+export const SET_LOADING = "SET_LOADING";
 // DEFAULT Authorization
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const CHECK_PASSWORD = "CHECK_PASSWORD";

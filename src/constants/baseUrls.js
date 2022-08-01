@@ -3,11 +3,11 @@ const LocalUrl = "http://localhost:3002/kyrio/v1/";
 const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";
 // Image URLs
 const ImageLocalUrl = "http://localhost:3002/";
-const ImageLiveUrl = "https://api.kyriopos.com/";
+const ImageLiveUrl = "https://apidev.kyriopos.com/";
 
 // Dashboard URLs
 const DashboardLocalUrl = "http://localhost:3000";
-const DashboardLiveUrl = "https://dashboard.kyriopos.com";
+const DashboardLiveUrl = "https://dashboarddev.kyriopos.com";
 
 // export const imageBaseUrl = "https://api.kyriopos.com/";
 export const imageBaseUrl = "http://94.250.202.208:3003/";

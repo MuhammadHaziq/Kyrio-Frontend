@@ -11,6 +11,7 @@ import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
   get_tax_sale_summary,
+  toggle_loading,
 } from "../../../actions/reports/salesTaxesActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesTaxDatatableNew from "../../../datatables/reports/SalesTaxDatatableNew";
@@ -20,11 +21,16 @@ import Amount from "../../../components/utils/Amount";
 
 const SalesTax = () => {
   const dispatch = useDispatch();
-  const taxes_sales_summary = useSelector((state) => state.reports.salesTaxesReducer.taxes_sales_summary)
+  const taxes_sales_summary = useSelector(
+    (state) => state.reports.salesTaxesReducer.taxes_sales_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesTaxesReducer.loading
+  );
 
   const [loading, setLoading] = useState(false);
   const [filterReset, setFilterReset] = useState(false);
-  const [exportData, setExportData] = useState([])
+  const [exportData, setExportData] = useState([]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
     { days: 1, name: "Days", disable: true, active: false },
@@ -42,17 +48,17 @@ const SalesTax = () => {
   }, []);
 
   useEffect(() => {
-    if(taxes_sales_summary?.taxes?.length > 0){
-      let exortData = []
-      taxes_sales_summary.taxes.map(itm => {
-          exortData.push({
-            ["Tax name"]: itm.title,
-            ["Tax rate"]: itm.tax_rate,
-            ["Taxable sales"]: itm.taxableSale,
-            ["Tax amount"]: itm.taxAmount
-          })
+    if (taxes_sales_summary?.taxes?.length > 0) {
+      let exortData = [];
+      taxes_sales_summary.taxes.map((itm) => {
+        exortData.push({
+          ["Tax name"]: itm.title,
+          ["Tax rate"]: itm.tax_rate,
+          ["Taxable sales"]: itm.taxableSale,
+          ["Tax amount"]: itm.taxAmount,
+        });
       });
-      setExportData(exortData)
+      setExportData(exortData);
     }
   }, [taxes_sales_summary]);
 
@@ -63,21 +69,47 @@ const SalesTax = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_tax_sale_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CCard>
         <CCardBody>
           <CRow>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Taxable sales</h6>
-              <h2><Amount value={taxes_sales_summary?.taxableSales ? taxes_sales_summary.taxableSales : 0} /></h2>
+              <h2>
+                <Amount
+                  value={
+                    taxes_sales_summary?.taxableSales
+                      ? taxes_sales_summary.taxableSales
+                      : 0
+                  }
+                />
+              </h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Non-taxable sales</h6>
-              <h2><Amount value={taxes_sales_summary?.NonTaxableSales ? taxes_sales_summary.NonTaxableSales : 0} /></h2>
+              <h2>
+                <Amount
+                  value={
+                    taxes_sales_summary?.NonTaxableSales
+                      ? taxes_sales_summary.NonTaxableSales
+                      : 0
+                  }
+                />
+              </h2>
             </CCol>
             <CCol sm="4" md="4" lg="4" style={{ textAlign: "center" }}>
               <h6>Total net sales</h6>
-              <h2><Amount value={taxes_sales_summary?.NetSales ? taxes_sales_summary.NetSales : 0} /></h2>
+              <h2>
+                <Amount
+                  value={
+                    taxes_sales_summary?.NetSales
+                      ? taxes_sales_summary.NetSales
+                      : 0
+                  }
+                />
+              </h2>
             </CCol>
           </CRow>
         </CCardBody>
@@ -88,24 +120,29 @@ const SalesTax = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof taxes_sales_summary.taxes !== "undefined" && taxes_sales_summary.taxes.length > 0 ?
-                <CSVLink data={exportData}
-                  filename={"SalesByTaxes"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                    <CButton
-                      color="secondary"
-                      className="btn-square"
+                  {typeof taxes_sales_summary.taxes !== "undefined" &&
+                  taxes_sales_summary.taxes.length > 0 ? (
+                    <CSVLink
+                      data={exportData}
+                      filename={
+                        "SalesByTaxes" + dateformat(new Date()) + ".csv"
+                      }
+                      target="_blank"
                     >
-                      EXPORT
-                    </CButton>
-                  </CSVLink>
-                  : ""}
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
+                    </CSVLink>
+                  ) : (
+                    ""
+                  )}
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <SalesTaxDatatableNew taxes_sales_summary={taxes_sales_summary.taxes} />
+              <SalesTaxDatatableNew
+                taxes_sales_summary={taxes_sales_summary.taxes}
+              />
             </CCardBody>
           </CCard>
         </CCol>

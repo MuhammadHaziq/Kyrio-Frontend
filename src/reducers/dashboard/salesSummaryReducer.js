@@ -28,6 +28,7 @@ const salesSummaryReducer = (state = initialState, action) => {
     case GET_SALES_SUMMARY: {
       return Object.assign({}, state, {
         sales_summary: action.response,
+        loading: false,
       });
     }
     case GET_SALES_GRAPH_DATA: {

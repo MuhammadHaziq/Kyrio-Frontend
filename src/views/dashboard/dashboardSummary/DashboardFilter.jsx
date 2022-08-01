@@ -17,6 +17,7 @@ import { get_stores } from "../../../actions/settings/storeActions";
 import {
   get_grap_sales_summary,
   change_days,
+  toggle_loading,
 } from "../../../actions/dashboard/salesSummaryActions";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
@@ -416,6 +417,7 @@ const DashboardFilter = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
+      dispatch(toggle_loading(true));
       dispatch(get_grap_sales_summary(data));
     }
   }, [Days]);
@@ -444,6 +446,7 @@ const DashboardFilter = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
+      dispatch(toggle_loading(true));
       dispatch(get_grap_sales_summary(data));
     }
   }, [Days]);
@@ -563,6 +566,7 @@ const DashboardFilter = (props) => {
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
+    dispatch(toggle_loading(true));
     dispatch(get_grap_sales_summary(data));
   };
 
@@ -619,6 +623,7 @@ const DashboardFilter = (props) => {
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
+    dispatch(toggle_loading(true));
     dispatch(get_grap_sales_summary(data));
   };
 
@@ -975,7 +980,7 @@ const DashboardFilter = (props) => {
             className="btn btn-outline-primary btn-block"
             onClick={resetFilters}
           >
-            {props.loading ? <CSpinner color="info" /> : "Reset"}
+            {props.loading ? <CSpinner color="info" size="sm" /> : "Reset"}
           </CButton>
         </CCol>
       </CRow>

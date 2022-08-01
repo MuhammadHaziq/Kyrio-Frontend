@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
   CRow,
   CInputCheckbox,
   CDropdown,
@@ -22,7 +19,8 @@ import dateformat from "dateformat";
 // import FilterComponent from "../FilterComponent";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
 import {
-  get_item_sale_summary
+  get_item_sale_summary,
+  toggle_loading,
 } from "../../../actions/reports/salesItemActions";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,12 +30,14 @@ import { CSVLink } from "react-csv";
 import { amountFormat } from "../../../utils/helpers";
 
 const SalesItem = () => {
-  
   const decimal = useSelector((state) => state.auth.user.decimal);
 
-  const item_sales_summary = useSelector((state) => state.reports.salesItemReducer.item_sales_summary);
-  //   // $(this).parent().toggleClass("open");
-  // });
+  const item_sales_summary = useSelector(
+    (state) => state.reports.salesItemReducer.item_sales_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesItemReducer.loading
+  );
 
   const dispatch = useDispatch();
   const filterComponent = useSelector(
@@ -47,16 +47,76 @@ const SalesItem = () => {
   const [columns, setColumns] = useState([
     { key: "name", label: "Item", filter: true, isShow: true, disabled: true },
     { key: "sku", label: "SKU", filter: true, isShow: true, disabled: false },
-    { key: "category", label: "Category", filter: true, isShow: true, disabled: false },
-    { key: "ItemsSold", label: "Items sold", filter: true, isShow: true, disabled: false },
-    { key: "GrossSales", label: "Gross sales", filter: true, isShow: true, disabled: false },
-    { key: "ItemsRefunded", label: "Items refunded", filter: true, isShow: true, disabled: false },
-    { key: "Refunds", label: "Refunds", filter: true, isShow: true, disabled: false },
-    { key: "discounts", label: "Discounts", filter: true, isShow: true, disabled: false },
-    { key: "NetSales", label: "Net Sales", filter: true, isShow: true, disabled: false },
-    { key: "CostOfGoods", label: "Cost of goods", filter: true, isShow: true, disabled: false },
-    { key: "GrossProfit", label: "Gross profit", filter: true, isShow: true, disabled: false },
-    { key: "Margin", label: "Margin", filter: true, isShow: true, disabled: false },
+    {
+      key: "category",
+      label: "Category",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "ItemsSold",
+      label: "Items sold",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "GrossSales",
+      label: "Gross sales",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "ItemsRefunded",
+      label: "Items refunded",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "Refunds",
+      label: "Refunds",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "discounts",
+      label: "Discounts",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "NetSales",
+      label: "Net Sales",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "CostOfGoods",
+      label: "Cost of goods",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "GrossProfit",
+      label: "Gross profit",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
+    {
+      key: "Margin",
+      label: "Margin",
+      filter: true,
+      isShow: true,
+      disabled: false,
+    },
     { key: "Tax", label: "Taxes", filter: true, isShow: true, disabled: false },
   ]);
   const [loading, setLoading] = useState(false);
@@ -104,7 +164,7 @@ const SalesItem = () => {
   };
 
   const handleOnChangeCheck = (itm) => {
-    if(!itm.disabled){
+    if (!itm.disabled) {
       setColumns(
         columns.slice().map((item) => {
           if (item.key.trim() === itm.key.trim()) {
@@ -126,6 +186,8 @@ const SalesItem = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_item_sale_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>
@@ -138,35 +200,63 @@ const SalesItem = () => {
             <CCardHeader>
               <CRow>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
-                {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
-                <CSVLink data={item_sales_summary.itemsReport.length > 0 ? item_sales_summary.itemsReport.map(itm => {
-                    return {
-                      ["Name"]: itm.name,
-                      ["SKU"]: itm.sku,
-                      ["Category"]: itm.category,
-                      ["No. of Items Sold"]: itm.ItemsSold,
-                      ["Gross Sales"]: amountFormat(itm?.GrossSales, parseInt(decimal)),
-                      ["Total Items Refunded"]: itm.ItemsRefunded,
-                      ["Refunds"]: amountFormat(itm?.Refunds, parseInt(decimal)),
-                      ["Discounts"]: amountFormat(itm?.discounts, parseInt(decimal)),
-                      ["Net Sales"]: amountFormat(itm?.NetSales, parseInt(decimal)),
-                      ["Cost of Goods"]: amountFormat(itm?.CostOfGoods, parseInt(decimal)),
-                      ["Gross Profit"]: amountFormat(itm?.GrossProfit, parseInt(decimal)),
-                      ["Margin"]: amountFormat(itm?.Margin, parseInt(decimal))+"%",
-                      ["Taxes"]: amountFormat(itm?.Tax, parseInt(decimal))
-                    }
-                  }) : []}
-                  filename={"SalesByItem"+dateformat(new Date)+".csv"}
-                  target="_blank"
-                  >
-                  <CButton
-                    color="secondary"
-                    className="btn-square"
-                  >
-                    EXPORT
-                  </CButton>
-                  </CSVLink>
-                  : ""}
+                  {typeof item_sales_summary.itemsReport !== "undefined" &&
+                  item_sales_summary.itemsReport.length > 0 ? (
+                    <CSVLink
+                      data={
+                        item_sales_summary.itemsReport.length > 0
+                          ? item_sales_summary.itemsReport.map((itm) => {
+                              return {
+                                ["Name"]: itm.name,
+                                ["SKU"]: itm.sku,
+                                ["Category"]: itm.category,
+                                ["No. of Items Sold"]: itm.ItemsSold,
+                                ["Gross Sales"]: amountFormat(
+                                  itm?.GrossSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Total Items Refunded"]: itm.ItemsRefunded,
+                                ["Refunds"]: amountFormat(
+                                  itm?.Refunds,
+                                  parseInt(decimal)
+                                ),
+                                ["Discounts"]: amountFormat(
+                                  itm?.discounts,
+                                  parseInt(decimal)
+                                ),
+                                ["Net Sales"]: amountFormat(
+                                  itm?.NetSales,
+                                  parseInt(decimal)
+                                ),
+                                ["Cost of Goods"]: amountFormat(
+                                  itm?.CostOfGoods,
+                                  parseInt(decimal)
+                                ),
+                                ["Gross Profit"]: amountFormat(
+                                  itm?.GrossProfit,
+                                  parseInt(decimal)
+                                ),
+                                ["Margin"]:
+                                  amountFormat(itm?.Margin, parseInt(decimal)) +
+                                  "%",
+                                ["Taxes"]: amountFormat(
+                                  itm?.Tax,
+                                  parseInt(decimal)
+                                ),
+                              };
+                            })
+                          : []
+                      }
+                      filename={"SalesByItem" + dateformat(new Date()) + ".csv"}
+                      target="_blank"
+                    >
+                      <CButton color="secondary" className="btn-square">
+                        EXPORT
+                      </CButton>
+                    </CSVLink>
+                  ) : (
+                    ""
+                  )}
                 </CCol>
                 <CCol xs="12" sm="6" md="6" xl="xl" className="mb-3 mb-xl-0">
                   <CCol
@@ -214,9 +304,18 @@ const SalesItem = () => {
               </CRow>
             </CCardHeader>
             <CCardBody>
-              {typeof item_sales_summary.itemsReport !== "undefined" && item_sales_summary.itemsReport.length > 0 ?
-              <SalesItemDatatableNew item_sale_summary={item_sales_summary.itemsReport} columns={columns} />
-              : <SalesItemDatatableNew item_sale_summary={[]} columns={columns} />}
+              {typeof item_sales_summary.itemsReport !== "undefined" &&
+              item_sales_summary.itemsReport.length > 0 ? (
+                <SalesItemDatatableNew
+                  item_sale_summary={item_sales_summary.itemsReport}
+                  columns={columns}
+                />
+              ) : (
+                <SalesItemDatatableNew
+                  item_sale_summary={[]}
+                  columns={columns}
+                />
+              )}
             </CCardBody>
           </CCard>
         </CCol>

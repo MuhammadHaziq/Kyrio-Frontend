@@ -7,6 +7,7 @@ import {
   TOGGLE_SHIFT_SIDEBAR,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 import authAxios from "../../constants/authAxios";
 
@@ -57,7 +58,14 @@ export const get_shift_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_shift_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({

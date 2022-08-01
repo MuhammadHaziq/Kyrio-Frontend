@@ -8,7 +8,10 @@ import {
   CRow,
 } from "@coreui/react";
 import { unmount_filter } from "../../../actions/dashboard/filterComponentActions";
-import { get_sales_employee_summary } from "../../../actions/reports/salesEmployeeActions";
+import {
+  get_sales_employee_summary,
+  toggle_loading,
+} from "../../../actions/reports/salesEmployeeActions";
 import { useSelector, useDispatch } from "react-redux";
 import SalesEmployeeDatatable from "../../../datatables/reports/SalesEmployeeDatatable";
 import ReportsFilters from "../../../components/reportFilters/ReportsFilters";
@@ -20,6 +23,9 @@ const SalesEmployee = () => {
   const dispatch = useDispatch();
   const employee_sales_summary = useSelector(
     (state) => state.reports.salesEmployeeReducer.employee_sales_summary
+  );
+  const loadingFilter = useSelector(
+    (state) => state.reports.salesEmployeeReducer.loading
   );
   const decimal = useSelector((state) => state.auth.user.decimal);
 
@@ -50,6 +56,8 @@ const SalesEmployee = () => {
         resetFilter={filterReset}
         filter={false}
         get_filter_record={get_sales_employee_summary}
+        toggle_loading={toggle_loading}
+        loading={loadingFilter}
       />
       <CRow>
         <CCol>

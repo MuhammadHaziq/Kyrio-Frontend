@@ -8,10 +8,9 @@ import {
   CDropdownMenu,
   CDropdownItem,
   CInputCheckbox,
-  CInputRadio,
-  CInputGroup,
   CLabel,
   CButton,
+  CSpinner,
 } from "@coreui/react";
 import { get_employee_list } from "../../actions/employee/employeeListActions";
 import { get_stores } from "../../actions/settings/storeActions";
@@ -377,6 +376,7 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
+      dispatch(props.toggle_loading(true));
       dispatch(props.get_filter_record(data));
     }
   }, [
@@ -413,6 +413,7 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
+      dispatch(props.toggle_loading(true));
       dispatch(props.get_filter_record(data));
     }
   }, [Days]);
@@ -441,7 +442,7 @@ const ReportsFilters = (props) => {
         // need this formate with year to match with date filter exactly
         matches: daysDates,
       };
-
+      dispatch(props.toggle_loading(true));
       dispatch(props.get_filter_record(data));
     }
   }, [Days]);
@@ -561,7 +562,7 @@ const ReportsFilters = (props) => {
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
-
+    dispatch(props.toggle_loading(true));
     dispatch(props.get_filter_record(data));
   };
 
@@ -618,7 +619,7 @@ const ReportsFilters = (props) => {
       // need this formate with year to match with date filter exactly
       matches: daysDates,
     };
-    console.log("dasdsa5", data);
+    dispatch(props.toggle_loading(true));
     dispatch(props.get_filter_record(data));
   };
 
@@ -765,157 +766,158 @@ const ReportsFilters = (props) => {
             </CButton>
           </DatetimeRangePicker>
         </CCol>
-        {props?.hideFilter == true
-          ? ""
-          : ""
-            // <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
-            //   <CDropdown style={{ backgroundColor: "white" }}>
-            //     <CDropdownToggle caret color="default  btn-block">
-            //       <MdAvTimer />{" "}
-            //       {fields.time_filter === 0
-            //         ? "All Day"
-            //         : startHours + startTimeZone + "-" + endHours + endTimeZone}
-            //     </CDropdownToggle>
+        {
+          props?.hideFilter == true ? "" : ""
+          // <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
+          //   <CDropdown style={{ backgroundColor: "white" }}>
+          //     <CDropdownToggle caret color="default  btn-block">
+          //       <MdAvTimer />{" "}
+          //       {fields.time_filter === 0
+          //         ? "All Day"
+          //         : startHours + startTimeZone + "-" + endHours + endTimeZone}
+          //     </CDropdownToggle>
 
-            //     <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
-            //       {/*// show={toggleDropDown[0]}*/}
-            //       <CDropdownItem onClick={() => handleOnChange(0)}>
-            //         <CInputGroup
-            //           variant="custom-radio"
-            //           inline
-            //           className="form-group-space"
-            //         >
-            //           <CInputRadio
-            //             className="form-check-input"
-            //             id="time_filter"
-            //             name="time_filter"
-            //             value={0}
-            //             checked={fields.time_filter === 0}
-            //             divider={true}
-            //             style={{ marginLeft: "0px" }}
-            //           />
-            //           <CLabel
-            //             htmlFor="time_filter"
-            //             className="checkbox-label"
-            //             style={{ marginLeft: "20px" }}
-            //           >
-            //             All Day
-            //           </CLabel>
-            //         </CInputGroup>
-            //       </CDropdownItem>
-            //       <CDropdownItem onClick={() => handleOnChange(1)}>
-            //         <CInputGroup
-            //           variant="custom-radio"
-            //           inline
-            //           className="form-group-space"
-            //         >
-            //           <CInputRadio
-            //             className="form-check-input"
-            //             id="time_filter"
-            //             name="time_filter"
-            //             value={1}
-            //             checked={fields.time_filter === 1}
-            //             style={{ marginLeft: "0px" }}
-            //           />
-            //           <CLabel
-            //             htmlFor="time_filter"
-            //             className="checkbox-label"
-            //             style={{ marginLeft: "20px" }}
-            //           >
-            //             Custome Period
-            //           </CLabel>
-            //         </CInputGroup>
-            //       </CDropdownItem>
-            //       {fields.time_filter === 1 ? (
-            //         <CDropdownItem>
-            //           <CFormGroup inline>
-            //             <CLabel htmlFor="start_time">Start Time</CLabel>
-            //             <CInputGroup variant="custom-radio" inline>
-            //               <TimePicker
-            //                 start="00:00"
-            //                 end="23:59"
-            //                 step={60}
-            //                 name="startTime"
-            //                 value={timeRange.startTime}
-            //                 onChange={handleOnChangeStartTime}
-            //               />
-            //             </CInputGroup>
-            //           </CFormGroup>
-            //           <CFormGroup inline>
-            //             <CLabel htmlFor="start_time">End Time</CLabel>
-            //             <CInputGroup variant="custom-radio" inline>
-            //               <TimePicker
-            //                 start="00:00"
-            //                 end="23:59"
-            //                 step={60}
-            //                 name="endTime"
-            //                 value={timeRange.endTime}
-            //                 onChange={handleOnChangeEndTime}
-            //               />
-            //             </CInputGroup>
-            //           </CFormGroup>
-            //         </CDropdownItem>
-            //       ) : (
-            //         ""
-            //       )}
-            //     </CDropdownMenu>
-            //   </CDropdown>
-            // </CCol>
+          //     <CDropdownMenu style={{ width: "max-content" }} id="dropdown0">
+          //       {/*// show={toggleDropDown[0]}*/}
+          //       <CDropdownItem onClick={() => handleOnChange(0)}>
+          //         <CInputGroup
+          //           variant="custom-radio"
+          //           inline
+          //           className="form-group-space"
+          //         >
+          //           <CInputRadio
+          //             className="form-check-input"
+          //             id="time_filter"
+          //             name="time_filter"
+          //             value={0}
+          //             checked={fields.time_filter === 0}
+          //             divider={true}
+          //             style={{ marginLeft: "0px" }}
+          //           />
+          //           <CLabel
+          //             htmlFor="time_filter"
+          //             className="checkbox-label"
+          //             style={{ marginLeft: "20px" }}
+          //           >
+          //             All Day
+          //           </CLabel>
+          //         </CInputGroup>
+          //       </CDropdownItem>
+          //       <CDropdownItem onClick={() => handleOnChange(1)}>
+          //         <CInputGroup
+          //           variant="custom-radio"
+          //           inline
+          //           className="form-group-space"
+          //         >
+          //           <CInputRadio
+          //             className="form-check-input"
+          //             id="time_filter"
+          //             name="time_filter"
+          //             value={1}
+          //             checked={fields.time_filter === 1}
+          //             style={{ marginLeft: "0px" }}
+          //           />
+          //           <CLabel
+          //             htmlFor="time_filter"
+          //             className="checkbox-label"
+          //             style={{ marginLeft: "20px" }}
+          //           >
+          //             Custome Period
+          //           </CLabel>
+          //         </CInputGroup>
+          //       </CDropdownItem>
+          //       {fields.time_filter === 1 ? (
+          //         <CDropdownItem>
+          //           <CFormGroup inline>
+          //             <CLabel htmlFor="start_time">Start Time</CLabel>
+          //             <CInputGroup variant="custom-radio" inline>
+          //               <TimePicker
+          //                 start="00:00"
+          //                 end="23:59"
+          //                 step={60}
+          //                 name="startTime"
+          //                 value={timeRange.startTime}
+          //                 onChange={handleOnChangeStartTime}
+          //               />
+          //             </CInputGroup>
+          //           </CFormGroup>
+          //           <CFormGroup inline>
+          //             <CLabel htmlFor="start_time">End Time</CLabel>
+          //             <CInputGroup variant="custom-radio" inline>
+          //               <TimePicker
+          //                 start="00:00"
+          //                 end="23:59"
+          //                 step={60}
+          //                 name="endTime"
+          //                 value={timeRange.endTime}
+          //                 onChange={handleOnChangeEndTime}
+          //               />
+          //             </CInputGroup>
+          //           </CFormGroup>
+          //         </CDropdownItem>
+          //       ) : (
+          //         ""
+          //       )}
+          //     </CDropdownMenu>
+          //   </CDropdown>
+          // </CCol>
         }
         {storeId.length > 1 ? (
-        <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
-          <CDropdown style={{ backgroundColor: "white" }}>
-            <CDropdownToggle caret color="default  btn-block">
-              <MdStoreMallDirectory />
-              {storeId.filter((item) => item.isSelected !== true).length === 0
-                ? "All Stores"
-                : storeId.filter((item) => item.isSelected === true).length +
-                  " Stores"}
-            </CDropdownToggle>
-            <CDropdownMenu style={{ width: "max-content" }}>
-              {/* show={toggleDropDown[1]} */}
+          <CCol sm="12" md="3" lg="3" xs="12" className="mb-3">
+            <CDropdown style={{ backgroundColor: "white" }}>
+              <CDropdownToggle caret color="default  btn-block">
+                <MdStoreMallDirectory />
+                {storeId.filter((item) => item.isSelected !== true).length === 0
+                  ? "All Stores"
+                  : storeId.filter((item) => item.isSelected === true).length +
+                    " Stores"}
+              </CDropdownToggle>
+              <CDropdownMenu style={{ width: "max-content" }}>
+                {/* show={toggleDropDown[1]} */}
 
-              <CDropdownItem onClick={() => storeHandleChange("0")}>
-                {" "}
-                <CFormGroup variant="custom-checkbox" inline>
-                  <CInputCheckbox
-                    custom
-                    name="checkAll"
-                    id={"checkAll"}
-                    value={0}
-                    checked={fields.checkAll}
-                  />
-                  <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
-                    All Stores
-                  </CLabel>
-                </CFormGroup>
-              </CDropdownItem>
-              {(storeId || []).map((item, index) => (
-                <CDropdownItem
-                  key={index}
-                  onClick={() => storeHandleChange(item._id)}
-                >
-                  <CFormGroup variant="custom-checkbox" inline key={index}>
+                <CDropdownItem onClick={() => storeHandleChange("0")}>
+                  {" "}
+                  <CFormGroup variant="custom-checkbox" inline>
                     <CInputCheckbox
                       custom
-                      name="storeId"
-                      id={"storeId" + item._id}
-                      value={item._id}
-                      checked={item.isSelected}
+                      name="checkAll"
+                      id={"checkAll"}
+                      value={0}
+                      checked={fields.checkAll}
                     />
-                    <CLabel
-                      variant="custom-checkbox"
-                      htmlFor={"storeId" + item._id}
-                    >
-                      {item.title}
+                    <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
+                      All Stores
                     </CLabel>
                   </CFormGroup>
                 </CDropdownItem>
-              ))}
-            </CDropdownMenu>
-          </CDropdown>
-        </CCol>
-        ) : ""}
+                {(storeId || []).map((item, index) => (
+                  <CDropdownItem
+                    key={index}
+                    onClick={() => storeHandleChange(item._id)}
+                  >
+                    <CFormGroup variant="custom-checkbox" inline key={index}>
+                      <CInputCheckbox
+                        custom
+                        name="storeId"
+                        id={"storeId" + item._id}
+                        value={item._id}
+                        checked={item.isSelected}
+                      />
+                      <CLabel
+                        variant="custom-checkbox"
+                        htmlFor={"storeId" + item._id}
+                      >
+                        {item.title}
+                      </CLabel>
+                    </CFormGroup>
+                  </CDropdownItem>
+                ))}
+              </CDropdownMenu>
+            </CDropdown>
+          </CCol>
+        ) : (
+          ""
+        )}
         {props?.hideFilter == true ? (
           ""
         ) : (
@@ -980,7 +982,7 @@ const ReportsFilters = (props) => {
             className="btn btn-outline-primary btn-block"
             onClick={resetFilters}
           >
-            Reset
+            {props.loading ? <CSpinner color="info" size="sm" /> : "Reset"}
           </CButton>
         </CCol>
       </CRow>

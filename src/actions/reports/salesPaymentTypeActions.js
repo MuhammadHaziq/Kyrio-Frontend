@@ -6,6 +6,7 @@ import {
   ROW_DATA_PAYMENT_TYPE_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 import authAxios from "../../constants/authAxios";
 
@@ -56,7 +57,14 @@ export const get_sales_payment_type_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_payment_type_sales_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({

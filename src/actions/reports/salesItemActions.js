@@ -6,8 +6,9 @@ import {
   ROW_DATA_ITEM_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
+import authAxios from "../../constants/authAxios";
 
 export const get_item_sale_summary = (data) => {
   return (dispatch) => {
@@ -15,7 +16,7 @@ export const get_item_sale_summary = (data) => {
       authAxios({
         method: "POST",
         url: `reports/sale/item`,
-        data: data
+        data: data,
       })
         .then((response) => {
           dispatch({
@@ -56,7 +57,14 @@ export const get_item_sale_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_item_sale_single_select = (data) => {
   return (dispatch) => {
     dispatch({
@@ -85,7 +93,7 @@ export const delete_item_sale = (ids) => {
     //     authAxios({
     //         method: "DELETE",
     //         url: `employee/employeeList/${ids}`,
-    //        
+    //
     //     })
     //         .then((response) => {
     //             dispatch({ type: DELETE_ITEM_SALES, response: JSON.parse(ids) });

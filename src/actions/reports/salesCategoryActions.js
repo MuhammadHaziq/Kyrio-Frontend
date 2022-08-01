@@ -6,8 +6,9 @@ import {
   ROW_DATA_CATEGORY_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
+import authAxios from "../../constants/authAxios";
 
 export const get_sales_category_summary = (data) => {
   return (dispatch) => {
@@ -56,7 +57,14 @@ export const get_sales_category_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_sales_category_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({

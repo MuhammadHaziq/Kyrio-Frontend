@@ -3,20 +3,28 @@ import {
   TOGGLE_CATEGORY_SALE_SUMMARY_SINGLE_SELECT,
   TOGGLE_CATEGORY_SALE_SUMMARY_ALL_SELECT,
   DELETE_CATEGORY_SALES_SUMMARY,
-  ROW_DATA_CATEGORY_SALES_SUMMARY,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 
 const initialState = {
   category_sales_summary: [],
   redirect_update: false,
   redirect_sale_category_summary: true,
+  loading: true,
 };
 const salesCategoryReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
   switch (action.type) {
+    case SET_LOADING: {
+      return Object.assign({}, state, {
+        loading: action.response,
+      });
+    }
+
     case GET_CATEGORY_SALES_SUMMARY: {
       return Object.assign({}, state, {
         category_sales_summary: action.response,
+        loading: false,
       });
     }
 

@@ -6,8 +6,9 @@ import {
   ROW_DATA_DISCOUNT_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
-import authAxios from '../../constants/authAxios'
+import authAxios from "../../constants/authAxios";
 
 export const get_discount_summary = (data) => {
   return (dispatch) => {
@@ -15,7 +16,7 @@ export const get_discount_summary = (data) => {
       authAxios({
         method: "POST",
         url: `reports/sale/discounts`,
-        data: data
+        data: data,
       })
         .then((response) => {
           dispatch({
@@ -56,7 +57,14 @@ export const get_discount_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_discount_summary_single_select = (data) => {
   return (dispatch) => {
     dispatch({

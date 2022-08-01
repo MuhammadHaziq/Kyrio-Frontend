@@ -6,18 +6,18 @@ import {
   ROW_DATA_TAXES_SALES_SUMMARY,
   MESSAGE,
   ERROR_MESSAGE,
+  SET_LOADING,
 } from "../../constants/ActionTypes";
 import { BaseUrl } from "../../constants/baseUrls";
-import authAxios from '../../constants/authAxios'
+import authAxios from "../../constants/authAxios";
 
 export const get_tax_sale_summary = (data) => {
   return (dispatch) => {
     try {
       authAxios({
         method: "POST",
-        url: 'reports/sale/taxes',
-        data: data
-        
+        url: "reports/sale/taxes",
+        data: data,
       })
         .then((response) => {
           dispatch({
@@ -26,7 +26,7 @@ export const get_tax_sale_summary = (data) => {
           });
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           let msg = {
             open: true,
             message:
@@ -59,7 +59,14 @@ export const get_tax_sale_summary = (data) => {
     }
   };
 };
-
+export const toggle_loading = (data) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING,
+      response: data,
+    });
+  };
+};
 export const toggle_tax_sale_single_select = (data) => {
   return (dispatch) => {
     dispatch({

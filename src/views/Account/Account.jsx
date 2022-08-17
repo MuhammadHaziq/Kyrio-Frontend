@@ -36,6 +36,7 @@ import {
   update_password,
   delete_account,
 } from "../../actions/accounts/accountAction";
+import { cibWindows } from "@coreui/icons";
 var languages = require("language-list")();
 
 const Account = () => {
@@ -86,6 +87,7 @@ const Account = () => {
   const [NPShow, setNPShow] = useState(false);
   const [CPShow, setCPShow] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [password, setPassword] = useState("");
   const [changeType, setChangeType] = useState("");
   const [comments, setComments] = useState("");
@@ -130,10 +132,10 @@ const Account = () => {
     },
   ]);
 
-  const handleDataFetching = useCallback(async () => {
+  const handleDataFetching = useCallback(() => {
     setLoading(true);
-    await dispatch(get_account());
-    setLoading(false);
+    dispatch(get_account());
+    
   }, []);
 
   useEffect(() => {
@@ -149,6 +151,7 @@ const Account = () => {
 
   useEffect(() => {
     if (Object.keys(account_detail).length > 0) {
+      
       setFields({
         ...fields,
         businessName: account_detail?.businessName,
@@ -157,6 +160,7 @@ const Account = () => {
         language: account_detail?.language,
       });
     }
+    setLoading(false);
   }, [account_detail]);
 
   const handleEmailFields = (e) => {
@@ -233,26 +237,30 @@ const Account = () => {
     setModal(true);
     setChangeType(type);
   };
-
+const redirectToDashboard =  () => {
+  window.location.href = "/"
+}
   const saveAccount = () => {
-    if (
-      fields.businessName !== null &&
-      fields.timezone !== null &&
-      fields.language !== null
-    ) {
-      if (
-        !validator.isEmpty(fields.businessName) &&
-        !validator.isEmpty(fields.timezone) &&
-        !validator.isEmpty(fields.language)
-      ) {
+      let error = false;
+      if(fields.businessName === null && fields.businessName === undefined){
+        error = true
+      }
+      if(fields.language === null && fields.language === undefined){
+        error = true
+      }
+      if(!error){
         const data = {
           businessName: fields.businessName,
           timezone: fields.timezone,
           language: fields.language,
         };
+        setSaving(true);
         dispatch(set_account_info(data));
+        setTimeout(()=>{
+          setSaving(false);
+        },1000)
       }
-    }
+    
   };
 
   const continueAction = () => {
@@ -779,6 +787,7 @@ const Account = () => {
                     variant="outline"
                     className="btn-pill pull-right"
                     color="danger"
+                    onClick={redirectToDashboard}
                   >
                     CANCEL
                   </CButton>
@@ -797,7 +806,10 @@ const Account = () => {
                     color="success"
                     onClick={saveAccount}
                   >
-                    SAVE
+                    {saving ? (
+                      <CSpinner />
+                    ) : (
+                    "SAVE")}
                   </CButton>
                 </CCol>
               </CRow>

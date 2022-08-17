@@ -275,7 +275,7 @@ const ItemsList = () => {
                         <ConformationAlert
                           button_text="Delete"
                           heading="Delete item"
-                          section={`Are you sure you want to delete (${item.item_list.length}) items  ?`}
+                          section={`Are you sure you want to delete (${item.item_list.filter((item) => item.isDeleted === true).length}) items  ?`}
                           buttonAction={deleteItem}
                           show_alert={showAlert}
                           hideAlert={setShowAlert}

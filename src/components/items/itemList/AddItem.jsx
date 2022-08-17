@@ -164,14 +164,8 @@ const AddItem = (props) => {
       fields.categoryId !== "0" ? fields.categoryId : null
     );
     formData.append("soldByType", fields.sold_by);
-    formData.append(
-      "price",
-      fields.price ? ReturnNumber(fields.price) : 0
-    );
-    formData.append(
-      "cost",
-      fields.cost ? ReturnNumber(fields.cost) : 0
-    );
+    formData.append("price", fields.price ? ReturnNumber(fields.price) : 0);
+    formData.append("cost", fields.cost ? ReturnNumber(fields.cost) : 0);
     formData.append("color", fields.color);
     formData.append("compositeItem", inventorySwitch[0]);
     formData.append("trackStock", inventorySwitch[1]);
@@ -650,7 +644,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                            item.stores.map((str) => str.title).join(",")}
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -699,7 +693,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                            item.stores.map((str) => str.title).join(",")}
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>

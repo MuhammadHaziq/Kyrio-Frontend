@@ -174,12 +174,12 @@ const AddPaymentMethod = (props) => {
                           required="required"
                           name="cvc"
                           value={cvc}
-                          onChange={(e)=> setCVC(e.target.value)}
+                          onChange={(e) => setCVC(e.target.value)}
                         />
                       </CInputGroup>
                     </CFormGroup>
                   </CCol>
-                  <CCol xs="12">
+                  {/* <CCol xs="12">
                     <CFormGroup>
                       <CLabel htmlFor="cvv">
                         Country of business registration
@@ -196,7 +196,7 @@ const AddPaymentMethod = (props) => {
                         <option value="duabi">Dubai</option>
                       </CSelect>
                     </CFormGroup>
-                  </CCol>
+                  </CCol>*/}
                 </CRow>
                 <CRow>
                   <CCol xs="4" className="text-center mt-3">

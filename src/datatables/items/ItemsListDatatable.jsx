@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  CDataTable,
-  CInputCheckbox,
-  CFormGroup,
-  CLabel,
-} from "@coreui/react";
+import { CDataTable, CInputCheckbox, CFormGroup, CLabel } from "@coreui/react";
 import {
   toggle_item_single_select,
   toggle_item_all_select,
@@ -40,6 +35,7 @@ const ItemsListDatatable = (props) => {
   return (
     <CDataTable
       itemsPerPageSelect
+      itemsPerPage={10}
       items={props.itemList}
       fields={[
         { key: "select", label: "Select", filter: false },
@@ -50,7 +46,6 @@ const ItemsListDatatable = (props) => {
         { key: "margin", label: "Margin %", filter: true },
         { key: "stockQty", label: "Stock", filter: true },
       ]}
-      itemsPerPage={5}
       columnFilter
       sorter
       hover
@@ -105,38 +100,40 @@ const ItemsListDatatable = (props) => {
           return (
             <td>
               {item.price !== undefined &&
-                item.price !== null &&
-                item.price !== ""
-                ? (
-                  <Amount value={item.price} />
-                ) : (
-                  <Amount value={0} />
-                )}
+              item.price !== null &&
+              item.price !== "" ? (
+                <Amount value={item.price} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
         cost: (item) => {
           return (
             <td>
-              {item.cost !== undefined && item.cost !== null && item.cost !== ""
-                ? (
-                  <Amount value={item.cost} />
-                ) : (
-                  <Amount value={0} />
-                )}
+              {item.cost !== undefined &&
+              item.cost !== null &&
+              item.cost !== "" ? (
+                <Amount value={item.cost} />
+              ) : (
+                <Amount value={0} />
+              )}
             </td>
           );
         },
         margin: (item) => {
-          const price = item.price !== undefined && item.price !== null ? item.price : 0;
-          const cost = item.cost !== undefined && item.cost !== null ? item.cost : 0;
+          const price =
+            item.price !== undefined && item.price !== null ? item.price : 0;
+          const cost =
+            item.cost !== undefined && item.cost !== null ? item.cost : 0;
 
           let margin = "-";
 
           if (cost == 0 && price !== 0) {
-            margin = 100
+            margin = 100;
           } else if (cost !== 0 && price !== 0) {
-            margin = ((price - cost) / price) * 100
+            margin = ((price - cost) / price) * 100;
           }
           if (margin !== "-") {
             return <td>{<Amount value={item.cost} sign="%" />}</td>;

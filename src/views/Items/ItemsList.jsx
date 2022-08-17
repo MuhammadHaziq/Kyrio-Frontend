@@ -19,7 +19,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
-import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable"
+import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable";
 import {
   // get_items_list,
   // get_items_stock,
@@ -95,8 +95,8 @@ const ItemsList = () => {
 
   useEffect(() => {
     // if (defaultStoreId !== undefined) {
-      searchFilterRecords();
-      // dispatch(get_items_list(data));
+    searchFilterRecords();
+    // dispatch(get_items_list(data));
     // }
   }, []);
 
@@ -140,10 +140,10 @@ const ItemsList = () => {
       categoryFilter: selectCategory ? selectCategory : "0",
       search: search ? search : "",
       page: 1,
-      columnFilterValue: JSON.stringify(''),
+      columnFilterValue: JSON.stringify(""),
       tableFilterValue: "",
-      sorterValue: JSON.stringify(''),
-      itemsPerPage: 5
+      sorterValue: JSON.stringify(""),
+      itemsPerPage: 5,
     };
     dispatch(search_item_list(data));
   };
@@ -156,10 +156,10 @@ const ItemsList = () => {
       categoryFilter: selectCategory ? selectCategory : "0",
       search: search ? search : "",
       page: 1,
-      columnFilterValue: JSON.stringify(''),
+      columnFilterValue: JSON.stringify(""),
       tableFilterValue: "",
-      sorterValue: JSON.stringify(''),
-      itemsPerPage: 5
+      sorterValue: JSON.stringify(""),
+      itemsPerPage: 5,
     };
 
     dispatch(search_item_list(data));
@@ -216,8 +216,8 @@ const ItemsList = () => {
     storeId: storeId,
     stockFilter: selectStock,
     categoryFilter: selectCategory,
-    search: search
-  }
+    search: search,
+  };
   return (
     <React.Fragment>
       <div className="animated fadeIn">
@@ -235,7 +235,11 @@ const ItemsList = () => {
         )}
         {fadeAddItem ? (
           <CFade timeout={timeout} in={fadeAddItem}>
-            <AddItem goBack={goBack} store={item.store_list} key={"addItem" + 1} />
+            <AddItem
+              goBack={goBack}
+              store={item.store_list}
+              key={"addItem" + 1}
+            />
           </CFade>
         ) : (
           ""
@@ -306,26 +310,29 @@ const ItemsList = () => {
                   {showSearch === false ? (
                     <React.Fragment>
                       {item.store_list.length > 1 ? (
-                          <CCol xs="12" sm="2" md="2" xl="xl">
-                            <CFormGroup>
-                              <CSelect
-                                size="md"
-                                name="storeId"
-                                id="storeId"
-                                value={storeId}
-                                onChange={storeHandleChange}
-                              >
-                                <option value="0">All Store</option>
-                                {item.store_list.map((item) => {
-                                  return (
-                                    <option value={item.store._id} key={item.store._id}>
-                                      {item.store.title}
-                                    </option>
-                                  );
-                                })}
-                              </CSelect>
-                            </CFormGroup>
-                          </CCol>
+                        <CCol xs="12" sm="2" md="2" xl="xl">
+                          <CFormGroup>
+                            <CSelect
+                              size="md"
+                              name="storeId"
+                              id="storeId"
+                              value={storeId}
+                              onChange={storeHandleChange}
+                            >
+                              <option value="0">All Store</option>
+                              {item.store_list.map((item) => {
+                                return (
+                                  <option
+                                    value={item.store._id}
+                                    key={item.store._id}
+                                  >
+                                    {item.store.title}
+                                  </option>
+                                );
+                              })}
+                            </CSelect>
+                          </CFormGroup>
+                        </CCol>
                       ) : (
                         ""
                       )}
@@ -372,7 +379,11 @@ const ItemsList = () => {
                         </CFormGroup>
                       </CCol>
                       <CCol xs="12" sm="1" md="1" xl="xl">
-                        <SearchIcon setShowSearch={setShowSearch} showSearch={showSearch} style={{ marginTop: "10px", cursor: "pointer" }} />
+                        <SearchIcon
+                          setShowSearch={setShowSearch}
+                          showSearch={showSearch}
+                          style={{ marginTop: "10px", cursor: "pointer" }}
+                        />
                       </CCol>
                     </React.Fragment>
                   ) : (
@@ -406,8 +417,12 @@ const ItemsList = () => {
 
               <CCardBody>
                 {/* {item?.item_list?.length === 0 ? (<ItemSplash buttonName="ADD ITEM" onClick={addItem} description={"Here you can manage your items."} descriptionLink={""} title="Items" secondButton="IMPORT ITEMS" secondClick={importList} />) : ( */}
-                <ItemListServerSideDatatable filters={filters} itemList={item.item_list} item_pages={item.item_pages} />
-                 {/* )} */}
+                <ItemListServerSideDatatable
+                  filters={filters}
+                  itemList={item.item_list}
+                  item_pages={item.item_pages}
+                />
+                {/* )} */}
               </CCardBody>
             </CCard>
           </React.Fragment>

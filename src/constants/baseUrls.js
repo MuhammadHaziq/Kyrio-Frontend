@@ -1,5 +1,5 @@
 // API URLs
-const LocalUrl = "https://api.kyriopos.com/kyrio/v1/"; // "http://localhost:3002/kyrio/v1/";
+const LocalUrl = "http://localhost:3002/kyrio/v1/";
 const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";
 // Image URLs
 const ImageLocalUrl = "http://localhost:3002/";
@@ -38,4 +38,4 @@ if (window.location.hostname == "localhost") {
 export const BaseUrl = Base_Url;
 export const ImageUrl = Image_Url;
 export const DashboardUrl = dashboard_Url;
-export const SocketURL = "https://api.kyriopos.com"; // Server IP
+export const SocketURL = "http://localhost:3002"; // Server IP

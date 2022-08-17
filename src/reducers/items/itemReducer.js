@@ -66,7 +66,7 @@ const itemReducer = (state = initialState, action) => {
     case GET_ITEM_LIST: {
       return Object.assign({}, state, {
         item_list: action.response,
-        item_pages: action.pages
+        item_pages: action.pages,
       });
     }
     case GET_ITEM_STOCK: {
@@ -415,7 +415,7 @@ const itemReducer = (state = initialState, action) => {
         item_row_data: action.response,
         item_variants:
           action.response.varients !== null &&
-            action.response.varients !== undefined
+          action.response.varients !== undefined
             ? action.response.varients
             : [],
         store_list: storeList,

@@ -19,13 +19,13 @@ const DashboardLiveUrl = "https://dashboard.kyriopos.com";
 const DashboardStagingUrl = "https://dashboarddev.kyriopos.com";
 
 // export const imageBaseUrl = "https://api.kyriopos.com/";
-export const imageBaseUrl = "http://94.250.202.208:3003/";
+export const imageBaseUrl = "https://api.kyriopos.com/";
 let Base_Url = "";
 let Image_Url = "";
 let dashboard_Url = "";
 let socket_Url = "";
 
-if (window.location.hostname == "localhost") {
+if (window.location.hostname === "localhost") {
   Base_Url = LocalUrl;
   Image_Url = ImageLocalUrl;
   dashboard_Url = DashboardLocalUrl;
@@ -43,18 +43,8 @@ if (window.location.hostname == "localhost") {
     socket_Url = SocketStagingUrl;
   }
 }
-//  Base_Url = "http://94.250.202.208:3003/kyrio/v1/"
-//  Image_Url = "http://94.250.202.208:3003/"
-//  else {
-// Office IP
-// Base_Url = "http://192.168.18.32:3002/kyrio/v1/"
-// Image_Url = "http://192.168.18.32:3002/"
-// Home IP
-// Base_Url = "http://192.168.10.7:3002/kyrio/v1/"
-// Image_Url = "http://192.168.10.7:3002/"
-// }
 
 export const BaseUrl = Base_Url;
 export const ImageUrl = Image_Url;
 export const DashboardUrl = dashboard_Url;
-export const SocketURL = "https://api.kyriopos.com"; // Server IP
+export const SocketURL = socket_Url; // Server IP

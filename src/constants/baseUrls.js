@@ -1,4 +1,4 @@
-const mode = "production"; // "staging" "production"
+const mode = "staging"; // "staging" "production"
 // API URLs
 const LocalUrl = "http://localhost:3002/kyrio/v1/";
 const LiveUrl = "https://api.kyriopos.com/kyrio/v1/";

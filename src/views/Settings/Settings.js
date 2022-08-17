@@ -247,30 +247,32 @@ const Settings = () => {
           settings.find((st) => st.module.title === "Stores").enable = true;
         }
 
-        (settings || []).map((item, index) => {
-          return index !== 9
-            ? item.enable === true
+        (settings || [])
+          .filter((item) => item.module.title !== "Billing & subscriptions")
+          .map((item, index) => {
+            return index !== 9
+              ? item.enable === true
+                ? setting.push({
+                    _tag: "CSidebarNavItem",
+                    name: item.module.title,
+                    module: item.module.title,
+                    to: `${url}/${item.module.title.replace(/\s/g, "")}`,
+                  })
+                : ""
+              : storePOSCheck || roleTitle === "Owner"
               ? setting.push({
                   _tag: "CSidebarNavItem",
-                  name: item.module.title,
-                  module: item.module.title,
-                  to: `${url}/${item.module.title.replace(/\s/g, "")}`,
+                  name: (
+                    <>
+                      {item.module.heading}
+                      <br />
+                      {item.module.span}
+                    </>
+                  ),
+                  icon: <MdStore style={{ fontSize: "30px", margin: "5px" }} />,
                 })
-              : ""
-            : storePOSCheck || roleTitle === "Owner"
-            ? setting.push({
-                _tag: "CSidebarNavItem",
-                name: (
-                  <>
-                    {item.module.heading}
-                    <br />
-                    {item.module.span}
-                  </>
-                ),
-                icon: <MdStore style={{ fontSize: "30px", margin: "5px" }} />,
-              })
-            : "";
-        });
+              : "";
+          });
         setSettingBar(setting);
       }
     }
@@ -341,12 +343,12 @@ const Settings = () => {
                   name="Setting Features"
                   render={(props) => <General {...props} />}
                 />
-                <Route
+                {/*<Route
                   path={`${url}/Billing&subscriptions`}
                   exact
                   name={"Billing Subscription"}
                   render={(props) => <BillingSubscription {...props} />}
-                />
+                />*/}
                 <Route
                   path={`${url}/PaymentTypes`}
                   exact

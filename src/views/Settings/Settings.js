@@ -263,7 +263,7 @@ const Settings = () => {
                 name: (
                   <>
                     {item.module.heading}
-                    <br />
+                    {/*  <br />*/}
                     {item.module.span}
                   </>
                 ),

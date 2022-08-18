@@ -177,7 +177,7 @@ const Settings = () => {
         } else {
           settings.find(
             (st) => st.module.title === "Billing & subscriptions"
-          ).enable = true;
+          ).enable = false;
         }
         if (!mngPaymentTypes) {
           settings.find(
@@ -246,33 +246,31 @@ const Settings = () => {
         } else {
           settings.find((st) => st.module.title === "Stores").enable = true;
         }
-
-        (settings || [])
-          .filter((item) => item.module.title !== "Billing & subscriptions")
-          .map((item, index) => {
-            return index !== 9
-              ? item.enable === true
-                ? setting.push({
-                    _tag: "CSidebarNavItem",
-                    name: item.module.title,
-                    module: item.module.title,
-                    to: `${url}/${item.module.title.replace(/\s/g, "")}`,
-                  })
-                : ""
-              : storePOSCheck || roleTitle === "Owner"
+        // .filter((item) => item.module.title !== "Billing & subscriptions")
+        (settings || []).map((item, index) => {
+          return index !== 9
+            ? item.enable === true
               ? setting.push({
                   _tag: "CSidebarNavItem",
-                  name: (
-                    <>
-                      {item.module.heading}
-                      <br />
-                      {item.module.span}
-                    </>
-                  ),
-                  icon: <MdStore style={{ fontSize: "30px", margin: "5px" }} />,
+                  name: item.module.title,
+                  module: item.module.title,
+                  to: `${url}/${item.module.title.replace(/\s/g, "")}`,
                 })
-              : "";
-          });
+              : ""
+            : storePOSCheck || roleTitle === "Owner"
+            ? setting.push({
+                _tag: "CSidebarNavItem",
+                name: (
+                  <>
+                    {item.module.heading}
+                    <br />
+                    {item.module.span}
+                  </>
+                ),
+                icon: <MdStore style={{ fontSize: "30px", margin: "5px" }} />,
+              })
+            : "";
+        });
         setSettingBar(setting);
       }
     }

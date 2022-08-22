@@ -57,46 +57,50 @@ const SalesReceipts = () => {
       <CSVLink
         data={
           sale_receipt_summary.receipts.length > 0
-            ? sale_receipt_summary.receipts.map((item) => {
+            ? sale_receipt_summary.receipts.map((sale) => {
+                let cost_of_goods = 0;
+                for (const item of sale.items) {
+                  cost_of_goods = cost_of_goods + item.quantity * item.cost;
+                }
                 return {
-                  ["Date"]: moment(item.sale_timestamp).format(
+                  ["Date"]: moment(sale.sale_timestamp).format(
                     "MM/DD/YYYY h:mm a"
                   ),
-                  ["Receipt number"]: " " + item.receipt_number,
-                  ["Receipt type"]: item.receipt_type,
-                  ["Gross sales"]: parseFloat(item.sub_total).toFixed(2),
-                  ["Discounts"]: parseFloat(item.total_discount).toFixed(2),
+                  ["Receipt number"]: " " + sale.receipt_number,
+                  ["Receipt type"]: sale.receipt_type,
+                  ["Gross sales"]: parseFloat(sale.sub_total).toFixed(2),
+                  ["Discounts"]: parseFloat(sale.total_discount).toFixed(2),
                   ["Net Sales"]: parseFloat(
-                    item.sub_total - item.total_discount
+                    sale.sub_total - sale.total_discount
                   ).toFixed(2),
-                  ["Taxes"]: parseFloat(item.total_tax).toFixed(2),
-                  ["Total collected"]: parseFloat(item.total_price).toFixed(2),
-                  ["Cost of Goods"]: parseFloat(item.cost_of_goods).toFixed(2),
+                  ["Taxes"]: parseFloat(sale.total_tax).toFixed(2),
+                  ["Total collected"]: parseFloat(sale.total_price).toFixed(2),
+                  ["Cost of Goods"]: parseFloat(cost_of_goods).toFixed(2),
                   ["Gross profit"]: parseFloat(
-                    item.total_price - item.cost_of_goods - item.total_discount
+                    sale.total_price - cost_of_goods
                   ).toFixed(2),
-                  ["Payment type"]: item.payments.map((pay) => pay.paymentType),
-                  ["Discription"]: item.items.map((ite) => {
+                  ["Payment type"]: sale.payments.map((pay) => pay.paymentType),
+                  ["Discription"]: sale.items.map((ite) => {
                     return " " + ite.quantity + " X " + ite.name;
                   }),
                   ["Dining option"]:
-                    typeof item.dining_option !== "undefined"
-                      ? item?.dining_option?.name
+                    typeof sale.dining_option !== "undefined"
+                      ? sale?.dining_option?.name
                       : "Dine In",
-                  ["POS"]: item.device.name,
-                  ["Store"]: item.store.name,
-                  ["Cashier name"]: item.cashier.name,
+                  ["POS"]: sale.device.name,
+                  ["Store"]: sale.store.name,
+                  ["Cashier name"]: sale.cashier.name,
                   ["Customer name"]:
-                    typeof item.customer !== "undefined" &&
-                    item.customer !== null
-                      ? item.customer.name
+                    typeof sale.customer !== "undefined" &&
+                    sale.customer !== null
+                      ? sale.customer.name
                       : "",
                   ["Customer contact"]:
-                    typeof item.customer !== "undefined" &&
-                    item.customer !== null
-                      ? item.customer.email
+                    typeof sale.customer !== "undefined" &&
+                    sale.customer !== null
+                      ? sale.customer.email
                       : "",
-                  ["Status"]: item.open ? "Open" : "Closed",
+                  ["Status"]: sale.open ? "Open" : "Closed",
                 };
               })
             : []

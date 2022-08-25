@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const _nav = [
   {
@@ -140,30 +140,30 @@ const _nav = [
     to: "/settings",
     icon: "cil-settings",
   },
-  {
-    _tag: "CSidebarNavDropdown",
-    name: "Help",
-    module: "Access to live chat support",
-    to: "/help",
-    icon: "cil-speech",
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Help center",
-        to: "/help",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Community",
-        to: "/help",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Live chat",
-        to: "/help",
-      },
-    ],
-  },
+  // {
+  //   _tag: "CSidebarNavDropdown",
+  //   name: "Help",
+  //   module: "Access to live chat support",
+  //   to: "/help",
+  //   icon: "cil-speech",
+  //   _children: [
+  //     {
+  //       _tag: "CSidebarNavItem",
+  //       name: "Help center",
+  //       to: "/help",
+  //     },
+  //     {
+  //       _tag: "CSidebarNavItem",
+  //       name: "Community",
+  //       to: "/help",
+  //     },
+  //     {
+  //       _tag: "CSidebarNavItem",
+  //       name: "Live chat",
+  //       to: "/help",
+  //     },
+  //   ],
+  // },
 ];
 
-export default _nav
+export default _nav;

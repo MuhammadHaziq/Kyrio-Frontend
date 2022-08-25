@@ -62,6 +62,7 @@ const SalesReceipts = () => {
                 for (const item of sale.items) {
                   cost_of_goods = cost_of_goods + item.quantity * item.cost;
                 }
+                console.log(sale_receipt_summary.receipts);
                 return {
                   ["Date"]: moment(sale.sale_timestamp).format(
                     "MM/DD/YYYY h:mm a"
@@ -120,6 +121,7 @@ const SalesReceipts = () => {
           item.modifiers.map((mod) =>
             mod.options.map((op) => modifiers.push(op.option_name))
           );
+          console.log(sale_receipt_summary.receipts);
           csvData.push({
             ["Date"]: moment(sale.sale_timestamp).format("MM/DD/YYYY h:mm a"),
             ["Receipt number"]: " " + sale.receipt_number,

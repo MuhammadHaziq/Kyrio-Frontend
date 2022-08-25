@@ -205,7 +205,9 @@ const Categories = () => {
                             })
                           : []
                       }
-                      filename={"SalesByItem" + dateformat(new Date()) + ".csv"}
+                      filename={
+                        "SalesByCategories" + dateformat(new Date()) + ".csv"
+                      }
                       target="_blank"
                     >
                       <CButton color="secondary" className="btn-square">

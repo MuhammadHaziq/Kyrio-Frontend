@@ -24,8 +24,8 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import StoresDatatable from "./StoresDatatable";
 // import { add_new_category } from "../../../actions/items/categoryActions";
-import AddItemVariant from "./AddItemVariant";
-import VariantDatatable from "./VariantDatatable";
+// import AddItemVariant from "./AddItemVariant";
+// import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
 import {
   save_item,
@@ -56,7 +56,7 @@ const AddItem = (props) => {
   const [taxesSwitch, setTaxesSwitch] = useState([]);
   const [modifiers, setModifiers] = useState([]);
   const [receiptFile, setrReceiptFile] = useState("");
-  const [variantModal, setVariantModal] = useState(false);
+  // const [variantModal, setVariantModal] = useState(false);
   const [errors, setErrors] = useState({
     item_name: false,
   });
@@ -107,9 +107,7 @@ const AddItem = (props) => {
         })
       );
       const taxesSwitch = [];
-      (item.item_taxes || []).map((item) => {
-        taxesSwitch.push(true);
-      });
+      (item.item_taxes || []).map((item) => taxesSwitch.push(true));
       setTaxesSwitch(taxesSwitch);
     }
   }, [item.item_taxes]);
@@ -213,7 +211,7 @@ const AddItem = (props) => {
     );
     formData.append("image", receiptFile);
     formData.append("stockQty", stockQty);
-    formData.append("autoSKU", autoSKU == fields.sku);
+    formData.append("autoSKU", autoSKU === fields.sku);
     dispatch(save_item(formData));
   };
 
@@ -310,18 +308,18 @@ const AddItem = (props) => {
     setItemTax(taxes);
     setTaxesSwitch(state);
   };
-  const toggleVariantModal = () => {
-    setVariantModal(!variantModal);
-  };
+  // const toggleVariantModal = () => {
+  //   setVariantModal(!variantModal);
+  // };
 
   const removeSelectedImages = (name) => {
     setItemImage(null);
   };
 
   const disable =
-    fields.item_name == undefined ||
+    fields.item_name === undefined ||
     fields.item_name == null ||
-    fields.item_name == "";
+    fields.item_name === "";
   return (
     <React.Fragment>
       <CCard>

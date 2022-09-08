@@ -36,9 +36,10 @@ import {
   update_password,
   delete_account,
 } from "../../actions/accounts/accountAction";
-import { cibWindows } from "@coreui/icons";
+import { orderBy } from "lodash";
+// import { cibWindows } from "@coreui/icons";
 var languages = require("language-list")();
-
+console.log(languages.getData());
 const Account = () => {
   const dispatch = useDispatch();
   const updated = useSelector((state) => state.account.updated);
@@ -46,9 +47,12 @@ const Account = () => {
   const password_correct = useSelector(
     (state) => state.account.password_correct
   );
+  var LanguageArr = languages.getData();
+  const [language] = useState(
+    orderBy(LanguageArr, ["language", "code"], ["asc", "asc"])
+  );
 
-  const [language] = useState(languages.getData());
-
+  // orderBy([languages, "language"], ["asc"]);
   const [fields, setFields] = useState({
     businessName: "",
     email: "",
@@ -261,27 +265,27 @@ const Account = () => {
   };
 
   const continueAction = () => {
-    if (password_correct == "NO" || password_correct == "") {
+    if (password_correct === "NO" || password_correct === "") {
       if (!validator.isEmpty(password)) {
         const data = { password: password };
         dispatch(check_password(data));
       }
-    } else if (password_correct == "YES") {
-      if (changeType == "email") {
+    } else if (password_correct === "YES") {
+      if (changeType === "email") {
         if (!emailErrors.newEmail && !emailErrors.confirmEmail) {
           const data = { email: emailFields.newEmail };
           dispatch(update_email(data));
         }
-      } else if (changeType == "password") {
+      } else if (changeType === "password") {
         if (!passwordErrors.newPassword && !passwordErrors.confirmPassword) {
           const data = { password: passwordFields.newPassword };
           dispatch(update_password(data));
         }
-      } else if (changeType == "delete") {
+      } else if (changeType === "delete") {
         if (!validator.isEmpty(reasons)) {
           setChangeType("confirm");
         }
-      } else if (changeType == "confirm") {
+      } else if (changeType === "confirm") {
         if (!validator.isEmpty(reasons)) {
           setChangeType("confirm");
           const data = {
@@ -319,7 +323,7 @@ const Account = () => {
     <React.Fragment>
       {/* Model For Update Points Balance*/}
       <CModal show={modal} onClose={toggle}>
-        {password_correct == "NO" || password_correct == "" ? (
+        {password_correct === "NO" || password_correct === "" ? (
           <>
             <CModalHeader closeButton>Enter your password</CModalHeader>
             <CModalBody>
@@ -335,7 +339,7 @@ const Account = () => {
                     type={show ? "text" : "password"}
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
-                    invalid={password_correct == "NO" ? true : false}
+                    invalid={password_correct === "NO" ? true : false}
                     value={password}
                   />
                   <CInputGroupAppend>
@@ -350,13 +354,13 @@ const Account = () => {
                     </CButton>
                   </CInputGroupAppend>
                   <CInvalidFeedback>
-                    {password_correct == "NO" ? "Wrong password" : ""}
+                    {password_correct === "NO" ? "Wrong password" : ""}
                   </CInvalidFeedback>
                 </CInputGroup>
               </CFormGroup>
             </CModalBody>
           </>
-        ) : password_correct == "YES" && changeType == "email" ? (
+        ) : password_correct === "YES" && changeType === "email" ? (
           <>
             <CModalHeader closeButton>Change email</CModalHeader>
             <CModalBody>
@@ -404,7 +408,7 @@ const Account = () => {
               </p>
             </CModalBody>
           </>
-        ) : password_correct == "YES" && changeType == "password" ? (
+        ) : password_correct === "YES" && changeType === "password" ? (
           <>
             <CModalHeader closeButton>Change password</CModalHeader>
             <CModalBody>
@@ -476,7 +480,7 @@ const Account = () => {
               </p>
             </CModalBody>
           </>
-        ) : password_correct == "YES" && changeType == "delete" ? (
+        ) : password_correct === "YES" && changeType === "delete" ? (
           <>
             <CModalHeader closeButton>Reason for account deletion</CModalHeader>
             <CModalBody>
@@ -517,7 +521,7 @@ const Account = () => {
               </CFormGroup>
             </CModalBody>
           </>
-        ) : password_correct == "YES" && changeType == "confirm" ? (
+        ) : password_correct === "YES" && changeType === "confirm" ? (
           <>
             <CModalHeader closeButton>Delete account</CModalHeader>
             <CModalBody>
@@ -553,35 +557,35 @@ const Account = () => {
           <CButton
             color="success"
             disabled={
-              password_correct == "" && validator.isEmpty(password)
+              password_correct === "" && validator.isEmpty(password)
                 ? true
-                : password_correct == "YES" &&
-                  changeType == "email" &&
+                : password_correct === "YES" &&
+                  changeType === "email" &&
                   (validator.isEmpty(emailFields.newEmail) ||
                     validator.isEmpty(emailFields.confirmEmail) ||
                     !validator.isEmail(emailFields.newEmail) ||
                     emailFields.newEmail !== emailFields.confirmEmail)
                 ? true
-                : password_correct == "YES" &&
-                  changeType == "password" &&
+                : password_correct === "YES" &&
+                  changeType === "password" &&
                   (validator.isEmpty(passwordFields.newPassword) ||
                     validator.isEmpty(passwordFields.confirmPassword) ||
                     passwordFields.newPassword !==
                       passwordFields.confirmPassword)
                 ? true
-                : password_correct == "YES" &&
-                  changeType == "delete" &&
+                : password_correct === "YES" &&
+                  changeType === "delete" &&
                   validator.isEmpty(reasons)
                 ? true
-                : password_correct == "YES" &&
-                  changeType == "confirm" &&
+                : password_correct === "YES" &&
+                  changeType === "confirm" &&
                   !confirmDelete
                 ? true
                 : false
             }
             onClick={continueAction}
           >
-            {changeType == "confirm" ? "DELETE ACCOUNT" : "CONTINUE"}
+            {changeType === "confirm" ? "DELETE ACCOUNT" : "CONTINUE"}
           </CButton>
         </CModalFooter>
       </CModal>

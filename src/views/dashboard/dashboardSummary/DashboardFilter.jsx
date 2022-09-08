@@ -24,22 +24,22 @@ import moment from "moment";
 import dateFormat from "dateformat";
 import DatetimeRangePicker from "react-bootstrap-datetimerangepicker-updated";
 import "bootstrap-daterangepicker/daterangepicker.css";
-import TimePicker from "react-bootstrap-time-picker";
+// import TimePicker from "react-bootstrap-time-picker";
 import {
   MdPerson,
   MdStoreMallDirectory,
   MdDateRange,
-  MdAvTimer,
+  // MdAvTimer,
 } from "react-icons/md";
 import {
-  change_in_date_time,
-  change_in_time,
+  // change_in_date_time,
+  // change_in_time,
   stores_change,
   employee_change,
 } from "../../../actions/dashboard/filterComponentActions";
 import dateformat from "dateformat";
 
-import $ from "jquery";
+// import $ from "jquery";
 const DashboardFilter = (props) => {
   const dispatch = useDispatch();
   // Start Reducer Functions
@@ -47,9 +47,9 @@ const DashboardFilter = (props) => {
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
-  const salesSummary = useSelector(
-    (state) => state.reports.salesSummaryReducer
-  );
+  // const salesSummary = useSelector(
+  //   (state) => state.reports.salesSummaryReducer
+  // );
   // End Reducer Functions
   const [fields, setFields] = useState({
     checkAll: true,
@@ -111,8 +111,8 @@ const DashboardFilter = (props) => {
 
   const days_filter = (from, to, filterName) => {
     var d = from,
-      a = [],
-      i = 0;
+      a = [];
+    // i = 0;
     var daysDates = [];
     const daysDiff = Math.round(
       moment.duration(moment(to).diff(moment(from))).asDays()
@@ -129,12 +129,12 @@ const DashboardFilter = (props) => {
       filterName === "Hours"
     ) {
       const totalHours = 24;
-      var i = 1;
-      while (i <= totalHours) {
+      var c = 1;
+      while (c <= totalHours) {
         daysDates.push(moment(time).format("MMM DD, YYYY, hh:mm A"));
         a.push(moment(time).format("LT"));
         time = moment(time).add(1, "hours").format("YYYY-MM-DD HH:mm:ss");
-        i++;
+        c++;
       }
       props.setFilter("Hours");
       setDays(a);
@@ -143,13 +143,13 @@ const DashboardFilter = (props) => {
     } else if (getNatural(daysDiff) > 1 && filterName === "Days") {
       const dateGape =
         daysDiff >= 60 ? daysDiff / getNatural(monthDiff) : daysDiff;
-      while (i < getNatural(dateGape)) {
+      while (c < getNatural(dateGape)) {
         daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
         d = moment(d, "DD-MM-YYYY").add(diff, "days");
-        i++;
+        c++;
       }
-      if (i === getNatural(daysDiff)) {
+      if (c === getNatural(daysDiff)) {
         // include last day
         daysDates.push(dateformat(d, "mmm dd yyyy"));
         a.push(dateformat(d, "mmm dd"));
@@ -326,18 +326,18 @@ const DashboardFilter = (props) => {
         .duration(moment(dateRange.endDate).diff(moment(dateRange.startDate)))
         .asDays();
       const dateCheck =
-        moment(dateRange.endDate).format("D-M-YYYY") ==
+        moment(dateRange.endDate).format("D-M-YYYY") ===
         moment(dateRange.startDate).format("D-M-YYYY");
 
       const filter =
-        getNatural(timeDiff) == 0 ? "Hours" : dateCheck ? "Hours" : "Days";
+        getNatural(timeDiff) === 0 ? "Hours" : dateCheck ? "Hours" : "Days";
       props.setDaysFilter(
         props.daysFilter.map((item) => {
           if (parseInt(item.days) <= getNatural(timeDiff)) {
             return {
               ...item,
               disable:
-                getNatural(timeDiff) == 0 || dateCheck
+                getNatural(timeDiff) === 0 || dateCheck
                   ? false
                   : getNatural(timeDiff) >= 0 &&
                     parseInt(item.days) === 0 &&
@@ -644,55 +644,55 @@ const DashboardFilter = (props) => {
     });
   };
 
-  const handleOnChange = (e, value) => {
-    e.stopPropagation();
-    setFields({
-      ...fields,
-      time_filter: value,
-    });
-  };
-  const toggleDropdown = (tab) => {
-    const state = toggleDropDown.map((x, index) => (tab === index ? !x : x));
-    setToggleDropDown(state);
-  };
+  // const handleOnChange = (e, value) => {
+  //   e.stopPropagation();
+  //   setFields({
+  //     ...fields,
+  //     time_filter: value,
+  //   });
+  // };
+  // const toggleDropdown = (tab) => {
+  //   const state = toggleDropDown.map((x, index) => (tab === index ? !x : x));
+  //   setToggleDropDown(state);
+  // };
 
-  const handleOnChangeStartTime = (e) => {
-    setTimeRange({
-      ...timeRange,
-      startTime: e,
-    });
-  };
+  // const handleOnChangeStartTime = (e) => {
+  //   setTimeRange({
+  //     ...timeRange,
+  //     startTime: e,
+  //   });
+  // };
 
-  const handleOnChangeEndTime = (e) => {
-    setTimeRange({
-      ...timeRange,
-      endTime: e,
-    });
-  };
+  // const handleOnChangeEndTime = (e) => {
+  //   setTimeRange({
+  //     ...timeRange,
+  //     endTime: e,
+  //   });
+  // };
 
-  var startHours =
-    Math.floor(timeRange.startTime / 60 / 60) < 10 &&
-    Math.floor(timeRange.startTime / 60 / 60) !== 0
-      ? "0" + Math.floor(timeRange.startTime / 60 / 60)
-      : Math.floor(timeRange.startTime / 60 / 60) === 0
-      ? "12"
-      : Math.floor(timeRange.startTime / 60 / 60) > 12
-      ? Math.floor(timeRange.startTime / 60 / 60) % 12 || 12
-      : Math.floor(timeRange.startTime / 60 / 60);
-  var endHours =
-    Math.floor(timeRange.endTime / 60 / 60) < 10
-      ? Math.floor(timeRange.endTime / 60 / 60) === 0
-        ? "12"
-        : "0" + Math.floor(timeRange.endTime / 60 / 60)
-      : Math.floor(timeRange.endTime / 60 / 60) === 0
-      ? "12"
-      : Math.floor(timeRange.endTime / 60 / 60) > 12
-      ? Math.floor(timeRange.endTime / 60 / 60) % 12 || 12
-      : Math.floor(timeRange.endTime / 60 / 60);
+  // var startHours =
+  //   Math.floor(timeRange.startTime / 60 / 60) < 10 &&
+  //   Math.floor(timeRange.startTime / 60 / 60) !== 0
+  //     ? "0" + Math.floor(timeRange.startTime / 60 / 60)
+  //     : Math.floor(timeRange.startTime / 60 / 60) === 0
+  //     ? "12"
+  //     : Math.floor(timeRange.startTime / 60 / 60) > 12
+  //     ? Math.floor(timeRange.startTime / 60 / 60) % 12 || 12
+  //     : Math.floor(timeRange.startTime / 60 / 60);
+  // var endHours =
+  //   Math.floor(timeRange.endTime / 60 / 60) < 10
+  //     ? Math.floor(timeRange.endTime / 60 / 60) === 0
+  //       ? "12"
+  //       : "0" + Math.floor(timeRange.endTime / 60 / 60)
+  //     : Math.floor(timeRange.endTime / 60 / 60) === 0
+  //     ? "12"
+  //     : Math.floor(timeRange.endTime / 60 / 60) > 12
+  //     ? Math.floor(timeRange.endTime / 60 / 60) % 12 || 12
+  //     : Math.floor(timeRange.endTime / 60 / 60);
 
-  var startTimeZone =
-    Math.floor(timeRange.startTime / 60 / 60) >= 12 ? "PM" : "AM";
-  var endTimeZone = Math.floor(timeRange.endTime / 60 / 60) >= 12 ? "PM" : "AM";
+  // var startTimeZone =
+  //   Math.floor(timeRange.startTime / 60 / 60) >= 12 ? "PM" : "AM";
+  // var endTimeZone = Math.floor(timeRange.endTime / 60 / 60) >= 12 ? "PM" : "AM";
 
   const resetFilters = () => {
     setFields({

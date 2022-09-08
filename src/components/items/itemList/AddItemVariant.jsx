@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CCol,
@@ -26,7 +26,7 @@ import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 
 const AddItemVariant = (props) => {
-  const reactTags = useRef();
+  // const reactTags = useRef();
   const dispatch = useDispatch();
 
   // const item = useSelector((state) => state.items.itemReducer);
@@ -161,7 +161,7 @@ const AddItemVariant = (props) => {
 
   const addOptions = () => {
     const validateVariantFields = (variantFields || []).filter((item) => {
-      return item.optionName.trim() == "";
+      return item.optionName.trim() === "";
     });
     const validateVariantValue = (variantFields || []).filter((item) => {
       return item.optionValue.length === 0;
@@ -304,6 +304,7 @@ const AddItemVariant = (props) => {
     dispatch(delete_item_varient_option(idx));
   };
   const delimiters = [KeyCodes.comma, KeyCodes.enter];
+  console.clear(delimiters);
   return (
     <React.Fragment>
       <CModal
@@ -327,7 +328,7 @@ const AddItemVariant = (props) => {
                         {variantFields.map((item, index) => (
                           <Draggable
                             key={item._id}
-                            draggableId={"draggableID"+item._id}
+                            draggableId={"draggableID" + item._id}
                             index={index}
                           >
                             {(provided, snapshot) => (

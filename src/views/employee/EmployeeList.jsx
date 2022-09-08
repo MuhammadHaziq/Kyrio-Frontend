@@ -36,7 +36,7 @@ const EmployeeList = () => {
   const employee = useSelector(
     (state) => state.employeeReducers.employeeListReducer
   );
-  const auth = useSelector((state) => state.auth);
+  // const auth = useSelector((state) => state.auth);
   const userRoles = useSelector(
     (state) => state.employeeReducers.userRolesReducer
   );
@@ -84,9 +84,9 @@ const EmployeeList = () => {
     setShowAlert(!showAlert);
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
 
   const addEmployee = () => {
     setFadeEmployee(false);
@@ -114,7 +114,7 @@ const EmployeeList = () => {
   const closeSearch = () => {
     setShowSearch(!showSearch);
     setSearch("");
-    let storeId = selectedStoreId ? selectedStoreId : "0"
+    let storeId = selectedStoreId ? selectedStoreId : "0";
     dispatch(get_store_employee_list(storeId));
   };
 
@@ -200,30 +200,32 @@ const EmployeeList = () => {
                         )}
                       </CCol>
 
-                      {showSearch == false ? (
+                      {showSearch === false ? (
                         <React.Fragment>
                           {store.stores_list.length > 1 ? (
-                          <CCol xs="12" sm="6" md="6" xl="xl">
-                            <CFormGroup style={{ float: "right" }}>
-                              <CSelect
-                                size="md"
-                                name="selectStore"
-                                id="selectStore"
-                                value={selectedStoreId}
-                                onChange={storeHandleChange}
-                              >
-                                <option value="0">All Store</option>
-                                {store.stores_list.map((item, index) => {
-                                  return (
-                                    <option value={item._id} key={index}>
-                                      {item.title}
-                                    </option>
-                                  );
-                                })}
-                              </CSelect>
-                            </CFormGroup>
-                          </CCol>
-                          ) : ""}
+                            <CCol xs="12" sm="6" md="6" xl="xl">
+                              <CFormGroup style={{ float: "right" }}>
+                                <CSelect
+                                  size="md"
+                                  name="selectStore"
+                                  id="selectStore"
+                                  value={selectedStoreId}
+                                  onChange={storeHandleChange}
+                                >
+                                  <option value="0">All Store</option>
+                                  {store.stores_list.map((item, index) => {
+                                    return (
+                                      <option value={item._id} key={index}>
+                                        {item.title}
+                                      </option>
+                                    );
+                                  })}
+                                </CSelect>
+                              </CFormGroup>
+                            </CCol>
+                          ) : (
+                            ""
+                          )}
                           {/* <CCol xs="12" sm="2" md="2" xl="xl">
                             <svg
                               viewBox="0 0 20 20"

@@ -23,15 +23,15 @@ import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import StoresDatatable from "./StoresDatatable";
 import ConformationAlert from "../../conformationAlert/ConformationAlert";
-import AddItemVariant from "./AddItemVariant";
-import VariantDatatable from "./VariantDatatable";
+// import AddItemVariant from "./AddItemVariant";
+// import VariantDatatable from "./VariantDatatable";
 import NumberFormat from "react-number-format";
 import { ImageUrl } from "../../../constants/baseUrls";
 import {
   update_item_record,
   toggle_item_stock,
   delete_item_list,
-  remove_row_data,
+  // remove_row_data,
 } from "../../../actions/items/itemActions";
 const AddItem = (props) => {
   const decimal = useSelector((state) => state.auth.user.decimal);
@@ -96,17 +96,13 @@ const AddItem = (props) => {
         })
       );
       const taxesSwitch = [];
-      (item.item_taxes || []).map((item) => {
-        taxesSwitch.push(true);
-      });
+      (item.item_taxes || []).map((item) => taxesSwitch.push(true));
       setTaxesSwitch(taxesSwitch);
     }
   }, [item.item_taxes]);
   useEffect(() => {
     let modifierSwitch = [];
-    (modifire.modifiers_list || []).map((item) => {
-      modifierSwitch.push(false);
-    });
+    (modifire.modifiers_list || []).map((item) => modifierSwitch.push(false));
     setModifierSwitch(modifierSwitch);
     setModifiers(modifire.modifiers_list);
   }, [modifire.modifiers_list]);
@@ -149,7 +145,7 @@ const AddItem = (props) => {
         item_name: props.item_row_data.title,
         categoryId:
           props.item_row_data.category !== undefined &&
-            props.item_row_data.category !== null
+          props.item_row_data.category !== null
             ? props.item_row_data.category._id
             : "0",
         sold_by: props.item_row_data.soldByType,
@@ -227,15 +223,15 @@ const AddItem = (props) => {
     item.store_list
       .filter((item) => item.isSelected === true)
       .map((item) => {
-        return (item.taxes || []).map((tax) => {
-          taxes.push(tax._id);
+        return (item.taxes || []).map(
+          (tax) => taxes.push(tax._id)
           // taxes.push({
           //   id: tax._id,
           //   title: typeof tax.title == "undefined" ? "" : tax.title,
           //   type: typeof tax.tax_type == "undefined" ? "" : tax.tax_type.title,
           //   value: typeof tax.tax_rate == "undefined" ? null : tax.tax_rate,
           // });
-        });
+        );
       });
     const ReturnNumber = (params) => {
       let num =
@@ -256,18 +252,8 @@ const AddItem = (props) => {
       fields.categoryId !== "0" ? fields.categoryId : null
     );
     formData.append("soldByType", fields.sold_by);
-    formData.append(
-      "price",
-      fields.price
-        ? ReturnNumber(fields.price)
-        : 0
-    );
-    formData.append(
-      "cost",
-      fields.cost
-        ? ReturnNumber(fields.cost)
-        : 0
-    );
+    formData.append("price", fields.price ? ReturnNumber(fields.price) : 0);
+    formData.append("cost", fields.cost ? ReturnNumber(fields.cost) : 0);
     formData.append("color", fields.color);
     formData.append("compositeItem", inventorySwitch[0]);
     formData.append("trackStock", inventorySwitch[1]);
@@ -731,7 +717,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                            item.stores.map((str) => str.title).join(",")}
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -780,7 +766,7 @@ const AddItem = (props) => {
                           {item.stores.length === store.stores_list.length
                             ? "Available in all stores"
                             : "Available in " +
-                            item.stores.map((str) => str.title).join(",")}
+                              item.stores.map((str) => str.title).join(",")}
                         </p>
                       </CListGroupItem>
                     </CListGroup>
@@ -807,7 +793,7 @@ const AddItem = (props) => {
             <StoresDatatable
               stores={props.store}
               stock={inventorySwitch[1]}
-            // stores={props.item_row_data.stores}
+              // stores={props.item_row_data.stores}
             />
           </CCol>
         </CCardBody>

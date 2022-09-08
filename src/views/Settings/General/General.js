@@ -117,7 +117,9 @@ const General = () => {
     let hold = false;
     let settings = (user.settings || []).map((item, index) => {
       let feature = item.feature !== null ? item.feature._id : null;
-      let enable = (sChecked || []).filter((itm) => itm.feature._id == feature);
+      let enable = (sChecked || []).filter(
+        (itm) => itm.feature._id === feature
+      );
       enable = enable.length > 0 ? enable[0].enable : item.enable;
       return {
         feature: feature,
@@ -215,7 +217,9 @@ const General = () => {
   const saveAlertFeatures = () => {
     let settings = (user.settings || []).map((item, index) => {
       let feature = item.feature !== null ? item.feature._id : null;
-      let enable = (sChecked || []).filter((itm) => itm.feature._id == feature);
+      let enable = (sChecked || []).filter(
+        (itm) => itm.feature._id === feature
+      );
       enable = enable.length > 0 ? enable[0].enable : item.enable;
       return {
         feature: feature,

@@ -233,9 +233,9 @@ const UpdateDiscount = (props) => {
     dispatch(delete_discount(JSON.stringify(data)));
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
 
   return (
     <React.Fragment>

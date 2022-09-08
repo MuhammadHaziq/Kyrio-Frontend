@@ -28,10 +28,10 @@ const ItemListServerSideDatatable = (props) => {
   const [tableFilterValue, setTableFilterValue] = useState("");
   const [sorterValue, setSorterValue] = useState();
 
-  const [fetchTrigger, setFetchTrigger] = useState(0);
+  // const [fetchTrigger, setFetchTrigger] = useState(0);
   const dispatch = useDispatch();
 
-  const [selected, setSelected] = useState([]);
+  // const [selected, setSelected] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const params = {
@@ -182,7 +182,7 @@ const ItemListServerSideDatatable = (props) => {
               item.cost !== undefined && item.cost !== null ? item.cost : 0;
 
             let margin = "-";
-            if (cost == 0 && price !== 0) {
+            if (cost === 0 && price !== 0) {
               margin = 100;
             } else if (cost !== 0 && price !== 0) {
               margin = ((price - cost) / price) * 100;

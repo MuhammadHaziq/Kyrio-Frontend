@@ -6,7 +6,7 @@ import {
   DELETE_SALES_SUMMARY,
   CHANGE_DAYS,
   SET_LOADING,
-  ROW_DATA_SALES_SUMMARY,
+  // ROW_DATA_SALES_SUMMARY,
 } from "../../constants/ActionTypes";
 
 const initialState = {

@@ -68,7 +68,11 @@ const UpdateTax = (props) => {
       const stores = store.stores_list.slice().map((item) => {
         return {
           ...item,
-          isSelected: taxes.tax_row_data.stores.filter(store => store._id == item._id) ? true : false,
+          isSelected: taxes.tax_row_data.stores.filter(
+            (store) => store._id === item._id
+          )
+            ? true
+            : false,
         };
       });
       setStoreId(stores);
@@ -83,7 +87,6 @@ const UpdateTax = (props) => {
 
   useEffect(() => {
     if (taxes.tax_types !== undefined && taxes.tax_types.length > 0) {
-
       setTaxType(
         taxes.tax_row_data.tax_type !== undefined &&
           taxes.tax_row_data.tax_type !== null
@@ -155,30 +158,30 @@ const UpdateTax = (props) => {
         taxes.tax_row_data !== undefined &&
         Object.keys(taxes.tax_row_data).length > 0
       ) {
-        const check = taxes.tax_row_data.items.length > 0 ||
-            taxes.tax_row_data.categories.length > 0
+        const check =
+          taxes.tax_row_data.items.length > 0 ||
+          taxes.tax_row_data.categories.length > 0
             ? true
-            : false
+            : false;
         setChecked(check);
       }
-    } 
+    }
     let dine = taxes.tax_row_data.dinings;
-    if(typeof dine !== "undefined"){
-      if(dine.length > 0){
-        setChecked(true)
+    if (typeof dine !== "undefined") {
+      if (dine.length > 0) {
+        setChecked(true);
       }
     }
-    if(taxes.tax_row_data){
-      if(typeof taxes.tax_row_data.items !== "undefined"){
-        taxes.category_items.map(itm => {
-            const check = taxes.tax_row_data.items.includes(itm._id)
-            itm.isSelected = check
-        })
+    if (taxes.tax_row_data) {
+      if (typeof taxes.tax_row_data.items !== "undefined") {
+        taxes.category_items.map((itm) => {
+          const check = taxes.tax_row_data.items.includes(itm._id);
+          itm.isSelected = check;
+        });
       }
     }
-  // }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
   }, [taxes.tax_row_data]);
-
+  // }, [taxes.tax_row_data && taxes.tax_category_list && taxes.category_items]);
   const toggle = (tab) => {
     const state = collapse.map((x, index) => (tab === index ? !x : x));
     setCollapse(state);
@@ -232,16 +235,17 @@ const UpdateTax = (props) => {
       title: fields.tax_name,
       tax_rate: fields.tax_rate,
       tax_type: types[0] ? types[0]._id : "",
-      tax_option:
-        options.length === 0
-          ? ""
-          : options[0]._id || "0",
+      tax_option: options.length === 0 ? "" : options[0]._id || "0",
       stores: selectedStore,
       dinings: selectedDining,
-      categories: typeof selectedCategory[0] !== "undefined" &&  selectedCategory[0] == "0" ? [] : selectedCategory,
+      categories:
+        typeof selectedCategory[0] !== "undefined" &&
+        selectedCategory[0] === "0"
+          ? []
+          : selectedCategory,
       items: selectedCategoryItems,
     };
-    
+
     dispatch(update_item_tax(data));
   };
   const handleOnChange = (e) => {
@@ -305,9 +309,9 @@ const UpdateTax = (props) => {
     const deleteIds = [taxes.tax_row_data._id || 0];
     dispatch(delete_item_taxes(JSON.stringify(deleteIds)));
   };
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
   return (
     <React.Fragment>
       <CCard>
@@ -495,7 +499,7 @@ const UpdateTax = (props) => {
           </CCollapse>
         </CCardFooter>
       </CCard>
-      {sChecked == true ? (
+      {sChecked === true ? (
         <CRow>
           <CCol sm="12" xl="12">
             <CCard>

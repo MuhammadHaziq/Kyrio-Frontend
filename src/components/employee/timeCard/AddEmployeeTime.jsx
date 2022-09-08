@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+// import { Link, Redirect } from "react-router-dom";
 import {
   CButton,
   CCard,
   CCardBody,
   CCardHeader,
-  CCardFooter,
+  // CCardFooter,
   CCol,
   CInput,
   CInputGroup,
-  CInputGroupPrepend,
+  // CInputGroupPrepend,
   CInputGroupText,
   CRow,
   CInvalidFeedback,
   CFormGroup,
-  CInputCheckbox,
+  // CInputCheckbox,
   CLabel,
-  CLink,
-  CCollapse,
+  // CLink,
+  // CCollapse,
   CSelect,
-  CFormText,
+  // CFormText,
   CInputGroupAppend,
 } from "@coreui/react";
 import { MdPermContactCalendar } from "react-icons/md";
@@ -58,7 +58,7 @@ const AddEmployeeTime = (props) => {
     startTime: false,
     endTime: false,
   });
-  const [totalWorkingHour, setTolalHour] = useState(0);
+  // const [totalWorkingHour, setTolalHour] = useState(0);
   const [stores, setStores] = useState([]);
   const [employees, setEmployees] = useState([]);
   const dispatch = useDispatch();
@@ -237,7 +237,7 @@ const AddEmployeeTime = (props) => {
       dispatch(add_new_timeCard(data));
     }
   };
-  let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
+  // let start = dateFormat(dateRange.startDate, "yyyy-mm-dd");
 
   const handleEventStart = (event, picker) => {
     setDateRange({
@@ -279,7 +279,7 @@ const AddEmployeeTime = (props) => {
   let totalHour = 0;
   const startHours =
     timeRange.startTime !== null && timeRange.startTime !== undefined
-      ? timeRange.startTime.split(":")[0] == 12
+      ? timeRange.startTime.split(":")[0] === 12
         ? 24
         : timeRange.startTime.split(":")[0]
       : 0;
@@ -289,7 +289,7 @@ const AddEmployeeTime = (props) => {
       : 0;
   const endHours =
     timeRange.endTime !== null && timeRange.endTime !== undefined
-      ? timeRange.endTime.split(":")[0] == 12
+      ? timeRange.endTime.split(":")[0] === 12
         ? 24
         : timeRange.endTime.split(":")[0]
       : 0;
@@ -358,43 +358,45 @@ const AddEmployeeTime = (props) => {
                   </CFormGroup>
                 </CCol>
                 {stores.length > 1 ? (
-                <CCol sm="12" md="6" lg="6">
-                  <CFormGroup>
-                    <CLabel> Store </CLabel>
-                    <CInputGroup className="mb-3">
-                      <CSelect
-                        className={
-                          errors.storeId === true
-                            ? "form-control is-invalid"
-                            : "form-control"
-                        }
-                        size="md"
-                        name="storeId"
-                        id="storeId"
-                        value={fields.storeId}
-                        onChange={handleOnChange}
-                        onBlur={handleOnBlur}
-                        invalid={errors.storeId}
-                      >
-                        <option value="0">All Store</option>
-                        {stores.map((item, index) => {
-                          return (
-                            <option value={item._id} key={index}>
-                              {item.title}
-                            </option>
-                          );
-                        })}
-                      </CSelect>
+                  <CCol sm="12" md="6" lg="6">
+                    <CFormGroup>
+                      <CLabel> Store </CLabel>
+                      <CInputGroup className="mb-3">
+                        <CSelect
+                          className={
+                            errors.storeId === true
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
+                          size="md"
+                          name="storeId"
+                          id="storeId"
+                          value={fields.storeId}
+                          onChange={handleOnChange}
+                          onBlur={handleOnBlur}
+                          invalid={errors.storeId}
+                        >
+                          <option value="0">All Store</option>
+                          {stores.map((item, index) => {
+                            return (
+                              <option value={item._id} key={index}>
+                                {item.title}
+                              </option>
+                            );
+                          })}
+                        </CSelect>
 
-                      <CInvalidFeedback>
-                        {errors.storeId === true
-                          ? "Please Enter Select Store"
-                          : ""}
-                      </CInvalidFeedback>
-                    </CInputGroup>
-                  </CFormGroup>
-                </CCol>
-                ): ""}
+                        <CInvalidFeedback>
+                          {errors.storeId === true
+                            ? "Please Enter Select Store"
+                            : ""}
+                        </CInvalidFeedback>
+                      </CInputGroup>
+                    </CFormGroup>
+                  </CCol>
+                ) : (
+                  ""
+                )}
               </CRow>
               <CRow>
                 <CCol sm="12" md="6" lg="6">

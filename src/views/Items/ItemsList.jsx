@@ -8,17 +8,17 @@ import {
   CFormGroup,
   CCardHeader,
   CCardBody,
-  CCollapse,
+  // CCollapse,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
   CInput,
-  CLink,
+  // CLink,
   CButton,
   CFade,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
+// import CIcon from "@coreui/icons-react";
+// import ItemsListDatatable from "../../datatables/items/ItemsListDatatable.jsx";
 import ItemListServerSideDatatable from "../../datatables/items/ItemListServerSideDatatable";
 import {
   // get_items_list,
@@ -33,22 +33,22 @@ import {
 import { get_category_list } from "../../actions/items/categoryActions";
 import ConformationAlert from "../../components/conformationAlert/ConformationAlert";
 import AddItem from "../../components/items/itemList/AddItem";
-import ImportItem from "../../components/items/itemList/ImportItem";
+// import ImportItem from "../../components/items/itemList/ImportItem";
 import ImportItemCsv from "../../components/items/itemList/ImportItemCsv";
 import UpdateItem from "../../components/items/itemList/UpdateItem";
 import { get_modifires_list } from "../../actions/items/modifiresActions";
 import { useSelector, useDispatch } from "react-redux";
 import { get_stores } from "../../actions/settings/storeActions";
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import PlusIcon from "../../components/icons/PlusIcon.js";
-import ItemSplash from "../../components/splashScreen/ItemSplash.jsx";
+// import ItemSplash from "../../components/splashScreen/ItemSplash.jsx";
 import SearchIcon from "../../components/icons/SearchIcon.js";
 const ItemsList = () => {
   let item = useSelector((state) => state.items.itemReducer);
   const category = useSelector((state) => state.items.categoryReducer);
   const auth = useSelector((state) => state.auth);
-  const modifire = useSelector((state) => state.items.modifiresReducer);
-  const store = useSelector((state) => state.settingReducers.storeReducer);
+  // const modifire = useSelector((state) => state.items.modifiresReducer);
+  // const store = useSelector((state) => state.settingReducers.storeReducer);
 
   const dispatch = useDispatch();
   // const [items, setItems] = useState(usersData)
@@ -275,7 +275,11 @@ const ItemsList = () => {
                         <ConformationAlert
                           button_text="Delete"
                           heading="Delete item"
-                          section={`Are you sure you want to delete (${item.item_list.filter((item) => item.isDeleted === true).length}) items  ?`}
+                          section={`Are you sure you want to delete (${
+                            item.item_list.filter(
+                              (item) => item.isDeleted === true
+                            ).length
+                          }) items  ?`}
                           buttonAction={deleteItem}
                           show_alert={showAlert}
                           hideAlert={setShowAlert}

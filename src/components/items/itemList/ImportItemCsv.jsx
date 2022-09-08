@@ -5,23 +5,23 @@ import {
   CCardBody,
   CCol,
   CRow,
-  CInvalidFeedback,
+  // CInvalidFeedback,
   CCardFooter,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { Link } from "react-router-dom";
+// import CIcon from "@coreui/icons-react";
+// import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import validator from "validator";
+// import validator from "validator";
 import { CSVReader } from "react-papaparse";
 import {
   save_csv,
-  get_items_list,
+  // get_items_list,
   validate_csv,
 } from "../../../actions/items/itemActions";
 import ShowUploadFileErrors from "./ShowUploadFileErrors";
 import ItemImportConfirm from "./ItemImportConfirm";
 const ImportItem = (props) => {
-  const buttonRef = React.createRef();
+  // const buttonRef = React.createRef();
 
   const [addFile, setAddFile] = useState(null);
   const [uploadFileError, SetUploadFileError] = useState(false);
@@ -62,17 +62,17 @@ const ImportItem = (props) => {
     }
   }, [item.confirm_upload]);
 
-  const get_upload_file = (data, fileInfo) => {
-    setErrors({
-      ...errors,
-      uploadFileError: false,
-    });
-    setAddFile(data);
-  };
+  // const get_upload_file = (data, fileInfo) => {
+  //   setErrors({
+  //     ...errors,
+  //     uploadFileError: false,
+  //   });
+  //   setAddFile(data);
+  // };
   const save_csv_db = (e) => {
-    var handle = [];
-    var sku = [];
-    if (typeof addFile === "null" || typeof addFile === "undefined") {
+    // var handle = [];
+    // var sku = [];
+    if (addFile === "null" || typeof addFile === "undefined") {
       setErrors({
         ...errors,
         uploadFileError: true,
@@ -86,9 +86,9 @@ const ImportItem = (props) => {
     }
   };
   const validate_csv_backend = (e) => {
-    var handle = [];
-    var sku = [];
-    if (typeof addFile === "null" || typeof addFile === "undefined") {
+    // var handle = [];
+    // var sku = [];
+    if (addFile === "null" || typeof addFile === "undefined") {
       setErrors({
         ...errors,
         uploadFileError: true,
@@ -101,24 +101,24 @@ const ImportItem = (props) => {
       dispatch(validate_csv(fd));
     }
   };
-  const papaparseOptions = {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    // transformHeader: header =>
-    //   header
-    //     .toLowerCase()
-    //     .replace(/\W/g, '_')
-  };
+  // const papaparseOptions = {
+  //   header: true,
+  //   dynamicTyping: true,
+  //   skipEmptyLines: true,
+  //   // transformHeader: header =>
+  //   //   header
+  //   //     .toLowerCase()
+  //   //     .replace(/\W/g, '_')
+  // };
   const uploadFileScreen = () => {
     SetUploadFileError(false);
   };
-  const handleOpenDialog = (e) => {
-    // Note that the ref is set async, so it might be null at some point
-    if (buttonRef.current) {
-      buttonRef.current.open(e);
-    }
-  };
+  // const handleOpenDialog = (e) => {
+  //   // Note that the ref is set async, so it might be null at some point
+  //   if (buttonRef.current) {
+  //     buttonRef.current.open(e);
+  //   }
+  // };
 
   const handleOnDrop = (data, file) => {
     console.log("---------------------------");
@@ -141,12 +141,12 @@ const ImportItem = (props) => {
     console.log("---------------------------");
   };
 
-  const handleRemoveFile = (e) => {
-    // Note that the ref is set async, so it might be null at some point
-    if (buttonRef.current) {
-      buttonRef.current.removeFile(e);
-    }
-  };
+  // const handleRemoveFile = (e) => {
+  //   // Note that the ref is set async, so it might be null at some point
+  //   if (buttonRef.current) {
+  //     buttonRef.current.removeFile(e);
+  //   }
+  // };
 
   if (uploadFileError) {
     return (

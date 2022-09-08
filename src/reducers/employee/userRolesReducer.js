@@ -4,7 +4,7 @@ import {
   ADD_NEW_USER_ROLE,
   TOGGLE_BACK_OFFICE_ENABLE,
   TOGGLE_POS_ENABLE,
-  TOGGLE_BACK_OFFICE,
+  // TOGGLE_BACK_OFFICE,
   REDIRECT_BACK_USER_ROLES,
   TOGGLE_BACK_OFFICE_MODULE,
   TOGGLE_POS_MODULE,
@@ -25,7 +25,7 @@ const initialState = {
   copyBackOfficeModules: [],
   posModules: [],
   copyPosModules: [],
-  user_role_row_data: {},
+  // user_role_row_data: {},
 };
 const userRolesReducer = (state = initialState, action) => {
   // eslint-disable-next-line default-case
@@ -60,7 +60,7 @@ const userRolesReducer = (state = initialState, action) => {
 
     case UPDATE_USER_ROLE: {
       const user_roles = state.user_roles.slice().map((item) => {
-        if (item.role_id == action.response.role_id) {
+        if (item.role_id === action.response.role_id) {
           return action.response;
         }
         return item;
@@ -103,7 +103,7 @@ const userRolesReducer = (state = initialState, action) => {
           return {
             ...item,
             modules: item.modules.map((backOff, backIndex) => {
-              if (backOff._id == action.id) {
+              if (backOff._id === action.id) {
                 return {
                   ...backOff,
                   enable: !backOff.enable,
@@ -123,7 +123,7 @@ const userRolesReducer = (state = initialState, action) => {
         return {
           ...item,
           modules: item.modules.map((pos, backIndex) => {
-            if (pos._id == action.id) {
+            if (pos._id === action.id) {
               return {
                 ...pos,
                 enable: !pos.enable,

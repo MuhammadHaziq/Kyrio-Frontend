@@ -24,7 +24,7 @@ const brandInfo = getStyle("info") || "#20a8d8";
 const brandDanger = getStyle("danger") || "#f86c6b";
 const brandWarning = getStyle("warning") || "#e1a82d";
 const brandPrimary = getStyle("primary") || "#4638c2";
-const brandSecondary = getStyle("secondary") || "#8a93a2";
+// const brandSecondary = getStyle("secondary") || "#8a93a2";
 
 const Dashboard = (props) => {
   // States
@@ -160,24 +160,24 @@ const Dashboard = (props) => {
           GrossProfit,
         } = salesSummary.sales_graph_data.graphRecord;
         let filterSale = orginalSale.slice().map((sale) => {
-          if (sale.label == "Gross sales") {
+          if (sale.label === "Gross sales") {
             sale.data = GrossSales;
-          } else if (sale.label == "Refunds") {
+          } else if (sale.label === "Refunds") {
             sale.data = Refunds;
-          } else if (sale.label == "Discounts") {
+          } else if (sale.label === "Discounts") {
             sale.data = discounts;
-          } else if (sale.label == "Net sales") {
+          } else if (sale.label === "Net sales") {
             sale.data = NetSales;
-          } else if (sale.label == "Cost Of Goods") {
+          } else if (sale.label === "Cost Of Goods") {
             sale.data = CostOfGoods;
-          } else if (sale.label == "Gross profit") {
+          } else if (sale.label === "Gross profit") {
             sale.data = GrossProfit;
           }
           return sale;
         });
         setSalesFilter("Gross sales");
         const newSales = orginalSale.filter((item) => {
-          return item.label == salesFilter;
+          return item.label === salesFilter;
         });
         setOrginalSale(filterSale);
         setSales(newSales);
@@ -213,11 +213,11 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     if (prevSalesFilter !== salesFilter && prevSalesFilter !== undefined) {
-      if (salesFilter == "All sales") {
+      if (salesFilter === "All sales") {
         setSales(orginalSale);
       } else {
         const newSales = orginalSale.filter((item) => {
-          return item.label == salesFilter;
+          return item.label === salesFilter;
         });
         setSales(newSales);
       }

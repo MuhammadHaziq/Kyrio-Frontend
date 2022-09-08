@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {
-  CInputCheckbox,
+  // CInputCheckbox,
   CRow,
-  CCol,
-  CFormGroup,
-  CLabel,
+  // CCol,
+  // CFormGroup,
+  // CLabel,
   CInput,
   CButton,
 } from "@coreui/react";
 import "react-bootstrap-table/dist//react-bootstrap-table-all.min.css";
 import {
-  toggle_select_all_item_stores,
-  toggle_select_single_item_store,
-  set_item_store_price,
+  // toggle_select_all_item_stores,
+  // toggle_select_single_item_store,
+  // set_item_store_price,
   update_variants_table_values,
   delete_item_varient,
 } from "../../../actions/items/itemActions";
@@ -63,7 +63,7 @@ const Price = (props) => {
 const Cost = (props) => {
   const dispatch = useDispatch();
   const decimal = useSelector((state) => state.auth.user.decimal);
-  
+
   const [variantCost, setVariantCost] = useState(props.item.cost);
   useEffect(() => {
     if (props.item.cost !== null && props.item.cost !== undefined) {

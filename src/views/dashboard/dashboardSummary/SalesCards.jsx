@@ -1,5 +1,5 @@
 import React from "react";
-import { CProgress, CCol } from "@coreui/react";
+import { CProgress } from "@coreui/react";
 import Amount from "../../../components/utils/Amount";
 
 const SalesCards = ({

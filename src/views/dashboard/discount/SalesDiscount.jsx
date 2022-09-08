@@ -30,7 +30,7 @@ const SalesDiscount = () => {
 
   const [loading, setLoading] = useState(false);
   const [filterReset, setFilterReset] = useState(false);
-  const [exportData, setExportData] = useState([]);
+  // const [exportData, setExportData] = useState([]);
   const [daysFilter, setDaysFilter] = useState([
     { days: 0, name: "Hours", disable: false, active: true },
     { days: 1, name: "Days", disable: true, active: false },

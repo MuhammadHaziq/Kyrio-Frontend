@@ -1,15 +1,15 @@
 import React from "react";
 import { CChartLine } from "@coreui/react-chartjs";
-import { getStyle, hexToRgba } from "@coreui/utils/src";
+// import { getStyle, hexToRgba } from "@coreui/utils/src";
 
-const brandSuccess = getStyle("success") || "#4dbd74";
-const brandInfo = getStyle("info") || "#20a8d8";
-const brandDanger = getStyle("danger") || "#f86c6b";
+// const brandSuccess = getStyle("success") || "#4dbd74";
+// const brandInfo = getStyle("info") || "#20a8d8";
+// const brandDanger = getStyle("danger") || "#f86c6b";
 
 const MainChartExample = (attributes) => {
-  const random = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
+  // const random = (min, max) => {
+  //   return Math.floor(Math.random() * (max - min + 1) + min);
+  // };
 
   const defaultDatasets = (() => {
     return attributes.sales;

@@ -74,7 +74,8 @@ const ViewCustomer = (props) => {
   });
 
   const dispatch = useDispatch();
-  const msg = useSelector((state) => state.msg);
+  // const msg = useSelector((state) => state.msg);
+
   const customer = useSelector(
     (state) => state.customerReducers.customerReducer
   );
@@ -169,7 +170,7 @@ const ViewCustomer = (props) => {
   };
 
   const deleteCustomer = () => {
-    const data = [customer.customer_row_data._id];
+    // const data = [customer.customer_row_data._id];
     confirmAlert({
       title: "Delete Customer",
       message: `Are you sure you want to delete the customer? Upon deleting, his or her data will no longer be displayed in associated receipts.`,

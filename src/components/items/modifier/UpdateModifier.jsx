@@ -56,7 +56,7 @@ const UpdateModifier = (props) => {
     modifier_name: false,
   });
   const [storeId, setStoreId] = useState([]);
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
 
   const modifier = useSelector((state) => state.items.modifiresReducer);
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ const UpdateModifier = (props) => {
   useEffect(() => {
     if (props.store !== undefined) {
       let stores = props.store;
-      let options = [];
+      // let options = [];
       if (props.modifier_row_data !== undefined) {
         (props.modifier_row_data.stores || []).map((ite) => {
           return (stores = stores.slice().map((item) => {
@@ -136,14 +136,14 @@ const UpdateModifier = (props) => {
       return false;
     }
     const validateModiferFields = (modifierFields || []).filter((item) => {
-      return item.name.trim() == "" || item.price === "";
+      return item.name.trim() === "" || item.price === "";
     });
     if (validator.isEmpty(fields.modifier_name)) {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
       return false;
     } else if (validateModiferFields.length > 0) {
       const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
-        if (item.name.trim() == "" || item.price === "") {
+        if (item.name.trim() === "" || item.price === "") {
           const data = modifierFieldsError.map((ite, indx) => {
             if (index === indx) {
               return {
@@ -157,13 +157,14 @@ const UpdateModifier = (props) => {
           setModifierFieldsError(data);
         }
       });
+      console.clear(modifierFieldsIndex);
       return false;
     } else {
       const data = {
         id: props.modifier_row_data._id,
         title: fields.modifier_name,
         options: modifierFields.map((item) => {
-          if (item._id == "0") {
+          if (item._id === "0") {
             return {
               name: item.name,
               price: ReturnNumber(item.price),
@@ -303,13 +304,13 @@ const UpdateModifier = (props) => {
 
   const addOptions = () => {
     const validateModiferFields = (modifierFields || []).filter((item) => {
-      return item.name.trim() == "" || item.price === "";
+      return item.name.trim() === "" || item.price === "";
     });
     if (validator.isEmpty(fields.modifier_name)) {
       setErrors({ modifier_name: validator.isEmpty(fields.modifier_name) });
     } else if (validateModiferFields.length > 0) {
       const modifierFieldsIndex = (modifierFields || []).map((item, index) => {
-        if (item.name.trim() == "" || item.price == "") {
+        if (item.name.trim() === "" || item.price === "") {
           const data = modifierFieldsError.map((ite, indx) => {
             if (index === indx) {
               return {
@@ -376,9 +377,9 @@ const UpdateModifier = (props) => {
     dispatch(delete_modifire(JSON.stringify([props.modifier_row_data._id])));
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
 
   return (
     <React.Fragment>

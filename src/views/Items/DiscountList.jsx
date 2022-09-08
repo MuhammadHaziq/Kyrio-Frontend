@@ -64,9 +64,9 @@ const DiscountList = (props) => {
     dispatch(delete_discount(JSON.stringify(discount_id)));
   };
 
-  const hideAlert = () => {
-    setShowAlert(!showAlert);
-  };
+  // const hideAlert = () => {
+  //   setShowAlert(!showAlert);
+  // };
 
   const addDicount = () => {
     setFadeDiscount(false);
@@ -119,7 +119,12 @@ const DiscountList = (props) => {
                         ADD DISCOUNT
                       </CButton>
                     </CCol>
-                    <CCol xs="2" md="2" xl="xl" className="btn-square pull-left">
+                    <CCol
+                      xs="2"
+                      md="2"
+                      xl="xl"
+                      className="btn-square pull-left"
+                    >
                       {discount.discount_list.filter(
                         (item) => item.isDeleted === true
                       ).length > 0 ? (
@@ -149,37 +154,51 @@ const DiscountList = (props) => {
                       )}
                     </CCol>
                     {store.stores_list.length > 1 ? (
-                    <CCol
-                      xs="7"
-                      md="7"
-                      xl="xl"
-                      className="mb-3 mb-xl-0 pull-right"
-                    >
-                      <CFormGroup>
-                        <CSelect
-                          size="md"
-                          name="selectStore"
-                          id="selectStore"
-                          value={selectedStoreId}
-                          onChange={storeHandleChange}
-                        >
-                          <option value="0">All Store</option>
-                          {store.stores_list.map((item, index) => {
-                            return (
-                              <option value={item._id} key={index}>
-                                {item.title}
-                              </option>
-                            );
-                          })}
-                        </CSelect>
-                      </CFormGroup>
-                    </CCol>
-                    ) : ""}
+                      <CCol
+                        xs="7"
+                        md="7"
+                        xl="xl"
+                        className="mb-3 mb-xl-0 pull-right"
+                      >
+                        <CFormGroup>
+                          <CSelect
+                            size="md"
+                            name="selectStore"
+                            id="selectStore"
+                            value={selectedStoreId}
+                            onChange={storeHandleChange}
+                          >
+                            <option value="0">All Store</option>
+                            {store.stores_list.map((item, index) => {
+                              return (
+                                <option value={item._id} key={index}>
+                                  {item.title}
+                                </option>
+                              );
+                            })}
+                          </CSelect>
+                        </CFormGroup>
+                      </CCol>
+                    ) : (
+                      ""
+                    )}
                   </CRow>
                 </CCardHeader>
               )}
               <CCardBody>
-                {discount?.discount_list?.length === 0 ? (<ItemSplash buttonName="ADD DISCOUNT" onClick={addDicount} description={"Create discounts that can be applied at the time of sale."} descriptionLink={"https://help.loyverse.com/help/how-create-and-configure-discounts?utm_source=Back%20Office&utm_medium=Discounts"} title="Discounts" />) : (
+                {discount?.discount_list?.length === 0 ? (
+                  <ItemSplash
+                    buttonName="ADD DISCOUNT"
+                    onClick={addDicount}
+                    description={
+                      "Create discounts that can be applied at the time of sale."
+                    }
+                    descriptionLink={
+                      "https://help.loyverse.com/help/how-create-and-configure-discounts?utm_source=Back%20Office&utm_medium=Discounts"
+                    }
+                    title="Discounts"
+                  />
+                ) : (
                   <DiscountDatatable discount={discount.discount_list} />
                 )}
               </CCardBody>

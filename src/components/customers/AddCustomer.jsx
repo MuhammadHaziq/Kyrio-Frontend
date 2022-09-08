@@ -117,12 +117,12 @@ const AddCustomer = (props) => {
       [name]: validator.isEmpty(value),
     });
   };
-  const handleOnBlurCountry = (e) => {
-    setErrors({
-      ...errors,
-      country: validator.isEmpty(fields.country) ? true : false,
-    });
-  };
+  // const handleOnBlurCountry = (e) => {
+  //   setErrors({
+  //     ...errors,
+  //     country: validator.isEmpty(fields.country) ? true : false,
+  //   });
+  // };
   return (
     <React.Fragment>
       <CRow className="justify-content-left">

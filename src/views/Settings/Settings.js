@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-  CCard,
-  CCardBody,
+  // CCard,
+  // CCardBody,
   CCol,
   CListGroup,
   CRow,
@@ -14,7 +14,7 @@ import {
 import { Redirect } from "react-router-dom";
 import { MdSettings, MdStore } from "react-icons/md";
 import General from "./General/General";
-import BillingSubscription from "./BillingSubscriptions/BillingSubscription.jsx";
+// import BillingSubscription from "./BillingSubscriptions/BillingSubscription.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import LoginCheck from "../Authorization/LoginCheck";
 import Store from "./stores/Store.jsx";
@@ -125,28 +125,28 @@ const Settings = () => {
       );
       if (settingCheck.length > 0 || editSettingCheck.length > 0) {
         let generalSettings = modules.find(
-          (mod) => mod.backoffice.title == "Edit general settings"
+          (mod) => mod.backoffice.title === "Edit general settings"
         ).enable;
         let mngBilling = modules.find(
-          (mod) => mod.backoffice.title == "Manage billing"
+          (mod) => mod.backoffice.title === "Manage billing"
         ).enable;
         let mngPaymentTypes = modules.find(
-          (mod) => mod.backoffice.title == "Manage payment types"
+          (mod) => mod.backoffice.title === "Manage payment types"
         ).enable;
         let mngLoyaltyProgram = modules.find(
-          (mod) => mod.backoffice.title == "Manage loyalty program"
+          (mod) => mod.backoffice.title === "Manage loyalty program"
         ).enable;
         let mngTaxes = modules.find(
-          (mod) => mod.backoffice.title == "Manage taxes"
+          (mod) => mod.backoffice.title === "Manage taxes"
         ).enable;
         let mngDiningOptions = modules.find(
-          (mod) => mod.backoffice.title == "Manage dining options"
+          (mod) => mod.backoffice.title === "Manage dining options"
         ).enable;
         let mngKitchenPrinters = modules.find(
-          (mod) => mod.backoffice.title == "Manage kitchen printers"
+          (mod) => mod.backoffice.title === "Manage kitchen printers"
         ).enable;
         let mngPOSDevices = modules.find(
-          (mod) => mod.backoffice.title == "Manage POS devices"
+          (mod) => mod.backoffice.title === "Manage POS devices"
         ).enable;
 
         if (!generalSettings) {

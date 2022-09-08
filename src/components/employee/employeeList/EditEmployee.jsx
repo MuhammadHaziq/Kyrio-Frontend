@@ -25,10 +25,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { TextMask, InputAdapter } from "react-text-mask-hoc";
 import CIcon from "@coreui/icons-react";
 import NumberFormat from "react-number-format";
-import ConformationAlert from "../../conformationAlert/ConformationAlert";
+// import ConformationAlert from "../../conformationAlert/ConformationAlert";
 import {
   update_employee,
-  delete_employee,
+  // delete_employee,
 } from "../../../actions/employee/employeeListActions";
 import validator from "validator";
 
@@ -55,7 +55,7 @@ const EditEmployee = (props) => {
   });
   const [storeId, setStoreId] = useState([]);
   const [collapse, setCollapse] = useState([true, true]);
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
 
   const dispatch = useDispatch();
   const employee = useSelector(
@@ -119,16 +119,16 @@ const EditEmployee = (props) => {
             ? props.employee_row_data.role["title"]
             : "",
         sendMail:
-          props.employee_row_data.role !== undefined 
-          // && props.employee_row_data.role["title"] === "Administrator"
-            ? props.employee_row_data.sendMail === undefined
+          props.employee_row_data.role !== undefined
+            ? // && props.employee_row_data.role["title"] === "Administrator"
+              props.employee_row_data.sendMail === undefined
               ? true
               : props.employee_row_data.sendMail
             : true,
         posPin:
-          props.employee_row_data.role !== undefined 
-          // && props.employee_row_data.role["title"] !== "Administrator"
-            ? props.employee_row_data.posPin === undefined
+          props.employee_row_data.role !== undefined
+            ? // && props.employee_row_data.role["title"] !== "Administrator"
+              props.employee_row_data.posPin === undefined
               ? "0000"
               : props.employee_row_data.posPin
             : "0000",
@@ -287,14 +287,15 @@ const EditEmployee = (props) => {
         role: true,
       });
       return false;
-    } else if(fields.enablePin && fields.posPin === "0000"){
+    } else if (fields.enablePin && fields.posPin === "0000") {
       setErrors({
         ...errors,
         posPin: true,
       });
       return false;
     } else {
-      let role_id = typeof fields.role._id === "undefined" ? fields.role : fields.role._id
+      let role_id =
+        typeof fields.role._id === "undefined" ? fields.role : fields.role._id;
       const data = {
         id: props.employee_row_data._id,
         name: fields.name,
@@ -302,22 +303,22 @@ const EditEmployee = (props) => {
         phone: fields.phone,
         enablePin: fields.enablePin,
         stores: storeId
-            .filter((item) => item.isSelected === true)
-            .map((item) => {
-              // return {
-              //   id: item._id,
-              //   name: item.title,
-              // };
-              return item._id
-            }),
+          .filter((item) => item.isSelected === true)
+          .map((item) => {
+            // return {
+            //   id: item._id,
+            //   name: item.title,
+            // };
+            return item._id;
+          }),
         role: props.user_roles
-            .filter((item) => item.role_id === role_id)
-            .map((item) => {
-              return {
-                _id: item.role_id,
-                title: item.title,
-              };
-            })[0],
+          .filter((item) => item.role_id === role_id)
+          .map((item) => {
+            return {
+              _id: item.role_id,
+              title: item.title,
+            };
+          })[0],
       };
       if (
         props.user_roles
@@ -342,24 +343,30 @@ const EditEmployee = (props) => {
   };
 
   const changeMailStatus = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      //  value
+    } = e.target;
     setFields({
       ...fields,
       [name]: !fields.sendMail,
     });
   };
   const changePinEnable = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      // value
+    } = e.target;
     setFields({
       ...fields,
       [name]: !fields.enablePin,
     });
   };
-  const delete_employee_record = () => {
-    const data = [props.employee_row_data._id];
-    dispatch(delete_employee(JSON.stringify(data)));
-    setShowAlert(!showAlert);
-  };
+  // const delete_employee_record = () => {
+  //   const data = [props.employee_row_data._id];
+  //   dispatch(delete_employee(JSON.stringify(data)));
+  //   setShowAlert(!showAlert);
+  // };
 
   return (
     <React.Fragment>
@@ -416,7 +423,7 @@ const EditEmployee = (props) => {
                     onChange={handleOnChange}
                     onBlur={handleOnBlur}
                     invalid={errors.email}
-                    disabled={fields.roleName.toUpperCase() == "OWNER"}
+                    disabled={fields.roleName.toUpperCase() === "OWNER"}
                   />
                   <CInvalidFeedback>
                     {errors.email === true ? "Please Enter Employee Email" : ""}
@@ -474,8 +481,8 @@ const EditEmployee = (props) => {
                   </CInputGroupPrepend>
                   {props.employee_row_data.role !== undefined &&
                   props.employee_row_data.role["title"] !== undefined ? (
-                    props.employee_row_data.role["title"] == "onwer" ||
-                    props.employee_row_data.role["title"] == "Owner" ? (
+                    props.employee_row_data.role["title"] === "onwer" ||
+                    props.employee_row_data.role["title"] === "Owner" ? (
                       <CSelect
                         className={
                           errors.role === true
@@ -722,7 +729,7 @@ const EditEmployee = (props) => {
                         value={0}
                         checked={fields.checkAll}
                         onChange={storeHandleChange}
-                        disabled={fields.roleName.toUpperCase() == "OWNER"}
+                        disabled={fields.roleName.toUpperCase() === "OWNER"}
                       />
                       <CLabel variant="custom-checkbox" htmlFor={"checkAll"}>
                         {storeId.filter((item) => item.isSelected !== true)
@@ -742,7 +749,7 @@ const EditEmployee = (props) => {
                           value={item._id}
                           checked={item.isSelected}
                           onChange={storeHandleChange}
-                          disabled={fields.roleName.toUpperCase() == "OWNER"}
+                          disabled={fields.roleName.toUpperCase() === "OWNER"}
                         />
                         <CLabel
                           variant="custom-checkbox"

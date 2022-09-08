@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  CModal,
-  CModalHeader,
-  CModalBody,
-  CModalFooter,
-  CButton,
+  // CModal,
+  // CModalHeader,
+  // CModalBody,
+  // CModalFooter,
+  // CButton,
   CFormGroup,
   CCol,
   CInputCheckbox,
@@ -13,18 +13,20 @@ import {
   CListGroupItem,
 } from "@coreui/react";
 import { useDispatch, useSelector } from "react-redux";
-import CIcon from "@coreui/icons-react";
+// import CIcon from "@coreui/icons-react";
 import { toggle_category_item } from "../../../actions/settings/taxesActions.js";
 const ModalCategoryItemsTax = (props) => {
   const dispatch = useDispatch();
-  const [itemId, setItemId] = useState([]);
+  // const [itemId, setItemId] = useState([]);
   const [categoryItems, setCategoryItems] = useState(props.category_items);
   useEffect(() => {
     setCategoryItems(props.category_items);
   }, [props.category_items]);
 
   const categoryHandleChange = (e) => {
-    const category = categoryItems.filter((item) => item._id == e.target.value);
+    const category = categoryItems.filter(
+      (item) => item._id === e.target.value
+    );
     setCategoryItems(
       categoryItems.map((item) => {
         if (item._id === e.target.value) {
